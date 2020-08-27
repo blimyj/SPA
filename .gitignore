@@ -417,4 +417,3 @@ MigrationBackup/
 
 # Ignore AutoTester output in RunTestsOutput
 **/RunTestsOutput/*.xml
-!**/RunTestsOutput/analysis.xml
