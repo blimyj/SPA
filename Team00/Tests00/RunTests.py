@@ -131,6 +131,7 @@ for index, (source_path, queries_path) in enumerate(tests):
     output_full_path = os.path.join(OUTPUT_DIRECTORY, output_full_path)
     output_full_path = os.path.abspath(output_full_path)
 
+    # Run AutoTester
     printinfo("Running test ({}/{}): {} ({})".format(index+1, len(tests), s_name, q_name))
     process = subprocess.run([autotester_path, source_full_path, queries_full_path, output_full_path], stdout=subprocess.DEVNULL)
 
@@ -139,4 +140,4 @@ for index, (source_path, queries_path) in enumerate(tests):
         printerr("Full Command: {} {} {} {}".format(autotester_path, source_full_path, queries_full_path, output_full_path))
         exit()
 
-printinfo("All tests done! :) Please check '{}' directory for all xml outputs!".format(os.path.relpath(OUTPUT_DIRECTORY)))
+printinfo("All tests done! :) Please check '{}' directory for all AutoTester outputs!".format(os.path.relpath(OUTPUT_DIRECTORY)))
