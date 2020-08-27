@@ -14,16 +14,20 @@ QUERIES_EXTENSION = "qry"
 SOURCE_EXTENSION = "src"
 SOURCE_DEPENDENCIES_EXTENSION = "dep"
 
+WARNING_COLOR = "\033[93m"
+ERROR_COLOR = "\033[91m"
+END_COLOR = "\033[0m"
+
 
 
 def printinfo(s):
     print("Info: {}".format(s))
 
 def printerr(s):
-    print("Error: {}".format(s))
+    print("{}Error: {}{}".format(ERROR_COLOR, s, END_COLOR))
 
 def printwarn(s):
-    print("Warning: {}".format(s))
+    print("{}Warning: {}{}".format(WARNING_COLOR, s, END_COLOR))
 
 
 
@@ -87,6 +91,10 @@ for (dir_path, dirs, files) in os.walk(tests_dir_path):
             queries_paths.add(path)
         elif ext == SOURCE_EXTENSION:
             source_paths.append(path)
+
+if len(source_paths) == 0:
+    printwarn("No source files were found! Exiting...")
+    exit()
 
 # Check dependencies of source files
 printinfo("Checking source dependencies files...")
