@@ -412,3 +412,9 @@ healthchecksdb
 MigrationBackup/
 
 # End of https://www.gitignore.io/api/c++,windows,visualstudio
+
+
+
+# Ignore AutoTester output in RunTestsOutput
+**/RunTestsOutput/*.xml
+!**/RunTestsOutput/analysis.xml
