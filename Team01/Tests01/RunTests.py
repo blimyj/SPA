@@ -5,8 +5,7 @@ import sys
 
 
 
-# TODO: Change Code00 when appropriate
-AUTOTESTER_DIRECTORIES = [".", "../Code00/Debug"]
+AUTOTESTER_DIRECTORIES = [".", "../Code01/Debug"]
 AUTOTESTER_FILE_NAME = "AutoTester.exe"
 OUTPUT_DIRECTORY = "./RunTestsOutput"
 
