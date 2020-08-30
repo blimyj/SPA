@@ -1,0 +1,17 @@
+procedure multipleNestedIf {
+	first = 0;
+	second = 1;
+	third = 2;
+	fourth = 3;
+	fifth = 4;
+	if (first != second) {
+		if (second != third) {
+			if (third != fourth) {
+				if (fourth != fifth) {
+					print fifth;
+				}
+			}
+		}
+	}
+
+}
