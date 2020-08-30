@@ -1,0 +1,18 @@
+procedure main {
+    while (h == 2) {
+        a = 1;
+        b = x;
+            if (i !=3) {
+                c = 2;
+                d = y;
+                while (j < 2) {
+                    e = 3;
+                    f = z;
+                    if (k >= 4) {
+                        g = 3;
+                        h = w;    
+                    }
+                }
+            }
+    }
+}
