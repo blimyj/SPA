@@ -1,0 +1,19 @@
+--- procedure sourceTwo {
+001     read a;
+002     read b;
+003     c = 0;
+004     if (a == 0) {
+005         read d;
+006     } else {
+007         e = a + b + 1;
+008         print e;
+---     }
+009     while (c < 5) {
+010         if (c == 0) {
+011             print a;
+012             read f;
+---         }
+013         print c;
+014         c = c + 1;
+---     }
+--- }
