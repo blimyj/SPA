@@ -1,0 +1,16 @@
+--- procedure multipleNestedIf {
+001		first = 0;
+002		second = 1;
+003		third = 2;
+004		fourth = 3;
+005		fifth = 4;
+006		if (first != second) {
+007			if (second != third) {
+008				if (third != fourth) {
+009					if (fourth != fifth) {
+010						print fifth;
+---					}
+---				}
+---			}
+---		}
+--- }
