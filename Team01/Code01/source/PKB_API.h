@@ -5,7 +5,7 @@ class PKBBuilder {
 /* Overview: A builder to aid in the construction of the PKB */
 
 public:
-    VOID addStatements(STATEMENT_NODE s);
+    VOID addStatement(STATEMENT_NODE s);
         /*
         Description:
             Normal: Adds a STATEMENT_NODE when building the PKB
@@ -237,6 +237,7 @@ public:
     /*
     Description:
         Normal: Return the VARIABLE_NODE at INDEX 'i' in this table.
+        Abnormal: If INDEX 'i' is out of range, throw an exception
     */
 };
 
@@ -263,6 +264,7 @@ public:
     /*
     Description:
         Normal: Returns the PROCEDURE_NODE at INDEX 'i' in this table.
+        Abnormal: If INDEX 'i' is out of range, throw an exception
     */
 };
 
