@@ -4,7 +4,7 @@
 003     while (start != end) {
 004         start = start + 1;
 ---     }
-005     if (end == 100) {
+005     if (end == 100) then {
 006         print start;
 ---     } else {
 007         print end;

@@ -4,7 +4,7 @@
 003     while (a > 0) {
 004         a = a - 1;
 ---     }
-005     if (b != c) {
+005     if (b != c) then {
 006         print b;
 ---     } else {
 007         print c;
