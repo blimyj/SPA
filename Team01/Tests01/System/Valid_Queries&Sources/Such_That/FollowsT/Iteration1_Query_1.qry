@@ -103,6 +103,3 @@ print p;
 Select p such that FollowsT(9, p);
 10
 1000
-
-
-
