@@ -463,7 +463,7 @@ def label_statements(statement_list, indent):
             result.extend(label_statements(s[1][1][1], indent + 1))
             result.append((False, indent, "}"))
         elif s[0] == NODE_STATEMENT_IF:
-            v = "if ({}) {{".format(s[1][0])
+            v = "if ({}) then {{".format(s[1][0])
             result.append((True, indent, v))
             result.extend(label_statements(s[1][1][1], indent + 1))
             result.append((False, indent, "} else {"))
