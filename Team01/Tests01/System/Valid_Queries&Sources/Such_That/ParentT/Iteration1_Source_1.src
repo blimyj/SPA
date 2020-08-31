@@ -5,7 +5,7 @@ procedure main {
     read a;
     if (a != 0) then {
         a = a + b + c + d + e;
-        if (c == b) {
+        if (c == b) then {
             a = 5;
             print a;  
         } else {
@@ -25,7 +25,7 @@ procedure main {
                     c = a - e * 5;
                     if (c > e) then {
                         read a;
-                        a = 1 * a + b / 2 * 4
+                        a = 1 * a + b / 2 * 4;
                         print d;
                     } else {
                         b = (1 * a + 2 * c + 3 * d + 4 * e) / 4;
