@@ -4,10 +4,10 @@
 003		third = 2;
 004		fourth = 3;
 005		fifth = 4;
-006		if (first != second) {
-007			if (second != third) {
-008				if (third != fourth) {
-009					if (fourth != fifth) {
+006		if (first != second) then {
+007			if (second != third) then {
+008				if (third != fourth) then {
+009					if (fourth != fifth) then {
 010						print fifth;
 ---					} else {
 011						print first;
