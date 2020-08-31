@@ -40,6 +40,7 @@ TOKEN_NOT = 10
 TOKEN_AND = 11
 TOKEN_OR = 12
 TOKEN_EQUALS = 13
+TOKEN_EOF = 14
 
 NODE_PROGRAM = 0
 NODE_PROCEDURE = 1
@@ -65,7 +66,8 @@ TOKENS_PATTERN = {
     "&&": TOKEN_AND,
     "\|\|": TOKEN_OR,
     "=": TOKEN_EQUALS,
-    "\s+": None
+    "\s+": None,
+    ".": None
 }
 
 
@@ -128,6 +130,7 @@ def tokenize_source(content):
     while True:
         length = len(content)
         if length == 0:
+            out.append((TOKEN_EOF, "EOF"))
             return out
 
         for k, v in TOKENS_PATTERN.items():
@@ -142,16 +145,18 @@ def tokenize_source(content):
             break
 
         if length == len(content):
-            raise Exception()
+            raise Exception("Failed to tokenize! :(")
 
-def not_none(n):
+def not_none(n, error):
     if n is None:
-        raise Exception()
+        raise Exception(error)
     return n
 
 def parse_program(tokens):
     children = []
-    children.append(not_none(parse_procedure(tokens)))
+    children.append(not_none(parse_procedure(tokens), "Expected 'PROCEDURE'!"))
+    if not tokens[0][0] == TOKEN_EOF:
+        raise Exception("Expected 'EOF' after 'PROCEDURE'!")
     return (NODE_PROGRAM, children)
 
 def parse_procedure(tokens):
@@ -161,13 +166,13 @@ def parse_procedure(tokens):
     tokens.popleft()
     token = tokens.popleft()
     if not token[0] == TOKEN_NAME:
-        raise Exception()
+        raise Exception("Expected 'NAME' after 'procedure'!")
     children.append(token[1])
     if not tokens.popleft()[0] == TOKEN_OPEN_BRACE:
-        raise Exception()
-    children.append(not_none(parse_statement_list(tokens)))
+        raise Exception("Expected '{{' after 'procedure {}'!".format(children[0]))
+    children.append(not_none(parse_statement_list(tokens), "Expected 'STATEMENT_LIST' after 'procedure {} {{'!".format(children[0])))
     if not tokens.popleft()[0] == TOKEN_CLOSE_BRACE:
-        raise Exception()
+        raise Exception("Expected '}}' after 'procedure {} {{ STATEMENT_LIST'!".format(children[0]))
     return (NODE_PROCEDURE, children)
 
 def parse_statement_list(tokens):
@@ -195,10 +200,10 @@ def parse_read(tokens):
     tokens.popleft()
     token = tokens.popleft()
     if not token[0] == TOKEN_NAME:
-        raise Exception()
+        raise Exception("Expected 'NAME' after 'read'!")
     children.append(token[1])
     if not tokens.popleft()[0] == TOKEN_SEMICOLON:
-        raise Exception()
+        raise Exception("Expected ';' after 'read {}'!".format(children[0]))
     return (NODE_STATEMENT_READ, children)
 
 def parse_print(tokens):
@@ -208,10 +213,10 @@ def parse_print(tokens):
     tokens.popleft()
     token = tokens.popleft()
     if not token[0] == TOKEN_NAME:
-        raise Exception()
+        raise Exception("Expected 'NAME' after 'print'!")
     children.append(token[1])
     if not tokens.popleft()[0] == TOKEN_SEMICOLON:
-        raise Exception()
+        raise Exception("Expected ';' after 'print {}'!".format(children[0]))
     return (NODE_STATEMENT_PRINT, children)
 
 def parse_while(tokens):
@@ -220,15 +225,15 @@ def parse_while(tokens):
     children = []
     tokens.popleft()
     if not tokens.popleft()[0] == TOKEN_OPEN_BRACKET:
-        raise Exception()
-    children.append(not_none(parse_cond_expr(tokens)))
+        raise Exception("Expected '(' after 'while'!")
+    children.append(not_none(parse_cond_expr(tokens), "Expected 'COND_EXPR' after 'while ('!"))
     if not tokens.popleft()[0] == TOKEN_CLOSE_BRACKET:
-        raise Exception()
+        raise Exception("Expected ')' after 'while ({}'!".format(children[0]))
     if not tokens.popleft()[0] == TOKEN_OPEN_BRACE:
-        raise Exception()
-    children.append(not_none(parse_statement_list(tokens)))
+        raise Exception("Expected '{{' after 'while ({})'!".format(children[0]))
+    children.append(not_none(parse_statement_list(tokens), "Expected 'STATEMENT_LIST' after 'while ({}) {{'!".format(children[0])))
     if not tokens.popleft()[0] == TOKEN_CLOSE_BRACE:
-        raise Exception()
+        raise Exception("Expected '}}' after 'while ({}) {{ STATEMENT_LIST'!".format(children[0]))
     return (NODE_STATEMENT_WHILE, children)
 
 def parse_if(tokens):
@@ -237,26 +242,26 @@ def parse_if(tokens):
     children = []
     tokens.popleft()
     if not tokens.popleft()[0] == TOKEN_OPEN_BRACKET:
-        raise Exception()
-    children.append(not_none(parse_cond_expr(tokens)))
+        raise Exception("Expected '(' after 'if'!")
+    children.append(not_none(parse_cond_expr(tokens), "Expected 'COND_EXPR' after 'if' (!"))
     if not tokens.popleft()[0] == TOKEN_CLOSE_BRACKET:
-        raise Exception()
+        raise Exception("Expected ')' after 'if ({}'!".format(children[0]))
     token = tokens.popleft()
     if not (token[0] == TOKEN_NAME and token[1] == "then"):
-        raise Exception()
+        raise Exception("Expected 'then' after 'if ({})'!".format(children[0]))
     if not tokens.popleft()[0] == TOKEN_OPEN_BRACE:
-        raise Exception()
-    children.append(not_none(parse_statement_list(tokens)))
+        raise Exception("Expected '{{' after 'if ({}) then'!".format(children[0]))
+    children.append(not_none(parse_statement_list(tokens), "Expected 'STATEMENT_LIST' after 'if ({}) then {{'!".format(children[0])))
     if not tokens.popleft()[0] == TOKEN_CLOSE_BRACE:
-        raise Exception()
+        raise Exception("Expected '}}' after 'if ({}) then {{ STATEMENT_LIST'!".format(children[0]))
     token = tokens.popleft()
     if not (token[0] == TOKEN_NAME and token[1] == "else"):
-        raise Exception()
+        raise Exception("Expected 'else' after 'if ({}) then {{ STATEMENT_LIST }}'!".format(children[0]))
     if not tokens.popleft()[0] == TOKEN_OPEN_BRACE:
-        raise Exception()
-    children.append(not_none(parse_statement_list(tokens)))
+        raise Exception("Expected '{{' after 'if ({}) then {{ STATEMENT_LIST }} else'!".format(children[0]))
+    children.append(not_none(parse_statement_list(tokens), "Expected 'STATEMENT_LIST' after 'if ({}) then {{ STATEMENT_LIST }} else {{'!".format(children[0])))
     if not tokens.popleft()[0] == TOKEN_CLOSE_BRACE:
-        raise Exception()
+        raise Exception("Expected '}}' after 'if ({}) then {{ STATEMENT_LIST }} else {{ STATEMENT_LIST'!".format(children[0]))
     return (NODE_STATEMENT_IF, children)
 
 def parse_assign(tokens):
@@ -265,43 +270,43 @@ def parse_assign(tokens):
     children = []
     children.append(tokens.popleft()[1])
     tokens.popleft()
-    children.append(not_none(parse_expr(tokens)))
+    children.append(not_none(parse_expr(tokens), "Expected 'EXPR' after '{} ='!".format(children[0])))
     if not tokens.popleft()[0] == TOKEN_SEMICOLON:
-        raise Exception()
+        raise Exception("Expected ';' after '{} = {}'!".format(children[0], children[1]))
     return (NODE_STATEMENT_ASSIGN, children)
 
 def parse_cond_expr(tokens):
     if tokens[0][0] == TOKEN_OPEN_BRACKET:
         o = tokens.popleft()[1]
-        o += not_none(parse_cond_expr(tokens))
+        o += not_none(parse_cond_expr(tokens), "Expected 'COND_EXPR' after '('!")
         token = tokens.popleft()
         if not token[0] == TOKEN_CLOSE_BRACKET:
-            raise Exception()
+            raise Exception("Expected ')' after '{}'!".format(o))
         o += token[1]
         token = tokens.popleft()
         if not (token[0] == TOKEN_AND or token[0] == TOKEN_OR):
-            raise Exception()
+            raise Exception("Expected '&&' or '||' after '{}'!".format(o))
         o += " {} ".format(token[1])
         token = tokens.popleft()
         if not token[0] == TOKEN_OPEN_BRACKET:
-            raise Exception()
+            raise Exception("Expected '(' after '{}'!".format(o))
         o += token[1]
-        o += not_none(parse_cond_expr(tokens))
+        o += not_none(parse_cond_expr(tokens), "Expected 'COND_EXPR' after '{}'!".format(o))
         token = tokens.popleft()
         if not token[0] == TOKEN_CLOSE_BRACKET:
-            raise Exception()
+            raise Exception("Expected ')' after '{}'!".format(o))
         o += token[1]
         return o
     elif tokens[0][0] == TOKEN_NOT:
         o = tokens.popleft()[1]
         token = tokens.popleft()
         if not token[0] == TOKEN_OPEN_BRACKET:
-            raise Exception()
+            raise Exception("Expected '(' after '{}'!".format(o))
         o += token[1]
-        o += not_none(parse_cond_expr(tokens))
+        o += not_none(parse_cond_expr(tokens), "Expected 'COND_EXPR' after '{}'!".format(o))
         token = tokens.popleft()
         if not token[0] == TOKEN_CLOSE_BRACKET:
-            raise Exception()
+            raise Exception("Expected ')' after '{}'!".format(o))
         o += token[1]
         return o
     o = parse_rel_expr(tokens)
@@ -314,9 +319,9 @@ def parse_rel_expr(tokens):
     if o is None:
         return None
     if not tokens[0][0] == TOKEN_REL_EXPR:
-        return o
+        raise Exception("Expected '>=' or '<=' or '==' or '!=' or '>' or '<' after '{}'!".format(o))
     o += " {} ".format(tokens.popleft()[1])
-    o += not_none(parse_rel_factor(tokens))
+    o += not_none(parse_rel_factor(tokens), "Expected 'REL_FACTOR' after '{}'!".format(o))
     return o
 
 def parse_rel_factor(tokens):
@@ -355,7 +360,7 @@ def parse_factor(tokens):
         o += parse_expr(tokens)
         token = tokens.popleft()
         if not token[0] == TOKEN_CLOSE_BRACKET:
-            raise Exception()
+            raise Exception("Expected ')' after '{}'!".format(o))
         o += token[1]
         return o
     return None
@@ -366,9 +371,42 @@ def parse_factor(tokens):
 def analyse():
     printerr("This function is not implemented yet :)")
 
+# Check that all .src files contain valid grammar
+def check():
+    queries_paths, source_paths = get_tests_paths()
+
+    if len(source_paths) == 0:
+        printwarn("No source files were found!")
+        return
+
+    printinfo("Checking .src files...")
+    for index, source_path in enumerate(source_paths):
+        source_full_path = "{}.{}".format(source_path, SOURCE_EXTENSION)
+
+        with open(source_full_path) as f:
+            content = "".join(f.readlines())
+
+        path = os.path.relpath(source_full_path)
+        printinfo("Checking ({}/{}): '{}'".format(index+1, len(source_paths), path))
+
+        try:
+            parse_program(tokenize_source(content))
+        except Exception as err:
+            printwarn("Invalid grammar!\nError Message: {}".format(err))
+            continue
+
+        printinfo("Valid grammar :)")
+
+    printinfo("All done! :)")
+
+
 # Generate .lab files from existing .src files
 def label():
     queries_paths, source_paths = get_tests_paths()
+
+    if len(source_paths) == 0:
+        printwarn("No source files were found!")
+        return
 
     printinfo("Generating .lab files...")
     for index, source_path in enumerate(source_paths):
@@ -382,11 +420,10 @@ def label():
             tokens = tokenize_source(content)
             ast = parse_program(tokens)
         except:
-            path = os.path.relpath(source_full_path)
-            printwarn("'{}' contains invalid grammar! Skipping...".format(path))
             continue
 
-        printinfo("Labelling ({}/{}): {}".format(index+1, len(source_paths), source_full_path))
+        path = os.path.relpath(label_full_path)
+        printinfo("Labelling ({}/{}): '{}'".format(index+1, len(source_paths), path))
         statements = []
         for i, p in enumerate(ast[1]):
             if i != 0:
@@ -408,6 +445,8 @@ def label():
 
         with open(label_full_path, "w") as f:
             f.writelines(lines)
+
+    printinfo("All done! :)")
 
 def label_statements(statement_list, indent):
     result = []
@@ -441,8 +480,8 @@ def run():
     queries_paths, source_paths = get_tests_paths()
 
     if len(source_paths) == 0:
-        printwarn("No source files were found! Exiting...")
-        exit()
+        printwarn("No source files were found!")
+        return
 
     # Check dependencies of source files
     printinfo("Checking source dependencies files...")
@@ -506,13 +545,14 @@ if not sys.version_info.major >= 3:
 # Parse command arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--analyse", action="store_true", help="Summarize 'coverage' of all .qry and .src files")
+parser.add_argument("-c", "--check", action="store_true", help="Check that all .src files contain valid grammar")
 parser.add_argument("-l", "--label", action="store_true", help="Generate .lab files from existing .src files")
 parser.add_argument("-r", "--run", action="store_true", help="Tests all .src files using AutoTester")
 parser.add_argument("tests_dir_path", help="Path of directory containing tests")
 args = parser.parse_args()
 
 # If no options are selected, run by default
-if not (args.analyse or args.label or args.run):
+if not (args.analyse or args.check or args.label or args.run):
     args.run = True
 
 # Check tests_path
@@ -532,6 +572,9 @@ if not os.path.isdir(OUTPUT_DIRECTORY):
 # Run options
 if args.analyse:
     analyse()
+
+if args.check:
+    check()
 
 if args.label:
     label()
