@@ -3,24 +3,26 @@
 002 		end = 100;
 003 		if (start == 0) then {
 004 			start = 0;
----			}
-005		while (start < end) {
-006 			start = start + 1;
+---		} else {
+005			start = 0;
+---		}
+006		while (start < end) {
+007 			start = start + 1;
 --- 		}
-007 		start = start - end;
-008			middle = (start + end) / 2;
-009		if (middle > 0) then {
-010 			print start;
+008 		start = start - end;
+009		middle = (start + end) / 2;
+010		if (middle > 0) then {
+011 			print start;
 --- 		} else {
-011 			print end;
+012 			print end;
 --- 		}
-012		if (middle < 0) then {
-013 			print end;
---- 		}
-014		while (middle < end) {
-015 			end = end - 1;
-016 			start = start + 1;
+013		if (middle < 0) then {
+014 			print end;
+--- 		} else {
+015			print start;
+---		}
+016		while (middle < end) {
+017 			end = end - 1;
+018 			start = start + 1;
 ---		}
 --- }
-	
-	

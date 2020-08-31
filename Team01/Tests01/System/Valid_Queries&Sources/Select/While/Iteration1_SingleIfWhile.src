@@ -6,5 +6,7 @@ procedure singleIfWhile {
 	}
 	if (end==100) then {
 		print start;
+	} else {
+		print end;
 	}
 }

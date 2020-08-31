@@ -9,9 +9,16 @@ procedure multipleNestedIf {
 			if (third != fourth) {
 				if (fourth != fifth) {
 					print fifth;
+				} else {
+					print first;
 				}
+			} else {
+				print first;
 			}
+		} else {
+			print first;
 		}
+	} else {
+		print first;
 	}
-
 }

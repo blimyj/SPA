@@ -13,6 +13,8 @@
 009 			end = end - 1;
 010 			if (end == 0) then {
 011 				print end;
---- 			}
+--- 			} else {
+012				print start;
+---			}
 --- 		}
 --- }

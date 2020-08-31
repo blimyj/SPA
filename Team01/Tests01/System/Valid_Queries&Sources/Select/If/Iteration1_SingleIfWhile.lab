@@ -6,5 +6,7 @@
 --- 		}
 005		if (end==100) then {
 006 			print start; 
---- 		}
+--- 		} else {
+007			print end;
+---		}
 --- }
