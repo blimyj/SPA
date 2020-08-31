@@ -20,6 +20,12 @@ SOURCE_EXTENSION = "src"
 SOURCE_DEPENDENCIES_EXTENSION = "dep"
 LABEL_EXTENSION = "lab"
 
+WARNING_COLOR = "\033[93m"
+ERROR_COLOR = "\033[91m"
+END_COLOR = "\033[0m"
+
+LABEL_INDENTATION = "    "
+
 TOKEN_NAME = 0
 TOKEN_INTEGER = 1
 TOKEN_OPEN_BRACKET = 2
@@ -61,10 +67,6 @@ TOKENS_PATTERN = {
     "=": TOKEN_EQUALS,
     "\s+": None
 }
-
-WARNING_COLOR = "\033[93m"
-ERROR_COLOR = "\033[91m"
-END_COLOR = "\033[0m"
 
 
 
@@ -397,7 +399,7 @@ def label():
         lines = []
         n = 0
         for b, i, v in statements:
-            indent = " "*4*i
+            indent = LABEL_INDENTATION * i
             if b:
                 n += 1
                 lines.append("{:03d} {}{}\n".format(n, indent, v))
