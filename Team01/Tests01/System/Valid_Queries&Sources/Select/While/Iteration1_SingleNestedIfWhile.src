@@ -13,6 +13,8 @@ procedure singleNestedIfWhile {
 		end = end - 1;
 		if (end == 0) then {
 			print end;
+		} else {
+			print start;
 		}
 	}
 }

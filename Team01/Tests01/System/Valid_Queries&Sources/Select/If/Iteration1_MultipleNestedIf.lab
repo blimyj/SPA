@@ -9,8 +9,16 @@
 008				if (third != fourth) {
 009					if (fourth != fifth) {
 010						print fifth;
+---					} else {
+011						print first;
 ---					}
+---				} else {
+012					print first;
 ---				}
+---			} else {
+013				print first;
 ---			}
+---		} else {
+014			print first;
 ---		}
 --- }

@@ -3,6 +3,8 @@ procedure multipleIfWhile {
 	end = 100;
 	if (start == 0) then {
 		start = 0;
+	} else {
+		start = 0;
 	}
 	while (start < end) {
 		start = start + 1;
@@ -16,6 +18,8 @@ procedure multipleIfWhile {
 	}
 	if (middle < 0) then {
 		print end;
+	} else {
+		print start;
 	}
 	while (middle < end) {
 		end = end - 1;
