@@ -2,7 +2,7 @@ procedure sourceTwo {
     read a;
     read b;
     c = 0;
-    if (a == 0) {
+    if (a == 0) then {
         read d;
     } else {
         e = a + b + 1;

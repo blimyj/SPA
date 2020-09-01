@@ -2,7 +2,7 @@
 001     read a;
 002     read b;
 003     c = 0;
-004     if (a == 0) {
+004     if (a == 0) then {
 005         read d;
 006     } else {
 007         e = a + b + 1;
