@@ -9,9 +9,11 @@ procedure sourceTwo {
         print e;
     }
     while (c < 5) {
-        if (c == 0) {
+        if (c == 0) then {
             print a;
             read f;
+        } else {
+            f = 1;
         }
         print c;
         c = c + 1;
