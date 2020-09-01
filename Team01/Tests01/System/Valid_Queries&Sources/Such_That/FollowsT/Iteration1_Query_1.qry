@@ -103,3 +103,13 @@ print p;
 Select p such that Follows*(9, p);
 10
 1000
+22 - Statement and Statement 1
+stmt s1, s2;
+Select s1 such that Follows*(s1, s2);
+1, 2, 3, 4, 9, 11
+1000
+23 - Statement and Statement 1
+stmt s1, s2;
+Select s2 such that Follows*(s1, s2);
+2, 3, 4, 10, 12
+1000
