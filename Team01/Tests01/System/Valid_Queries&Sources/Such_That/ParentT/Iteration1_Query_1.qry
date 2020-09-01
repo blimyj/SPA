@@ -66,12 +66,12 @@ Select i such that Parent*(i, 9)
 14 - If and Constant 2
 if i;
 Select i such that Parent*(i, 21)
-18
+5, 18
 1000
 15 - Constant and If 1
 if i;
 Select i such that Parent*(16, i)
-16, 21
+18, 21
 1000
 16 - Constant and If 2
 if i;
@@ -169,32 +169,32 @@ Select w such that Parent*(i, w)
 12, 16
 1000
 35 - Statement and Statement 1
-stmt s1; stmt s2;
+stmt s1, s2;
 Select s1 such that Parent*(s1, s2)
 5, 7, 12, 16, 18, 21
 1000
 36 - Statement and Statement 2
-stmt s1; stmt s2;
+stmt s1, s2;
 Select s2 such that Parent*(s1, s2)
 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
 1000
 37 - While and While 1
-while w1; while w2;
+while w1, w2;
 Select w1 such that Parent*(w1, w2)
 12
 1000
 38 - While and While 2
-while w1; while w2;
+while w1, w2;
 Select w2 such that Parent*(w1, w2)
 16
 1000
 39 - If and If 1
-if i1; if i2;
+if i1, i2;
 Select i1 such that Parent*(i1, i2)
 5, 18
 1000
 40 - If and If 2
-if i1; if i2;
+if i1, i2;
 Select i2 such that Parent*(i1, i2)
-7, 21
+7, 18, 21
 1000
