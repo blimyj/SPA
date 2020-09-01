@@ -152,6 +152,18 @@ def not_none(n, error):
         raise Exception(error)
     return n
 
+def lookahead(function, tokens):
+    tokens_copy = tokens.copy()
+    try:
+        o = function(tokens_copy)
+    except Exception:
+        return None
+    if o is None:
+        return None
+    tokens.clear()
+    tokens.extend(tokens_copy)
+    return o
+
 def parse_program(tokens):
     children = []
     children.append(not_none(parse_procedure(tokens), "Expected 'PROCEDURE'!"))
@@ -276,6 +288,11 @@ def parse_assign(tokens):
     return (NODE_STATEMENT_ASSIGN, children)
 
 def parse_cond_expr(tokens):
+    o = lookahead(parse_rel_expr, tokens)
+    if not o is None:
+        return o
+    if not (tokens[0][0] == TOKEN_OPEN_BRACKET or tokens[0][0] == TOKEN_NOT):
+        raise Exception("Expected '(' or '!' in 'COND_EXPR'!")
     if tokens[0][0] == TOKEN_OPEN_BRACKET:
         o = tokens.popleft()[1]
         o += not_none(parse_cond_expr(tokens), "Expected 'COND_EXPR' after '('!")
@@ -309,10 +326,6 @@ def parse_cond_expr(tokens):
             raise Exception("Expected ')' after '{}'!".format(o))
         o += token[1]
         return o
-    o = parse_rel_expr(tokens)
-    if o is None:
-        return None
-    return o
 
 def parse_rel_expr(tokens):
     o = parse_rel_factor(tokens)
