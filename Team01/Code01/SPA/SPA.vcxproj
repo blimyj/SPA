@@ -13,11 +13,41 @@
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
-    <ClCompile Include="..\source\PKB.cpp" />
+    <ClCompile Include="..\source\PKB\AssignTable.cpp" />
+    <ClCompile Include="..\source\PKB\ConstantTable.cpp" />
+    <ClCompile Include="..\source\PKB\FollowsTable.cpp" />
+    <ClCompile Include="..\source\PKB\IfTable.cpp" />
+    <ClCompile Include="..\source\PKB\ModifiesTable.cpp" />
+    <ClCompile Include="..\source\PKB\ParentTable.cpp" />
+    <ClCompile Include="..\source\PKB\PrintTable.cpp" />
+    <ClCompile Include="..\source\PKB\ProcedureTable.cpp" />
+    <ClCompile Include="..\source\PKB\ReadTable.cpp" />
+    <ClCompile Include="..\source\PKB\StatementTable.cpp" />
+    <ClCompile Include="..\source\PKB\UsesTable.cpp" />
+    <ClCompile Include="..\source\PKB\VariableTable.cpp" />
+    <ClCompile Include="..\source\PKB\WhileTable.cpp" />
+    <ClCompile Include="..\source\PKB_Old.cpp" />
     <ClCompile Include="..\source\TNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\ASTNode.h" />
+    <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\PKB.h" />
+    <ClInclude Include="..\source\PKBBuilder.h" />
+    <ClInclude Include="..\source\PKB\AssignTable.h" />
+    <ClInclude Include="..\source\PKB\ConstantTable.h" />
+    <ClInclude Include="..\source\PKB\FollowsTable.h" />
+    <ClInclude Include="..\source\PKB\IfTable.h" />
+    <ClInclude Include="..\source\PKB\ModifiesTable.h" />
+    <ClInclude Include="..\source\PKB\ParentTable.h" />
+    <ClInclude Include="..\source\PKB\PrintTable.h" />
+    <ClInclude Include="..\source\PKB\ProcedureTable.h" />
+    <ClInclude Include="..\source\PKB\ReadTable.h" />
+    <ClInclude Include="..\source\PKB\StatementTable.h" />
+    <ClInclude Include="..\source\PKB\UsesTable.h" />
+    <ClInclude Include="..\source\PKB\VariableTable.h" />
+    <ClInclude Include="..\source\PKB\WhileTable.h" />
+    <ClInclude Include="..\source\PKB_Old.h" />
     <ClInclude Include="..\source\TNode.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

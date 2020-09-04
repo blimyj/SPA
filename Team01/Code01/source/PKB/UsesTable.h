@@ -23,4 +23,9 @@ public:
         /*
         Description: Returns a BOOLEAN indicating whether or not Uses(p, v) holds.
         */
+
+private:
+    STATEMENT_TABLE statement_table_;
+    PROCEDURE_TABLE procedure_table_;
+
 };

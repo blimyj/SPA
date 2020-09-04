@@ -13,4 +13,8 @@ public:
         /*
         Description: Returns a BOOLEAN indicating whether or not Parent(s1, s2) holds.
         */
+
+private:
+    TABLE table_;
+
 };
