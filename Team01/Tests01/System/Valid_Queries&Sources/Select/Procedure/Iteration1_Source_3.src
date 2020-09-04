@@ -10,11 +10,3 @@ procedure proc1 {
 	}
 	h = 11 + i;
 }
-
-procedure proc2 {
-	call proc1;
-	while (x == 0) {
-		read y
-		print z
-	}
-}
