@@ -13,4 +13,8 @@ public:
         /*
         Description: Returns a collection of STATEMENT_NUMBER added to this table.
         */
+
+private:
+    TABLE table_;
+
 };
