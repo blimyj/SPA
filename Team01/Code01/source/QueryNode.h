@@ -15,8 +15,9 @@ private:
 
 public: 
 	QueryNode();
-	//QUERY_NODE_POINTER createNode(NODE_TYPE node_type, QUERY_NODE_POINTERS children);
+	void setNodeType(NODE_TYPE node_type);
 	NODE_TYPE getNodeType();
+	void setChildren(QUERY_NODE_POINTERS children); //need to add all children at once, in the right order
 	QUERY_NODE_POINTERS getChildren();
 
 };
