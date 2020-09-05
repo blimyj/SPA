@@ -1,21 +1,26 @@
 #pragma once
 
-#include "ASTNode.h"
+#include "StatementNode.h"
 
-class PrintNode : public ASTNode {
+class PrintNode : public StatementNode {
 
 public:
-	PrintNode(VAR_NODE_PTR var_node);
+	PrintNode(VAR_NODE_PTR var_node_ptr);
 		/*
-			Description: Constructs an PrintNode that contains a VAR_NODE that it prints.
+		Description: Constructs an PrintNode that contains a AST_NODE_PTR that it prints.
 		*/
 
-	VAR_NODE_PTR getVariable();
+	BOOLEAN setVariableNode(VAR_NODE_PTR var_node_ptr);
 		/*
-			Description: Returns the VAR_NODE_PTR of the vairable node attached to this AssignNode
+		Description: Returns True if able to set node_ as the var_node, false otherwise.
+		*/
+
+	VAR_NODE_PTR getVariableNode();
+		/*
+		Description: Returns the VAR_NODE_PTR of the variable node attached to this PrintNode.
 		*/
 
 private:
-	VAR_NODE_PTR var_node_;
+	VAR_NODE_PTR var_node_ptr_;
 
 };

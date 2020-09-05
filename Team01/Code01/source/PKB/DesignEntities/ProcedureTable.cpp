@@ -1,22 +1,23 @@
 #include <iostream>
 #include <vector>
 #include "ProcedureTable.h"
+#include "../ASTNode/ProcedureNode.h"
 
 typedef int INDEX;
-typedef std::string PROCEDURE_NAME;
-typedef std::vector<PROCEDURE_NAME> TABLE;
-typedef std::vector<PROCEDURE_NAME> PROCEDURE_NAME_LIST;
+typedef ProcedureNode* PROC_NODE_PTR;
+typedef std::vector<PROC_NODE_PTR> TABLE;
+typedef std::vector<PROC_NODE_PTR> PROC_NODE_PTR_LIST;
 
-INDEX ProcedureTable::addProcedureName(PROCEDURE_NAME p) {
+INDEX ProcedureTable::addProcedureNode(PROC_NODE_PTR node) {
     INDEX index = table_.size();
-    table_.push_back(p);
+    table_.push_back(node);
     return index;
 }
 
-STATEMENT_NUMBER_LIST ProcedureTable::getProcedureNameList() {
-    PROCEDURE_NAME_LIST copy;
-    for (PROCEDURE_NAME p : table_) {
-        copy.push_back(p);
+PROC_NODE_PTR_LIST ProcedureTable::getProcedureNodeList() {
+    PROC_NODE_PTR_LIST copy;
+    for (PROC_NODE_PTR node : table_) {
+        copy.push_back(node);
     }
     return copy;
 }

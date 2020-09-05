@@ -1,21 +1,23 @@
 #include <iostream>
 #include <vector>
 #include "IfTable.h"
+#include "../ASTNode/IfNode.h"
 
 typedef int INDEX;
-typedef std::string STATEMENT_NUMBER;
-typedef std::vector<STATEMENT_NUMBER> STATEMENT_NUMBER_LIST;
+typedef IfNode* IF_NODE_PTR;
+typedef std::vector<IF_NODE_PTR> TABLE;
+typedef std::vector<IF_NODE_PTR> IF_NODE_PTR_LIST;
 
-INDEX IfTable::addStatementNumber(STATEMENT_NUMBER n) {
+INDEX IfTable::addIfNode(IF_NODE_PTR node) {
     INDEX index = table_.size();
-    table_.push_back(n);
+    table_.push_back(node);
     return index;
 }
 
-STATEMENT_NUMBER_LIST IfTable::getStatementNumberList() {
-    STATEMENT_NUMBER_LIST copy;
-    for (STATEMENT_NUMBER n : table_) {
-        copy.push_back(n);
+IF_NODE_PTR_LIST IfTable::getIfNodeList() {
+    IF_NODE_PTR_LIST copy;
+    for (IF_NODE_PTR node : table_) {
+        copy.push_back(node);
     }
     return copy;
 }

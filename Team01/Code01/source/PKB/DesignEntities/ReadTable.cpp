@@ -1,22 +1,23 @@
 #include <iostream>
 #include <vector>
 #include "ReadTable.h"
+#include "../ASTNode/ReadNode.h"
 
 typedef int INDEX;
-typedef std::string STATEMENT_NUMBER;
-typedef std::vector<STATEMENT_NUMBER> TABLE;
-typedef std::vector<STATEMENT_NUMBER> STATEMENT_NUMBER_LIST;
+typedef ReadNode* READ_NODE_PTR;
+typedef std::vector<READ_NODE_PTR> TABLE;
+typedef std::vector<READ_NODE_PTR> READ_NODE_PTR_LIST;
 
-INDEX ReadTable::addStatementNumber(STATEMENT_NUMBER s) {
+INDEX ReadTable::addReadNode(READ_NODE_PTR node) {
     INDEX index = table_.size();
-    table_.push_back(s);
+    table_.push_back(node);
     return index;
 }
 
-STATEMENT_NUMBER_LIST ReadTable::getStatementNumberList() {
-    STATEMENT_NUMBER_LIST copy;
-    for (STATEMENT_NUMBER s : table_) {
-        copy.push_back(s);
+READ_NODE_PTR_LIST ReadTable::getReadNodeList() {
+    READ_NODE_PTR_LIST copy;
+    for (READ_NODE_PTR node : table_) {
+        copy.push_back(node);
     }
     return copy;
 }

@@ -4,14 +4,14 @@ class VariableTable {
 /* Overview: This is a data structure*/
 
 public:
-    INDEX addVariableName(VARIABLE_NAME v);
+    INDEX addVariableNode(VAR_NODE_PTR node);
         /*
-        Description: Returns the index of the VARIABLE_NAME that is added to the table.
+        Description: Returns the index of the VAR_NODE_PTR added to the table.
         */
 
-    VARIABLE_NAME_LIST getVariableNameList();
+    VAR_NODE_PTR_LIST getVariableNodeList();
         /*
-        Description: Returns a collection of VARIALBE_NAME added to this table.
+        Description: Returns a VAR_NODE_PTR_LIST of the table.
         */
 
 private:

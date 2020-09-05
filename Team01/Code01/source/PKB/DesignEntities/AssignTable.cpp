@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
 #include "AssignTable.h"
-#include "AssignNode.h"
+#include "../ASTNode/AssignNode.h"
 
 typedef int INDEX;
-typedef AssignNode ASSIGN_NODE_PTR;
+typedef AssignNode* ASSIGN_NODE_PTR;
 typedef std::vector<ASSIGN_NODE_PTR> TABLE;
 typedef std::vector<ASSIGN_NODE_PTR> ASSIGN_NODE_PTR_LIST;
 

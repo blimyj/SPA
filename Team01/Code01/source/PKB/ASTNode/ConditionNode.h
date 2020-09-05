@@ -2,34 +2,50 @@
 
 #include "ASTNode.h"
 
-class ConditionNode : public ASTNode {
+class ConditionNode : public StatementNode {
 
 public:
-	ConditionNode(RELATION_TYPE relation_type, AST_NODE_PTR left_node, AST_NODE_PTR right_node);
+	ConditionNode(CONDITION_TYPE condition_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr);
 		/*
-			Description: Constructs an ConditionNode consisting of a RELATION_TYPE, left and right AST_NODE_PTR.
+		Description: Constructs an ConditionNode consisting of a CONDITION_TYPE, left and right AST_NODE_PTR.
 		*/
 
-	RELATION_TYPE getRelationType();
+	BOOLEAN setRelationType(CONDITION_TYPE condition_type);
 		/*
-			Description: Returns the RELATION_TYPE of the condition.
+		Description: Returns the CONDITION_TYPE enum of the condition.
+		Can be CONDITION_TYPE enum of NONE, NOT, AND, OR
+		*/
+
+	BOOLEAN setLeftAstNode(AST_NODE_PTR left_node_ptr);
+		/*
+		Description: Returns True if able to set left_node_ as left_node_ptr, false otherwise.
+		left_node_ptr must be ConditionNode or RelationNode
+		*/
+
+	BOOLEAN setRightAstNode(AST_NODE_PTR right_node_ptr);
+		/*
+		Description: Returns True if able to set right_node_ as right_node_ptr, false otherwise.
+		right_node_ptr must be ConditionNode or RelationNode
+		*/
+
+	RELATION_TYPE getConditionType();
+		/*
+		Description: Returns the CONDITION_TYPE of this condition.
 		*/
 
 	AST_NODE_PTR getLeftAstNode();
 		/*
-			Description: Returns the AST_NODE_PTR of the left hand side of the expression.
+		Description: Returns the AST_NODE_PTR of the left hand side of the expression.
 		*/
-
 
 	AST_NODE_PTR getRightAstNode();
 		/*
-			Description: Returns the AST_NODE_PTR of the right hand side of the expression.
+		Description: Returns the AST_NODE_PTR of the right hand side of the expression, throws exception if this node has CONDITION_TYPE NONE.
 		*/
 
-
 private:
-	RELATION_TYPE relation_type_;
-	AST_NODE_PTR left_node_;
-	AST_NODE_PTR right_node_;
+	CONDITION_TYPE CONDITION_TYPE;
+	AST_NODE_PTR left_node_ptr_;
+	AST_NODE_PTR right_node_ptr_;
 
 };

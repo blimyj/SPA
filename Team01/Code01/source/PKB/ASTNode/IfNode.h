@@ -1,32 +1,46 @@
 #pragma once
 
-#include "ASTNode.h"
+#include "StatementNode.h"
 
-class IfNode : public ASTNode {
+class IfNode : public StatementNode {
 public:
-	IfNode(EXPR_NODE_PTR condition, STMT_LIST_NODE_PTR then_stmt_list, STMT_LIST_NODE_PTR else_stmt_list);
+	IfNode(CONDITION_NODE_PTR condition_node, STMT_LIST_NODE_PTR then_stmt_list_node_ptr, STMT_LIST_NODE_PTR else_stmt_list_node_ptr);
 		/*
-			Description: Constructs an IfNode with the given EXPRESSION_NODE_PTR, STATEMENT_LIST_PTR for both then and else.
+		Description: Constructs an IfNode with the given CONDITION_NODE_PTR, STATEMENT_LIST_PTR for both then and else.
 		*/
 
-	EXPR_NODE_PTR getCondition();
+	BOOLEAN setConditionNode(CONDITION_NODE_PTR condition_node_ptr);
 		/*
-			Description: Returns the EXPRESSION_NODE_PTR of IfNode condition.
+		Description: Returns True if able to set the condition_node_ptr_ as condition_node_ptr  of IfNode condition.
 		*/
 
-	STATEMENT_LIST_NODE_PTR getThenStatementList();
+	BOOLEAN setThenStatementListNode(STMT_LIST_NODE_PTR then_stmt_list_node_ptr);
 		/*
-			Description: Returns a STATEMENT_LIST_NODE_PTR of the then statement body.
+		Description: Returns True if able to set then_stmt_list_node_ as then_stmt_list, false otherwise.
 		*/
 
-	STATEMENT_LIST_NODE_PTR getElseStatementList();
+	BOOLEAN setElseStatementListNode(STMT_LIST_NODE_PTR else_stmt_list_node_ptr);
 		/*
-			Description: Returns a STATEMENT_LIST_NODE_PTR of the else statement body.
+		Description: Returns True if able to set else_stmt_list_node_ as else_stmt_list, false otherwise.
+		*/
+	CONDITION_NODE_PTR getConditionNode();
+		/*
+		Description: Returns the CONDITION_NODE_PTR of IfNode condition.
+		*/
+
+	STATEMENT_LIST_NODE_PTR getThenStatementListNode();
+		/*
+		Description: Returns a STATEMENT_LIST_NODE_PTR of the then statement body.
+		*/
+
+	STATEMENT_LIST_NODE_PTR getElseStatementListNode();
+		/*
+		Description: Returns a STATEMENT_LIST_NODE_PTR of the else statement body.
 		*/
 
 private:
-	EXPR_NODE_PTR expr_node_;
-	STMT_LIST_NODE_PTR then_stmt_list_node_;
-	STMT_LIST_NODE_PTR else_stmt_list_node_;
+	CONDITION_NODE_PTR condition_node_ptr_;
+	STMT_LIST_NODE_PTR then_stmt_list_node_ptr_;
+	STMT_LIST_NODE_PTR else_stmt_list_node_ptr_;
 
 };

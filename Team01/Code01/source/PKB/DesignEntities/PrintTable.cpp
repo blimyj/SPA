@@ -1,22 +1,23 @@
 #include <iostream>
 #include <vector>
-#include "PrintTable.h"
+#include "PrintTable.h" 
+#include "../ASTNode/PrintNode.h" 
 
 typedef int INDEX;
-typedef std::string STATEMENT_NUMBER;
-typedef std::vector<STATEMENT_NUMBER> TABLE;
-typedef std::vector<STATEMENT_NUMBER> STATEMENT_NUMBER_LIST;
+typedef PrintNode* PRINT_NODE_PTR;
+typedef std::vector<PRINT_NODE_PTR> TABLE;
+typedef std::vector<PRINT_NODE_PTR> PRINT_NODE_PTR_LIST;
 
-INDEX PrintTable::addStatementNumber(STATEMENT_NUMBER s) {
+INDEX PrintTable::addPrintNode(PRINT_NODE_PTR node) {
     INDEX index = table_.size();
-    table_.push_back(s);
+    table_.push_back(node);
     return index;
 }
 
-STATEMENT_NUMBER_LIST PrintTable::getStatementNumberList() {
-    STATEMENT_NUMBER_LIST copy;
-    for (STATEMENT_NUMBER s : table_) {
-        copy.push_back(s);
+PRINT_NODE_PTR_LIST PrintTable::getPrintNodeList() {
+    PRINT_NODE_PTR_LIST copy;
+    for (PRINT_NODE_PTR node : table_) {
+        copy.push_back(node);
     }
     return copy;
 }

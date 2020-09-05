@@ -1,22 +1,23 @@
 #include <iostream>
 #include <vector>
 #include "WhileTable.h"
+#include "../ASTNode/WhileNode.h"
 
 typedef int INDEX;
-typedef std::string STATEMENT_NUMBER;
-typedef std::vector<STATEMENT_NUMBER> TABLE;
-typedef std::vector<STATEMENT_NUMBER> STATEMENT_NUMBER_LIST;
+typedef WhileNode* WHILE_NODE_PTR;
+typedef std::vector<WHILE_NODE_PTR> TABLE;
+typedef std::vector<WHILE_NODE_PTR> WHILE_NODE_PTR_LIST;
 
-INDEX WhileTable::addStatementNumber(STATEMENT_NUMBER s) {
+INDEX WhileTable::addWhileNode(WHILE_NODE_PTR node) {
     INDEX index = table_.size();
-    table_.push_back(s);
+    table_.push_back(node);
     return index;
 }
 
-STATEMENT_NUMBER_LIST WhileTable::getStatementNumberList() {
-    STATEMENT_NUMBER_LIST copy;
-    for (STATEMENT_NUMBER s : table_) {
-        copy.push_back(s);
+WHILE_NODE_PTR_LIST WhileTable::getWhileNodeList() {
+    WHILE_NODE_PTR_LIST copy;
+    for (WHILE_NODE_PTR node : table_) {
+        copy.push_back(node);
     }
     return copy;
 }
