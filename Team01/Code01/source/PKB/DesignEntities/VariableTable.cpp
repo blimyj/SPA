@@ -1,22 +1,23 @@
 #include <iostream>
 #include <vector> 
 #include "VariableTable.h"
+#include "../ASTNode/VariableNode.h"
 
 typedef int INDEX;
-typedef std::string VARIABLE_NAME;
-typedef std::vector<VARIABLE_NAME> TABLE;
-typedef std::vector<VARIABLE_NAME> VARIABLE_NAME_LIST;
+typedef VariableNode* VAR_NODE_PTR;
+typedef std::vector<VAR_NODE_PTR> TABLE;
+typedef std::vector<VAR_NODE_PTR> VAR_NODE_PTR_LIST;
 
-INDEX VariableTable::addVariableName(VARIABLE_NAME v) {
+INDEX VariableTable::addVariableNode(VAR_NODE_PTR node) {
     INDEX index = table_.size();
-    table_.push_back(v);
+    table_.push_back(node);
     return index;
 }
 
-VARIABLE_NAME_LIST VariableTable::getVariableNameList() {
-    VARIABLE_NAME_LIST copy;
-    for (VARIABLE_NAME v : table_) {
-        copy.push_back(v);
+VAR_NODE_PTR_LIST VariableTable::getVariableNodeList() {
+    VAR_NODE_PTR_LIST copy;
+    for (VAR_NODE_PTR node : table_) {
+        copy.push_back(node);
     }
     return copy;
 }

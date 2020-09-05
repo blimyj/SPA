@@ -4,14 +4,14 @@ class ConstantTable {
 /* Overview: This is a data structure*/
 
 public:
-    INDEX addConstantName(CONSTANT_NODE_PTR node);
+    INDEX addConstantNode(CONSTANT_NODE_PTR node);
         /*
-        Description: Returns the index of the CONSTANT_NAME that is added to the table.
+        Description: Returns the index of the CONSTANT_NODE_PTR added to the table.
         */
 
-    CONSTANT_NODE_PTR_LIST getConstantNameList();
+    CONSTANT_NODE_PTR_LIST getConstantNodeList();
         /*
-        Description: Returns a collection of CONSTANT_NAME added to this table.
+        Description: Returns a CONSTANT_NAME_PTR_LIST of the table.
         */
 
 private:

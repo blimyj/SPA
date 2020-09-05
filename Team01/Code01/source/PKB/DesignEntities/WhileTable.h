@@ -1,17 +1,17 @@
 #pragma once
 
-class AssignTable {
+class WhileTable {
 /* Overview: This is a data structure*/
 
 public:
-    INDEX addStatementNumber(STATEMENT_NUMBER s);
+    INDEX addWhileNode(WHILE_NODE_PTR node);
         /*
-        Description: Returns the index of the STATEMENT_NUMBER that is added to the table.
+        Description: Returns the index of the WHILE_NODE_PTR added to the table.
         */
 
-    STATEMENT_NUMBER_LIST getStatementNumberList();
+    WHILE_NODE_PTR_LIST getWhileNodeList();
         /*
-        Description: Returns a collection of STATEMENT_NUMBER added to this table.
+        Description: Returns a WHILE_NODE_PTR_LIST of the table.
         */
 
 private:

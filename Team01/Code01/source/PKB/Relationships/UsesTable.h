@@ -21,7 +21,7 @@ public:
 
     BOOLEAN isUses(PROCEDURE_NAME p, VARIABLE_NAME v);
         /*
-        Description: Returns a BOOLEAN indicating whether or not Uses(p, v) holds.
+        Description: Returns a BOOLEAN indicating whether or not Uses(p, v) holds. I am not timothy. I am Kyzure
         */
 
 private:

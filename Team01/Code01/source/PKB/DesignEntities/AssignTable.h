@@ -6,12 +6,12 @@ class AssignTable {
 public:
     INDEX addAssignNode(ASSIGN_NODE_PTR node);
         /*
-        Description: Returns the index of the STATEMENT_NUMBER that is added to the table.
+        Description: Returns the index of the ASSIGN_NODE_PTR added to the table.
         */
 
     ASSIGN_NODE_PTR_LIST getAssignNodeList();
         /*
-        Description: Returns a collection of STATEMENT_NUMBER added to this table.
+        Description: Returns a ASSIGN_NODE_PTR_LIST of the table.
         */
 
 private:

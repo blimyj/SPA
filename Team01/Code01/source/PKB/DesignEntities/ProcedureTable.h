@@ -4,14 +4,14 @@ class ProcedureTable {
 /* Overview: This is a data structure*/
 
 public:
-    INDEX addProcedureName(PROCEDURE_NAME p);
+    INDEX addProcedureNode(PROC_NODE_PTR node);
         /*
-        Description: Returns the index of the PROCEDURE_NAME that is added to the table.
+        Description: Returns the index of the PROC_NODE_PTR added to the table.
         */
 
-    PROCEDURE_NAME_LIST getProcedureNameList();
+    PROC_NODE_PTR_LIST getProcedureNodeList();
         /*
-        Description: Returns a collection of PROCEDURE_NAME added to this table.
+        Description: Returns a PROC_NODE_PTR_LIST of the table.
         */
 
 private:
