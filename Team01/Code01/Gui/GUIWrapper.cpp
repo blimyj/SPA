@@ -1,8 +1,8 @@
 #include "GUIWrapper.h"
-
+#include "../source/QueryNode.cpp"
 #include <iostream>
 
-#include "QueryNode.cpp"
+
 
 // a default constructor
 GUIWrapper::GUIWrapper() {
@@ -21,7 +21,7 @@ void GUIWrapper::parse(std::string filename) {
 void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 // call your evaluator to evaluate the query here
   // ...code to evaluate query...
-	QueryNode qn = 
+	QueryNode qn = QueryNode();
 
 
 	std::cout << "query=  " << query << std::endl;
