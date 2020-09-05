@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "QueryNode.cpp"
+
 // a default constructor
 GUIWrapper::GUIWrapper() {
   // create any objects here as instance variables of this class
@@ -19,6 +21,8 @@ void GUIWrapper::parse(std::string filename) {
 void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 // call your evaluator to evaluate the query here
   // ...code to evaluate query...
+	QueryNode qn = 
+
 
 	std::cout << "query=  " << query << std::endl;
 	results.push_back(query + "\nQuery result: ...");
