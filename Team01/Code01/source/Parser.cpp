@@ -46,7 +46,7 @@ int parseFile(STRING filename) {
 int parseText(LIST_OF_STRINGS str_list) {
 	int line_cnt = 0;
 	for (string str : str_list) {
-		std::cout << "\nNEWLINE " << line_cnt << ": " << str;
+		//std::cout << "\nNEWLINE " << line_cnt << ": " << str;
 		//call parseLine
 	}
 
@@ -116,6 +116,13 @@ int parseLine(STRING str) {
 	//
 	
 	//Takes out only first set of whitespaces
+	std::string::iterator it = str.begin();
+	while (it != str.end() && std::isspace(*it)) {
+		++it;
+	}
+
+	//Check for empty line
+	if (it == str.end()) return 0;
 
 	//check for 'if' / 'while' in the first 2 and 5 chars  respectively & a '(' exists (Otherwise it could be a var name)
 		//call parseIf & parseWhile respectively
@@ -125,7 +132,7 @@ int parseLine(STRING str) {
 	
 	//check for 'read' / 'print' / 'procedure' / 'call'
 		//call parseRead & parsePrint & parseProc & parseCall respectively
-	
+
 	//check for '}'
 		//call parseStmtListClose;
 	
