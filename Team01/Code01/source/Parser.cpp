@@ -101,14 +101,19 @@ DOES NOT indicate the end of the line. There can be combinations of the aforemen
 */
 
 /*
-Due to the possibility of read, print, if, else, then, while, procedure, call being variable names,
+Due to the possibility of 'read', 'print', 'if', 'else', 'then', 'while', 'procedure', 'call' being variable names,
 we must look ahead at least 1 token to see if it is an assign statement.
+*/
+
+/*
+Note that for cond_expr, if a boolean operator is applied to it, the operand(s) cond_expr will each be encapsulated by the terminals '(', ')'
 */
 
 int parseLine(STRING str) {
 	
 	//Taking a string, we want to tokenize 1 at a time, with each token telling us what we expect next.
-	
+	//We must maintain class member curr_token_stream_ <--- A vector of important tokens, I believe we can ignore the following tokens: '{', '}', ';'
+	//
 	
 	//Takes out only first set of whitespaces
 
