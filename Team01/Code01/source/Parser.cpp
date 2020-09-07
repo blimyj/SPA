@@ -2,9 +2,15 @@
 #include <iostream>
 #include <string>
 #include <vector>
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 using namespace std;
+=======
+#include <sstream>
+#include <fstream>
+#include <unordered_map>
+>>>>>>> TEMP: Saving work on parser. Hit roadblock on calling parseSecondStreamToken after new lines
 
 #include "PKB.h"
 
@@ -45,9 +51,12 @@ int parseFile(STRING filename) {
 
 int parseText(LIST_OF_STRINGS str_list) {
 	int line_cnt = 0;
+	
+	/* Due to the 1 statement across multiple lines being allowed, splitting acording to lines is no longer a good idea.
+	* I now intend to read every thing possibly from a buffer (which could be a line)
+	*/
 	for (string str : str_list) {
-		//std::cout << "\nNEWLINE " << line_cnt << ": " << str;
-		//call parseLine
+		parseFirstStreamToken(str, 0);
 	}
 
 	return 0;
@@ -109,21 +118,78 @@ we must look ahead at least 1 token to see if it is an assign statement.
 Note that for cond_expr, if a boolean operator is applied to it, the operand(s) cond_expr will each be encapsulated by the terminals '(', ')'
 */
 
-int parseLine(STRING str) {
+AST_NODE_PTR current_parent_node_ = PROGRAM_NODE();
+
+//curr_token_stream_ stores tokens for a particular statement / opening segment
+//Note that first token always denotes type of statement
+std::vector<std::string> curr_token_stream_; 
+
+//Definition of function pointer hashtable
+typedef int (*PARSE_FUNC_PTR)(string, int);
+
+std::unordered_map<std::string, PARSE_FUNC_PTR> parse_func_table_ = {
+	{"read", parseRead},
+	{"print", parsePrint}
+};
+
+
+int parseFirstStreamToken(STRING str, int ind) {
 	
 	//Taking a string, we want to tokenize 1 at a time, with each token telling us what we expect next.
 	//We must maintain class member curr_token_stream_ <--- A vector of important tokens, I believe we can ignore the following tokens: '{', '}', ';'
-	//
 	
 	//Takes out only first set of whitespaces
-	std::string::iterator it = str.begin();
-	while (it != str.end() && std::isspace(*it)) {
-		++it;
+	int str_ind = ind;
+	while (str_ind < str.size() && std::isspace(str.at(str_ind))) {
+		str_ind++;
 	}
 
-	//Check for empty line
-	if (it == str.end()) return 0;
+	//If empty line, skips to next line
+	if (str_ind == str.size()) return 0;
+	//After this, we know str[str_ind] is not whitespace nor the end.
+	
+	//First Token Checker
+	if (curr_token_stream_.empty() && str[str_ind].isalnum()) {
+		start_ind = str_ind;
+		//read in first token of the form LETTER(LETTER|DIGIT)* ---> could be a NAME or a terminal
+		while (str_ind < str.size() && str[str_ind].isalnum()) {
+			str_ind++;
+		}
+		//take substr(old_ind, (str_ind - old_ind)) as first token and put into curr_token_stream_
+		std::string token = str.substr(old_ind, (str_ind - old_ind));
+		
+		//Note that first token could always be var name instead of actual stmt type.
+		curr_token_stream_.append(token);
+		parseFirstStreamToken(str, str_ind);
+	}
 
+
+	else {
+		//Takes out only first set of whitespaces
+		int str_ind = ind;
+		while (str_ind < str.size() && std::isspace(str.at(str_ind))) {
+			str_ind++;
+		}
+
+		//If empty line, skips to next line
+		if (str_ind == str.size()) return 0;
+		//After this, we know str[str_ind] is not whitespace nor the end.
+
+		if (curr_token_stream_.size() == 1) {
+			//Check if second token is '=' to differentiate assign statement from other statements
+			if (str[str_ind] == '=') {
+				//Change stmt type in curr_token_stream_ to assignment
+				curr_token_stream_.insert(curr_token_stream_.begin(), "assign");
+			} else {
+				PARSE_FUNC_PTR parse_func = parse_func_table_[token];
+				parse_func(str, str_ind);
+			}
+		}
+		//could be another alnum token
+		//could be assign operator
+		//could be a terminal like '{', '}', ';', '(', ')', arithmetic operators, boolean operators
+		//not sure if it could be terminals such as comparison operators
+	}
 	//check for 'if' / 'while' in the first 2 and 5 chars  respectively & a '(' exists (Otherwise it could be a var name)
 		//call parseIf & parseWhile respectively
 	
@@ -165,7 +231,7 @@ int parseAssign(STRING str) {
 	return 0;
 }
 
-int parseRead(STRING str) {
+int parseRead(STRING str, int ind) {
 	//We assume that this statement will terminate with ';'
 	return 0;
 }
