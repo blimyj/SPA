@@ -1,5 +1,6 @@
 #include "GUIWrapper.h"
 #include "../source/QueryNode.cpp"
+#include "../source/QueryProcessor.cpp"
 #include <iostream>
 
 
@@ -21,7 +22,9 @@ void GUIWrapper::parse(std::string filename) {
 void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 // call your evaluator to evaluate the query here
   // ...code to evaluate query...
+	QueryProcessor qp = QueryProcessor();
 	QueryNode qn = QueryNode();
+	QUERY_RESULT query_result = qp.processQuery(query);
 
 
 	std::cout << "query=  " << query << std::endl;
