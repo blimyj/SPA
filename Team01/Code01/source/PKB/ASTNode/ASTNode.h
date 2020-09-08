@@ -27,5 +27,4 @@ public:
 private:
 	AST_NODE_PTR parent_node_ptr_;
 	AST_NODE_PTR_LIST children_node_ptr_;
-	STATEMENT_NUMBER statement_number_;
 };

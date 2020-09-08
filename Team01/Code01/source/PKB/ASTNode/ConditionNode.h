@@ -28,7 +28,7 @@ public:
 		right_node_ptr must be ConditionNode or RelationNode
 		*/
 
-	RELATION_TYPE getConditionType();
+	CONDITION_TYPE getConditionType();
 		/*
 		Description: Returns the CONDITION_TYPE of this condition.
 		*/
@@ -44,7 +44,7 @@ public:
 		*/
 
 private:
-	CONDITION_TYPE CONDITION_TYPE;
+	CONDITION_TYPE condition_type_;
 	AST_NODE_PTR left_node_ptr_;
 	AST_NODE_PTR right_node_ptr_;
 

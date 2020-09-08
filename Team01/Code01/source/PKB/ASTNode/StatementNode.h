@@ -5,7 +5,7 @@
 class StatementNode : public ASTNode {
 	BOOLEAN setStatementNumber(INDEX stmt_num);
 		/*
-		Description: Returns true if successfully setting the INDEX of the statement index of this StatementNode.
+		Description: Returns true if successfully setting the STMT_NUMBER of this StatementNode.
 		*/
 
 	BOOLEAN setStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);
@@ -22,5 +22,9 @@ class StatementNode : public ASTNode {
 		/*
 		Description: Returns the parent STMT_LIST_NODE_PTR of this StatementNode.
 		*/
+
+private:
+	INDEX stmt_num_;
+	STMT_NODE_PTR_LIST stmt_node_ptr_list_;
 
 };
