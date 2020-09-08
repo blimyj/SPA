@@ -4,6 +4,7 @@ BOOLEAN StatementListNode::addStatementNode(STMT_NODE_PTR stmt_node_ptr) {
     try {
         stmt_node_ptr_list_.push_back(stmt_node_ptr);
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;

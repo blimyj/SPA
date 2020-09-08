@@ -8,6 +8,7 @@ BOOLEAN VariableNode::setVariableName(STRING var_name) {
 	try {
 		var_name_ = var_name;
 	} catch (int e) {
+		(void)e;
 		return false;
 	}
 	return true;

@@ -6,24 +6,24 @@
 
 typedef void VOID;
 typedef bool BOOLEAN;
-typedef std::shared_ptr<std::string> STATEMENT_NUMBER;
-typedef std::unordered_map<STATEMENT_NUMBER, STATEMENT_NUMBER> TABLE;
+typedef std::shared_ptr<int> STMT_NUM;
+typedef std::unordered_map<STMT_NUM, STMT_NUM> FOLLOWS_TABLE;
 
 class FollowsTable {
 /* Overview: This is a data structure*/
 
 public:
-    VOID addFollows(STATEMENT_NUMBER s1, STATEMENT_NUMBER s2);
+    VOID addFollows(STMT_NUM s1, STMT_NUM s2);
         /*
         Description: Adds to a collection that maps s1 to s2.
         */
 
-    BOOLEAN isFollows(STATEMENT_NUMBER s1, STATEMENT_NUMBER s2);
+    BOOLEAN isFollows(STMT_NUM s1, STMT_NUM s2);
         /*
         Description: Returns a BOOLEAN indicating whether or not Follows(s1, s2) holds.
         */
 
 private:
-    TABLE table_;
+    FOLLOWS_TABLE table_;
 
 };

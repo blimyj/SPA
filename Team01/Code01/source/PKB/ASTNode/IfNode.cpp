@@ -10,6 +10,7 @@ BOOLEAN IfNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
     try {
         condition_node_ptr_ = condition_node_ptr;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;
@@ -19,6 +20,7 @@ BOOLEAN IfNode::setThenStatementListNode(STMT_LIST_NODE_PTR then_stmt_list_node_
     try {
         then_stmt_list_node_ptr_ = then_stmt_list_node_ptr;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;
@@ -28,6 +30,7 @@ BOOLEAN IfNode::setElseStatementListNode(STMT_LIST_NODE_PTR else_stmt_list_node_
     try {
         else_stmt_list_node_ptr_ = else_stmt_list_node_ptr;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;

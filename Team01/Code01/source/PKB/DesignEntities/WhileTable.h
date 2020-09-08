@@ -6,7 +6,6 @@
 
 typedef int INDEX;
 typedef std::shared_ptr<WhileNode> WHILE_NODE_PTR;
-typedef std::vector<WHILE_NODE_PTR> TABLE;
 typedef std::vector<WHILE_NODE_PTR> WHILE_NODE_PTR_LIST;
 
 class WhileTable {
@@ -24,6 +23,6 @@ public:
         */
 
 private:
-    TABLE table_;
+    WHILE_NODE_PTR_LIST table_;
 
 };

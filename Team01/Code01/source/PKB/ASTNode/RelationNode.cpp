@@ -10,6 +10,7 @@ BOOLEAN RelationNode::setRelationType(RELATION_TYPE relation_type) {
     try {
         relation_type_ = relation_type;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;
@@ -19,6 +20,7 @@ BOOLEAN RelationNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     try {
         left_node_ptr_ = left_node_ptr;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;
@@ -28,6 +30,7 @@ BOOLEAN RelationNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
     try {
         right_node_ptr_ = right_node_ptr;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;

@@ -1,5 +1,23 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+#include "PKB/DesignEntities/AssignTable.h"
+#include "PKB/DesignEntities/ConstantTable.h"
+#include "PKB/DesignEntities/IfTable.h"
+#include "PKB/DesignEntities/PrintTable.h"
+#include "PKB/DesignEntities/ProcedureTable.h"
+#include "PKB/DesignEntities/ReadTable.h"
+#include "PKB/DesignEntities/StatementTable.h"
+#include "PKB/DesignEntities/VariableTable.h"
+#include "PKB/DesignEntities/WhileTable.h"
+#include "PKB/Relationships/FollowsTable.h"
+#include "PKB/Relationships/ParentTable.h"
+#include "PKB/Relationships/UsesTable.h"
+#include "PKB/Relationships/ModifiesTable.h"
+
+typedef void PKB_BUILDER;
+
 class PKB {
 /* Overview: The PKB that contains design entities and relationships of a given SIMPLE source code */
 
@@ -8,108 +26,108 @@ public:
     PKB(PKB_BUILDER builder);
 
     /*==== Design Entities ====*/
-    STATEMENT_NUMBER_LIST getStatements();
+    STMT_NODE_PTR_LIST getStatements();
         /*
-        Description: Returns the STATEMENT_NUMBER_LIST stored in STATEMENT_TABLE.
+        Description: Returns the STMT_NUM_LIST stored in STATEMENT_TABLE.
                      If there are no elements in the collection, returns an empty
-                     STATEMENT_NUMBER_LIST.
+                     STMT_NUM_LIST.
         */
 
-    STATEMENT_NUMBER_LIST getReads();
+    READ_NODE_PTR_LIST getReads();
         /*
-        Description: Returns the STATEMENT_NUMBER_LIST stored in READ_TABLE.
+        Description: Returns the STMT_NUM_LIST stored in READ_TABLE.
                      If there are no elements in the collection, returns an empty
-                     STATEMENT_NUMBER_LIST.
+                     STMT_NUM_LIST.
         */
 
-    STATEMENT_NUMBER_LIST getPrints();
+    PRINT_NODE_PTR_LIST getPrints();
         /*
-        Description: Returns the STATEMENT_NUMBER_LIST stored in PRINT_TABLE.
+        Description: Returns the STMT_NUM_LIST stored in PRINT_TABLE.
                      If there are no elements in the collection, returns an empty
-                     STATEMENT_NUMBER_LIST.
+                     STMT_NUM_LIST.
         */
-    
-    STATEMENT_NUMBER_LIST getWhiles();
+
+    WHILE_NODE_PTR_LIST getWhiles();
         /*
-        Description: Returns the STATEMENT_NUMBER_LIST stored in WHILE_TABLE.
+        Description: Returns the STMT_NUM_LIST stored in WHILE_TABLE.
                      If there are no elements in the collection, returns an empty
-                     STATEMENT_NUMBER_LIST.
+                     STMT_NUM_LIST.
         */
-    
-    STATEMENT_NUMBER_LIST getIfs();
+
+    IF_NODE_PTR_LIST getIfs();
         /*
-        Description: Returns the STATEMENT_NUMBER_LIST stored in IF_TABLE.
+        Description: Returns the STMT_NUM_LIST stored in IF_TABLE.
                      If there are no elements in the collection, returns an empty
-                     STATEMENT_NUMBER_LIST.
+                     STMT_NUM_LIST.
         */
-    
-    STATEMENT_NUMBER_LIST getAssigns();
+
+    ASSIGN_NODE_PTR_LIST getAssigns();
         /*
-        Description: Returns the STATEMENT_NUMBER_LIST stored in ASSIGN_TABLE.
+        Description: Returns the STMT_NUM_LIST stored in ASSIGN_TABLE.
                      If there are no elements in the collection, returns an empty
-                     STATEMENT_NUMBER_LIST.
+                     STMT_NUM_LIST.
         */
-    
-    CONSTANT_NAME_LIST getConstants();
+
+    CONSTANT_NODE_PTR_LIST getConstants();
         /*
         Description: Returns the CONSTANT_NAME_LIST stored in CONSTANT_TABLE.
                      If there are no elements in the collection, returns an empty
                      CONSTANT_NAME_LIST.
         */
 
-    VARIABLE_NAME_LIST getVariables();
+    VAR_NODE_PTR_LIST getVariables();
         /*
-        Description: Returns the VARIABLE_NAME_LIST stored in VARIABLE_TABLE.
+        Description: Returns the VAR_NAME_LIST stored in VARIABLE_TABLE.
                      If there are no elements in the collection, returns an empty
-                     VARIABLE_NAME_LIST.
+                     VAR_NAME_LIST.
         */
-    
-    PROCEDURE_NAME_LIST getProcedures();
+
+    PROC_NODE_PTR_LIST getProcedures();
         /*
-        Description: Returns the PROCEDURE_NAME_LIST stored in PROCEDURE_TABLE.
+        Description: Returns the PROC_NAME_LIST stored in PROCEDURE_TABLE.
                      If there are no elements in the collection, returns an empty
-                     PROCEDURE_NAME_LIST.
+                     PROC_NAME_LIST.
         */
 
     /*==== Relationships ====*/
-    BOOLEAN isFollows(STATEMENT_NUMBER s1, STATEMENT_NUMBER s2);
+    BOOLEAN isFollows(STMT_NUM s1, STMT_NUM s2);
         /*
         Description: Returns a BOOLEAN indicating whether or not
-                     Follows(STATEMENT_NUMBER, STATEMENT_NUMBER) holds
+                     Follows(STMT_NUM, STMT_NUM) holds
         */
 
-    BOOLEAN isParent(STATEMENT_NUMBER s1, STATEMENT_NUMBER s2);
+    BOOLEAN isParent(STMT_NUM s1, STMT_NUM s2);
         /*
         Description: Returns a BOOLEAN indicating whether or not
-                     Parent(STATEMENT_NUMBER, STATEMENT_NUMBER) holds
+                     Parent(STMT_NUM, STMT_NUM) holds
         */
 
-    BOOLEAN isUses(STATEMENT_NUMBER s, VARIABLE_NAME v);
+    BOOLEAN isUses(STMT_NUM s, VAR_NAME v);
         /*
         Description: Returns a BOOLEAN indicating whether or not
-                     Uses(STATEMENT_NUMBER, VARIABLE_NAME) holds
+                     Uses(STMT_NUM, VAR_NAME) holds
         */
 
-    BOOLEAN isUses(PROCEDURE_NAME p, VARIABLE_NAME v);
+    BOOLEAN isUses(PROC_NAME p, VAR_NAME v);
         /*
         Description: Returns a BOOLEAN indicating whether or not
-                     Uses(PROCEDURE_NAME, VARIABLE_NAME) holds
+                     Uses(PROC_NAME, VAR_NAME) holds
         */
 
-    BOOLEAN isModifies(STATEMENT_NUMBER s, VARIABLE_NAME v);
+    BOOLEAN isModifies(STMT_NUM s, VAR_NAME v);
         /*
         Description: Returns a BOOLEAN indicating whether or not
-                     Modifies(STATEMENT_NUMBER, VARIABLE_NAME) holds
+                     Modifies(STMT_NUM, VAR_NAME) holds
         */
 
-    BOOLEAN isModifies(PROCEDURE_NAME p, VARIABLE_NAME v);
+    BOOLEAN isModifies(PROC_NAME p, VAR_NAME v);
         /*
         Description: Returns a BOOLEAN indicating whether or not
-                     Modifies(PROCEDURE_NAME, VARIABLE_NAME) holds
+                     Modifies(PROC_NAME, VAR_NAME) holds
         */
 
     /*==== AST ====*/
-    PROGRAM_AST_NODE getProgramAST();
+    AST_NODE_PTR getProgramAST();
         /*
         Description: Returns the source program's AST.
         */

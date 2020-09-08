@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+class ASTNode;
+
 typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef std::vector<std::shared_ptr<ASTNode>> AST_NODE_PTR_LIST;
 typedef bool BOOLEAN;

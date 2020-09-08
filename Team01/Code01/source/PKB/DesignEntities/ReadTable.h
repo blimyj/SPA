@@ -6,7 +6,6 @@
 
 typedef int INDEX;
 typedef std::shared_ptr<ReadNode> READ_NODE_PTR;
-typedef std::vector<READ_NODE_PTR> TABLE;
 typedef std::vector<READ_NODE_PTR> READ_NODE_PTR_LIST;
 
 class ReadTable {
@@ -24,6 +23,6 @@ public:
         */
 
 private:
-    TABLE table_;
+    READ_NODE_PTR_LIST table_;
 
 };

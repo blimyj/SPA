@@ -4,6 +4,7 @@ BOOLEAN StatementNode::setStatementNumber(STMT_NUMBER stmt_num) {
     try {
         stmt_num_ = stmt_num;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;
@@ -13,6 +14,7 @@ BOOLEAN StatementNode::setStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_pt
     try {
         stmt_list_node_ptr_ = stmt_list_node_ptr;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;

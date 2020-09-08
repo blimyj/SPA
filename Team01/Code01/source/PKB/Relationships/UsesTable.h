@@ -6,38 +6,38 @@
 
 typedef void VOID;
 typedef bool BOOLEAN;
-typedef std::shared_ptr<std::string> STATEMENT_NUMBER;
-typedef std::shared_ptr<std::string> PROCEDURE_NAME;
-typedef std::shared_ptr<std::string> VARIABLE_NAME;
-typedef std::unordered_map<STATEMENT_NUMBER, VARIABLE_NAME> STATEMENT_TABLE;
-typedef std::unordered_map<PROCEDURE_NAME, VARIABLE_NAME> PROCEDURE_TABLE;
+typedef std::shared_ptr<int> STMT_NUM;
+typedef std::shared_ptr<std::string> PROC_NAME;
+typedef std::shared_ptr<std::string> VAR_NAME;
+typedef std::unordered_map<STMT_NUM, VAR_NAME> USES_STATEMENT_TABLE;
+typedef std::unordered_map<PROC_NAME, VAR_NAME> USES_PROCEDURE_TABLE;
 
 class UsesTable {
 /* Overview: This is a data structure*/
 
 public:
-    VOID addUses(STATEMENT_NUMBER s, VARIABLE_NAME v);
+    VOID addUses(STMT_NUM s, VAR_NAME v);
         /*
         Description: Adds to a collection that maps s to v.
         */
 
-    VOID addUses(PROCEDURE_NAME p, VARIABLE_NAME v);
+    VOID addUses(PROC_NAME p, VAR_NAME v);
         /*
         Description: Adds to a collection that maps p to v.
         */
 
-    BOOLEAN isUses(STATEMENT_NUMBER s, VARIABLE_NAME v);
+    BOOLEAN isUses(STMT_NUM s, VAR_NAME v);
         /*
         Description: Returns a BOOLEAN indicating whether or not Uses(s, v) holds.
         */
 
-    BOOLEAN isUses(PROCEDURE_NAME p, VARIABLE_NAME v);
+    BOOLEAN isUses(PROC_NAME p, VAR_NAME v);
         /*
         Description: Returns a BOOLEAN indicating whether or not Uses(p, v) holds. I am not timothy. I am Kyzure
         */
 
 private:
-    STATEMENT_TABLE statement_table_;
-    PROCEDURE_TABLE procedure_table_;
+    USES_STATEMENT_TABLE statement_table_;
+    USES_PROCEDURE_TABLE procedure_table_;
 
 };

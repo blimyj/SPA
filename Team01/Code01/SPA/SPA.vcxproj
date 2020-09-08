@@ -41,12 +41,12 @@
     <ClInclude Include="..\source\PKB\Relationships\ModifiesTable.h" />
     <ClInclude Include="..\source\PKB\Relationships\ParentTable.h" />
     <ClInclude Include="..\source\PKB\Relationships\UsesTable.h" />
-    <ClInclude Include="..\source\PKB_Old.h" />
-    <ClInclude Include="..\source\TNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
+    <ClCompile Include="..\source\PKB.cpp" />
+    <ClCompile Include="..\source\PKBBuilder.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\AssignNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\ASTNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\ConditionNode.cpp" />
@@ -74,8 +74,6 @@
     <ClCompile Include="..\source\PKB\Relationships\ModifiesTable.cpp" />
     <ClCompile Include="..\source\PKB\Relationships\ParentTable.cpp" />
     <ClCompile Include="..\source\PKB\Relationships\UsesTable.cpp" />
-    <ClCompile Include="..\source\PKB_Old.cpp" />
-    <ClCompile Include="..\source\TNode.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>

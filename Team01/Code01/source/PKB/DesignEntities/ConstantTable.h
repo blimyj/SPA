@@ -6,7 +6,6 @@
 
 typedef int INDEX;
 typedef std::shared_ptr<ConstantNode> CONSTANT_NODE_PTR;
-typedef std::vector<CONSTANT_NODE_PTR> TABLE;
 typedef std::vector<CONSTANT_NODE_PTR> CONSTANT_NODE_PTR_LIST;
 
 class ConstantTable {
@@ -24,6 +23,6 @@ public:
         */
 
 private:
-    TABLE table_;
+    CONSTANT_NODE_PTR_LIST table_;
 
 };
