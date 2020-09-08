@@ -9,6 +9,7 @@ BOOLEAN WhileNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
 	try {
 		condition_node_ptr_ = condition_node_ptr;
 	} catch (int e) {
+		(void)e;
 		return false;
 	}
 	return true;
@@ -18,6 +19,7 @@ BOOLEAN WhileNode::setWhileStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_p
 	try {
 		stmt_list_node_ptr_ = stmt_list_node_ptr;
 	} catch (int e) {
+		(void)e;
 		return false;
 	}
 	return true;

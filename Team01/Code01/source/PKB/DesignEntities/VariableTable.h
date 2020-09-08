@@ -6,7 +6,6 @@
 
 typedef int INDEX;
 typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
-typedef std::vector<VAR_NODE_PTR> TABLE;
 typedef std::vector<VAR_NODE_PTR> VAR_NODE_PTR_LIST;
 
 class VariableTable {
@@ -24,5 +23,5 @@ public:
         */
 
 private:
-    TABLE table_;
+    VAR_NODE_PTR_LIST table_;
 };

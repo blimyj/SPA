@@ -5,40 +5,40 @@ class PKBBuilder {
 
 public:
     /*==== Design Entities ====*/
-    INDEX addStatement(STATEMENT_NUMBER s);
+    INDEX addStatement(STMT_NUM s);
         /*
-        Description: Adds a STATEMENT_NUMBER to the STATEMENT_TABLE when building the PKB.
-                     Returns the INDEX of the STATEMENT_NUMBER in the STATEMENT_TABLE.
+        Description: Adds a STMT_NUM to the STATEMENT_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_NUM in the STATEMENT_TABLE.
         */
 
-    INDEX addRead(STATEMENT_NUMBER s);
+    INDEX addRead(STMT_NUM s);
         /*
-        Description: Adds a STATEMENT_NUMBER to the READ_TABLE when building the PKB.
-                     Returns the INDEX of the STATEMENT_NUMBER in the READ_TABLE.
+        Description: Adds a STMT_NUM to the READ_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_NUM in the READ_TABLE.
         */
 
-    INDEX addPrint(STATEMENT_NUMBER s);
+    INDEX addPrint(STMT_NUM s);
         /*
-        Description: Adds a STATEMENT_NUMBER to the PRINT_TABLE when building the PKB.
-                     Returns the INDEX of the STATEMENT_NUMBER in the PRINT_TABLE.
+        Description: Adds a STMT_NUM to the PRINT_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_NUM in the PRINT_TABLE.
         */
 
-    INDEX addWhile(STATEMENT_NUMBER s);
+    INDEX addWhile(STMT_NUM s);
         /*
-        Description: Adds a STATEMENT_NUMBER to the WHILE_TABLE when building the PKB.
-                     Returns the INDEX of the STATEMENT_NUMBER in the WHILE_TABLE.
-        */ 
-
-    INDEX addIf(STATEMENT_NUMBER s);
-        /*
-        Description: Adds a STATEMENT_NUMBER to the IF_TABLE when building the PKB.
-                     Returns the INDEX of the STATEMENT_NUMBER in the IF_TABLE.
+        Description: Adds a STMT_NUM to the WHILE_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_NUM in the WHILE_TABLE.
         */
 
-    INDEX addAssign(STATEMENT_NUMBER s);
+    INDEX addIf(STMT_NUM s);
         /*
-        Description: Adds a STATEMENT_NUMBER to the ASSIGN_TABLE when building the PKB.
-                     Returns the INDEX of the STATEMENT_NUMBER in the ASSIGN_TABLE.
+        Description: Adds a STMT_NUM to the IF_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_NUM in the IF_TABLE.
+        */
+
+    INDEX addAssign(STMT_NUM s);
+        /*
+        Description: Adds a STMT_NUM to the ASSIGN_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_NUM in the ASSIGN_TABLE.
         */
 
     INDEX addConstant(CONSTANT_NAME c);
@@ -47,50 +47,50 @@ public:
                      Returns the INDEX of the CONSTANT_NAME in the CONSTANT_TABLE.
         */
 
-    INDEX addVariable(VARIABLE_NAME v);
+    INDEX addVariable(VAR_NAME v);
         /*
-        Description: Adds a VARIABLE_NAME to the VARIABLE_TABLE when building the PKB.
-                     Returns the INDEX of the VARIABLE_NAME in the VARIABLE_TABLE.
+        Description: Adds a VAR_NAME to the VARIABLE_TABLE when building the PKB.
+                     Returns the INDEX of the VAR_NAME in the VARIABLE_TABLE.
         */
 
-    INDEX addProcedure(PROCEDURE_NAME p);
+    INDEX addProcedure(PROC_NAME p);
         /*
-        Description: Adds a PROCEDURE_NAME to the PROCEDURE_TABLE when building the PKB.
-                     Returns the INDEX of the PROCEDURE_NAME in the PROCEDURE_TABLE.
+        Description: Adds a PROC_NAME to the PROCEDURE_TABLE when building the PKB.
+                     Returns the INDEX of the PROC_NAME in the PROCEDURE_TABLE.
         */
 
     /*==== Relationships ====*/
-    VOID addFollows(STATEMENT_NUMBER s1, STATEMENT_NUMBER s2);
+    VOID addFollows(STMT_NUM s1, STMT_NUM s2);
         /*
-        Description: Stores a Follows(STATEMENT_NUMBER, STATEMENT_NUMBER) relationship to
+        Description: Stores a Follows(STMT_NUM, STMT_NUM) relationship to
                      the FOLLOWS_TABLE when building the PKB.
         */
-    VOID addParent(STATEMENT_NUMBER s1, STATEMENT_NUMBER s2);
+    VOID addParent(STMT_NUM s1, STMT_NUM s2);
         /*
-        Description: Stores a Parent(STATEMENT_NUMBER, STATEMENT_NUMBER) relationship to
+        Description: Stores a Parent(STMT_NUM, STMT_NUM) relationship to
                      the PARENT_TABLE when building the PKB.
         */
-    VOID addUses(STATEMENT_NUMBER s, VARIABLE_NAME v);
+    VOID addUses(STMT_NUM s, VAR_NAME v);
         /*
-        Description: Stores a Uses(STATEMENT_NAME, VARIABLE_NAME) relationship to
+        Description: Stores a Uses(STATEMENT_NAME, VAR_NAME) relationship to
                      the USES_TABLE when building the PKB.
         */
 
-    VOID addUses(PROCEDURE_NAME p, VARIABLE_NAME v);
+    VOID addUses(PROC_NAME p, VAR_NAME v);
         /*
-        Description: Stores a Uses(PROCEDURE_NAME, VARIABLE_NAME) relationship to
+        Description: Stores a Uses(PROC_NAME, VAR_NAME) relationship to
                      the USES_TABLE when building the PKB.
         */
 
-    VOID addModifies(STATEMENT_NUMBER s, VARIABLE_NAME v);
+    VOID addModifies(STMT_NUM s, VAR_NAME v);
         /*
-        Description: Stores a Modifies(STATEMENT_NUMBER, VARIABLE_NAME) relationship to
+        Description: Stores a Modifies(STMT_NUM, VAR_NAME) relationship to
                      the MODIFIES_TABLE when building the PKB.
         */
 
-    VOID addModifies(PROCEDURE_NAME p, VARIABLE_NAME v);
+    VOID addModifies(PROC_NAME p, VAR_NAME v);
         /*
-        Description: Stores a Modifies(PROCEDURE_NAME, VARIABLE_NAME) relationship to
+        Description: Stores a Modifies(PROC_NAME, VAR_NAME) relationship to
                      the MODIFIES_TABLE when building the PKB.
         */
 

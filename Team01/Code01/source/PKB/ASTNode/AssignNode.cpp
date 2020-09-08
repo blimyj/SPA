@@ -9,6 +9,7 @@ BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	try {
 		var_node_ptr_ = var_node_ptr;
 	} catch (int e) {
+		(void)e;
 		return false;
 	}
 	return true;
@@ -18,6 +19,7 @@ BOOLEAN AssignNode::setExpressionNode(EXPR_NODE_PTR expr_node_ptr) {
     try {
 		expr_node_ptr_ = expr_node_ptr;
 	} catch (int e) {
+		(void)e;
 		return false;
 	}
 	return true;

@@ -6,7 +6,6 @@
 
 typedef int INDEX;
 typedef std::shared_ptr<AssignNode> ASSIGN_NODE_PTR;
-typedef std::vector<ASSIGN_NODE_PTR> TABLE;
 typedef std::vector<ASSIGN_NODE_PTR> ASSIGN_NODE_PTR_LIST;
 
 class AssignTable {
@@ -24,6 +23,6 @@ public:
         */
 
 private:
-    TABLE table_;
+    ASSIGN_NODE_PTR_LIST table_;
 
 };

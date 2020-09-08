@@ -6,7 +6,6 @@
 
 typedef int INDEX;
 typedef std::shared_ptr<IfNode> IF_NODE_PTR;
-typedef std::vector<IF_NODE_PTR> TABLE;
 typedef std::vector<IF_NODE_PTR> IF_NODE_PTR_LIST;
 
 class IfTable {
@@ -24,6 +23,6 @@ public:
         */
 
 private:
-    TABLE table_;
+    IF_NODE_PTR_LIST table_;
 
 };

@@ -6,7 +6,6 @@
 
 typedef int INDEX;
 typedef std::shared_ptr<PrintNode> PRINT_NODE_PTR;
-typedef std::vector<PRINT_NODE_PTR> TABLE;
 typedef std::vector<PRINT_NODE_PTR> PRINT_NODE_PTR_LIST;
 
 class PrintTable {
@@ -24,6 +23,6 @@ public:
         */
 
 private:
-    TABLE table_;
+    PRINT_NODE_PTR_LIST table_;
 
 };

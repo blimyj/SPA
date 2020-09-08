@@ -1,5 +1,7 @@
 #pragma once
 
+class StatementNode;
+
 #include <memory>
 #include "ASTNode.h"
 #include "StatementListNode.h"

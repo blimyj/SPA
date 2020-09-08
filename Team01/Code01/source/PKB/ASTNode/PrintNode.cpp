@@ -8,6 +8,7 @@ BOOLEAN PrintNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	try {
 		var_node_ptr_ = var_node_ptr;
 	} catch (int e) {
+		(void)e;
 		return false;
 	}
 	return true;

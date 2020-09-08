@@ -6,7 +6,6 @@
 
 typedef int INDEX;
 typedef std::shared_ptr<StatementNode> STMT_NODE_PTR;
-typedef std::vector<STMT_NODE_PTR> TABLE;
 typedef std::vector<STMT_NODE_PTR> STMT_NODE_PTR_LIST;
 
 class StatementTable {
@@ -24,6 +23,6 @@ public:
         */
 
 private:
-    TABLE table_;
+    STMT_NODE_PTR_LIST table_;
 
 };

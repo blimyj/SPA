@@ -9,6 +9,7 @@ BOOLEAN ProcedureNode::setProcedureName(STRING proc_name) {
     try {
         proc_name_ = proc_name;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;
@@ -18,6 +19,7 @@ BOOLEAN ProcedureNode::setProcedureStatementListNode(STMT_LIST_NODE_PTR stmt_lis
     try {
         stmt_list_node_ptr_ = stmt_list_node_ptr;
     } catch (int e) {
+        (void)e;
         return false;
     }
     return true;

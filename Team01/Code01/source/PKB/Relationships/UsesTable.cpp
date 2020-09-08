@@ -1,14 +1,14 @@
 #include "UsesTable.h"
 
-VOID UsesTable::addUses(STATEMENT_NUMBER s, VARIABLE_NAME v) {
+VOID UsesTable::addUses(STMT_NUM s, VAR_NAME v) {
     statement_table_.insert({ s, v });
 }
 
-VOID UsesTable::addUses(PROCEDURE_NAME p, VARIABLE_NAME v) {
+VOID UsesTable::addUses(PROC_NAME p, VAR_NAME v) {
     procedure_table_.insert({ p, v });
 }
 
-BOOLEAN UsesTable::isUses(STATEMENT_NUMBER s, VARIABLE_NAME v) {
+BOOLEAN UsesTable::isUses(STMT_NUM s, VAR_NAME v) {
     auto it = statement_table_.find(s);
     if (it == statement_table_.end()) {
         return false;
@@ -16,7 +16,7 @@ BOOLEAN UsesTable::isUses(STATEMENT_NUMBER s, VARIABLE_NAME v) {
     return it->second == v;
 }
 
-BOOLEAN UsesTable::isUses(PROCEDURE_NAME p, VARIABLE_NAME v) {
+BOOLEAN UsesTable::isUses(PROC_NAME p, VAR_NAME v) {
     auto it = procedure_table_.find(p);
     if (it == procedure_table_.end()) {
         return false;
