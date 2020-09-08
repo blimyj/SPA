@@ -15,7 +15,7 @@ public:
 		Description: Returns True if able to set var_node_ of this node to var_node_ptr, false otherwise.
 		*/
 
-	BOOEALN setExpressionNode(EXPR_NODE_PTR expr_node_ptr);
+	BOOLEAN setExpressionNode(EXPR_NODE_PTR expr_node_ptr);
 		/*
 		Description: Returns True if able to set expr_node_ of this node to expr_node_ptr, false otherwise.
 		*/

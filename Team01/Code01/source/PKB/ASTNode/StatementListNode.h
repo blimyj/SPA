@@ -5,11 +5,6 @@
 class StatementListNode : public ASTNode {
 
 public:
-	StatementListNode(AST_NODE_PTR_LIST node_ptr_list);
-		/*
-		Description: Constructs an ProcedureNode consisting of a STRING procedure name and STATEMENT_LIST_NODE_PTR statement list.
-		*/
-
 	BOOLEAN addStatementNode(STMT_NODE_PTR stmt_node_ptr);
 		/*
 		Description: Returns True if able to append stmt_node_ptr to stmt_node_ptr_list_, false otherwise.

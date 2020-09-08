@@ -42,7 +42,7 @@ public:
 		*/
 
 private:
-	RELATION_TYPE RELATION_TYPE;
+	RELATION_TYPE relation_type_;
 	AST_NODE_PTR left_node_ptr_;
 	AST_NODE_PTR right_node_ptr_;
 

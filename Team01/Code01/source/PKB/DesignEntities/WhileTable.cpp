@@ -4,7 +4,7 @@
 #include "../ASTNode/WhileNode.h"
 
 typedef int INDEX;
-typedef WhileNode* WHILE_NODE_PTR;
+typedef std::shared_ptr<WhileNode> WHILE_NODE_PTR;
 typedef std::vector<WHILE_NODE_PTR> TABLE;
 typedef std::vector<WHILE_NODE_PTR> WHILE_NODE_PTR_LIST;
 
