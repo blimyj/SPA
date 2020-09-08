@@ -1,10 +1,3 @@
-typedef std::shared_ptr<ConditionNode> CONDITION_NODE_PTR;
-typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
-typedef bool BOOLEAN;
-
-#include <iostream>
-#include "ConditionNode.h"
-#include "StatementListNode.h"
 #include "WhileNode.h"
 
 WhileNode::WhileNode(CONDITION_NODE_PTR condition_node_ptr, STMT_LIST_NODE_PTR stmt_list_node_ptr) {

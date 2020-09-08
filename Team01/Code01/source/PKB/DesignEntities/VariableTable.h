@@ -1,5 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+#include "../ASTNode/VariableNode.h"
+
+typedef int INDEX;
+typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
+typedef std::vector<VAR_NODE_PTR> TABLE;
+typedef std::vector<VAR_NODE_PTR> VAR_NODE_PTR_LIST;
+
 class VariableTable {
 /* Overview: This is a data structure*/
 

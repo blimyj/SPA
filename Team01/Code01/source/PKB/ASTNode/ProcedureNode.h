@@ -1,6 +1,13 @@
 #pragma once
 
+#include <memory>
+#include <string>
+#include "StatementListNode.h"
 #include "ASTNode.h"
+
+typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
+typedef std::string STRING;
+typedef bool BOOLEAN;
 
 class ProcedureNode : public ASTNode {
 
@@ -22,7 +29,7 @@ public:
 
 	STRING getProcedureName();
 		/*
-		Description: Returns a STRING of the procedure's name 
+		Description: Returns a STRING of the procedure's name
 		*/
 
 	STMT_LIST_NODE_PTR getProcedureStatementListNode();

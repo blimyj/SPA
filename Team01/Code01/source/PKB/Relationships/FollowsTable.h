@@ -1,5 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <string>
+#include <unordered_map>
+
+typedef void VOID;
+typedef bool BOOLEAN;
+typedef std::shared_ptr<std::string> STATEMENT_NUMBER;
+typedef std::unordered_map<STATEMENT_NUMBER, STATEMENT_NUMBER> TABLE;
+
 class FollowsTable {
 /* Overview: This is a data structure*/
 

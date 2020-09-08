@@ -1,10 +1,4 @@
-typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
-typedef std::string STRING;
-typedef bool BOOLEAN;
-
-#include <iostream>
 #include "ProcedureNode.h"
-#include "StatementListNode.h"
 
 ProcedureNode::ProcedureNode(STRING proc_name, STMT_LIST_NODE_PTR stmt_list_node_ptr) {
     setProcedureName(proc_name);

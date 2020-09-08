@@ -1,11 +1,4 @@
-typedef std::shared_ptr<StatementNode> STMT_NODE_PTR;
-typedef std::vector<std::shared_ptr<StatementNode>> STMT_NODE_PTR_LIST;
-typedef bool BOOLEAN;
-
-#include <iostream>
-#include <vector>
 #include "StatementListNode.h"
-#include "StatementNode.h"
 
 BOOLEAN StatementListNode::addStatementNode(STMT_NODE_PTR stmt_node_ptr) {
     try {

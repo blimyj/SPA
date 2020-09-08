@@ -1,25 +1,32 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+
+typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
+typedef std::vector<std::shared_ptr<ASTNode>> AST_NODE_PTR_LIST;
+typedef bool BOOLEAN;
+
 class ASTNode {
 
 public:
-	virtual BOOLEAN setParentNode(AST_NODE_PTR parent_node_ptr);
+	BOOLEAN setParentNode(AST_NODE_PTR parent_node_ptr);
 		/*
 		Description: Sets the given AST_NODE_PTR node to be the parent of this node.
 		*/
 
-	virtual BOOLEAN addChildNode(AST_NODE_PTR child_node_ptr);
+	BOOLEAN addChildNode(AST_NODE_PTR child_node_ptr);
 		/*
 		Description: Sets the given AST_NODE_PTR node to be a child of this node.
 					 The child added will be sorted from left to right based on the AST.
 		*/
 
-	virtual AST_NODE_PTR getParentNode();
+	AST_NODE_PTR getParentNode();
 		/*
 		Description: Returns the AST_NODE_PTR that points to the parent AST_NODE of this node otherwise returns NULL.
 		*/
 
-	virtual AST_NODE_PTR_LIST getChildrenNode();
+	AST_NODE_PTR_LIST getChildrenNode();
 		/*
 		Description: Returns a list of AST_NODE_PTR_LIST that point to AST_NODE that are children of this node, if there are no children, returns an empty list.
 		*/

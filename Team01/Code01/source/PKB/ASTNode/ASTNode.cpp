@@ -1,9 +1,3 @@
-typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
-typedef std::vector<std::shared_ptr<ASTNode>> AST_NODE_PTR_LIST;
-typedef bool BOOLEAN;
-
-#include <iostream>
-#include <vector>
 #include "ASTNode.h"
 
 BOOLEAN ASTNode::setParentNode(AST_NODE_PTR parent_node_ptr) {

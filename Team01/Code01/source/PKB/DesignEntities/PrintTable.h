@@ -1,5 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+#include "../ASTNode/PrintNode.h"
+
+typedef int INDEX;
+typedef std::shared_ptr<PrintNode> PRINT_NODE_PTR;
+typedef std::vector<PRINT_NODE_PTR> TABLE;
+typedef std::vector<PRINT_NODE_PTR> PRINT_NODE_PTR_LIST;
+
 class PrintTable {
 /* Overview: This is a data structure*/
 

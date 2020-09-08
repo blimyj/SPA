@@ -1,6 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <string>
+#include "PrintNode.h"
 #include "StatementNode.h"
+#include "VariableNode.h"
+
+typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
+typedef std::string STRING;
+typedef bool BOOLEAN;
 
 class PrintNode : public StatementNode {
 

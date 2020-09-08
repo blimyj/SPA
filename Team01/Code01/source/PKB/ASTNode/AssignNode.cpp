@@ -1,11 +1,4 @@
-typedef std::shared_ptr<ExpressionNode> EXPR_NODE_PTR;
-typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
-typedef bool BOOLEAN;
-
-#include <iostream>
 #include "AssignNode.h"
-#include "ExpressionNode.h"
-#include "VariableNode.h"
 
 AssignNode::AssignNode(VAR_NODE_PTR var_node_ptr, EXPR_NODE_PTR expr_node_ptr) {
 	setVariableNode(var_node_ptr);

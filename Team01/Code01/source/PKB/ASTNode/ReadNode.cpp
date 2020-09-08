@@ -1,10 +1,4 @@
-typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
-typedef std::string STRING;
-typedef bool BOOLEAN;
-
-#include <iostream>
 #include "ReadNode.h"
-#include "VariableNode.h"
 
 ReadNode::ReadNode(VAR_NODE_PTR var_node_ptr) {
 	setVariableNode(var_node_ptr);

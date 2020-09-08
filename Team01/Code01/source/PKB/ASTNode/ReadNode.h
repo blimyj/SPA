@@ -1,13 +1,20 @@
 #pragma once
 
+#include <memory>
+#include <string>
 #include "StatementNode.h"
+#include "VariableNode.h"
+
+typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
+typedef std::string STRING;
+typedef bool BOOLEAN;
 
 class ReadNode : public StatementNode {
 
 public:
 	ReadNode(VAR_NODE_PTR var_node_ptr);
 		/*
-		Description: Constructs an PrintNode consisting of a VAR_NODE of the variable it prints. 
+		Description: Constructs an PrintNode consisting of a VAR_NODE of the variable it prints.
 		*/
 
 	BOOLEAN setVariableNode(VAR_NODE_PTR var_node_ptr);

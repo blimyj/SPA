@@ -1,6 +1,13 @@
 #pragma once
 
+#include <memory>
+#include <vector>
 #include "ASTNode.h"
+#include "StatementNode.h"
+
+typedef std::shared_ptr<StatementNode> STMT_NODE_PTR;
+typedef std::vector<std::shared_ptr<StatementNode>> STMT_NODE_PTR_LIST;
+typedef bool BOOLEAN;
 
 class StatementListNode : public ASTNode {
 

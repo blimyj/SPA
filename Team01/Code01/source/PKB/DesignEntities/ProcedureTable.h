@@ -1,5 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+#include "../ASTNode/ProcedureNode.h"
+
+typedef int INDEX;
+typedef std::shared_ptr<ProcedureNode> PROC_NODE_PTR;
+typedef std::vector<PROC_NODE_PTR> TABLE;
+typedef std::vector<PROC_NODE_PTR> PROC_NODE_PTR_LIST;
+
 class ProcedureTable {
 /* Overview: This is a data structure*/
 

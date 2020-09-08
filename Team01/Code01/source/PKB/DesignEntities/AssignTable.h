@@ -1,5 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+#include "../ASTNode/AssignNode.h"
+
+typedef int INDEX;
+typedef std::shared_ptr<AssignNode> ASSIGN_NODE_PTR;
+typedef std::vector<ASSIGN_NODE_PTR> TABLE;
+typedef std::vector<ASSIGN_NODE_PTR> ASSIGN_NODE_PTR_LIST;
+
 class AssignTable {
 /* Overview: This is a data structure*/
 

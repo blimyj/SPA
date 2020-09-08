@@ -1,5 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+#include "../ASTNode/ConstantNode.h"
+
+typedef int INDEX;
+typedef std::shared_ptr<ConstantNode> CONSTANT_NODE_PTR;
+typedef std::vector<CONSTANT_NODE_PTR> TABLE;
+typedef std::vector<CONSTANT_NODE_PTR> CONSTANT_NODE_PTR_LIST;
+
 class ConstantTable {
 /* Overview: This is a data structure*/
 

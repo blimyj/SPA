@@ -1,7 +1,3 @@
-typedef std::string STRING;
-typedef bool BOOLEAN;
-
-#include <iostream>
 #include "VariableNode.h"
 
 VariableNode::VariableNode(STRING var_name) {
