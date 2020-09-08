@@ -1,12 +1,4 @@
-typedef int INDEX;
-typedef std::shared_ptr<AssignNode> ASSIGN_NODE_PTR;
-typedef std::vector<ASSIGN_NODE_PTR> TABLE;
-typedef std::vector<ASSIGN_NODE_PTR> ASSIGN_NODE_PTR_LIST;
-
-#include <iostream>
-#include <vector>
 #include "AssignTable.h"
-#include "../ASTNode/AssignNode.h"
 
 INDEX AssignTable::addAssignNode(ASSIGN_NODE_PTR node) {
     INDEX index = table_.size();

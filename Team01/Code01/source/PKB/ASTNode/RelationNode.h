@@ -1,6 +1,12 @@
 #pragma once
 
+#include <memory>
+#include <string>
 #include "ASTNode.h"
+
+typedef std::string RELATION_TYPE;
+typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
+typedef bool BOOLEAN;
 
 class RelationNode : public ASTNode {
 

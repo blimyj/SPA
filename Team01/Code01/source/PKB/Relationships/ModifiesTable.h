@@ -1,5 +1,17 @@
 #pragma once
 
+#include <memory>
+#include <string>
+#include <unordered_map>
+
+typedef void VOID;
+typedef bool BOOLEAN;
+typedef std::shared_ptr<std::string> STATEMENT_NUMBER;
+typedef std::shared_ptr<std::string> PROCEDURE_NAME;
+typedef std::shared_ptr<std::string> VARIABLE_NAME;
+typedef std::unordered_map<STATEMENT_NUMBER, VARIABLE_NAME> STATEMENT_TABLE;
+typedef std::unordered_map<PROCEDURE_NAME, VARIABLE_NAME> PROCEDURE_TABLE;
+
 class ModifiesTable {
 /* Overview: This is a data structure*/
 
@@ -27,5 +39,5 @@ public:
 private:
     STATEMENT_TABLE statement_table_;
     PROCEDURE_TABLE procedure_table_;
-    
+
 };

@@ -1,7 +1,12 @@
 #pragma once
 
+#include <memory>
+#include <string>
 #include "ASTNode.h"
 
+typedef std::string EXPR_TYPE;
+typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
+typedef bool BOOLEAN;
 
 class ExpressionNode : public ASTNode {
 
@@ -10,7 +15,7 @@ public:
 		/*
 		Description: Constructs an ExpressionNode consisting of a EXPR_TYPE, left and right AST_NODE_PTR.
 		*/
-		
+
 	BOOLEAN setExpressionType(EXPR_TYPE expr_type);
 		/*
 		Description: Returns the EXPR_TYPE enum of the condition.

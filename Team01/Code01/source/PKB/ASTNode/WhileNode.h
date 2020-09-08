@@ -1,6 +1,13 @@
 #pragma once
 
+#include <memory>
+#include "ConditionNode.h"
+#include "StatementListNode.h"
 #include "StatementNode.h"
+
+typedef std::shared_ptr<ConditionNode> CONDITION_NODE_PTR;
+typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
+typedef bool BOOLEAN;
 
 class WhileNode : public StatementNode {
 public:
@@ -26,7 +33,7 @@ public:
 
 	STMT_LIST_NODE_PTR getWhileStatementListNode();
 		/*
-		Description: Returns a STATEMENT_LIST_NODE_PTR of the while statement body. 
+		Description: Returns a STATEMENT_LIST_NODE_PTR of the while statement body.
 		*/
 
 

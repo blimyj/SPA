@@ -1,6 +1,13 @@
 #pragma once
 
+#include <memory>
+#include "ExpressionNode.h"
 #include "StatementNode.h"
+#include "VariableNode.h"
+
+typedef std::shared_ptr<ExpressionNode> EXPR_NODE_PTR;
+typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
+typedef bool BOOLEAN;
 
 class AssignNode : public StatementNode {
 
@@ -9,7 +16,7 @@ public:
 		/*
 		Description: Constructs an AssignNode based on the VAR_NODE and EXPR_NODE attached to it
 		*/
-		
+
 	BOOLEAN setVariableNode(VAR_NODE_PTR var_node_ptr);
 		/*
 		Description: Returns True if able to set var_node_ of this node to var_node_ptr, false otherwise.

@@ -1,9 +1,15 @@
 #pragma once
 
+#include <memory>
 #include "ASTNode.h"
+#include "StatementListNode.h"
+
+typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
+typedef bool BOOLEAN;
+typedef int STMT_NUMBER;
 
 class StatementNode : public ASTNode {
-	BOOLEAN setStatementNumber(INDEX stmt_num);
+	BOOLEAN setStatementNumber(STMT_NUMBER stmt_num);
 		/*
 		Description: Returns true if successfully setting the STMT_NUMBER of this StatementNode.
 		*/
@@ -24,7 +30,7 @@ class StatementNode : public ASTNode {
 		*/
 
 private:
-	INDEX stmt_num_;
-	STMT_NODE_PTR_LIST stmt_node_ptr_list_;
+	STMT_NUMBER stmt_num_;
+	STMT_LIST_NODE_PTR stmt_list_node_ptr_;
 
 };

@@ -1,9 +1,3 @@
-typedef std::vector<std::shared_ptr<StatementNode>> STMT_LIST_NODE_PTR;
-typedef bool BOOLEAN;
-typedef int STMT_NUMBER;
-
-#include <iostream>
-#include <vector>
 #include "StatementNode.h"
 
 BOOLEAN StatementNode::setStatementNumber(STMT_NUMBER stmt_num) {

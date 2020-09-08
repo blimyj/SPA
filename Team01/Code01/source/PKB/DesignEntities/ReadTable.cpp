@@ -1,12 +1,4 @@
-typedef int INDEX;
-typedef std::shared_ptr<ReadNode> READ_NODE_PTR;
-typedef std::vector<READ_NODE_PTR> TABLE;
-typedef std::vector<READ_NODE_PTR> READ_NODE_PTR_LIST;
-
-#include <iostream>
-#include <vector>
 #include "ReadTable.h"
-#include "../ASTNode/ReadNode.h"
 
 INDEX ReadTable::addReadNode(READ_NODE_PTR node) {
     INDEX index = table_.size();

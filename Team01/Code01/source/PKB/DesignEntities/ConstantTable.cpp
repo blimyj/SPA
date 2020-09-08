@@ -1,12 +1,4 @@
-typedef int INDEX;
-typedef std::shared_ptr<ConstantNode> CONSTANT_NODE_PTR;
-typedef std::vector<CONSTANT_NODE_PTR> TABLE;
-typedef std::vector<CONSTANT_NODE_PTR> CONSTANT_NODE_PTR_LIST;
-
-#include <iostream>
-#include <vector>
 #include "ConstantTable.h"
-#include "../ASTNode/ConstantNode.h"
 
 INDEX ConstantTable::addConstantNode(CONSTANT_NODE_PTR node) {
     INDEX index = table_.size();

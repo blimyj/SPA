@@ -1,8 +1,3 @@
-typedef std::string RELATION_TYPE;
-typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
-typedef bool BOOLEAN;
-
-#include <iostream>
 #include "RelationNode.h"
 
 RelationNode::RelationNode(RELATION_TYPE relation_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr) {

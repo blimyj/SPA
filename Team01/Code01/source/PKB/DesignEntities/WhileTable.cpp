@@ -1,12 +1,4 @@
-#include <iostream>
-#include <vector>
 #include "WhileTable.h"
-#include "../ASTNode/WhileNode.h"
-
-typedef int INDEX;
-typedef std::shared_ptr<WhileNode> WHILE_NODE_PTR;
-typedef std::vector<WHILE_NODE_PTR> TABLE;
-typedef std::vector<WHILE_NODE_PTR> WHILE_NODE_PTR_LIST;
 
 INDEX WhileTable::addWhileNode(WHILE_NODE_PTR node) {
     INDEX index = table_.size();

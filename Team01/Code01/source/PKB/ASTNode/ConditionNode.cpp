@@ -1,11 +1,4 @@
-typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
-typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
-typedef std::string CONDITION_TYPE;
-typedef bool BOOLEAN;
-
-#include <iostream>
 #include "ConditionNode.h"
-#include "VariableNode.h"
 
 ConditionNode::ConditionNode(CONDITION_TYPE condition_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr) {
     setRelationType(condition_type);

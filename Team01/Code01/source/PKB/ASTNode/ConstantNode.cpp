@@ -1,7 +1,3 @@
-typedef int VALUE;
-typedef bool BOOLEAN;
-
-#include <iostream>
 #include "ConstantNode.h"
 
 ConstantNode::ConstantNode(VALUE value) {

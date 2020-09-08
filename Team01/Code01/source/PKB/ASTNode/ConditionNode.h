@@ -1,6 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <string>
 #include "ASTNode.h"
+#include "VariableNode.h"
+
+typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
+typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
+typedef std::string CONDITION_TYPE;
+typedef bool BOOLEAN;
 
 class ConditionNode : public StatementNode {
 

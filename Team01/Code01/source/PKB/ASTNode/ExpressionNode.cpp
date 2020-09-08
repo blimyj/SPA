@@ -1,8 +1,3 @@
-typedef std::string EXPR_TYPE;
-typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
-typedef bool BOOLEAN;
-
-#include <iostream>
 #include "ExpressionNode.h"
 
 ExpressionNode::ExpressionNode(EXPR_TYPE expr_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr) {

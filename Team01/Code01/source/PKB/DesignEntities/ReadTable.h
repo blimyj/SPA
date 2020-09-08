@@ -1,5 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+#include "../ASTNode/ReadNode.h"
+
+typedef int INDEX;
+typedef std::shared_ptr<ReadNode> READ_NODE_PTR;
+typedef std::vector<READ_NODE_PTR> TABLE;
+typedef std::vector<READ_NODE_PTR> READ_NODE_PTR_LIST;
+
 class ReadTable {
 /* Overview: This is a data structure*/
 

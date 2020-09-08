@@ -1,6 +1,10 @@
 #pragma once
 
+#include <string>
 #include "StatementNode.h"
+
+typedef std::string STRING;
+typedef bool BOOLEAN;
 
 class VariableNode : public StatementNode {
 

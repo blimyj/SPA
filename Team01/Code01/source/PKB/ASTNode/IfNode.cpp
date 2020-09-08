@@ -1,11 +1,4 @@
-typedef std::shared_ptr<ConditionNode> CONDITION_NODE_PTR;
-typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
-typedef bool BOOLEAN;
-
-#include <iostream>
-#include "ConditionNode.h"
 #include "IfNode.h"
-#include "StatementListNode.h"
 
 IfNode::IfNode(CONDITION_NODE_PTR condition_node_ptr, STMT_LIST_NODE_PTR then_stmt_list_node_ptr, STMT_LIST_NODE_PTR else_stmt_list_node_ptr) {
     setConditionNode(condition_node_ptr);

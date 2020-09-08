@@ -2,6 +2,9 @@
 
 #include "ASTNode.h"
 
+typedef int VALUE;
+typedef bool BOOLEAN;
+
 class ConstantNode : public ASTNode {
 
 public:
