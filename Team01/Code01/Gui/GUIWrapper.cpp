@@ -1,6 +1,7 @@
 #include "GUIWrapper.h"
 #include "../source/QueryNode.cpp"
 #include "../source/QueryProcessor.cpp"
+#include "../source/QueryEvaluator.cpp"
 #include <iostream>
 
 
