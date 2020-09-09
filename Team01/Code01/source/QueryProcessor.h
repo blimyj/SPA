@@ -9,6 +9,5 @@ typedef std::string QUERY;
 
 class QueryProcessor {
 public:
-	QueryProcessor();
 	QUERY_RESULT processQuery(QUERY q);
 };
