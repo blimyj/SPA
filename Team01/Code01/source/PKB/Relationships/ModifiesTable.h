@@ -9,8 +9,6 @@ typedef bool BOOLEAN;
 typedef std::shared_ptr<int> STMT_NUM;
 typedef std::shared_ptr<std::string> PROC_NAME;
 typedef std::shared_ptr<std::string> VAR_NAME;
-typedef std::unordered_map<STMT_NUM, VAR_NAME> MODIFIES_STATEMENT_TABLE;
-typedef std::unordered_map<PROC_NAME, VAR_NAME> MODIFIES_PROCEDURE_TABLE;
 
 class ModifiesTable {
 /* Overview: This is a data structure*/
@@ -37,7 +35,7 @@ public:
         */
 
 private:
-    MODIFIES_STATEMENT_TABLE statement_table_;
-    MODIFIES_PROCEDURE_TABLE procedure_table_;
+    std::unordered_map<STMT_NUM, VAR_NAME> statement_table_;
+    std::unordered_map<PROC_NAME, VAR_NAME> procedure_table_;
 
 };

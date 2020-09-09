@@ -1,7 +1,10 @@
 #pragma once
 
+class PKB;
+
 #include <memory>
 #include <vector>
+#include "PKBBuilder.h"
 #include "PKB/DesignEntities/AssignTable.h"
 #include "PKB/DesignEntities/ConstantTable.h"
 #include "PKB/DesignEntities/IfTable.h"
@@ -16,7 +19,22 @@
 #include "PKB/Relationships/UsesTable.h"
 #include "PKB/Relationships/ModifiesTable.h"
 
-typedef void PKB_BUILDER;
+typedef PKBBuilder PKB_BUILDER;
+
+typedef AssignTable ASSIGN_TABLE;
+typedef ConstantTable CONSTANT_TABLE;
+typedef IfTable IF_TABLE;
+typedef PrintTable PRINT_TABLE;
+typedef ProcedureTable PROC_TABLE;
+typedef ReadTable READ_TABLE;
+typedef StatementTable STMT_TABLE;
+typedef VariableTable VAR_TABLE;
+typedef WhileTable WHILE_TABLE;
+
+typedef FollowsTable FOLLOWS_TABLE;
+typedef ParentTable PARENT_TABLE;
+typedef UsesTable USES_TABLE;
+typedef ModifiesTable MODIFIES_TABLE;
 
 class PKB {
 /* Overview: The PKB that contains design entities and relationships of a given SIMPLE source code */
@@ -127,8 +145,26 @@ public:
         */
 
     /*==== AST ====*/
-    AST_NODE_PTR getProgramAST();
+    AST_NODE_PTR getRootNode();
         /*
         Description: Returns the source program's AST.
         */
+
+private:
+    AST_NODE_PTR root_node_;
+
+    ASSIGN_TABLE assign_table_;
+    CONSTANT_TABLE constant_table_;
+    IF_TABLE if_table_;
+    PRINT_TABLE print_table_;
+    PROC_TABLE proc_table_;
+    READ_TABLE read_table_;
+    STMT_TABLE stmt_table_;
+    VAR_TABLE var_table_;
+    WHILE_TABLE while_table_;
+
+    FOLLOWS_TABLE follows_table_;
+    PARENT_TABLE parent_table_;
+    USES_TABLE uses_table_;
+    MODIFIES_TABLE modifies_table_;
 };
