@@ -7,7 +7,6 @@
 typedef void VOID;
 typedef bool BOOLEAN;
 typedef std::shared_ptr<int> STMT_NUM;
-typedef std::unordered_map<STMT_NUM, STMT_NUM> PARENT_TABLE;
 
 class ParentTable {
 /* Overview: This is a data structure*/
@@ -24,6 +23,6 @@ public:
         */
 
 private:
-    PARENT_TABLE table_;
+    std::unordered_map<STMT_NUM, STMT_NUM> table_;
 
 };
