@@ -31,7 +31,7 @@ public:
 
     BOOLEAN isUses(PROC_NAME p, VAR_NAME v);
         /*
-        Description: Returns a BOOLEAN indicating whether or not Uses(p, v) holds. I am not timothy. I am Kyzure
+        Description: Returns a BOOLEAN indicating whether or not Uses(p, v) holds.
         */
 
 private:
