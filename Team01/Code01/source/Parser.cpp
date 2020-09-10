@@ -2,28 +2,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-using namespace std;
-=======
 #include <sstream>
 #include <fstream>
-#include <unordered_map>
-<<<<<<< HEAD
->>>>>>> TEMP: Saving work on parser. Hit roadblock on calling parseSecondStreamToken after new lines
-=======
 #include <iterator>
 #include <deque>
->>>>>>> Add tokenization to parser
 
-#include "PKB.h"
-
-int Parse () {
-
-	return 0;
-}
-=======
 #include "PKB.h"
 #include "TNode.h"
 #include "Parser.h"
@@ -392,4 +375,3 @@ int parseStmtListClose(STRING str) {
 	//else end
 	return 0;
 }
->>>>>>> Change Parser assumptions
