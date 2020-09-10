@@ -343,7 +343,7 @@ int parsePrint(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_que
 }
 
 int parseProcedure(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
-	//We assume that this opening segment will either terminate with '{' or ';' with the exception of whitespaces and newline?
+	//We assume that this opening segment will either termin	ate with '{' or ';' with the exception of whitespaces and newline?
 	return 0;
 }
 
