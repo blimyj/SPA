@@ -82,17 +82,25 @@ int parseFile(STRING filename) {
 			stmt_token_queue.push_back("assign");
 			stmt_token_queue.push_back(stmt_token); //This would be the variable name
 			parseAssign(&stmt_token_queue, &process_token_stream);
+			continue;
 		}
 		
+		if (stmt_token == "procedure") {
+			stmt_token_queue.push_back(stmt_token); //This is "procedure" token
+			parseProcedure(&stmt_token_queue, &process_token_stream);
+			continue;
+		}
 
 		if (stmt_token == "read") {
 			stmt_token_queue.push_back(stmt_token); //This is "read" token
 			parseRead(&stmt_token_queue, &process_token_stream);
+			continue;
 		}
 
 		if (stmt_token == "print") {
-			stmt_token_queue.push_back(stmt_token); //This is "read" token
-			parseRead(&stmt_token_queue, &process_token_stream);
+			stmt_token_queue.push_back(stmt_token); //This is "print" token
+			parsePrint(&stmt_token_queue, &process_token_stream);
+			continue;
 		}
 
 		//Handler for all other tokens, prints them out
@@ -334,7 +342,7 @@ int parsePrint(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_que
 	//return a non-zero int otherwise	return 0;
 }
 
-int parseProcedure(STRING str) {
+int parseProcedure(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
 	//We assume that this opening segment will either terminate with '{' or ';' with the exception of whitespaces and newline?
 	return 0;
 }
