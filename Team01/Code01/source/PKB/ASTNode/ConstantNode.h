@@ -1,8 +1,10 @@
 #pragma once
+#include <string>
+
 
 #include "ASTNode.h"
 
-typedef int VALUE;
+typedef std::string VALUE;
 typedef bool BOOLEAN;
 
 class ConstantNode : public ASTNode {
