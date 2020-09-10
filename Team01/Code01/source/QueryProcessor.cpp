@@ -21,13 +21,13 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 
 	// Create fake synonyms and clauses for now
 	QueryNode assign_node = QueryNode();
-	assign_node.setSynonymNode({ QuerySynonymType::assign });
+	assign_node.setSynonymNode({ QuerySynonymType::assign }, "a");
 	QueryNode variable_node = QueryNode();
-	variable_node.setSynonymNode({ QuerySynonymType::variable });
+	variable_node.setSynonymNode({ QuerySynonymType::variable }, "v");
 	QueryNode procedure_node = QueryNode();
-	procedure_node.setSynonymNode({ QuerySynonymType::procedure });
+	procedure_node.setSynonymNode({ QuerySynonymType::procedure }, "p");
 	QueryNode while_node = QueryNode();
-	while_node.setSynonymNode({ QuerySynonymType::whiles });
+	while_node.setSynonymNode({ QuerySynonymType::whiles }, "w");
 	std::unordered_map<std::string, QueryNode> processed_synonyms = { 
 		{"a", assign_node},
 		{"v", variable_node},
@@ -38,10 +38,11 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	QueryNode processed_clauses = QueryNode(); //stores root node of the tree
 
 	// Build fake query tree for clauses
+	// eg Select a
 	QueryNode child1 = QueryNode();
 	child1.setNodeType({QueryNodeType::select});
 	QueryNode child2 = QueryNode();
-	child2.setSynonymNode("a");
+	child2.setSynonymNode({ QuerySynonymType::assign }, "a");
 	QueryNode child1_children[] = { child2 };
 	child1.setChildren(child1_children);
 
