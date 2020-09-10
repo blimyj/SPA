@@ -1,11 +1,12 @@
 #include "QueryNode.h"
+#include "QueryNodeType.h"
 
 void QueryNode::setNodeType(NODE_TYPE node_type) {
 	this->node_type = node_type;
 }
 
-void QueryNode::setSynonymNode(NODE_TYPE node_type, SYNONYM_NAME synonym) {
-	this->node_type = node_type;
+void QueryNode::setSynonymNode(SYNONYM_NAME synonym) {
+	this->node_type = {QueryNodeType::synonym};
 	this->synonym = synonym;
 }
 
