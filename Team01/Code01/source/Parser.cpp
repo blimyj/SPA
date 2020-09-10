@@ -34,7 +34,8 @@ int Parse() {
 }
 
 int parseFile(STRING filename) {
-	std::cout << "parsed " << filename << "\n";
+	//Construct program root node on heap using new
+	
 	
 	std::string str;	
 
@@ -62,7 +63,7 @@ int parseFile(STRING filename) {
 		}
 	}
 	
-	/*
+	
 	//This loop processes the tokens to construct nodes
 
 	//stmt_token_queue stores tokens for a particular statement / opening segment
@@ -74,6 +75,7 @@ int parseFile(STRING filename) {
 		//Check first two tokens, then call appropriate parse function
 		stmt_token = process_token_stream.front();
 		process_token_stream.pop_front();
+
 		//Checks for '=' token that denotes assign type
 		if (!process_token_stream.empty() && process_token_stream.front() == "=") {
 			process_token_stream.pop_front();
@@ -84,13 +86,19 @@ int parseFile(STRING filename) {
 		
 
 		if (stmt_token == "read") {
+			stmt_token_queue.push_back(stmt_token); //This is "read" token
 			parseRead(&stmt_token_queue, &process_token_stream);
 		}
 
+		if (stmt_token == "print") {
+			stmt_token_queue.push_back(stmt_token); //This is "read" token
+			parseRead(&stmt_token_queue, &process_token_stream);
+		}
+
+		//Handler for all other tokens, prints them out
 		std::cout << "\n" << stmt_token;
-		
 	}
-	*/
+	
 
 	return 0;
 }
@@ -212,15 +220,6 @@ Note that for cond_expr, if a boolean operator is applied to it, the operand(s) 
 
 //AST_NODE_PTR current_parent_node_ = PROGRAM_NODE();
 
-
-
-//Definition of function pointer hashtable
-typedef int (*PARSE_FUNC_PTR)(string, int);
-
-std::unordered_map<std::string, PARSE_FUNC_PTR> parse_func_table_ = {
-	{"read", parseRead},
-	{"print", parsePrint}
-};
 /*
 int parseFirstStreamToken(std::deque<STRING>* stmt_token_stream, std::deque<STRING>* ) {
 	
@@ -316,20 +315,23 @@ int parseElse(STRING str) {
 	return 0;
 }
 
-int parseAssign(STRING str) {
+int parseAssign(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
 	//We assume that this statement will terminate with ';'
 
 	return 0;
 }
 
-int parseRead(STRING str, int ind) {
-	//We assume that this statement will terminate with ';'
+int parseRead(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+	//We take in two tokens, expecting a NAME and a ';'
+		//Then we construct a node and insert to parent.
+	//return a non-zero int otherwise
 	return 0;
 }
 
-int parsePrint(STRING str, int ind) {
-	//We assume that this statement will terminate with ';'
-	return 0;
+int parsePrint(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+	//We take in two tokens, expecting a NAME and a ';'
+
+	//return a non-zero int otherwise	return 0;
 }
 
 int parseProcedure(STRING str) {
