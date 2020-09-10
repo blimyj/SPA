@@ -53,6 +53,7 @@
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="..\source\PKBBuilder.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\AssignNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\ASTNode.cpp" />
@@ -83,6 +84,14 @@
     <ClCompile Include="..\source\PKB\Relationships\ModifiesTable.cpp" />
     <ClCompile Include="..\source\PKB\Relationships\ParentTable.cpp" />
     <ClCompile Include="..\source\PKB\Relationships\UsesTable.cpp" />
+=======
+    <ClCompile Include="..\source\TNode.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\PKB.h" />
+    <ClInclude Include="..\source\TNode.h" />
+    <ClInclude Include="Parser.h" />
+>>>>>>> Add tokenization to parser
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
