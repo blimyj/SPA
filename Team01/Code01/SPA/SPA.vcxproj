@@ -17,13 +17,18 @@
     <ClInclude Include="..\source\PKB\ASTNode\AssignNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\ASTNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\ConditionNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ConditionTypeEnum.h" />
     <ClInclude Include="..\source\PKB\ASTNode\ConstantNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\ExpressionNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ExpressionTypeEnum.h" />
     <ClInclude Include="..\source\PKB\ASTNode\IfNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\NodeTypeEnum.h" />
     <ClInclude Include="..\source\PKB\ASTNode\PrintNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\ProcedureNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ProgramNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\ReadNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\RelationNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\RelationTypeEnum.h" />
     <ClInclude Include="..\source\PKB\ASTNode\StatementListNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\StatementNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\VariableNode.h" />
@@ -55,6 +60,7 @@
     <ClCompile Include="..\source\PKB\ASTNode\IfNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\PrintNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\ProcedureNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\ProgramNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\ReadNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\RelationNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\StatementListNode.cpp" />

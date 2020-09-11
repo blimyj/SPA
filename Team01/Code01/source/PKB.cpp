@@ -14,7 +14,7 @@ PKB::PKB(PKB_BUILDER builder) {
     parent_table_ = builder.parent_table_;
     uses_table_ = builder.uses_table_;
     modifies_table_ = builder.modifies_table_;
-    root_node_ = builder.root_node_;
+    program_node_ptr_ = builder.program_node_ptr;
 }
 
 STMT_NODE_PTR_LIST PKB::getStatements() {
@@ -77,6 +77,6 @@ BOOLEAN PKB::isModifies(PROC_NAME p, VAR_NAME v) {
     return modifies_table_.isModifies(p, v);
 }
 
-AST_NODE_PTR PKB::getRootNode() {
-    return root_node_;
+PROGRAM_NODE_PTR PKB::getProgramNode() {
+    return program_node_ptr_;
 }
