@@ -13,11 +13,21 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 	QueryNode chosen_return_type;
 	
 	QUERY_NODE_POINTERS children = clauses.getChildren();
-	if (clauses.getNodeType() == QueryNodeType::select) {
+	if (clauses.getNodeType() == QueryNodeType::select) { 
 		result_list[0] = result_list[0] + "\n" + "Select Worked";
 		chosen_return_type = children[0];
 		result_list[0] = result_list[0] + "\n" + "chosen return synonym name: " + chosen_return_type.getSynonymName();
 	}
+
+	// Hard coded result from PKBStub
+	VAR_NODE_PTR_LIST all_variables = pkb.getVariables();
+	std::string variable_string = "";
+	for (VAR_NODE_PTR variable : all_variables) {
+		VariableNode variable_node = *variable;
+		variable_string += variable_node.getVariableName();
+	}
+	result_list[0] = result_list[0] + "\n" + variable_string;
+
 	
 	//intermediate result_list can have many synonyms
 	//but final result should return just 1 string/empty
