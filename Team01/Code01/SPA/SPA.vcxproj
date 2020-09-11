@@ -20,6 +20,7 @@
     <ClInclude Include="..\source\PKB\ASTNode\ConstantNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\ExpressionNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\IfNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\NodeTypeEnum.h" />
     <ClInclude Include="..\source\PKB\ASTNode\PrintNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\ProcedureNode.h" />
     <ClInclude Include="..\source\PKB\ASTNode\ReadNode.h" />

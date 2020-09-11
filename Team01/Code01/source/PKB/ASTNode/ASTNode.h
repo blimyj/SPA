@@ -2,16 +2,21 @@
 
 #include <memory>
 #include <vector>
+#include "NodeTypeEnum.h"
 
 class ASTNode;
 
 typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef std::vector<std::shared_ptr<ASTNode>> AST_NODE_PTR_LIST;
 typedef bool BOOLEAN;
+typedef NodeTypeEnum NODE_TYPE_ENUM;
 
 class ASTNode {
 
 public:
+
+	NODE_TYPE_ENUM getNodeType();
+
 	BOOLEAN setParentNode(AST_NODE_PTR parent_node_ptr);
 		/*
 		Description: Sets the given AST_NODE_PTR node to be the parent of this node.
@@ -36,4 +41,7 @@ public:
 private:
 	AST_NODE_PTR parent_node_ptr_;
 	AST_NODE_PTR_LIST children_node_ptr_;
+
+protected:
+	NODE_TYPE_ENUM node_type_;
 };

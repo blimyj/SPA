@@ -4,6 +4,7 @@ ConditionNode::ConditionNode(CONDITION_TYPE condition_type, AST_NODE_PTR left_no
     setRelationType(condition_type);
     setLeftAstNode(left_node_ptr);
     setRightAstNode(right_node_ptr);
+    node_type_ = { NODE_TYPE_ENUM::Condition };
 }
 
 BOOLEAN ConditionNode::setRelationType(CONDITION_TYPE condition_type) {

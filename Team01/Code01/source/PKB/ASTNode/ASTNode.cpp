@@ -1,5 +1,9 @@
 #include "ASTNode.h"
 
+NODE_TYPE_ENUM ASTNode::getNodeType() {
+	return node_type_;
+}
+
 BOOLEAN ASTNode::setParentNode(AST_NODE_PTR parent_node_ptr) {
 	try {
 		parent_node_ptr_ = parent_node_ptr;
