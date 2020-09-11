@@ -9,13 +9,13 @@ class ASTNode;
 typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef std::vector<std::shared_ptr<ASTNode>> AST_NODE_PTR_LIST;
 typedef bool BOOLEAN;
-typedef NodeTypeEnum NODE_TYPE_ENUM;
+typedef NodeTypeEnum NODE_TYPE;
 
 class ASTNode {
 
 public:
 
-	NODE_TYPE_ENUM getNodeType();
+	NODE_TYPE getNodeType();
 
 	BOOLEAN setParentNode(AST_NODE_PTR parent_node_ptr);
 		/*
@@ -43,5 +43,5 @@ private:
 	AST_NODE_PTR_LIST children_node_ptr_;
 
 protected:
-	NODE_TYPE_ENUM node_type_;
+	NODE_TYPE node_type_;
 };

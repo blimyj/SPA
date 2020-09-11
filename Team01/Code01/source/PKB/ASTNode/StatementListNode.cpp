@@ -1,7 +1,7 @@
 #include "StatementListNode.h"
 
 StatementListNode::StatementListNode() {
-    node_type_ = { NODE_TYPE_ENUM::StatementList };
+    node_type_ = { NODE_TYPE::statementListNode };
 }
 
 BOOLEAN StatementListNode::addStatementNode(STMT_NODE_PTR stmt_node_ptr) {
