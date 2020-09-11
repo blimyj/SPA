@@ -4,7 +4,7 @@ IfNode::IfNode(CONDITION_NODE_PTR condition_node_ptr, STMT_LIST_NODE_PTR then_st
     setConditionNode(condition_node_ptr);
     setThenStatementListNode(then_stmt_list_node_ptr);
     setElseStatementListNode(else_stmt_list_node_ptr);
-    node_type_ = { NODE_TYPE_ENUM::If };
+    node_type_ = { NODE_TYPE::ifNode };
 }
 
 BOOLEAN IfNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {

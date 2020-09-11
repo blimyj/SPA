@@ -1,6 +1,6 @@
 #include "ASTNode.h"
 
-NODE_TYPE_ENUM ASTNode::getNodeType() {
+NODE_TYPE ASTNode::getNodeType() {
 	return node_type_;
 }
 
@@ -8,6 +8,7 @@ BOOLEAN ASTNode::setParentNode(AST_NODE_PTR parent_node_ptr) {
 	try {
 		parent_node_ptr_ = parent_node_ptr;
 	} catch (int e) {
+		(void)e;
 		return false;
 	}
 	return true;
@@ -17,6 +18,7 @@ BOOLEAN ASTNode::addChildNode(AST_NODE_PTR child_node_ptr) {
 	try {
 		children_node_ptr_.push_back(child_node_ptr);
 	} catch (int e) {
+		(void)e;
 		return false;
 	}
 	return true;

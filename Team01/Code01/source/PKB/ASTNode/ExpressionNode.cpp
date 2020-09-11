@@ -4,7 +4,7 @@ ExpressionNode::ExpressionNode(EXPR_TYPE expr_type, AST_NODE_PTR left_node_ptr, 
     setExpressionType(expr_type);
     setLeftAstNode(left_node_ptr);
     setRightAstNode(right_node_ptr);
-    node_type_ = { NODE_TYPE_ENUM::Expression };
+    node_type_ = { NODE_TYPE::expressionNode };
 }
 
 BOOLEAN ExpressionNode::setExpressionType(EXPR_TYPE expr_type) {
