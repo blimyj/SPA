@@ -4,7 +4,7 @@ enum class ExpressionTypeEnum {
     none,
     plus,
     min,
-    mult,
+    times,
     div,
     mod
 };
