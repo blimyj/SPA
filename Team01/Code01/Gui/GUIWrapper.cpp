@@ -2,7 +2,25 @@
 #include "../source/QueryNode.cpp"
 #include "../source/QueryProcessor.cpp"
 #include "../source/QueryEvaluator.cpp"
+#include "../source/PKB.cpp"
+#include "../source/PKBBuilder.cpp"
+#include "../source/PKB/ASTNode/VariableNode.cpp"
+#include "../source/PKBStub.cpp"
 #include <iostream>
+
+#include "../source/PKB/DesignEntities/AssignTable.cpp"
+#include "../source/PKB/DesignEntities/ConstantTable.cpp"
+#include "../source/PKB/DesignEntities/IfTable.cpp"
+#include "../source/PKB/DesignEntities/PrintTable.cpp"
+#include "../source/PKB/DesignEntities/ProcedureTable.cpp"
+#include "../source/PKB/DesignEntities/ReadTable.cpp"
+#include "../source/PKB/DesignEntities/StatementTable.cpp"
+#include "../source/PKB/DesignEntities/VariableTable.cpp"
+#include "../source/PKB/DesignEntities/WhileTable.cpp"
+#include "../source/PKB/Relationships/FollowsTable.cpp"
+#include "../source/PKB/Relationships/ParentTable.cpp"
+#include "../source/PKB/Relationships/UsesTable.cpp"
+#include "../source/PKB/Relationships/ModifiesTable.cpp"
 
 
 
@@ -23,6 +41,12 @@ void GUIWrapper::parse(std::string filename) {
 void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 // call your evaluator to evaluate the query here
   // ...code to evaluate query...
+
+	// Create PKBStub -- to be deleted
+	PKBStub pkb_init = PKBStub();
+	PKB pkbstub = pkb_init.addVariables();
+
+
 	QueryProcessor qp = QueryProcessor();
 	QueryNode qn = QueryNode();
 	QUERY_RESULT query_result = qp.processQuery(query);

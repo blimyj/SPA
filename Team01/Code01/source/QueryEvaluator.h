@@ -1,6 +1,9 @@
 #pragma once
 
 #include "QueryNode.h"
+#include "QueryNodeType.h"
+#include "QuerySynonymType.h"
+#include "PKB.h"
 
 #include <string>
 #include <unordered_map>

@@ -7,12 +7,17 @@
 #include <unordered_map>
 #include <string>
 
+
 QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
+	// Wait for preprocessor
 	/*
+	* const std::string empty_result = "";
 	* QueryPreProcessor pre_processor = QueryPreProcessor();
 	* PROCESSED_QUERY process_queries = pre_processor.parse(QUERY q);
 	* PROCESSED_SYNONYMS processed_synonyms = pre_processor.preProcessSynonyms(QUERY q); //returns table of synonym nodes
+	*	if (processed_synonyms.empty()) { return empty_result; } // either no synonym or syntax error, both should return emptyresult
 	* PROCESSED_CLAUSES processed_clauses = pre_processor.preProcessClauses(QUERY q); //returns query tree of clause nodes
+	* 	 if (processed_queries == NULL) { return empty_result; } // null result means that there is syntax error, return empty result
 	*/
 
 
@@ -35,7 +40,6 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 		{"w", while_node},
 	};
 
-	QueryNode processed_clauses = QueryNode(); //stores root node of the tree
 
 	// Build fake query tree for clauses
 	// eg Select a
@@ -45,6 +49,8 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	child2.setSynonymNode({ QuerySynonymType::assign }, "a");
 	QueryNode child1_children[] = { child2 };
 	child1.setChildren(child1_children);
+
+	QueryNode processed_clauses = child1; //stores root node of the tree
 
 
 	QUERY_RESULT query_result = "";
