@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PKB.h"
+
 #include <string>
 
 class QueryProcessor;
