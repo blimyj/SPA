@@ -14,6 +14,8 @@ typedef bool BOOLEAN;
 class StatementListNode : public ASTNode {
 
 public:
+	StatementListNode();
+
 	BOOLEAN addStatementNode(STMT_NODE_PTR stmt_node_ptr);
 		/*
 		Description: Returns True if able to append stmt_node_ptr to stmt_node_ptr_list_, false otherwise.

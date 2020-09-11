@@ -2,6 +2,7 @@
 
 VariableNode::VariableNode(STRING var_name) {
 	setVariableName(var_name);
+	node_type_ = { NODE_TYPE_ENUM::Variable };
 }
 
 BOOLEAN VariableNode::setVariableName(STRING var_name) {

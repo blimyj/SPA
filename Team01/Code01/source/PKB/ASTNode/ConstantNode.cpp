@@ -2,6 +2,7 @@
 
 ConstantNode::ConstantNode(VALUE value) {
     setValue(value);
+    node_type_ = { NODE_TYPE_ENUM::Constant };
 }
 
 BOOLEAN ConstantNode::setValue(VALUE value) {
@@ -9,6 +10,7 @@ BOOLEAN ConstantNode::setValue(VALUE value) {
         value_ = value;
     }
     catch (int e) {
+        (void)e;
         return false;
     }
     return true;

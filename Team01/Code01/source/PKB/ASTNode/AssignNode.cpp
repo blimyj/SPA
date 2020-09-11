@@ -3,6 +3,7 @@
 AssignNode::AssignNode(VAR_NODE_PTR var_node_ptr, EXPR_NODE_PTR expr_node_ptr) {
 	setVariableNode(var_node_ptr);
 	setExpressionNode(expr_node_ptr);
+	node_type_ = { NODE_TYPE_ENUM::Assign };
 }
 
 BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
