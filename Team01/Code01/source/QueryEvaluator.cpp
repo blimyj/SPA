@@ -3,6 +3,10 @@
 #include <string>
 #include <vector>
 
+QueryEvaluator::QueryEvaluator(PKB pkb) {
+	this->pkb = pkb;
+}
+
 QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSED_CLAUSES clauses) {
 	std::vector<std::string> result_list;
 	result_list.push_back("yo yo im here"); //initialise to empty_result

@@ -7,6 +7,11 @@
 #include <unordered_map>
 #include <string>
 
+QueryProcessor::QueryProcessor(){}
+
+QueryProcessor::QueryProcessor(PKB pkb) {
+	this->pkb = pkb;
+}
 
 QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	// Wait for preprocessor
@@ -21,7 +26,7 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	*/
 
 
-	QueryEvaluator query_evaluator = QueryEvaluator();
+	QueryEvaluator query_evaluator = QueryEvaluator(this->pkb);
 
 
 	// Create fake synonyms and clauses for now

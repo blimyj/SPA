@@ -47,7 +47,7 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 	PKB pkbstub = pkb_init.addVariables();
 
 
-	QueryProcessor qp = QueryProcessor();
+	QueryProcessor qp = QueryProcessor(pkbstub);
 	QueryNode qn = QueryNode();
 	QUERY_RESULT query_result = qp.processQuery(query);
 
