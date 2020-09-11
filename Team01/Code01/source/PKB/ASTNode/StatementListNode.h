@@ -16,7 +16,7 @@ class StatementListNode : public ASTNode {
 public:
 	StatementListNode();
 
-	BOOLEAN addStatementNode(STMT_NODE_PTR stmt_node_ptr);
+	BOOLEAN addStatementNode(STMT_NODE_PTR node);
 		/*
 		Description: Returns True if able to append stmt_node_ptr to stmt_node_ptr_list_, false otherwise.
 					 Serves as a function wrapper for addChild(STMT_NODE_PTR);
