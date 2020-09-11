@@ -4,18 +4,18 @@
 003     c = 0;
 004     if (a == 0) then {
 005         read d;
-006     } else {
-007         e = a + b + 1;
-008         print e;
+---     } else {
+006         e = a + b + 1;
+007         print e;
 ---     }
-009     while (c < 5) {
-010         if (c == 0) then {
-011             print a;
-012             read f;
+008     while (c < 5) {
+009         if (c == 0) then {
+010             print a;
+011             read f;
 ---         } else {
-013				f = 1;
----			}
-014         print c;
-015         c = c + 1;
+012             f = 1;
+---         }
+013         print c;
+014         c = c + 1;
 ---     }
 --- }
