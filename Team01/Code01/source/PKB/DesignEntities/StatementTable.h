@@ -12,7 +12,7 @@ class StatementTable {
 /* Overview: This is a data structure*/
 
 public:
-    INDEX addStatementNode(STMT_NODE_PTR node);
+    INDEX addStatementNode(STMT_NODE_PTR stmt_node_ptr);
         /*
         Description: Returns the index of the STMT_NODE_PTR added to the table.
         */

@@ -120,6 +120,9 @@
     <ClInclude Include="..\source\PKB\ASTNode\ProgramNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\PKB\DesignEntities\StatementListTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp">
@@ -216,6 +219,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\PKB\ASTNode\ProgramNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\DesignEntities\StatementListTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
