@@ -8,6 +8,7 @@ enum class NodeTypeEnum {
     ifNode, 
     printNode,
     procedureNode, 
+    programNode,
     readNode, 
     relationNode, 
     statementListNode,
