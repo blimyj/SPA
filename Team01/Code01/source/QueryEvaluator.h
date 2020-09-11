@@ -1,10 +1,34 @@
 #pragma once
 
+#include "QueryNode.h"
+#include "QueryNodeType.h"
+#include "QuerySynonymType.h"
+#include "PKB.h"
+
+#include <string>
+#include <unordered_map>
+
+class QueryEvaluator;
+
+typedef std::string QUERY_RESULT;
+/*may need to typedef processed_synonyms? check with huiming on the type from preprocessor*/
+typedef std::unordered_map<std::string, QueryNode> PROCESSED_SYNONYMS;
+typedef QueryNode PROCESSED_CLAUSES;
+
 class QueryEvaluator {
 	/* Overview: Evaluates pre-processed queries and returns the result */
 
+private:
+	PKB pkb = (PKBBuilder().build()); // because PKB has no default constructor
+
 public:
-	QUERY_RESULT evaluateQuery(PROCESSED_SYNONYMS s, PROCESSED_CLAUSES c);
+	QueryEvaluator(PKB pkb);
+	/*
+		Description:
+		  Normal:
+		*/
+
+	QUERY_RESULT evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSED_CLAUSES clauses);
 	/*
 		Requires: A query in the form of PROCESSED_SYNONYMS and PROCESSED_CLAUSES
 		Description:
