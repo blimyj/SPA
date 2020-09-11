@@ -5,6 +5,7 @@ class PKB;
 #include <memory>
 #include <vector>
 #include "PKBBuilder.h"
+#include "PKB/ASTNode/ProgramNode.h"
 #include "PKB/DesignEntities/AssignTable.h"
 #include "PKB/DesignEntities/ConstantTable.h"
 #include "PKB/DesignEntities/IfTable.h"
@@ -20,6 +21,8 @@ class PKB;
 #include "PKB/Relationships/ModifiesTable.h"
 
 typedef PKBBuilder PKB_BUILDER;
+
+typedef ProgramNode PROGRAM_NODE_PTR;
 
 typedef AssignTable ASSIGN_TABLE;
 typedef ConstantTable CONSTANT_TABLE;
@@ -145,13 +148,13 @@ public:
         */
 
     /*==== AST ====*/
-    AST_NODE_PTR getRootNode();
+    PROGRAM_NODE_PTR getProgramNode();
         /*
         Description: Returns the source program's AST.
         */
 
 private:
-    AST_NODE_PTR root_node_;
+    PROGRAM_NODE_PTR program_node_ptr_;
 
     ASSIGN_TABLE assign_table_;
     CONSTANT_TABLE constant_table_;
