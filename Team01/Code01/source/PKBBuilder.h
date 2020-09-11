@@ -3,6 +3,7 @@
 class PKBBuilder;
 
 #include "PKB.h"
+#include "PKB/ASTNode/ProgramNode.h"
 #include "PKB/DesignEntities/AssignTable.h"
 #include "PKB/DesignEntities/ConstantTable.h"
 #include "PKB/DesignEntities/IfTable.h"
@@ -16,6 +17,8 @@ class PKBBuilder;
 #include "PKB/Relationships/ParentTable.h"
 #include "PKB/Relationships/UsesTable.h"
 #include "PKB/Relationships/ModifiesTable.h"
+
+typedef ProgramNode PROGRAM_NODE_PTR;
 
 typedef AssignTable ASSIGN_TABLE;
 typedef ConstantTable CONSTANT_TABLE;
@@ -126,9 +129,9 @@ public:
                      the MODIFIES_TABLE when building the PKB.
         */
 
-    VOID setRootNode(AST_NODE_PTR root_node);
+    VOID setProgramNode(PROGRAM_NODE_PTR program_node_ptr);
         /*
-        Description: Stores the source program's AST into the PKB when building the PKB.
+        Description: Stores the root/program node pointer into the PKB.
         */
 
     PKB build();
@@ -140,7 +143,7 @@ public:
 private:
     friend class PKB;
 
-    AST_NODE_PTR root_node_;
+    PROGRAM_NODE_PTR program_node_ptr;
 
     ASSIGN_TABLE assign_table_;
     CONSTANT_TABLE constant_table_;

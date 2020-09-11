@@ -117,6 +117,9 @@
     <ClInclude Include="..\source\PKB\ASTNode\ConditionTypeEnum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\PKB\ASTNode\ProgramNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp">
@@ -210,6 +213,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\PKB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\ASTNode\ProgramNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
