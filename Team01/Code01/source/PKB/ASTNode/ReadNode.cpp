@@ -2,6 +2,7 @@
 
 ReadNode::ReadNode(VAR_NODE_PTR var_node_ptr) {
 	setVariableNode(var_node_ptr);
+	node_type_ = { NODE_TYPE::readNode };
 }
 
 BOOLEAN ReadNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {

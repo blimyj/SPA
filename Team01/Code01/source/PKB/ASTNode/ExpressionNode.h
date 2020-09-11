@@ -3,9 +3,10 @@
 #include <memory>
 #include <string>
 #include "ASTNode.h"
+#include "ExpressionTypeEnum.h"
 
-typedef std::string EXPR_TYPE;
 typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
+typedef ExpressionTypeEnum EXPR_TYPE;
 typedef bool BOOLEAN;
 
 class ExpressionNode : public ASTNode {

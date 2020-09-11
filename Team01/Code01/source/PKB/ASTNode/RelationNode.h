@@ -2,10 +2,12 @@
 
 #include <memory>
 #include <string>
-#include "ASTNode.h"
 
-typedef std::string RELATION_TYPE;
+#include "ASTNode.h"
+#include "RelationTypeEnum.h"
+
 typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
+typedef RelationTypeEnum RELATION_TYPE;
 typedef bool BOOLEAN;
 
 class RelationNode : public ASTNode {

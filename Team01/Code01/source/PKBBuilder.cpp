@@ -60,8 +60,8 @@ VOID PKBBuilder::addModifies(PROC_NAME p, VAR_NAME v) {
     modifies_table_.addModifies(p, v);
 }
 
-VOID PKBBuilder::setRootNode(AST_NODE_PTR root_node) {
-    root_node_ = root_node;
+VOID PKBBuilder::setProgramNode(PROGRAM_NODE_PTR program_node_ptr) {
+    program_node_ptr = program_node_ptr;
 }
 
 PKB PKBBuilder::build() {
