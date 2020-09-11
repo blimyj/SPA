@@ -7,7 +7,7 @@
 006         b = 1;
 007         read y;
 008         print z;
-009         if (i !=3) then {
+009         if (i != 3) then {
 010             a = x;
 011             while (j < 2) {
 012                 a = x;
@@ -20,7 +20,7 @@
 018                     a = x;
 019                     b = 1;
 020                     read y;
-021                     print z;                
+021                     print z;
 ---                 }
 ---             }
 ---         } else {
@@ -29,5 +29,5 @@
 024             read y;
 025             print z;
 ---         }
----		}
+---     }
 --- }
