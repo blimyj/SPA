@@ -13,26 +13,26 @@ class IfNode : public StatementNode {
 public:
 	IfNode(CONDITION_NODE_PTR condition_node_ptr, STMT_LIST_NODE_PTR then_stmt_list_node_ptr, STMT_LIST_NODE_PTR else_stmt_list_node_ptr);
 		/*
-		Description: Constructs a IfNode with the child CONDITION_NODE_PTR and \
+		Description: Constructs a IfNode with the child CONDITION_NODE_PTR and 
 		following then STMT_LIST_NODE_PTR and else STMT_LIST_NODE_PTR.
 		*/
 
 	BOOLEAN setConditionNode(CONDITION_NODE_PTR condition_node_ptr);
 		/*
 		Description: Returns True if able to set the 
-		CONDITION_NODE_PTR of this if statement.
+		CONDITION_NODE_PTR of this if statement, false otherwise.
 		*/
 
 	BOOLEAN setThenStatementListNode(STMT_LIST_NODE_PTR then_stmt_list_node_ptr);
 		/*
 		Description: Returns True if able to set the then child 
-		STMT_LIST_NODE_PTR of this if statement.
+		STMT_LIST_NODE_PTR of this if statement, false otherwise.
 		*/
 
 	BOOLEAN setElseStatementListNode(STMT_LIST_NODE_PTR else_stmt_list_node_ptr);
 		/*
 		Description: Returns True if able to set the else child 
-		STMT_LIST_NODE_PTR of this if statement.
+		STMT_LIST_NODE_PTR of this if statement, false otherwise.
 		*/
 	CONDITION_NODE_PTR getConditionNode();
 		/*
