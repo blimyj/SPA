@@ -1,58 +1,35 @@
+#include <algorithm>
 #include "FollowsTable.h"
 
 VOID FollowsTable::addFollows(STMT_NUM s1, STMT_NUM s2) {
-    statement_follows_[s1] = s2;
+    statements_[s1] = s2;
     follows_.insert({ s1, s2 });
-    follows_transitive_.insert({ s1, s2 });
+    follows_transitive_.insert({ { s1, s2 }, true });
 }
 
 BOOLEAN FollowsTable::isFollows(STMT_NUM s1, STMT_NUM s2) {
     // Check if Follows(s1, s2) exists
-    auto it = follows_.find({ s1, s2 });
-    return it != follows_.end();
+    return follows_.count({ s1, s2 }) > 0;
 }
 
 BOOLEAN FollowsTable::isFollowsTransitive(STMT_NUM s1, STMT_NUM s2) {
     // Check if Follows*(s1, s2) exists
-    auto it = follows_transitive_.find({ s1, s2 });
-    return it != follows_.end();
-
-    // Memoize transitive relationships
-    std::vector<STMT_NUM> statements;
-    statements.push_back(s1);
-    STMT_NUM curr = s1;
-    while (curr == s2) {
-        auto it = statement_follows_.find(curr);
-        if (it == statement_follows_.end()) {
-            return false;
-        }
-        STMT_NUM next = it->second;
-        for (STMT_NUM s : statements) {
-            follows_transitive_.insert({ s, next });
-        }
-        statements.push_back(next);
-        curr = next;
+    if (follows_transitive_.count({ s1, s2 }) > 0) {
+        return true;
     }
-    return true;
-}
 
-VOID FollowsTable::calculateTransitive() {
-    // Memoize transitive relationships
-    for (std::pair<STMT_NUM, STMT_NUM> f : follows_) {
-        std::vector<STMT_NUM> statements;
-        statements.push_back(f.first);
-        STMT_NUM curr = f.first;
-        while (curr == f.second) {
-            auto it = statement_follows_.find(curr);
-            if (it == statement_follows_.end()) {
-                break;
-            }
-            STMT_NUM next = it->second;
-            for (STMT_NUM s : statements) {
-                follows_transitive_.insert({ s, next });
-            }
-            statements.push_back(next);
-            curr = next;
-        }
+    // Check if s1 has a follower
+    auto it = statements_.find(s1);
+    if (it == statements_.end()) {
+        return false;
     }
+
+    // Check if follower is transitive
+    // Memoize transitive relationships :)
+    if (isFollowsTransitive(it->second, s2)) {
+        follows_transitive_.insert({ { s1, s2 }, true });
+        return true;
+    }
+    follows_transitive_.insert({ { s1, s2 }, false });
+    return false;
 }
