@@ -46,6 +46,9 @@ RELATION_NODE_PTR ConditionNode::getLeftRelationNode() {
 }
 
 RELATION_NODE_PTR ConditionNode::getRightRelationNode() {
+    if (right_relation_node_ptr_ == NULL) {
+        throw "Relation is of 'none' Type, there is no right relation node!";
+    }
     return right_relation_node_ptr_;
 }
 
