@@ -53,15 +53,15 @@ PROC_NODE_PTR_LIST PKB::getProcedures() {
     return proc_table_.getProcedureNodeList();
 }
 
-BOOLEAN PKB::isFollows(STMT_NUM s1, STMT_NUM s2) {
+BOOLEAN PKB::isFollows(STMT_NUM_PTR s1, STMT_NUM_PTR s2) {
     return follows_table_.isFollows(s1, s2);
 }
 
-BOOLEAN PKB::isParent(STMT_NUM s1, STMT_NUM s2) {
+BOOLEAN PKB::isParent(STMT_NUM_PTR s1, STMT_NUM_PTR s2) {
     return parent_table_.isParent(s1, s2);
 }
 
-BOOLEAN PKB::isUses(STMT_NUM s, VAR_NAME v) {
+BOOLEAN PKB::isUses(STMT_NUM_PTR s, VAR_NAME v) {
     return uses_table_.isUses(s, v);
 }
 
@@ -69,7 +69,7 @@ BOOLEAN PKB::isUses(PROC_NAME p, VAR_NAME v) {
     return uses_table_.isUses(p, v);
 }
 
-BOOLEAN PKB::isModifies(STMT_NUM s, VAR_NAME v) {
+BOOLEAN PKB::isModifies(STMT_NUM_PTR s, VAR_NAME v) {
     return modifies_table_.isModifies(s, v);
 }
 

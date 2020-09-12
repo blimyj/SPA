@@ -27,15 +27,18 @@ public:
 
 	AST_NODE_PTR getParentNode();
 		/*
-		Description: Returns the children AST_NODE_PTR_LIST of this ASTNode
+		Description: Returns the parent AST_NODE_PTR of this ASTNode
 		*/
 
 	AST_NODE_PTR_LIST getChildrenNode();
 		/*
-		Description: Returns a list of AST_NODE_PTR_LIST that point to AST_NODE that are children of this node, if there are no children, returns an empty list.
+		Description: Returns the children AST_NODE_PTR_LIST of this ASTNode
 		*/
 
 	NODE_TYPE getNodeType();
+		/*
+		Description: Returns the Sub Class's NODE_TYPE of this ASTNode.
+		*/
 
 private:
 	AST_NODE_PTR parent_node_ptr_;

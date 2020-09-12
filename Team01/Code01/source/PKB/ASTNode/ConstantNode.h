@@ -10,17 +10,17 @@ class ConstantNode : public ASTNode {
 public:
 	ConstantNode(VALUE value);
 		/*
-		Description: Constructs an ConstantNode consisting of a VALUE of the constant's value.
+		Description: Constructs a ConstantNode with the VALUE of the Constant.
 		*/
 
 	BOOLEAN setValue(VALUE value);
 		/*
-		Description: Returns TRUE if able to set value_ as value, false otherwise.
+		Description: Returns True if able to set the VALUE of the Constant in this ConstantNode
 		*/
 
 	VALUE getValue();
 		/*
-		Description: Returns a VALUE of the constant's value.
+		Description: Returns the VALUE of the Constant in this ConstantNode
 		*/
 
 

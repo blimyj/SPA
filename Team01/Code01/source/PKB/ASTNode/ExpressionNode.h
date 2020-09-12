@@ -14,26 +14,26 @@ class ExpressionNode : public ASTNode {
 public:
 	ExpressionNode(EXPR_TYPE expr_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr);
 		/*
-		Description: Constructs an ExpressionNode consisting of a EXPR_TYPE, left and right AST_NODE_PTR.
+		Description: Constructs an ExpressionNode with the EXPR_TYPE including the 
+		left child AST_NODE_PTR and right child AST_NODE_PTR of this ExpressionNode.
 		*/
 
 	BOOLEAN setExpressionType(EXPR_TYPE expr_type);
 		/*
-		Description: Returns the EXPR_TYPE enum of the condition.
-		Can be EXPR_TYPE enum of PLUS, MINUS, DIVIDE, MULTIPLY, MOD
+		Description: Returns True if able to set the EXPR_TYPE of this ExpressionNode, false otherwise.
 		*/
 
 	BOOLEAN setLeftAstNode(AST_NODE_PTR left_node_ptr);
 		/*
-		Description: Returns True if able to set left_node_ as left_node_ptr, false otherwise.
-		left_node_ptr must be ExpressionNode, VariableNode or ConstantNode.
+		Description: Returns True if able to set AST_NODE_PTR to be the left-hand side 
+		child of this Expression, false otherwise
 		*/
 
 
 	BOOLEAN setRightAstNode(AST_NODE_PTR right_node_ptr);
 		/*
-		Description: Returns True if able to set right_node_ as right_node_ptr, false otherwise.
-		right_node_ptr must be ExpressionNode, VariableNode or ConstantNode.
+		Description: Returns True if able to set AST_NODE_PTR to be the right-hand side 
+		child of this Condition, false otherwise.
 		*/
 
 	EXPR_TYPE getExpressionType();
@@ -43,13 +43,13 @@ public:
 
 	AST_NODE_PTR getLeftAstNode();
 		/*
-		Description: Returns the AST_NODE_PTR of the left hand side of the expression.
+		Description: Returns the left-hand side child AST_NODE_PTR of this Expression.
 		*/
 
 
 	AST_NODE_PTR getRightAstNode();
 		/*
-		Description: Returns the AST_NODE_PTR of the right hand side of the expression.
+		Description: Returns the right-hand side child AST_NODE_PTR of this Expression.
 		*/
 
 private:
