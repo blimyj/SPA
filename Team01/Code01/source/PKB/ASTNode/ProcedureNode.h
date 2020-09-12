@@ -14,27 +14,27 @@ class ProcedureNode : public ASTNode {
 public:
 	ProcedureNode(STRING proc_name, STMT_LIST_NODE_PTR stmt_list_node_ptr);
 		/*
-		Description: Constructs an ProcedureNode consisting of a STRING procedure name and STATEMENT_LIST_NODE_PTR statement list.
+		Description: Constructs a ProcedureNode with the STRING of the procedure's name, and the child STMT_LIST_NODE_PTR.
 		*/
 
 	BOOLEAN setProcedureName(STRING proc_name);
 		/*
-		Description: Returns TRUE if able to set proc_name_ as proc_name, false otherwise.
+		Description: Returns True if able to set STRING of the procedure's name, false otherwise.
 		*/
 
 	BOOLEAN setProcedureStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);
 		/*
-		Description: Returns True if able to set stmt_list_node_ as stmt_list, false otherwise.
+		Returns True if able to set the child STMT_LIST_NODE_PTR of the procedure, false otherwise.
 		*/
 
 	STRING getProcedureName();
 		/*
-		Description: Returns a STRING of the procedure's name
+		Description: Returns the STRING of the procedure's name
 		*/
 
 	STMT_LIST_NODE_PTR getProcedureStatementListNode();
 		/*
-		Description: Returns a STATEMENT_LIST_NODE_PTR of the procedure's statement list.
+		Description: Returns the child STMT_LIST_NODE_POINTER of the procedure.
 		*/
 
 private:

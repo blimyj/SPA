@@ -1,13 +1,13 @@
 #include "ConditionNode.h"
 
 ConditionNode::ConditionNode(CONDITION_TYPE condition_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr) {
-    setRelationType(condition_type);
+    setConditionType(condition_type);
     setLeftAstNode(left_node_ptr);
     setRightAstNode(right_node_ptr);
     node_type_ = { NODE_TYPE::conditionNode };
 }
 
-BOOLEAN ConditionNode::setRelationType(CONDITION_TYPE condition_type) {
+BOOLEAN ConditionNode::setConditionType(CONDITION_TYPE condition_type) {
     try {
         condition_type_ = condition_type;
     } catch (int e) {

@@ -15,27 +15,29 @@ class ASTNode {
 
 public:
 
-	NODE_TYPE getNodeType();
-
 	BOOLEAN setParentNode(AST_NODE_PTR parent_node_ptr);
 		/*
-		Description: Sets the given AST_NODE_PTR node to be the parent of this node.
+		Description: Returns True if able to set AST_NODE_PTR as a parent of this node, false otherwise
 		*/
 
 	BOOLEAN addChildNode(AST_NODE_PTR child_node_ptr);
 		/*
-		Description: Sets the given AST_NODE_PTR node to be a child of this node.
-					 The child added will be sorted from left to right based on the AST.
+		Description: Returns True if able to set AST_NODE_PTR as a child of this node, false otherwise
 		*/
 
 	AST_NODE_PTR getParentNode();
 		/*
-		Description: Returns the AST_NODE_PTR that points to the parent AST_NODE of this node otherwise returns NULL.
+		Description: Returns the parent AST_NODE_PTR of this ASTNode
 		*/
 
 	AST_NODE_PTR_LIST getChildrenNode();
 		/*
-		Description: Returns a list of AST_NODE_PTR_LIST that point to AST_NODE that are children of this node, if there are no children, returns an empty list.
+		Description: Returns the children AST_NODE_PTR_LIST of this ASTNode
+		*/
+
+	NODE_TYPE getNodeType();
+		/*
+		Description: Returns the Sub Class's NODE_TYPE of this ASTNode.
 		*/
 
 private:
