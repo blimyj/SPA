@@ -43,6 +43,7 @@
     <ClInclude Include="..\source\PKB\DesignEntities\StatementTable.h" />
     <ClInclude Include="..\source\PKB\DesignEntities\VariableTable.h" />
     <ClInclude Include="..\source\PKB\DesignEntities\WhileTable.h" />
+    <ClInclude Include="..\source\PKB\Hashing.h" />
     <ClInclude Include="..\source\PKB\Relationships\FollowsTable.h" />
     <ClInclude Include="..\source\PKB\Relationships\ModifiesTable.h" />
     <ClInclude Include="..\source\PKB\Relationships\ParentTable.h" />

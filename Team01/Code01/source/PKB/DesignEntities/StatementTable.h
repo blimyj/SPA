@@ -13,6 +13,7 @@ class StatementTable {
 
 private:
     friend class PKB;
+    friend class PKBBuilder;
 
     INDEX addStatementNode(STMT_NODE_PTR node);
         /*
