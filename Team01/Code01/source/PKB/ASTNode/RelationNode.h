@@ -11,6 +11,7 @@ typedef RelationTypeEnum RELATION_TYPE;
 typedef bool BOOLEAN;
 
 class RelationNode : public ASTNode {
+/*RelationNode is ==, !=, <=, >=, <, >*/
 
 public:
 	RelationNode(RELATION_TYPE relation_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr);

@@ -4,6 +4,10 @@ INDEX PKBBuilder::addStatementNode(STMT_NODE_PTR stmt_node_ptr) {
     return stmt_table_.addStatementNode(stmt_node_ptr);
 }
 
+INDEX PKBBuilder::addStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr) {
+    return stmt_list_table_.addStatementListNode(stmt_list_node_ptr);
+}
+
 INDEX PKBBuilder::addReadNode(READ_NODE_PTR read_node_ptr) {
     return read_table_.addReadNode(read_node_ptr);
 }
