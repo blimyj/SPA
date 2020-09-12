@@ -15,17 +15,17 @@ class PrintNode : public StatementNode {
 public:
 	PrintNode(VAR_NODE_PTR var_node_ptr);
 		/*
-		Description: Constructs an PrintNode that contains a AST_NODE_PTR that it prints.
+		Description: Constructs a PrintNode with the child VAR_NODE_PTR of the print statement.
 		*/
 
 	BOOLEAN setVariableNode(VAR_NODE_PTR var_node_ptr);
 		/*
-		Description: Returns True if able to set node_ as the var_node, false otherwise.
+		Description: Returns True if able to set the child VAR_NODE_PTR of the print statement, false otherwise.
 		*/
 
 	VAR_NODE_PTR getVariableNode();
 		/*
-		Description: Returns the VAR_NODE_PTR of the variable node attached to this PrintNode.
+		Description: Returns the child VAR_NODE_PTR of the print statement.
 		*/
 
 private:
