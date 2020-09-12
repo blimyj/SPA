@@ -17,6 +17,7 @@ PKB::PKB(PKB_BUILDER builder) {
     program_node_ptr_ = builder.program_node_ptr;
 }
 
+/*==== Design Entities (Nodes) ====*/
 STMT_NODE_PTR_LIST PKB::getStatements() {
     return stmt_table_.getStatementNodeList();
 }
@@ -53,6 +54,44 @@ PROC_NODE_PTR_LIST PKB::getProcedures() {
     return proc_table_.getProcedureNodeList();
 }
 
+/*==== Design Entities (Values) ====*/
+STMT_NUM_LIST PKB::getStatementNumList() {
+    return stmt_table_.getStatementNumList();
+}
+
+STMT_NUM_LIST PKB::getReadNumList() {
+    return read_table_.getReadNumList();
+}
+
+STMT_NUM_LIST PKB::getPrintNumList() {
+    return print_table_.getPrintNumList();
+}
+
+STMT_NUM_LIST PKB::getWhileNumList() {
+    return while_table_.getWhileNumList();
+}
+
+STMT_NUM_LIST PKB::getIfNumList() {
+    return if_table_.getIfNumList();
+}
+
+STMT_NUM_LIST PKB::getAssignNumList() {
+    return assign_table_.getAssignNumList();
+}
+
+CONSTANT_VALUE_LIST PKB::getConstantValueList() {
+    return constant_table_.getConstantValueList();
+}
+
+VAR_NAME_LIST PKB::getVariableNameList() {
+    return var_table_.getVariableNameList();
+}
+
+PROC_NAME_LIST PKB::getProcedureNameList() {
+    return proc_table_.getProcedureNameList();
+}
+
+/*==== Relationships ====*/
 BOOLEAN PKB::isFollows(STMT_NUM s1, STMT_NUM s2) {
     return follows_table_.isFollows(s1, s2);
 }
