@@ -12,7 +12,7 @@ class ReadNode : public StatementNode {
 public:
 	ReadNode(VAR_NODE_PTR var_node_ptr);
 		/*
-		Description: Constructs an PrintNode consisting of a VAR_NODE of the variable it prints.
+		Description: Constructs an ReadNode consisting of a VAR_NODE_PTR of the variable it prints.
 		*/
 
 	BOOLEAN setVariableNode(VAR_NODE_PTR var_node_ptr);
