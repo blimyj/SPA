@@ -18,7 +18,7 @@ public:
 	ConditionNode(CONDITION_TYPE condition_type, RELATION_NODE_PTR left_relation_node_ptr, RELATION_NODE_PTR right_relation_node_ptr);
 		/*
 		Description: Constructs a ConditionNode with the CONDITION_TYPE including the left child 
-		AST_NODE_PTR and right child AST_NODE_PTR of this CondtiionNode.
+		RELATION_NODE_PTR and right child RELATION_NODE_PTR of this CondtiionNode.
 		*/
 
 	BOOLEAN setConditionType(CONDITION_TYPE condition_type);
@@ -43,12 +43,12 @@ public:
 
 	RELATION_NODE_PTR getLeftRelationNode();
 		/*
-		Description: Returns the left-hand side child AST_NODE_PTR of this Condition.
+		Description: Returns the left-hand side child RELATION_NODE_PTR of this Condition.
 		*/
 
 	RELATION_NODE_PTR getRightRelationNode();
 		/*
-		Description: Returns the right-hand side child AST_NODE_PTR of this Condition.
+		Description: Returns the right-hand side child RELATION_NODE_PTR of this Condition.
 		*/
 
 private:
