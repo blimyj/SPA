@@ -46,7 +46,7 @@ public:
     /*==== Constructor ====*/
     PKB(PKB_BUILDER builder);
 
-    /*==== Design Entities ====*/
+    /*==== Design Entities (Nodes) ====*/
     STMT_NODE_PTR_LIST getStatements();
         /*
         Description: Returns the STMT_NUM_LIST stored in STATEMENT_TABLE.
@@ -104,6 +104,70 @@ public:
         */
 
     PROC_NODE_PTR_LIST getProcedures();
+        /*
+        Description: Returns the PROC_NAME_LIST stored in PROCEDURE_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     PROC_NAME_LIST.
+        */
+    
+    /*==== Design Entities (Values) ====*/
+    STMT_NUM_LIST getStatementNumList();
+        /*
+        Description: Returns the STMT_NUM_LIST stored in STATEMENT_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     STMT_NUM_LIST.
+        */
+
+    STMT_NUM_LIST getReadNumList();
+        /*
+        Description: Returns the STMT_NUM_LIST stored in READ_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     STMT_NUM_LIST.
+        */
+
+    STMT_NUM_LIST getPrintNumList();
+        /*
+        Description: Returns the STMT_NUM_LIST stored in PRINT_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     STMT_NUM_LIST.
+        */
+
+    STMT_NUM_LIST getWhileNumList();
+        /*
+        Description: Returns the STMT_NUM_LIST stored in WHILE_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     STMT_NUM_LIST.
+        */
+
+    STMT_NUM_LIST getIfNumList();
+        /*
+        Description: Returns the STMT_NUM_LIST stored in IF_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     STMT_NUM_LIST.
+        */
+
+    STMT_NUM_LIST getAssignNumList();
+        /*
+        Description: Returns the STMT_NUM_LIST stored in ASSIGN_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     STMT_NUM_LIST.
+        */
+
+    CONSTANT_VALUE_LIST getConstantValueList();
+        /*
+        Description: Returns the CONSTANT_VALUE_LIST stored in CONSTANT_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     CONSTANT_VALUE_LIST.
+        */
+
+    VAR_NAME_LIST getVariableNameList();
+        /*
+        Description: Returns the VAR_NAME_LIST stored in VARIABLE_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     VAR_NAME_LIST.
+        */
+
+    PROC_NAME_LIST getProcedureNameList();
         /*
         Description: Returns the PROC_NAME_LIST stored in PROCEDURE_TABLE.
                      If there are no elements in the collection, returns an empty
