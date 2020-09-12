@@ -96,8 +96,16 @@ BOOLEAN PKB::isFollows(STMT_NUM s1, STMT_NUM s2) {
     return follows_table_.isFollows(s1, s2);
 }
 
+BOOLEAN PKB::isFollowsTransitive(STMT_NUM s1, STMT_NUM s2) {
+    return follows_table_.isFollowsTransitive(s1, s2);
+}
+
 BOOLEAN PKB::isParent(STMT_NUM s1, STMT_NUM s2) {
     return parent_table_.isParent(s1, s2);
+}
+
+BOOLEAN PKB::isParentTransitive(STMT_NUM s1, STMT_NUM s2) {
+    return parent_table_.isParentTransitive(s1, s2);
 }
 
 BOOLEAN PKB::isUses(STMT_NUM s, VAR_NAME v) {

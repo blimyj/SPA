@@ -13,5 +13,5 @@ BOOLEAN ModifiesTable::isModifies(STMT_NUM s, VAR_NAME v) {
 }
 
 BOOLEAN ModifiesTable::isModifies(PROC_NAME p, VAR_NAME v) {
-    return modifies_p_.count({ p ,v }) > 0;
+    return modifies_p_.count({ p, v }) > 0;
 }

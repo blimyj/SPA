@@ -181,10 +181,22 @@ public:
                      Follows(STMT_NUM, STMT_NUM) holds
         */
 
+    BOOLEAN isFollowsTransitive(STMT_NUM s1, STMT_NUM s2);
+        /*
+        Description: Returns a BOOLEAN indicating whether or not
+                     Follows*(STMT_NUM, STMT_NUM) holds
+        */
+
     BOOLEAN isParent(STMT_NUM s1, STMT_NUM s2);
         /*
         Description: Returns a BOOLEAN indicating whether or not
                      Parent(STMT_NUM, STMT_NUM) holds
+        */
+
+    BOOLEAN isParentTransitive(STMT_NUM s1, STMT_NUM s2);
+        /*
+        Description: Returns a BOOLEAN indicating whether or not
+                     Parent*(STMT_NUM, STMT_NUM) holds
         */
 
     BOOLEAN isUses(STMT_NUM s, VAR_NAME v);
