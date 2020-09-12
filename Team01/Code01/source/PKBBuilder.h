@@ -60,8 +60,8 @@ public:
 
     INDEX addWhileNode(WHILE_NODE_PTR while_node_ptr);
         /*
-        Description: Adds a STMT_NUM to the WHILE_TABLE when building the PKB.
-                     Returns the INDEX of the STMT_NUM in the WHILE_TABLE.
+        Description: Adds a STMT_NUM_PTR to the WHILE_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_NUM_PTR in the WHILE_TABLE.
         */
 
     INDEX addIfNode(IF_NODE_PTR if_node_ptr);
@@ -95,17 +95,17 @@ public:
         */
 
     /*==== Relationships ====*/
-    VOID addFollows(STMT_NUM s1, STMT_NUM s2);
+    VOID addFollows(STMT_NUM_PTR s1, STMT_NUM_PTR s2);
         /*
-        Description: Stores a Follows(STMT_NUM, STMT_NUM) relationship to
+        Description: Stores a Follows(STMT_NUM_PTR, STMT_NUM_PTR) relationship to
                      the FOLLOWS_TABLE when building the PKB.
         */
-    VOID addParent(STMT_NUM s1, STMT_NUM s2);
+    VOID addParent(STMT_NUM_PTR s1, STMT_NUM_PTR s2);
         /*
-        Description: Stores a Parent(STMT_NUM, STMT_NUM) relationship to
+        Description: Stores a Parent(STMT_NUM_PTR, STMT_NUM_PTR) relationship to
                      the PARENT_TABLE when building the PKB.
         */
-    VOID addUses(STMT_NUM s, VAR_NAME v);
+    VOID addUses(STMT_NUM_PTR s, VAR_NAME v);
         /*
         Description: Stores a Uses(STATEMENT_NAME, VAR_NAME) relationship to
                      the USES_TABLE when building the PKB.
@@ -117,9 +117,9 @@ public:
                      the USES_TABLE when building the PKB.
         */
 
-    VOID addModifies(STMT_NUM s, VAR_NAME v);
+    VOID addModifies(STMT_NUM_PTR s, VAR_NAME v);
         /*
-        Description: Stores a Modifies(STMT_NUM, VAR_NAME) relationship to
+        Description: Stores a Modifies(STMT_NUM_PTR, VAR_NAME) relationship to
                      the MODIFIES_TABLE when building the PKB.
         */
 

@@ -19,12 +19,12 @@ public:
 
 	BOOLEAN setVariableNode(VAR_NODE_PTR var_node_ptr);
 		/*
-		Description: Returns True if able to set VAR_NODE_PTR as a child of this node, false otherwise
+		Description: Returns True if able to set VAR_NODE_PTR as a child of this AssignNode, false otherwise
 		*/
 
 	BOOLEAN setExpressionNode(EXPR_NODE_PTR expr_node_ptr);
 		/*
-		Description: Returns True if able to set EXPR_NODE_PTR as a child of this node, false otherwise
+		Description: Returns True if able to set EXPR_NODE_PTR as a child of this AssignNode, false otherwise
 		*/
 
 	VAR_NODE_PTR getVariableNode();
