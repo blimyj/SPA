@@ -6,9 +6,9 @@
 
 typedef void VOID;
 typedef bool BOOLEAN;
-typedef std::shared_ptr<int> STMT_NUM;
-typedef std::shared_ptr<std::string> PROC_NAME;
-typedef std::shared_ptr<std::string> VAR_NAME;
+typedef int STMT_NUM;
+typedef std::string PROC_NAME;
+typedef std::string VAR_NAME;
 
 class ModifiesTable {
 /* Overview: This is a data structure*/
