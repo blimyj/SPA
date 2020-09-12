@@ -11,7 +11,9 @@ typedef std::vector<STMT_NODE_PTR> STMT_NODE_PTR_LIST;
 class StatementTable {
 /* Overview: This is a data structure*/
 
-public:
+private:
+    friend class PKB;
+
     INDEX addStatementNode(STMT_NODE_PTR node);
         /*
         Description: Returns the index of the STMT_NODE_PTR added to the table.
@@ -22,7 +24,6 @@ public:
         Description: Returns a STMT_NODE_PTR_LIST of the table.
         */
 
-private:
-    STMT_NODE_PTR_LIST table_;
+    std::vector<STMT_NODE_PTR> nodes_;
 
 };
