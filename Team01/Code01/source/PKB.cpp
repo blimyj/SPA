@@ -2,6 +2,7 @@
 
 PKB::PKB(PKB_BUILDER builder) {
     stmt_table_ = builder.stmt_table_;
+    stmt_list_table_ = builder.stmt_list_table_;
     read_table_ = builder.read_table_;
     print_table_ = builder.print_table_;
     while_table_ = builder.while_table_;
@@ -19,6 +20,10 @@ PKB::PKB(PKB_BUILDER builder) {
 
 STMT_NODE_PTR_LIST PKB::getStatements() {
     return stmt_table_.getStatementNodeList();
+}
+
+STMT_LIST_NODE_PTR_LIST PKB::getStatementLists() {
+    return stmt_list_table_.getStatementListNodeList();
 }
 
 READ_NODE_PTR_LIST PKB::getReads() {
