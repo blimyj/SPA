@@ -6,7 +6,7 @@
 
 typedef void VOID;
 typedef bool BOOLEAN;
-typedef std::shared_ptr<int> STMT_NUM;
+typedef int STMT_NUM;
 
 class FollowsTable {
 /* Overview: This is a data structure*/
