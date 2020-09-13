@@ -46,64 +46,128 @@ public:
     /*==== Constructor ====*/
     PKB(PKB_BUILDER builder);
 
-    /*==== Design Entities ====*/
+    /*==== Design Entities (Nodes) ====*/
     STMT_NODE_PTR_LIST getStatements();
+        /*
+        Description: Returns the STMT_NODE_PTR_LIST stored in STATEMENT_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     STMT_NODE_PTR_LIST.
+        */
+
+    READ_NODE_PTR_LIST getReads();
+        /*
+        Description: Returns the READ_NODE_PTR_LIST stored in READ_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     READ_NODE_PTR_LIST.
+        */
+
+    PRINT_NODE_PTR_LIST getPrints();
+        /*
+        Description: Returns the PRINT_NODE_PTR_LIST stored in PRINT_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     PRINT_NODE_PTR_LIST.
+        */
+
+    WHILE_NODE_PTR_LIST getWhiles();
+        /*
+        Description: Returns the WHILE_NODE_PTR_LIST stored in WHILE_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     WHILE_NODE_PTR_LIST.
+        */
+
+    IF_NODE_PTR_LIST getIfs();
+        /*
+        Description: Returns the IF_NODE_PTR_LIST stored in IF_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     IF_NODE_PTR_LIST.
+        */
+
+    ASSIGN_NODE_PTR_LIST getAssigns();
+        /*
+        Description: Returns the ASSIGN_NODE_PTR_LIST stored in ASSIGN_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     ASSIGN_NODE_PTR_LIST.
+        */
+
+    CONSTANT_NODE_PTR_LIST getConstants();
+        /*
+        Description: Returns the CONSTANT_NODE_PTR_LIST stored in CONSTANT_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     CONSTANT_NODE_PTR_LIST.
+        */
+
+    VAR_NODE_PTR_LIST getVariables();
+        /*
+        Description: Returns the VAR_NODE_PTR_LIST stored in VARIABLE_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     VAR_NODE_PTR_LIST.
+        */
+
+    PROC_NODE_PTR_LIST getProcedures();
+        /*
+        Description: Returns the PROC_NODE_PTR_LIST stored in PROCEDURE_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     PROC_NODE_PTR_LIST.
+        */
+    
+    /*==== Design Entities (Values) ====*/
+    STMT_NUM_LIST getStatementNumList();
         /*
         Description: Returns the STMT_NUM_LIST stored in STATEMENT_TABLE.
                      If there are no elements in the collection, returns an empty
                      STMT_NUM_LIST.
         */
 
-    READ_NODE_PTR_LIST getReads();
+    STMT_NUM_LIST getReadNumList();
         /*
         Description: Returns the STMT_NUM_LIST stored in READ_TABLE.
                      If there are no elements in the collection, returns an empty
                      STMT_NUM_LIST.
         */
 
-    PRINT_NODE_PTR_LIST getPrints();
+    STMT_NUM_LIST getPrintNumList();
         /*
         Description: Returns the STMT_NUM_LIST stored in PRINT_TABLE.
                      If there are no elements in the collection, returns an empty
                      STMT_NUM_LIST.
         */
 
-    WHILE_NODE_PTR_LIST getWhiles();
+    STMT_NUM_LIST getWhileNumList();
         /*
         Description: Returns the STMT_NUM_LIST stored in WHILE_TABLE.
                      If there are no elements in the collection, returns an empty
                      STMT_NUM_LIST.
         */
 
-    IF_NODE_PTR_LIST getIfs();
+    STMT_NUM_LIST getIfNumList();
         /*
         Description: Returns the STMT_NUM_LIST stored in IF_TABLE.
                      If there are no elements in the collection, returns an empty
                      STMT_NUM_LIST.
         */
 
-    ASSIGN_NODE_PTR_LIST getAssigns();
+    STMT_NUM_LIST getAssignNumList();
         /*
         Description: Returns the STMT_NUM_LIST stored in ASSIGN_TABLE.
                      If there are no elements in the collection, returns an empty
                      STMT_NUM_LIST.
         */
 
-    CONSTANT_NODE_PTR_LIST getConstants();
+    CONSTANT_VALUE_LIST getConstantValueList();
         /*
-        Description: Returns the CONSTANT_NAME_LIST stored in CONSTANT_TABLE.
+        Description: Returns the CONSTANT_VALUE_LIST stored in CONSTANT_TABLE.
                      If there are no elements in the collection, returns an empty
-                     CONSTANT_NAME_LIST.
+                     CONSTANT_VALUE_LIST.
         */
 
-    VAR_NODE_PTR_LIST getVariables();
+    VAR_NAME_LIST getVariableNameList();
         /*
         Description: Returns the VAR_NAME_LIST stored in VARIABLE_TABLE.
                      If there are no elements in the collection, returns an empty
                      VAR_NAME_LIST.
         */
 
-    PROC_NODE_PTR_LIST getProcedures();
+    PROC_NAME_LIST getProcedureNameList();
         /*
         Description: Returns the PROC_NAME_LIST stored in PROCEDURE_TABLE.
                      If there are no elements in the collection, returns an empty
@@ -117,10 +181,22 @@ public:
                      Follows(STMT_NUM, STMT_NUM) holds
         */
 
+    BOOLEAN isFollowsTransitive(STMT_NUM s1, STMT_NUM s2);
+        /*
+        Description: Returns a BOOLEAN indicating whether or not
+                     Follows*(STMT_NUM, STMT_NUM) holds
+        */
+
     BOOLEAN isParent(STMT_NUM s1, STMT_NUM s2);
         /*
         Description: Returns a BOOLEAN indicating whether or not
                      Parent(STMT_NUM, STMT_NUM) holds
+        */
+
+    BOOLEAN isParentTransitive(STMT_NUM s1, STMT_NUM s2);
+        /*
+        Description: Returns a BOOLEAN indicating whether or not
+                     Parent*(STMT_NUM, STMT_NUM) holds
         */
 
     BOOLEAN isUses(STMT_NUM s, VAR_NAME v);

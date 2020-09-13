@@ -11,6 +11,8 @@ typedef bool BOOLEAN;
 typedef int STMT_NUM;
 
 class StatementNode : public ASTNode {
+
+public:
 	BOOLEAN setStatementNumber(STMT_NUM stmt_num);
 		/*
 		Description: Returns True if able to set a STMT_NUM of this StatementNode.
