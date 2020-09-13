@@ -30,10 +30,9 @@ private:
 
 	STRING getNextToken(std::istreambuf_iterator<char>* iter, std::istreambuf_iterator<char> eos);
 
-	std::shared_ptr<ASTNode> root_node_;
+	std::shared_ptr<ProgramNode> root_node_;
 	std::shared_ptr<ASTNode> current_parent_node_;
 	PKBBuilder pkb_builder_;
-
 
 	std::deque<STRING> stmt_token_queue_;
 	std::deque<STRING> process_token_stream_;

@@ -15,12 +15,12 @@
 		return 0;
 	}
 
-	int Parser::parseFile(STRING filename) {
+	PKB Parser::parseFile(STRING filename) {
 		//Construct program root node
 		//Will this be deleted after function exits?
-		this->root_node_ = (std::make_shared<ASTNode>)();
+		this->root_node_ = (std::make_shared<ProgramNode>)();
 		this->pkb_builder_ = PKBBuilder();
-		this->pkb_builder_.setRootNode(this->root_node_);
+		this->pkb_builder_.setProgramNode(this->root_node_);
 
 		this->current_parent_node_ = this->root_node_;
 
@@ -97,8 +97,15 @@
 			std::cout << "\n" << stmt_token;
 		}
 
-
-		return 0;
+		PKB pkb = this->pkb_builder_.build();
+		
+		for (std::shared_ptr<AssignNode> a_node : pkb.getAssigns()) {
+			a_node->getVariableNode();
+		}
+		
+		
+		
+		return pkb;
 	}
 
 	STRING Parser::getNextToken(std::istreambuf_iterator<char>* iter, std::istreambuf_iterator<char> eos) {
@@ -363,7 +370,7 @@
 			//Construct var node
 			std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>(rhs_token);
 			//Construct ExprNode
-			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>("NONE", new_var_node, nullptr);
+			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, new_var_node, nullptr);
 			//Construct assign node
 			std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>(new_lhs_var_node, new_expr_node);
 			
@@ -386,7 +393,7 @@
 			//Construct constant node
 			std::shared_ptr<ConstantNode> new_constant_node = std::make_shared<ConstantNode>(rhs_token);
 			//Construct ExprNode
-			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>("NONE", new_constant_node, nullptr);
+			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, new_constant_node, nullptr);
 			//Construct assign node
 			std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>(new_lhs_var_node, new_expr_node);
 
