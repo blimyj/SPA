@@ -6,9 +6,12 @@
 #include <fstream>
 #include <iterator>
 #include <deque>
+#include <set>
 
 #include "PKB.h"
 #include "Parser.h"
+#include "PKB/ASTNode/NodeTypeEnum.h"
+
 
 	int Parser::Parse() {
 
@@ -96,7 +99,7 @@
 			}
 
 			//Handler for all other tokens, prints them out
-			std::cout << "\n" << stmt_token;
+			std::cout << "\nUnprocessed Token: " << stmt_token;
 		}
 
 		PKB pkb = this->pkb_builder_.build();
@@ -165,7 +168,13 @@
 			return curr_token;
 		}
 
-		//Check for arithmetic terminal tokens & assign
+		//Check for arithmetic terminal tokens
+		if (**iter == '+' || **iter == '-' || **iter == '*' || **iter == '/' || **iter == '%') {
+			curr_token += **iter;
+			++* iter;
+			return curr_token;
+		}
+		
 
 		//Check for boolean terminal tokens
 
@@ -350,17 +359,7 @@
 			return -1;
 		}
 
-		//Third token is rhs expr (For now, it will just be a single var name or constant)
-		STRING rhs_token = this->process_token_stream_.front();
-		this->process_token_stream_.pop_front(); // Remove rhs var/const token
-		if (!isalpha(rhs_token.at(0)) && !isdigit(rhs_token.at(0))) {
-			return -1;
-		}
 
-		if (this->process_token_stream_.front() != ";") {
-			return -1;
-		}
-		this->process_token_stream_.pop_front(); // Pops out ';'
 
 		//REPLACEMENT FOR THIRD TOKEN CONSUMPTION
 		std::deque<ASTNode> output_node_stack = std::deque<ASTNode>();
@@ -372,10 +371,15 @@
 		//Here we will keep consuming tokens until we reach ';'
 
 		STRING rhs_token = this->process_token_stream_.front();
+		this->process_token_stream_.pop_front(); // Remove rhs var/const/operator/parentheses token for the next token
+
+		//TODO: HANDLERS FOR EMPTY STACKS / UNEXCPECTED TOKENS
+		//Need to handle gracefully
 
 		while (rhs_token != ";") {
 			//These tokens will populate this->stmt_token_queue_
 			this->stmt_token_queue_.push_back(rhs_token);
+			rhs_token = this->process_token_stream_.front();
 			this->process_token_stream_.pop_front(); // Remove rhs var/const/operator/parentheses token for the next token
 		}
 		
@@ -407,29 +411,29 @@
 				//Else means token is operator or parentheses
 				//Create a Operator TypeEnum object
 				if (temp_token == "+") {
-					op = op_plus;
+					op = OperatorTypeEnum::op_plus;
 				} else if (temp_token == "-") {
-					op = op_min;
+					op = OperatorTypeEnum::op_min;
 				} else if (temp_token == "*") {
-					op = op_mult;
+					op = OperatorTypeEnum::op_mult;
 				} else if (temp_token == "/") {
-					op = op_div;
+					op = OperatorTypeEnum::op_div;
 				} else if (temp_token == "%") {
-					op = op_mod;
+					op = OperatorTypeEnum::op_mod;
 				} else if (temp_token == "(") {
-					op = op_lparen;
+					op = OperatorTypeEnum::op_lparen;
 				} else if (temp_token == ")") {
-					op = op_rparen;
+					op = OperatorTypeEnum::op_rparen;
 				} else {
 					//If not any of the above tokens, return an error.
 					return -1;
 				}
 				
 				//throw into operator stack
-				if (op == op_lparen) {
+				if (op == OperatorTypeEnum::op_lparen) {
 					operator_stack.push_back(op);
-				} else if (op == op_rparen) {
-					while (!operator_stack.empty() && operator_stack.back() != op_lparen) {
+				} else if (op == OperatorTypeEnum::op_rparen) {
+					while (!operator_stack.empty() && operator_stack.back() != OperatorTypeEnum::op_lparen) {
 						//Pop operator from operator stack onto the output queue. 
 						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
 						temp_op = operator_stack.back();
@@ -442,30 +446,35 @@
 						output_node_stack.pop_back();
 
 						//Note we must check if we are able to pop out 2 & the 2 is the type we want
-						if (rhs_operand.getNodeType() != expressionNode || rhs_operand.getNodeType() != variableNode || rhs_operand.getNodeType() != constantNode) {
+						if (rhs_operand.getNodeType() != NodeTypeEnum::expressionNode 
+							|| rhs_operand.getNodeType() != NodeTypeEnum::variableNode
+							|| rhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
-						if (lhs_operand.getNodeType() != expressionNode || lhs_operand.getNodeType() != variableNode || lhs_operand.getNodeType() != constantNode) {
+						if (lhs_operand.getNodeType() != NodeTypeEnum::expressionNode 
+							|| lhs_operand.getNodeType() != NodeTypeEnum::variableNode
+							|| lhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
 
-						ExpressionTypeEnum expr_type = getExpressionType(OperatorTypeEnum op);
+						ExpressionTypeEnum expr_type = getExpressionType(op);
 
 						//TODO: Need parent, child pointers
-						ExpressionNode new_expr_node = ExpressionNode(expr_type, lhs_operand, rhs_operand);
+						ExpressionNode new_expr_node = ExpressionNode(expr_type
+							, std::make_shared<ASTNode>(lhs_operand), std::make_shared<ASTNode>(rhs_operand));
 
 						//We then place this ExpressionNode into the output_node_stack
 						output_node_stack.push_back(new_expr_node);
 					}
 					// If operator_stack.empty() that means there are mismatched parentheses
 					if (operator_stack.empty()) return -1;
-					if (operator_stack.back() == op_lparen) {
+					if (operator_stack.back() == OperatorTypeEnum::op_lparen) {
 						operator_stack.pop_back();
 					}
 				} else {
-					while (!operator_stack.empty() && operator_stack.back() != op_lparen
-						&& ((takesPrecedence(operator_stack.back(), op) == 1) 
-							|| (takesPrecedence(operator_stack.back(), op) == 0))) {
+					while (!operator_stack.empty() && operator_stack.back() != OperatorTypeEnum::op_lparen
+						&& ((takesPrecedent(operator_stack.back(), op) == 1) 
+							|| (takesPrecedent(operator_stack.back(), op) == 0))) {
 						//NOTE: Condition for takesPredence(op1, op2) == 0, i.e. same precedence also has the requirement
 						// of operators being left associative, which I think all of them are for this case.
 						temp_op = operator_stack.back();
@@ -479,17 +488,22 @@
 						output_node_stack.pop_back();
 
 						//Note we must check if we are able to pop out 2 & the 2 is the type we want
-						if (rhs_operand.getNodeType() != expressionNode || rhs_operand.getNodeType() != variableNode || rhs_operand.getNodeType() != constantNode) {
+						if (rhs_operand.getNodeType() != NodeTypeEnum::expressionNode 
+							|| rhs_operand.getNodeType() != NodeTypeEnum::variableNode 
+							|| rhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
-						if (lhs_operand.getNodeType() != expressionNode || lhs_operand.getNodeType() != variableNode || lhs_operand.getNodeType() != constantNode) {
+						if (lhs_operand.getNodeType() != NodeTypeEnum::expressionNode 
+							|| lhs_operand.getNodeType() != NodeTypeEnum::variableNode 
+							|| lhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
 						
-						ExpressionTypeEnum expr_type = getExpressionType(OperatorTypeEnum op);
+						ExpressionTypeEnum expr_type = getExpressionType(op);
 						
 						//TODO: Need parent, child pointers
-						ExpressionNode new_expr_node = ExpressionNode(expr_type, lhs_operand, rhs_operand);
+						ExpressionNode new_expr_node = ExpressionNode(expr_type
+							, std::make_shared<ASTNode>(lhs_operand), std::make_shared<ASTNode>(rhs_operand));
 
 						//We then place this ExpressionNode into the output_node_stack
 						output_node_stack.push_back(new_expr_node);
@@ -502,7 +516,7 @@
 		
 		//Handle remaining operators in operator_stack
 		while (!operator_stack.empty()) {
-			if (operator_stack.back() == op_lparen || operator_stack.back() == op_rparen) {
+			if (operator_stack.back() == OperatorTypeEnum::op_lparen || operator_stack.back() == OperatorTypeEnum::op_rparen) {
 				//Presence of parenthesis indicates mismatched parenthesis as they should have all been discarded earlier.
 				return -1;
 			}
@@ -517,17 +531,18 @@
 			output_node_stack.pop_back();
 
 			//Note we must check if we are able to pop out 2 & the 2 is the type we want
-			if (rhs_operand.getNodeType() != expressionNode || rhs_operand.getNodeType() != variableNode || rhs_operand.getNodeType() != constantNode) {
+			if (rhs_operand.getNodeType() != NodeTypeEnum::expressionNode || rhs_operand.getNodeType() != NodeTypeEnum::variableNode || rhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
 				return -1;
 			}
-			if (lhs_operand.getNodeType() != expressionNode || lhs_operand.getNodeType() != variableNode || lhs_operand.getNodeType() != constantNode) {
+			if (lhs_operand.getNodeType() != NodeTypeEnum::expressionNode || lhs_operand.getNodeType() != NodeTypeEnum::variableNode || lhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
 				return -1;
 			}
 
-			ExpressionTypeEnum expr_type = getExpressionType(OperatorTypeEnum op);
+			ExpressionTypeEnum expr_type = getExpressionType(op);
 
 			//TODO: Need parent, child pointers
-			ExpressionNode new_expr_node = ExpressionNode(expr_type, lhs_operand, rhs_operand);
+			ExpressionNode new_expr_node = ExpressionNode(expr_type
+				, std::make_shared<ASTNode>(lhs_operand), std::make_shared<ASTNode>(rhs_operand));
 
 			//We then place this ExpressionNode into the output_node_stack
 			output_node_stack.push_back(new_expr_node);
@@ -552,7 +567,7 @@
 		//We then create the AssignNode similar to the code below.
 		std::shared_ptr<ASTNode> result = std::make_shared<ASTNode>(output_node_stack.back());
 		output_node_stack.pop_back();
-		if (result.getNodeType() == variableNode || result.getNodeType() == constantNode) {
+		if (result->getNodeType() == NodeTypeEnum::variableNode || result->getNodeType() == NodeTypeEnum::constantNode) {
 			//TODO: Need parent, child pointers
 			
 			result = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, result, nullptr);
@@ -588,6 +603,18 @@
 
 		/*
 		//OLD ASSIGNMENT HANDLER
+
+		//Third token is rhs expr (For now, it will just be a single var name or constant)
+		STRING rhs_token = this->process_token_stream_.front();
+		this->process_token_stream_.pop_front(); // Remove rhs var/const token
+		if (!isalpha(rhs_token.at(0)) && !isdigit(rhs_token.at(0))) {
+			return -1;
+		}
+
+		if (this->process_token_stream_.front() == ";") {
+			return -1;
+		}
+		this->process_token_stream_.pop_front(); // Pops out ';'
 
 		//Check if constant or var node to construct
 		if (isalpha(rhs_token.at(0))) {
@@ -844,15 +871,15 @@
 	}
 
 	//===== START OF HELPER FUNCTIONS =====
-	int takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op) {
+	int Parser::takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op) {
 		//Returns 1 if left operator takes precendence
-		if (l_op == op_mult && r_op == op_div && r_op == op_mod) {
-			if (r_op == op_plus || l_op == op_min) {
+		if (l_op == OperatorTypeEnum::op_mult && r_op == OperatorTypeEnum::op_div && r_op == OperatorTypeEnum::op_mod) {
+			if (r_op == OperatorTypeEnum::op_plus || l_op == OperatorTypeEnum::op_min) {
 				return 1;
 			}
 		}
-		else if (l_op == op_plus || l_op == op_min) {
-			if (r_op == op_mult && r_op == op_div && r_op == op_mod) {
+		else if (l_op == OperatorTypeEnum::op_plus || l_op == OperatorTypeEnum::op_min) {
+			if (r_op == OperatorTypeEnum::op_mult && r_op == OperatorTypeEnum::op_div && r_op == OperatorTypeEnum::op_mod) {
 				//-1 if right operator takes precedence
 				return -1;
 			}
@@ -865,24 +892,24 @@
 		}
 	}
 
-	ExpressionTypeEnum getExpressionType(OperatorTypeEnum op) {
-		if (op == op_plus) {
-			return plus;
+	ExpressionTypeEnum Parser::getExpressionType(OperatorTypeEnum op) {
+		if (op == OperatorTypeEnum::op_plus) {
+			return ExpressionTypeEnum::plus;
 		}
-		else if (op == op_min) {
-			return min;
+		else if (op == OperatorTypeEnum::op_min) {
+			return ExpressionTypeEnum::min;
 		}
-		else if (op == op_mult) {
-			return times;
+		else if (op == OperatorTypeEnum::op_mult) {
+			return ExpressionTypeEnum::mult;
 		}
-		else if (op == op_div) {
-			return div;
+		else if (op == OperatorTypeEnum::op_div) {
+			return ExpressionTypeEnum::div;
 		}
-		else if (op == op_mod) {
-			return mod;
+		else if (op == OperatorTypeEnum::op_mod) {
+			return ExpressionTypeEnum::mod;
 		}
 		else {
-			return -1;
+			return ExpressionTypeEnum::none;
 		}
 	}
 
