@@ -1,7 +1,7 @@
 procedure proc1 {
 	read a;
 	read b;
-	if (a > 4) {
+	if (a > 4) then {
 		c = d;
 		e = 6;
 	} else {
