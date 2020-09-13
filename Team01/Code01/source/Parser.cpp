@@ -24,6 +24,8 @@
 
 		this->current_parent_node_ = this->root_node_;
 
+		this->stmt_num_ = 0;
+
 		std::string str;
 
 		// Construct file object
@@ -118,7 +120,7 @@
 		if (*iter == eos) {
 			return " ";
 		}
-		//TODO: Loop calling getNextToken() is responsible for checking if return is a space before adding the returned token to this->process_token_stream__
+		//NOTE: Loop calling getNextToken() is responsible for checking if return is a space before adding the returned token to this->process_token_stream__
 		//Guaranteed to never return space otherwise due to skipping space.
 
 		//Check for NAME token
@@ -143,8 +145,6 @@
 			++* iter;
 			return curr_token;
 		}
-
-		//TILL HERE
 
 		//Check for CONSTANT tokens
 		if (isdigit(**iter)) { //This guarantees first char is DIGIT
@@ -374,6 +374,10 @@
 			//Construct assign node
 			std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>(new_lhs_var_node, new_expr_node);
 			
+			//Set AssignNode stmt_num
+			this->stmt_num_++;
+			new_assign_node->setStatementNumber(this->stmt_num_);
+
 			//Set child & parent pointers
 			new_var_node->setParentNode(new_expr_node);
 			new_expr_node->setParentNode(new_assign_node);
@@ -396,6 +400,10 @@
 			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, new_constant_node, nullptr);
 			//Construct assign node
 			std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>(new_lhs_var_node, new_expr_node);
+
+			//Set AssignNode stmt_num
+			this->stmt_num_++;
+			new_assign_node->setStatementNumber(this->stmt_num_);
 
 			//Set child & parent pointers
 			new_constant_node->setParentNode(new_expr_node);
@@ -441,6 +449,10 @@
 		std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>(name_token);
 		std::shared_ptr<ReadNode> new_read_node = std::make_shared<ReadNode>(new_var_node);
 
+		//Set ReadNode stmt_num
+		this->stmt_num_++;
+		new_read_node->setStatementNumber(this->stmt_num_);
+
 		//Set child & parent pointers
 		new_read_node->setParentNode(this->current_parent_node_);
 		this->current_parent_node_->addChildNode(new_read_node);
@@ -478,6 +490,10 @@
 		//Construct new_var_node & new_print_node
 		std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>(name_token);
 		std::shared_ptr<PrintNode> new_print_node = std::make_shared<PrintNode>(new_var_node);
+
+		//Set PrintNode stmt_num
+		this->stmt_num_++;
+		new_print_node->setStatementNumber(this->stmt_num_);
 
 		//Set child & parent pointers
 		new_print_node->setParentNode(this->current_parent_node_);

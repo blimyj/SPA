@@ -10,6 +10,7 @@ typedef std::string STRING;
 typedef std::vector<std::string> LIST_OF_STRINGS;
 typedef std::deque<STRING>* STMT_TOKEN_QUEUE;
 typedef std::deque<STRING>* PROCESS_TOKEN_QUEUE;
+typedef int STMT_NUMBER;
 
 class Parser {
 public:
@@ -36,5 +37,7 @@ private:
 
 	std::deque<STRING> stmt_token_queue_;
 	std::deque<STRING> process_token_stream_;
+
+	STMT_NUMBER stmt_num_;
 };
 
