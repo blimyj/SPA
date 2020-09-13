@@ -5,6 +5,7 @@
 #include <deque>
 
 #include "../source/PKB.h"
+#include "../source/OperatorTypeEnum.h"
 
 typedef std::string STRING;
 typedef std::vector<std::string> LIST_OF_STRINGS;
@@ -15,8 +16,8 @@ typedef int STMT_NUMBER;
 class Parser {
 public:
 	int Parse();
-	int parseFile(STRING);
-	int parseText(LIST_OF_STRINGS);
+	PKB parseFile(STRING str);
+	int parseText(LIST_OF_STRINGS l_of_str);
 private:
 	int parseProcedure(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
 	int parseRead(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
@@ -41,7 +42,6 @@ private:
 	STMT_NUMBER stmt_num_;
 
 	//Helper variables & functions for parsing expressions
-	enum class OperatorTypeEnum { op_plus, op_min, op_mult, op_div, op_mod, op_lparen, op_rparen };
 	int takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op);
 	ExpressionTypeEnum getExpressionType(OperatorTypeEnum op);
 };
