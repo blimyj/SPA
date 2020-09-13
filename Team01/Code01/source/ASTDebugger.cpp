@@ -3,20 +3,6 @@
 #include <vector>
 
 #include "ASTDebugger.h"
-#include "PKB/ASTNode/AssignNode.h"
-#include "PKB/ASTNode/ConditionNode.h"
-#include "PKB/ASTNode/ConstantNode.h"
-#include "PKB/ASTNode/ExpressionNode.h"
-#include "PKB/ASTNode/IfNode.h"
-#include "PKB/ASTNode/PrintNode.h"
-#include "PKB/ASTNode/ProcedureNode.h"
-#include "PKB/ASTNode/ProgramNode.h"
-#include "PKB/ASTNode/ReadNode.h"
-#include "PKB/ASTNode/RelationNode.h"
-#include "PKB/ASTNode/StatementListNode.h"
-#include "PKB/ASTNode/StatementNode.h"
-#include "PKB/ASTNode/VariableNode.h"
-#include "PKB/ASTNode/WhileNode.h"
 
 int printTree(AST_NODE_PTR parent_node_ptr) {
     node_queue(parent_node_ptr);

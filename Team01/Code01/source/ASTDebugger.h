@@ -3,7 +3,8 @@
 #include <queue>
 #include <vector>
 
-#include "PKB/ASTNode/ASTNode.h"
+#include "PKB.h"
+#include "PKBBuilder.h"
 
 typedef std::string STRING;
 typedef std::vector<STRING> STRING_LIST;
