@@ -362,8 +362,239 @@
 		}
 		this->process_token_stream_.pop_front(); // Pops out ';'
 
+		//REPLACEMENT FOR THIRD TOKEN CONSUMPTION
+		enum OperatorTypeEnum { op_plus, op_min, op_mult, op_div, op_mod, op_lparen, op_rparen };
+		std::deque<ASTNode> output_node_stack = std::deque<ASTNode>();
+		std::deque<OperatorTypeEnum> operator_stack = std::deque<OperatorTypeEnum>();
+		OperatorTypeEnum op;
+		OperatorTypeEnum temp_op;
+
+		//===== START OF HELPER FUNCTIONS =====
+		int takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op) {
+			//Returns 1 if left operator takes precendence
+			if (l_op == op_mult && r_op == op_div && r_op == op_mod) {
+				if (r_op == op_plus || l_op == op_min) {
+					return 1;
+				}
+			} else if (l_op == op_plus || l_op == op_min) {
+				if (r_op == op_mult && r_op == op_div && r_op == op_mod) {
+					//-1 if right operator takes precedence
+					return -1;
+				}
+			}
+			else {
+				//0 if neither
+				//This includes any case where there is a paren in either op
+				// or if both are the same
+				return 0;
+			}
+		}
+
+		ExpressionTypeEnum getExpressionType(OperatorTypeEnum op) {
+			if (op == op_plus) {
+				return plus;
+			}
+			else if (op == op_min) {
+				return min;
+			}
+			else if (op == op_mult) {
+				return times;
+			}
+			else if (op == op_div) {
+				return div;
+			}
+			else if (op == op_mod) {
+				return mod;
+			}
+			else {
+				return -1;
+			}
+		}
+
+		//===== END OF HELPER FUNCTIONS =====
+
+		//===== Actual Code ======
+		//Here we will keep consuming tokens until we reach ';'
+
+		STRING rhs_token = this->process_token_stream_.front();
+
+		while (rhs_token != ';') {
+			//These tokens will populate this->stmt_token_queue_
+			this->stmt_token_queue_.push_back(rhs_token);
+			this->process_token_stream_.pop_front(); // Remove rhs var/const/operator/parentheses token for the next token
+		}
+		
+		//They will form the expr that is assigned to new_expr_node
+		//Then they will be funneled through the shunting yard algo
+		STRING temp_token = "";
+		//While stmt_token_queue_ has tokens
+		while (!this->stmt_token_queue_.empty()) {
+			//Get & remove first token from stmt_token_queue_
+			temp_token = this->stmt_token_queue_.front();
+			this->stmt_token_queue_.pop_front();
+
+			//if isalpha(first_char) 
+			if (isalpha(temp_token.at(0))) {
+				//then create varnode enqueue to output_node_stack
+				VariableNode new_var_node = VariableNode(temp_token);
+				output_node_stack.push_back(new_var_node);
+			}
+			else if (isdigit(temp_token.at(0))) {
+				//else isdigit(first_char) then create const node
+				ConstantNode new_const_node = ConstantNode(temp_token);
+					//enqueue to output_stack
+				output_node_stack.push_back(new_const_node);
+			}
+			else {
+				//Else means token is operator or parentheses
+				//Create a Operator TypeEnum object
+				if (temp_token == "+") {
+					op = op_plus;
+				} else if (temp_token == "-") {
+					op = op_min;
+				} else if (temp_token == "*") {
+					op = op_mult;
+				} else if (temp_token == "/") {
+					op = op_div;
+				} else if (temp_token == "%") {
+					op = op_mod;
+				} else if (temp_token == "(") {
+					op = op_lparen;
+				} else if (temp_token == ")") {
+					op = op_rparen;
+				} else {
+					//If not any of the above tokens, return an error.
+					return -1;
+				}
+				
+				//throw into operator stack
+				if (op == op_lparen) {
+					operator_stack.push_back(op);
+				} else if (op == op_rparen) {
+					while (!operator_stack.empty() && operator_stack.back() != op_lparen) {
+						//Pop operator from operator stack onto the output queue. 
+						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
+						temp_op = operator_stack.back();
+						operator_stack.pop_back();
+
+						ASTNode rhs_operand = output_node_stack.back();
+						output_node_stack.pop_back();
+
+						ASTNode lhs_operand = output_node_stack.back();
+						output_node_stack.pop_back();
+
+						//Note we must check if we are able to pop out 2 & the 2 is the type we want
+						if (rhs_operand.getNodeType() != expressionNode || rhs_operand.getNodeType() != variableNode || rhs_operand.getNodeType() != constantNode) {
+							return -1;
+						}
+						if (lhs_operand.getNodeType() != expressionNode || lhs_operand.getNodeType() != variableNode || lhs_operand.getNodeType() != constantNode) {
+							return -1;
+						}
+
+						ExpressionTypeEnum expr_type = getExpressionType(OperatorTypeEnum op);
+
+						ExpressionNode new_expr_node = ExpressionNode(expr_type, lhs_operand, rhs_operand);
+
+						//We then place this ExpressionNode into the output_node_stack
+						output_node_stack.push_back(new_expr_node);
+					}
+					// If operator_stack.empty() that means there are mismatched parentheses
+					if (operator_stack.empty()) return -1;
+					if (operator_stack.back() == op_lparen) {
+						operator_stack.pop_back();
+					}
+				} else {
+					while (!operator_stack.empty() && operator_stack.back() != op_lparen
+						&& ((takesPrecedence(operator_stack.back(), op) == 1) 
+							|| (takesPrecedence(operator_stack.back(), op) == 0))) {
+						//NOTE: Condition for takesPredence(op1, op2) == 0, i.e. same precedence also has the requirement
+						// of operators being left associative, which I think all of them are for this case.
+						temp_op = operator_stack.back();
+						operator_stack.pop_back();
+						
+						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
+						ASTNode rhs_operand = output_node_stack.back();
+						output_node_stack.pop_back();
+						
+						ASTNode lhs_operand = output_node_stack.back();
+						output_node_stack.pop_back();
+
+						//Note we must check if we are able to pop out 2 & the 2 is the type we want
+						if (rhs_operand.getNodeType() != expressionNode || rhs_operand.getNodeType() != variableNode || rhs_operand.getNodeType() != constantNode) {
+							return -1;
+						}
+						if (lhs_operand.getNodeType() != expressionNode || lhs_operand.getNodeType() != variableNode || lhs_operand.getNodeType() != constantNode) {
+							return -1;
+						}
+						
+						ExpressionTypeEnum expr_type = getExpressionType(OperatorTypeEnum op);
+						
+						ExpressionNode new_expr_node = ExpressionNode(expr_type, lhs_operand, rhs_operand);
+
+						//We then place this ExpressionNode into the output_node_stack
+						output_node_stack.push_back(new_expr_node);
+					}
+					//Push operator to operator stack
+					operator_stack.push_back(op);
+				}
+			}
+		}
+		
+		//Handle remaining operators in operator_stack
+		while (!operator_stack.empty()) {
+			if (operator_stack.back() == op_lparen || operator_stack.back() == op_rparen) {
+				//Presence of parenthesis indicates mismatched parenthesis as they should have all been discarded earlier.
+				return -1;
+			}
+			//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
+			temp_op = operator_stack.back();
+			operator_stack.pop_back();
+
+			ASTNode rhs_operand = output_node_stack.back();
+			output_node_stack.pop_back();
+
+			ASTNode lhs_operand = output_node_stack.back();
+			output_node_stack.pop_back();
+
+			//Note we must check if we are able to pop out 2 & the 2 is the type we want
+			if (rhs_operand.getNodeType() != expressionNode || rhs_operand.getNodeType() != variableNode || rhs_operand.getNodeType() != constantNode) {
+				return -1;
+			}
+			if (lhs_operand.getNodeType() != expressionNode || lhs_operand.getNodeType() != variableNode || lhs_operand.getNodeType() != constantNode) {
+				return -1;
+			}
+
+			ExpressionTypeEnum expr_type = getExpressionType(OperatorTypeEnum op);
+
+			ExpressionNode new_expr_node = ExpressionNode(expr_type, lhs_operand, rhs_operand);
+
+			//We then place this ExpressionNode into the output_node_stack
+			output_node_stack.push_back(new_expr_node);
+		}
+
+		//We maintain 1 node stacks, output
+		//We maintain an operator stack as well with type OperatorEnum {Plus, Minus, Times, Divide, LParen, RParen}
+		//We need a precedence checker
+
+
+		//Converting tokens to nodes the moment we dequeue them from this->stmt_token_queue_
+		//We use shunting yard algo with modifications
+		//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
+			//Note we must check if we are able to pop out 2 & the 2 is the type we want
+		//We then place this ExpressionNode into the output_node_stack
+		
+		//TODO: Once ';' is reached or stmt_token_queue_ is empty we should have only 1 expression node or VarNode/ConstNode in the output stack.
+		//Note that we must check if we need to encapsulate VarNode/ConstNode to return a proper ExpressionNode
+
+		//TODO: We then create the AssignNode similar to the code below.
+		
+
+		//REPLACEMENT END
+
 		//Create lhs var token
 		std::shared_ptr<VariableNode> new_lhs_var_node = std::make_shared<VariableNode>(lhs_name_token);
+
+		//
 
 		//Check if constant or var node to construct
 		if (isalpha(rhs_token.at(0))) {
@@ -383,7 +614,6 @@
 			new_expr_node->setParentNode(new_assign_node);
 			new_assign_node->setParentNode(this->current_parent_node_);
 			this->current_parent_node_->addChildNode(new_assign_node);
-			
 
 			//Need to add new_var_node & new_assign_node to PKB tables
 			this->pkb_builder_.addStatementNode(new_assign_node);
@@ -418,6 +648,8 @@
 
 			//Debugging statement
 			std::cout << "\nCreated constant node with var: " << new_constant_node->getValue();
+
+			//Set AssignNode
 
 		}
 		else {
