@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
+#include "../Hashing.h"
 
 typedef void VOID;
 typedef bool BOOLEAN;
@@ -13,7 +13,10 @@ typedef std::string VAR_NAME;
 class UsesTable {
 /* Overview: This is a data structure*/
 
-public:
+private:
+    friend class PKB;
+    friend class PKBBuilder;
+
     VOID addUses(STMT_NUM s, VAR_NAME v);
         /*
         Description: Adds to a collection that maps s to v.
@@ -34,8 +37,7 @@ public:
         Description: Returns a BOOLEAN indicating whether or not Uses(p, v) holds.
         */
 
-private:
-    std::unordered_map<STMT_NUM, VAR_NAME> statement_table_;
-    std::unordered_map<PROC_NAME, VAR_NAME> procedure_table_;
+    std::unordered_set<std::pair<STMT_NUM, VAR_NAME>> uses_s_;
+    std::unordered_set<std::pair<PROC_NAME, VAR_NAME>> uses_p_;
 
 };
