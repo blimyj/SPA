@@ -39,5 +39,10 @@ private:
 	std::deque<STRING> process_token_stream_;
 
 	STMT_NUMBER stmt_num_;
+
+	//Helper variables & functions for parsing expressions
+	enum class OperatorTypeEnum { op_plus, op_min, op_mult, op_div, op_mod, op_lparen, op_rparen };
+	int takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op);
+	ExpressionTypeEnum getExpressionType(OperatorTypeEnum op);
 };
 

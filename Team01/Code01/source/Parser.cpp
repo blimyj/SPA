@@ -363,62 +363,17 @@
 		this->process_token_stream_.pop_front(); // Pops out ';'
 
 		//REPLACEMENT FOR THIRD TOKEN CONSUMPTION
-		enum OperatorTypeEnum { op_plus, op_min, op_mult, op_div, op_mod, op_lparen, op_rparen };
 		std::deque<ASTNode> output_node_stack = std::deque<ASTNode>();
 		std::deque<OperatorTypeEnum> operator_stack = std::deque<OperatorTypeEnum>();
 		OperatorTypeEnum op;
 		OperatorTypeEnum temp_op;
-
-		//===== START OF HELPER FUNCTIONS =====
-		int takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op) {
-			//Returns 1 if left operator takes precendence
-			if (l_op == op_mult && r_op == op_div && r_op == op_mod) {
-				if (r_op == op_plus || l_op == op_min) {
-					return 1;
-				}
-			} else if (l_op == op_plus || l_op == op_min) {
-				if (r_op == op_mult && r_op == op_div && r_op == op_mod) {
-					//-1 if right operator takes precedence
-					return -1;
-				}
-			}
-			else {
-				//0 if neither
-				//This includes any case where there is a paren in either op
-				// or if both are the same
-				return 0;
-			}
-		}
-
-		ExpressionTypeEnum getExpressionType(OperatorTypeEnum op) {
-			if (op == op_plus) {
-				return plus;
-			}
-			else if (op == op_min) {
-				return min;
-			}
-			else if (op == op_mult) {
-				return times;
-			}
-			else if (op == op_div) {
-				return div;
-			}
-			else if (op == op_mod) {
-				return mod;
-			}
-			else {
-				return -1;
-			}
-		}
-
-		//===== END OF HELPER FUNCTIONS =====
 
 		//===== Actual Code ======
 		//Here we will keep consuming tokens until we reach ';'
 
 		STRING rhs_token = this->process_token_stream_.front();
 
-		while (rhs_token != ';') {
+		while (rhs_token != ";") {
 			//These tokens will populate this->stmt_token_queue_
 			this->stmt_token_queue_.push_back(rhs_token);
 			this->process_token_stream_.pop_front(); // Remove rhs var/const/operator/parentheses token for the next token
@@ -436,13 +391,16 @@
 			//if isalpha(first_char) 
 			if (isalpha(temp_token.at(0))) {
 				//then create varnode enqueue to output_node_stack
+				//TODO: Need to add to varTable
 				VariableNode new_var_node = VariableNode(temp_token);
+				//enqueue to output_stack
 				output_node_stack.push_back(new_var_node);
 			}
 			else if (isdigit(temp_token.at(0))) {
 				//else isdigit(first_char) then create const node
+				//TODO: Need to add to constTable
 				ConstantNode new_const_node = ConstantNode(temp_token);
-					//enqueue to output_stack
+				//enqueue to output_stack
 				output_node_stack.push_back(new_const_node);
 			}
 			else {
@@ -493,6 +451,7 @@
 
 						ExpressionTypeEnum expr_type = getExpressionType(OperatorTypeEnum op);
 
+						//TODO: Need parent, child pointers
 						ExpressionNode new_expr_node = ExpressionNode(expr_type, lhs_operand, rhs_operand);
 
 						//We then place this ExpressionNode into the output_node_stack
@@ -529,6 +488,7 @@
 						
 						ExpressionTypeEnum expr_type = getExpressionType(OperatorTypeEnum op);
 						
+						//TODO: Need parent, child pointers
 						ExpressionNode new_expr_node = ExpressionNode(expr_type, lhs_operand, rhs_operand);
 
 						//We then place this ExpressionNode into the output_node_stack
@@ -566,6 +526,7 @@
 
 			ExpressionTypeEnum expr_type = getExpressionType(OperatorTypeEnum op);
 
+			//TODO: Need parent, child pointers
 			ExpressionNode new_expr_node = ExpressionNode(expr_type, lhs_operand, rhs_operand);
 
 			//We then place this ExpressionNode into the output_node_stack
@@ -583,18 +544,50 @@
 			//Note we must check if we are able to pop out 2 & the 2 is the type we want
 		//We then place this ExpressionNode into the output_node_stack
 		
-		//TODO: Once ';' is reached or stmt_token_queue_ is empty we should have only 1 expression node or VarNode/ConstNode in the output stack.
+		//Once ';' is reached or stmt_token_queue_ is empty we should have only 1 expression node or VarNode/ConstNode in the output stack.
+		if (output_node_stack.size() != 1) {
+			return -1;
+		}
 		//Note that we must check if we need to encapsulate VarNode/ConstNode to return a proper ExpressionNode
+		//We then create the AssignNode similar to the code below.
+		std::shared_ptr<ASTNode> result = std::make_shared<ASTNode>(output_node_stack.back());
+		output_node_stack.pop_back();
+		if (result.getNodeType() == variableNode || result.getNodeType() == constantNode) {
+			//TODO: Need parent, child pointers
+			
+			result = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, result, nullptr);
+		}
 
-		//TODO: We then create the AssignNode similar to the code below.
+		//Finalise rhs_expr_node
+		std::shared_ptr<ExpressionNode> rhs_expr_node = std::static_pointer_cast<ExpressionNode>(result);
 		
+		//Create lhs var token
+		std::shared_ptr<VariableNode> new_lhs_var_node = std::make_shared<VariableNode>(lhs_name_token);
+		
+		//Create AssignNode
+		std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>(new_lhs_var_node, rhs_expr_node);
+
+		//Set AssignNode stmt_num
+		this->stmt_num_++;
+		new_assign_node->setStatementNumber(this->stmt_num_);
+
+		//Set child & parent pointers
+		rhs_expr_node->setParentNode(new_assign_node);
+		new_assign_node->setParentNode(this->current_parent_node_);
+		this->current_parent_node_->addChildNode(new_assign_node);
+
+		//Need to add & new_assign_node to PKB tables
+		this->pkb_builder_.addStatementNode(new_assign_node);
+		this->pkb_builder_.addAssignNode(new_assign_node);
+		//TODO: SET PARENT AND CHILDREN POINTERS FOR PREVIOUS CONSTRUCTIONS
+		//TODO: ADD NEWLY CONSTRUCTED NODES TO TABLES FOR PREVIOUS CONSTRUCTIONS
+		//TODO: TEST THIS ALGO INDIVIDUALLY, ONLY 1 ASSSIGN STMT
 
 		//REPLACEMENT END
 
-		//Create lhs var token
-		std::shared_ptr<VariableNode> new_lhs_var_node = std::make_shared<VariableNode>(lhs_name_token);
 
-		//
+		/*
+		//OLD ASSIGNMENT HANDLER
 
 		//Check if constant or var node to construct
 		if (isalpha(rhs_token.at(0))) {
@@ -656,6 +649,8 @@
 			return -1;
 		}
 
+		return 0;
+		*/
 		return 0;
 	}
 
@@ -847,3 +842,48 @@
 		//else end
 		return 0;
 	}
+
+	//===== START OF HELPER FUNCTIONS =====
+	int takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op) {
+		//Returns 1 if left operator takes precendence
+		if (l_op == op_mult && r_op == op_div && r_op == op_mod) {
+			if (r_op == op_plus || l_op == op_min) {
+				return 1;
+			}
+		}
+		else if (l_op == op_plus || l_op == op_min) {
+			if (r_op == op_mult && r_op == op_div && r_op == op_mod) {
+				//-1 if right operator takes precedence
+				return -1;
+			}
+		}
+		else {
+			//0 if neither
+			//This includes any case where there is a paren in either op
+			// or if both are the same
+			return 0;
+		}
+	}
+
+	ExpressionTypeEnum getExpressionType(OperatorTypeEnum op) {
+		if (op == op_plus) {
+			return plus;
+		}
+		else if (op == op_min) {
+			return min;
+		}
+		else if (op == op_mult) {
+			return times;
+		}
+		else if (op == op_div) {
+			return div;
+		}
+		else if (op == op_mod) {
+			return mod;
+		}
+		else {
+			return -1;
+		}
+	}
+
+	//===== END OF HELPER FUNCTIONS =====
