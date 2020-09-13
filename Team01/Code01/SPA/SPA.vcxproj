@@ -11,14 +11,78 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\Parser.h" />
+    <ClInclude Include="..\source\PKB.h" />
+    <ClInclude Include="..\source\PKBBuilder.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\AssignNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ASTNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ConditionNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ConditionTypeEnum.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ConstantNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ExpressionNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ExpressionTypeEnum.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\IfNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\NodeTypeEnum.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\PrintNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ProcedureNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ProgramNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\ReadNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\RelationNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\RelationTypeEnum.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\StatementListNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\StatementNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\VariableNode.h" />
+    <ClInclude Include="..\source\PKB\ASTNode\WhileNode.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\AssignTable.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\ConstantTable.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\IfTable.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\PrintTable.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\ProcedureTable.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\ReadTable.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\StatementListTable.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\StatementTable.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\VariableTable.h" />
+    <ClInclude Include="..\source\PKB\DesignEntities\WhileTable.h" />
+    <ClInclude Include="..\source\PKB\Hashing.h" />
+    <ClInclude Include="..\source\PKB\Relationships\FollowsTable.h" />
+    <ClInclude Include="..\source\PKB\Relationships\ModifiesTable.h" />
+    <ClInclude Include="..\source\PKB\Relationships\ParentTable.h" />
+    <ClInclude Include="..\source\PKB\Relationships\UsesTable.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
-    <ClCompile Include="..\source\TNode.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\source\PKB.h" />
-    <ClInclude Include="..\source\TNode.h" />
+    <ClCompile Include="..\source\PKBBuilder.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\AssignNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\ASTNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\ConditionNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\ConstantNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\ExpressionNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\IfNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\PrintNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\ProcedureNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\ProgramNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\ReadNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\RelationNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\StatementListNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\StatementNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\VariableNode.cpp" />
+    <ClCompile Include="..\source\PKB\ASTNode\WhileNode.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\AssignTable.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\ConstantTable.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\IfTable.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\PrintTable.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\ProcedureTable.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\ReadTable.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\StatementListTable.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\StatementTable.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\VariableTable.cpp" />
+    <ClCompile Include="..\source\PKB\DesignEntities\WhileTable.cpp" />
+    <ClCompile Include="..\source\PKB\Relationships\FollowsTable.cpp" />
+    <ClCompile Include="..\source\PKB\Relationships\ModifiesTable.cpp" />
+    <ClCompile Include="..\source\PKB\Relationships\ParentTable.cpp" />
+    <ClCompile Include="..\source\PKB\Relationships\UsesTable.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
