@@ -31,7 +31,7 @@ int printTree(AST_NODE_PTR parent_node_ptr) {
     return 0;
 }
 
-STRING_LIST getProperties(AST_NODE_PTR node_ptr, NODE_TYPE node_type, STRINGLIST node_properties) {
+STRING_LIST getProperties(AST_NODE_PTR node_ptr, NODE_TYPE node_type, STRING_LIST node_properties) {
     switch (node_type) {
 
         case NODE_TYPE::assignNode:
