@@ -7,11 +7,15 @@
 typedef int INDEX;
 typedef std::shared_ptr<PrintNode> PRINT_NODE_PTR;
 typedef std::vector<PRINT_NODE_PTR> PRINT_NODE_PTR_LIST;
+typedef std::vector<STMT_NUM> STMT_NUM_LIST;
 
 class PrintTable {
 /* Overview: This is a data structure*/
 
-public:
+private:
+    friend class PKB;
+    friend class PKBBuilder;
+
     INDEX addPrintNode(PRINT_NODE_PTR node);
         /*
         Description: Returns the index of the PRINT_NODE_PTR added to the table.
@@ -22,7 +26,11 @@ public:
         Description: Returns a PRINT_NODE_PTR_LIST of the table.
         */
 
-private:
-    PRINT_NODE_PTR_LIST table_;
+    STMT_NUM_LIST getPrintNumList();
+        /*
+        Description: Returns a STMT_NUM_LIST of the table.
+        */
+
+    std::vector<PRINT_NODE_PTR> nodes_;
 
 };

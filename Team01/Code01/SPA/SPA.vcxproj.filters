@@ -123,6 +123,9 @@
     <ClInclude Include="..\source\PKB\DesignEntities\StatementListTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\PKB\Hashing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp">
