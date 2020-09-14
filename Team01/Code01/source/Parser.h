@@ -24,7 +24,7 @@ private:
 	int parsePrint(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
 	int parseAssign(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
 
-	int Parser::parseWhile(STRING str);
+	int Parser::parseWhile(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
 	int Parser::parseIfThen(STRING str);
 	int Parser::parseElse(STRING str);
 	int Parser::parseCall(STRING str);
@@ -32,7 +32,7 @@ private:
 
 	STRING getNextToken(std::istreambuf_iterator<char>* iter, std::istreambuf_iterator<char> eos);
 
-	std::shared_ptr<ProgramNode> root_node_;
+	std::shared_ptr<ProgramNode> program_node_;
 	std::shared_ptr<ASTNode> current_parent_node_;
 	PKBBuilder pkb_builder_;
 

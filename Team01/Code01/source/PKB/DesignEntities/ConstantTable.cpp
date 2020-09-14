@@ -19,9 +19,9 @@ CONSTANT_VALUE_LIST ConstantTable::getConstantValueList() {
     for (CONSTANT_NODE_PTR n : nodes_) {
         // TODO: ConstantNode.h
         // Change constant value from int to string to prevent overflows
-        int v = n.get()->getValue();
-        CONSTANT_VALUE c = std::to_string(v);
-        result.push_back(c);
+        std::string v = n.get()->getValue();
+        //CONSTANT_VALUE c = std::to_string(v);
+        result.push_back(v);
     }
     return result;
 }

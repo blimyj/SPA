@@ -23,11 +23,11 @@
 	PKB Parser::parseFile(STRING filename) {
 		//Construct program root node
 		//Will this be deleted after function exits?
-		this->root_node_ = (std::make_shared<ProgramNode>)();
+		this->program_node_ = (std::make_shared<ProgramNode>)();
 		this->pkb_builder_ = PKBBuilder();
-		this->pkb_builder_.setProgramNode(this->root_node_);
+		this->pkb_builder_.setProgramNode(this->program_node_);
 
-		this->current_parent_node_ = this->root_node_;
+		this->current_parent_node_ = this->program_node_;
 
 		this->stmt_num_ = 0;
 
@@ -64,7 +64,7 @@
 		std::string stmt_token;
 		while (!this->process_token_stream_.empty()) {
 
-			//Check first two tokens, then call appropriate parse function
+			
 			stmt_token = this->process_token_stream_.front();
 			this->process_token_stream_.pop_front();
 
@@ -77,6 +77,7 @@
 				continue;
 			}
 
+			//After checking first two tokens, call appropriate parse function
 			if (stmt_token == "procedure") {
 				this->stmt_token_queue_.push_back(stmt_token); //This is "procedure" token
 				parseProcedure(&this->stmt_token_queue_, &this->process_token_stream_);
@@ -95,6 +96,12 @@
 				continue;
 			}
 
+			if (stmt_token == "while") {
+				this->stmt_token_queue_.push_back(stmt_token); //This is "while" token
+				parseWhile(&this->stmt_token_queue_, &this->process_token_stream_);
+				continue;
+			}
+
 			if (stmt_token == "}") {
 				parseStmtListClose();
 				continue;
@@ -106,12 +113,8 @@
 
 		PKB pkb = this->pkb_builder_.build();
 		
-		for (std::shared_ptr<AssignNode> a_node : pkb.getAssigns()) {
-			a_node->getVariableNode();
-		}
-		
-		
-		
+		printTree(this->program_node_);
+
 		return pkb;
 	}
 
@@ -179,6 +182,16 @@
 		
 
 		//Check for boolean terminal tokens
+
+
+		//Check for arithmetic comparison terminal tokens
+		if (**iter == '!=' || **iter == '==' 
+			|| **iter == '>' || **iter == '>=' 
+			|| **iter == '<' || **iter == '<=') {
+			curr_token += **iter;
+			++* iter;
+			return curr_token;
+		}
 
 		//Check for unexpected tokens
 		curr_token += "UNEXPECTED TOKEN:";
@@ -329,8 +342,125 @@
 		return 0;
 	}
 	*/
-	int Parser::parseWhile(STRING str) {
-		//We assume that this opening segment will either terminate with '{' or ';' with the exception of whitespaces and newline?
+	int Parser::parseWhile(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+		this->stmt_token_queue_;
+		this->process_token_stream_;
+
+		if (this->stmt_token_queue_.front() != "while") {
+			return -1;
+		}
+		this->stmt_token_queue_.pop_front(); // Remove stmt type token
+		
+		//Check for '('
+		if (this->process_token_stream_.front() != "(") {
+			return -1;
+		}
+		this->process_token_stream_.pop_front(); // Remove stmt type token
+		//Read in simple comparison (only 1 var/const on each side)	
+		
+		
+		//To read for simple comparison
+		STRING lhs_rel_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
+		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
+		std::shared_ptr<ASTNode> lhs_node;
+		//Create node & add to table
+		if (isalpha(lhs_rel_token.at(0))) {
+			lhs_node = std::make_shared<VariableNode>(lhs_rel_token);
+			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(lhs_node));
+		} else if (isdigit(lhs_rel_token.at(0))) {
+			lhs_node = std::make_shared<ConstantNode>(lhs_rel_token);
+			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(lhs_node));
+		}else {
+			return -1;
+		}
+
+		RelationTypeEnum rel_comp;
+		STRING rel_comp_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
+		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
+		if (rel_comp_token == "!=") {
+			rel_comp = RelationTypeEnum::neq;
+		} else if (rel_comp_token == "==") {
+			rel_comp = RelationTypeEnum::eq;
+		} else if (rel_comp_token == ">") {
+			rel_comp = RelationTypeEnum::gt;
+		} else if (rel_comp_token == ">=") {
+			rel_comp = RelationTypeEnum::gte;
+		} else if (rel_comp_token == "<=") {
+			rel_comp = RelationTypeEnum::lte;
+		} else if (rel_comp_token == "<") {
+			rel_comp = RelationTypeEnum::lt;
+		} else {
+			return -1;
+		}
+
+		STRING rhs_rel_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
+		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
+		std::shared_ptr<ASTNode> rhs_node;
+		//Create node & add to table
+		if (isalpha(rhs_rel_token.at(0))) {
+			rhs_node = std::make_shared<VariableNode>(rhs_rel_token);
+			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(rhs_node));
+		}
+		else if (isdigit(rhs_rel_token.at(0))) {
+			rhs_node = std::make_shared<ConstantNode>(rhs_rel_token);
+			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(rhs_node));
+		}
+		else {
+			return -1;
+		}
+		
+		std::shared_ptr<RelationNode> relation_node = std::make_shared<RelationNode>(rel_comp
+			, lhs_node, rhs_node);
+
+		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>(ConditionTypeEnum::none
+			, relation_node, nullptr);
+
+		//Set parent, child pointers for Condition<->Relation
+		condition_node->addChildNode(relation_node);
+		relation_node->setParentNode(condition_node);
+		//Set parent, child pointers for Relation <-> (lhs & rhs)
+		relation_node->addChildNode(lhs_node);
+		lhs_node->setParentNode(condition_node);
+		relation_node->addChildNode(rhs_node);
+		rhs_node->setParentNode(condition_node);
+
+		//Check for ')' & '{'
+		if (this->process_token_stream_.front() != ")") {
+			return -1;
+		}
+		this->process_token_stream_.pop_front(); // Pops out '{'
+
+		if (this->process_token_stream_.front() != "{") {
+			return -1;
+		}
+		this->process_token_stream_.pop_front(); // Pops out '{'
+
+		//Construct new_stmt_list_node & new_procedure_node
+		std::shared_ptr<StatementListNode> new_stmt_list_node = std::make_shared<StatementListNode>();
+		std::shared_ptr<WhileNode> new_while_node = std::make_shared<WhileNode>(condition_node, new_stmt_list_node);
+
+		//Set child & parent pointers
+
+		condition_node->setParentNode(new_while_node);
+		new_while_node->addChildNode(condition_node);
+
+		new_stmt_list_node->setParentNode(new_while_node);
+		new_while_node->addChildNode(new_stmt_list_node);
+
+		this->current_parent_node_->addChildNode(new_while_node);
+		new_while_node->setParentNode(this->current_parent_node_);
+
+		//change parent tracker to stmtlistnode_ptr
+		this->current_parent_node_ = new_stmt_list_node;
+
+		//Need to add new_stmt_list_node & new_while_node to PKB tables
+		this->pkb_builder_.addWhileNode(new_while_node);
+		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
+
+		//Debugging statement
+		std::cout << "\nCreated while node: " << new_while_node;
+
+
 		return 0;
 	}
 
@@ -461,7 +591,6 @@
 
 						ExpressionTypeEnum expr_type = getExpressionType(temp_op);
 
-						//TODO: Need parent, child pointers
 						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
 							, lhs_operand, rhs_operand);
 						
@@ -511,7 +640,6 @@
 						
 						ExpressionTypeEnum expr_type = getExpressionType(temp_op);
 						
-						//TODO: Need parent, child pointers
 						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
 							, lhs_operand, rhs_operand);
 
@@ -561,7 +689,6 @@
 
 			ExpressionTypeEnum expr_type = getExpressionType(temp_op);
 
-			//TODO: Need parent, child pointers
 			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
 				,lhs_operand, rhs_operand);
 			//Set parent pointers
@@ -597,7 +724,6 @@
 		output_node_stack.pop_back();
 		if (last_node->getNodeType() == NodeTypeEnum::variableNode
 			|| last_node->getNodeType() == NodeTypeEnum::constantNode) {
-			//TODO: Need parent, child pointers
 			
 			result = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, last_node, nullptr);
 			//Set parent pointers
@@ -635,12 +761,11 @@
 		this->pkb_builder_.addStatementNode(new_assign_node);
 		this->pkb_builder_.addAssignNode(new_assign_node);
 		std::cout << "New Assign Node created.";
+		//TODO: Remove Debugging statements.
 		//USE BFS HERE
-		printTree(new_assign_node);
+		//printTree(new_assign_node);
 
-		//TODO: ADD NEWLY CONSTRUCTED NODES TO TABLES FOR PREVIOUS CONSTRUCTIONS
-		//TODO: TEST THIS ALGO INDIVIDUALLY, ONLY 1 ASSSIGN STMT
-
+		//TODO: Test for invalid assignment statement case. (Mismatch parentheses, missing operand, missing operator, no ';')
 		//REPLACEMENT END
 		return 0;
 	}
@@ -760,8 +885,13 @@
 		new_procedure_node->addChildNode(new_stmt_list_node);
 		new_procedure_node->setParentNode(this->current_parent_node_);
 
+		//Check that we are actually adding this new procedure to programNode
+		if (this->current_parent_node_->getNodeType() != NodeTypeEnum::programNode) {
+			return -1;
+		}
+		this->current_parent_node_->addChildNode(new_procedure_node);
+
 		//change parent tracker to stmtlistnode_ptr
-		this->root_node_->addChildNode(new_procedure_node);
 		this->current_parent_node_ = new_stmt_list_node;
 		
 		//Need to add new_stmt_list_node & new_procedure_node to PKB tables
@@ -781,7 +911,7 @@
 
 	int Parser::parseStmtListClose() {
 		//Method 1: Accounts for procedure statement list only.
-		
+		/*
 		//Checks if stmtlist size < 1, returns non-zero int as a signal that there is a problem
 		if (this->current_parent_node_->getChildrenNode().size() < 1) {
 			return -1;
@@ -797,45 +927,45 @@
 		//Debugging stmt
 		std::shared_ptr<ProcedureNode> proc_node = std::static_pointer_cast<ProcedureNode>(this->current_parent_node_->getChildrenNode().at(0));
 		std::cout << "\nExited out of procedure node: " << proc_node->getProcedureName();
-
+		*/
+		
 		//Method 2: accounts for container statements
+		
 		//Part 1: When closing a stmtList Node, 
-			//we must ensure there exists at least 1 stmt (if == 0 child)
-				//print parsing error -> incorrect code
-		//remove '}'
-
+		//Checks if stmtlist size < 1, returns non-zero int as a signal that there is a problem
+		if (this->current_parent_node_->getChildrenNode().size() < 1) {
+			return -1;
+			//TODO:print parsing error -> incorrect code
+		}
 
 		//Part 2:
 		//Assuming we maintain curr_parent_node_
 
+
 		//There are 2 different ways to change the curr_parent_node_ (Refer to StmtListCloseChangeParentNode image)
-		//if (curr_parent_node_.getParent().getType() == IF_NODETYPE_ENUM)
+		if (this->current_parent_node_->getParentNode()->getNodeType() == NodeTypeEnum::ifNode){
 			//cast to parent of curr_parent_node_ to IF_NODE*
-			//check if its ThenStatementListNode is equal to curr_parent_node_ (after we cast curr_parent_node_ to STMT_LIST_NODE*)
-			//if ( ((IF_NODE*) curr_parent_node_.getParent()).getThenStatementListNode()) == ((STMT_LIST_NODE*) curr_parent_node_) )
+			std::shared_ptr<IfNode> ifNode = std::static_pointer_cast<IfNode>(this->current_parent_node_->getParentNode());
+			
+				//check if its ThenStatementListNode is equal to curr_parent_node_ (after we cast curr_parent_node_ to STMT_LIST_NODE*)
+			if (ifNode->getThenStatementListNode() == std::static_pointer_cast<StatementListNode>(this->current_parent_node_)) {
 				//change curr_parent_node_ to point to ELSE_STMT_LIST_NODE
 				//We assume that it was pre-created when we created the IF_STMT_LIST_NODE
-				//curr_parent_node_ =  (AST_NODE*) (((IF_NODE*) curr_parent_node_.getParent()).getElseStatementListNode())
-			//else
+				this->current_parent_node_ = ifNode->getElseStatementListNode();
+			} else {
 				//change curr_parent_node_ to point to STMT_LIST_NODE that contains the IF_NODE
 				//curr_parent_node_ = curr_parent_node_.getParent().getParent()
-		//else
+				this->current_parent_node_ = ifNode->getParentNode();
+			}
+		} else {
 			//change curr_parent_node_ to point to grandparent node of curr_parent_node_
 			//curr_parent_node_ must be STMT_LIST_NODE
-			//it's parent can be PROCEDURE_NODE, WHILE_NODE or IF_NODE (if this is an ELSE_STMT_LIST_NODE)
+			//it's parent can be PROCEDURE_NODE, WHILE_NODE
 			//therefore grandparent node can be PROGRAM_NODE or STMT_LIST_NODE
-			//curr_parent_node_ = curr_parent_node_.getParent().getParent()
+			this->current_parent_node_ = this->current_parent_node_->getParentNode()->getParentNode();
 
+		}
 
-
-
-
-		//Part 3:
-		//We make no assumptions that '}' ends this line. We check for any leftover non-whitespace characters
-		//and call parseLine on the remainding string if there are remaining chars. 
-		//check if there is remaining str
-			//call parseLine on remainder of str
-		//else end
 		return 0;
 	}
 
@@ -869,7 +999,7 @@
 			return ExpressionTypeEnum::min;
 		}
 		else if (op == OperatorTypeEnum::op_mult) {
-			return ExpressionTypeEnum::mult;
+			return ExpressionTypeEnum::times;
 		}
 		else if (op == OperatorTypeEnum::op_div) {
 			return ExpressionTypeEnum::div;
@@ -940,7 +1070,7 @@
 			
 			if (expr == ExpressionTypeEnum::div) {
 					expr_str = "DIVISION";
-			} else if(expr == ExpressionTypeEnum::mult) {
+			} else if(expr == ExpressionTypeEnum::times) {
 				expr_str = "MULTIPLICATION";
 			} else if(expr == ExpressionTypeEnum::plus) {
 				expr_str = "PLUS";
