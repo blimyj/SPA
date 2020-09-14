@@ -1,18 +1,22 @@
 #pragma once
 
-#include <iostream>
 #include <vector>
 #include <map>
-#include <algorithm>
 #include <string>
+#include <iterator>
 
 class ResultList;
 
+typedef std::string SYNONYM_NAME;
+typedef std::vector<std::string> SYNONYM_VALUES_LIST;
+typedef std::map<SYNONYM_NAME, SYNONYM_VALUES_LIST> RESULT_LIST;
+
 class ResultList {
 private:
-	std::map<std::string, std::vector<std::string>> results;
+	 RESULT_LIST results;
 public:
-	void addColumn(std::string columnName, std::vector<std::string> columnValues);
-	//removeColumn(std::string columnName);
-
-}
+	void addColumn(SYNONYM_NAME column_name, SYNONYM_VALUES_LIST column_values);
+	void removeColumn(SYNONYM_NAME column_name);
+	SYNONYM_VALUES_LIST getValuesOfSynonym(SYNONYM_NAME column_name);
+	bool containsSynonym(SYNONYM_NAME column_name);
+};

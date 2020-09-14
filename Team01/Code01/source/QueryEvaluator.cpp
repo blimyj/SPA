@@ -2,37 +2,53 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 QueryEvaluator::QueryEvaluator(PKB pkb) {
 	this->pkb = pkb;
 }
 
 QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSED_CLAUSES clauses) {
-	std::vector<std::string> result_list;
-	result_list.push_back("yo yo im here"); //initialise to empty_result
+	ResultList result_list = ResultList(); //initialise to empty_result
+	ResultList* result_list_ptr = &result_list;
+	std::string result = "";
 	QueryNode chosen_return_type;
+	std::string chosen_synonym_name;
 	
 	QUERY_NODE_POINTERS children = clauses.getChildren();
-	if (clauses.getNodeType() == QueryNodeType::select) { 
-		result_list[0] = result_list[0] + "\n" + "Select Worked";
+	if (clauses.getNodeType() == QueryNodeType::select) {
 		chosen_return_type = children[0];
-		result_list[0] = result_list[0] + "\n" + "chosen return synonym name: " + chosen_return_type.getSynonymName();
+		chosen_synonym_name = chosen_return_type.getSynonymName();
+		std::cout << chosen_synonym_name << std::endl;
 	}
-
+	else { //query tree is invalid
+		return "";
+	}
+	
 	// Hard coded result from PKBStub
 	VAR_NODE_PTR_LIST all_variables = pkb.getVariables();
-	std::string variable_string = "";
-	for (VAR_NODE_PTR variable : all_variables) {
-		VariableNode variable_node = *variable;
-		variable_string += variable_node.getVariableName();
-	}
-	result_list[0] = result_list[0] + "\n" + variable_string;
-
 	
+	/* --- check if PKB has method to return all variable names as string */
+	std::vector<std::string> variable_names = {};
+	for (VAR_NODE_PTR variable_ptr : all_variables) {
+		VariableNode variable = *variable_ptr;
+		variable_names.push_back(variable.getVariableName());
+	}
+
 	//intermediate result_list can have many synonyms
 	//but final result should return just 1 string/empty
+
+	result_list = ResultListManager::addSynonymAndValues(result_list_ptr, chosen_synonym_name, variable_names);
+
+	if (ResultListManager::containsSynonym(result_list, chosen_synonym_name)) {
+		result = ResultListManager::getValues(result_list, chosen_synonym_name);
+	}
+	else {
+		result = "";
+	}
 	
-	return result_list[0]; 
+
+	return result;
 }
 
 // to Iterate through Map of string:vector<string> pair
