@@ -26,7 +26,7 @@ public:
 
 	STMT_NODE_PTR_LIST getStatementNodeList();
 		/*
-		Description: Returns the list of children, TMT_NODE_PTR_LIST, of the statement list.
+		Description: Returns the list of children, STMT_NODE_PTR_LIST, of the statement list.
 		*/
 
 private:

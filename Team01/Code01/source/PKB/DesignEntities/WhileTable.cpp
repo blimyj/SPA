@@ -7,11 +7,7 @@ INDEX WhileTable::addWhileNode(WHILE_NODE_PTR node) {
 }
 
 WHILE_NODE_PTR_LIST WhileTable::getWhileNodeList() {
-    WHILE_NODE_PTR_LIST copy;
-    for (WHILE_NODE_PTR node : nodes_) {
-        copy.push_back(node);
-    }
-    return copy;
+    return WHILE_NODE_PTR_LIST(nodes_);
 }
 
 STMT_NUM_LIST WhileTable::getWhileNumList() {

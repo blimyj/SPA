@@ -7,11 +7,7 @@ INDEX AssignTable::addAssignNode(ASSIGN_NODE_PTR node) {
 }
 
 ASSIGN_NODE_PTR_LIST AssignTable::getAssignNodeList() {
-    ASSIGN_NODE_PTR_LIST copy;
-    for (ASSIGN_NODE_PTR node : nodes_) {
-        copy.push_back(node);
-    }
-    return copy;
+    return ASSIGN_NODE_PTR_LIST(nodes_);
 }
 
 STMT_NUM_LIST AssignTable::getAssignNumList() {
