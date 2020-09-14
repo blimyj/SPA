@@ -15,17 +15,18 @@ class StatementListNode : public ASTNode {
 
 public:
 	StatementListNode();
+		/*
+		Description: Constructs an empty StatementListNode.
+		*/
 
 	BOOLEAN addStatementNode(STMT_NODE_PTR stmt_node_ptr);
 		/*
-		Description: Returns True if able to append stmt_node_ptr to stmt_node_ptr_list_, false otherwise.
-					 Serves as a function wrapper for addChild(STMT_NODE_PTR);
+		Description: Returns True if able to add a child STMT_NODE_PTR of the statement list, false otherwise.
 		*/
 
 	STMT_NODE_PTR_LIST getStatementNodeList();
 		/*
-		Description: Returns a STMT_NODE_PTR_LIST of the statement list body.
-					 Serves as a function wrapper for getChildren();
+		Description: Returns the list of children, TMT_NODE_PTR_LIST, of the statement list.
 		*/
 
 private:
