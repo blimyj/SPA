@@ -12,6 +12,8 @@
 #include "Parser.h"
 #include "PKB/ASTNode/NodeTypeEnum.h"
 
+//TODO: Ensure RelationNode.h is included in PKB
+#include "PKB/ASTNode/RelationNode.h"
 
 	int Parser::Parse() {
 
@@ -362,7 +364,7 @@
 
 
 		//REPLACEMENT FOR THIRD TOKEN CONSUMPTION
-		std::deque<ASTNode> output_node_stack = std::deque<ASTNode>();
+		std::deque<std::shared_ptr<ASTNode>> output_node_stack = std::deque<std::shared_ptr<ASTNode>>();
 		std::deque<OperatorTypeEnum> operator_stack = std::deque<OperatorTypeEnum>();
 		OperatorTypeEnum op;
 		OperatorTypeEnum temp_op;
@@ -396,14 +398,14 @@
 			if (isalpha(temp_token.at(0))) {
 				//then create varnode enqueue to output_node_stack
 				//TODO: Need to add to varTable
-				VariableNode new_var_node = VariableNode(temp_token);
+				std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>(temp_token);
 				//enqueue to output_stack
 				output_node_stack.push_back(new_var_node);
 			}
 			else if (isdigit(temp_token.at(0))) {
 				//else isdigit(first_char) then create const node
 				//TODO: Need to add to constTable
-				ConstantNode new_const_node = ConstantNode(temp_token);
+				std::shared_ptr<ConstantNode> new_const_node = std::make_shared<ConstantNode>(temp_token);
 				//enqueue to output_stack
 				output_node_stack.push_back(new_const_node);
 			}
@@ -439,29 +441,36 @@
 						temp_op = operator_stack.back();
 						operator_stack.pop_back();
 
-						ASTNode rhs_operand = output_node_stack.back();
+						std::shared_ptr<ASTNode> rhs_operand = output_node_stack.back();
 						output_node_stack.pop_back();
 
-						ASTNode lhs_operand = output_node_stack.back();
+						std::shared_ptr<ASTNode> lhs_operand = output_node_stack.back();
 						output_node_stack.pop_back();
 
 						//Note we must check if we are able to pop out 2 & the 2 is the type we want
-						if (rhs_operand.getNodeType() != NodeTypeEnum::expressionNode 
-							|| rhs_operand.getNodeType() != NodeTypeEnum::variableNode
-							|| rhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
+						if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
+							&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+							&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
-						if (lhs_operand.getNodeType() != NodeTypeEnum::expressionNode 
-							|| lhs_operand.getNodeType() != NodeTypeEnum::variableNode
-							|| lhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
+						if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
+							&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+							&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
 
-						ExpressionTypeEnum expr_type = getExpressionType(op);
+						ExpressionTypeEnum expr_type = getExpressionType(temp_op);
 
 						//TODO: Need parent, child pointers
-						ExpressionNode new_expr_node = ExpressionNode(expr_type
-							, std::make_shared<ASTNode>(lhs_operand), std::make_shared<ASTNode>(rhs_operand));
+						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
+							, lhs_operand, rhs_operand);
+						//Set parent pointers
+						lhs_operand->setParentNode(new_expr_node);
+						new_expr_node->addChildNode(lhs_operand);
+
+						rhs_operand->setParentNode(new_expr_node);
+						new_expr_node->addChildNode(rhs_operand);
+
 
 						//We then place this ExpressionNode into the output_node_stack
 						output_node_stack.push_back(new_expr_node);
@@ -481,29 +490,36 @@
 						operator_stack.pop_back();
 						
 						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
-						ASTNode rhs_operand = output_node_stack.back();
+						std::shared_ptr<ASTNode> rhs_operand = output_node_stack.back();
 						output_node_stack.pop_back();
 						
-						ASTNode lhs_operand = output_node_stack.back();
+						std::shared_ptr<ASTNode> lhs_operand = output_node_stack.back();
 						output_node_stack.pop_back();
 
 						//Note we must check if we are able to pop out 2 & the 2 is the type we want
-						if (rhs_operand.getNodeType() != NodeTypeEnum::expressionNode 
-							|| rhs_operand.getNodeType() != NodeTypeEnum::variableNode 
-							|| rhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
+						if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
+							&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode 
+							&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
-						if (lhs_operand.getNodeType() != NodeTypeEnum::expressionNode 
-							|| lhs_operand.getNodeType() != NodeTypeEnum::variableNode 
-							|| lhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
+						if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
+							&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode 
+							&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
 						
-						ExpressionTypeEnum expr_type = getExpressionType(op);
+						ExpressionTypeEnum expr_type = getExpressionType(temp_op);
 						
 						//TODO: Need parent, child pointers
-						ExpressionNode new_expr_node = ExpressionNode(expr_type
-							, std::make_shared<ASTNode>(lhs_operand), std::make_shared<ASTNode>(rhs_operand));
+						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
+							, lhs_operand, rhs_operand);
+
+						//Set parent pointers
+						lhs_operand->setParentNode(new_expr_node);
+						new_expr_node->addChildNode(lhs_operand);
+
+						rhs_operand->setParentNode(new_expr_node);
+						new_expr_node->addChildNode(rhs_operand);
 
 						//We then place this ExpressionNode into the output_node_stack
 						output_node_stack.push_back(new_expr_node);
@@ -524,25 +540,35 @@
 			temp_op = operator_stack.back();
 			operator_stack.pop_back();
 
-			ASTNode rhs_operand = output_node_stack.back();
+			std::shared_ptr<ASTNode> rhs_operand = output_node_stack.back();
 			output_node_stack.pop_back();
 
-			ASTNode lhs_operand = output_node_stack.back();
+			std::shared_ptr<ASTNode> lhs_operand = output_node_stack.back();
 			output_node_stack.pop_back();
 
 			//Note we must check if we are able to pop out 2 & the 2 is the type we want
-			if (rhs_operand.getNodeType() != NodeTypeEnum::expressionNode || rhs_operand.getNodeType() != NodeTypeEnum::variableNode || rhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
+			if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
+				&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode 
+				&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 				return -1;
 			}
-			if (lhs_operand.getNodeType() != NodeTypeEnum::expressionNode || lhs_operand.getNodeType() != NodeTypeEnum::variableNode || lhs_operand.getNodeType() != NodeTypeEnum::constantNode) {
+			if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
+				&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode 
+				&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 				return -1;
 			}
 
-			ExpressionTypeEnum expr_type = getExpressionType(op);
+			ExpressionTypeEnum expr_type = getExpressionType(temp_op);
 
 			//TODO: Need parent, child pointers
-			ExpressionNode new_expr_node = ExpressionNode(expr_type
-				, std::make_shared<ASTNode>(lhs_operand), std::make_shared<ASTNode>(rhs_operand));
+			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
+				,lhs_operand, rhs_operand);
+			//Set parent pointers
+			lhs_operand->setParentNode(new_expr_node);
+			new_expr_node->addChildNode(lhs_operand);
+
+			rhs_operand->setParentNode(new_expr_node);
+			new_expr_node->addChildNode(rhs_operand);
 
 			//We then place this ExpressionNode into the output_node_stack
 			output_node_stack.push_back(new_expr_node);
@@ -565,12 +591,19 @@
 		}
 		//Note that we must check if we need to encapsulate VarNode/ConstNode to return a proper ExpressionNode
 		//We then create the AssignNode similar to the code below.
-		std::shared_ptr<ASTNode> result = std::make_shared<ASTNode>(output_node_stack.back());
+		std::shared_ptr<ASTNode> last_node = output_node_stack.back();
+		std::shared_ptr<ASTNode> result;
 		output_node_stack.pop_back();
-		if (result->getNodeType() == NodeTypeEnum::variableNode || result->getNodeType() == NodeTypeEnum::constantNode) {
+		if (last_node->getNodeType() == NodeTypeEnum::variableNode
+			|| last_node->getNodeType() == NodeTypeEnum::constantNode) {
 			//TODO: Need parent, child pointers
 			
-			result = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, result, nullptr);
+			result = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, last_node, nullptr);
+			//Set parent pointers
+			last_node->setParentNode(result);
+			result->addChildNode(last_node);
+		} else {
+			result = last_node;
 		}
 
 		//Finalise rhs_expr_node
@@ -587,14 +620,23 @@
 		new_assign_node->setStatementNumber(this->stmt_num_);
 
 		//Set child & parent pointers
+		new_lhs_var_node->setParentNode(new_assign_node);
+		new_assign_node->addChildNode(new_lhs_var_node);
+
 		rhs_expr_node->setParentNode(new_assign_node);
+		new_assign_node->addChildNode(rhs_expr_node);
+
 		new_assign_node->setParentNode(this->current_parent_node_);
 		this->current_parent_node_->addChildNode(new_assign_node);
 
 		//Need to add & new_assign_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_assign_node);
 		this->pkb_builder_.addAssignNode(new_assign_node);
-		//TODO: SET PARENT AND CHILDREN POINTERS FOR PREVIOUS CONSTRUCTIONS
+		//TODO: SET PARENT AND CHILDREN POINTERS FOR PREVIOUS CONSTRUCTION-> Done?
+		std::cout << "New Assign Node created.";
+		//USE BFS HERE
+		printTree(new_assign_node);
+
 		//TODO: ADD NEWLY CONSTRUCTED NODES TO TABLES FOR PREVIOUS CONSTRUCTIONS
 		//TODO: TEST THIS ALGO INDIVIDUALLY, ONLY 1 ASSSIGN STMT
 
@@ -710,7 +752,9 @@
 		//Set child & parent pointers
 		new_read_node->setParentNode(this->current_parent_node_);
 		this->current_parent_node_->addChildNode(new_read_node);
+		
 		new_var_node->setParentNode(new_read_node);
+		new_read_node->addChildNode(new_var_node);
 
 		//Need to add new_var_node & new_read_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_read_node);
@@ -752,8 +796,10 @@
 		//Set child & parent pointers
 		new_print_node->setParentNode(this->current_parent_node_);
 		this->current_parent_node_->addChildNode(new_print_node);
+
 		new_var_node->setParentNode(new_print_node);
-		
+		new_print_node->addChildNode(new_var_node);
+
 		//Need to add new_var_node & new_print_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_print_node);
 		this->pkb_builder_.addPrintNode(new_print_node);
@@ -789,6 +835,7 @@
 
 		//Set child & parent pointers
 		new_stmt_list_node->setParentNode(new_procedure_node);
+		new_procedure_node->addChildNode(new_stmt_list_node);
 		new_procedure_node->setParentNode(this->current_parent_node_);
 
 		//change parent tracker to stmtlistnode_ptr
@@ -873,13 +920,13 @@
 	//===== START OF HELPER FUNCTIONS =====
 	int Parser::takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op) {
 		//Returns 1 if left operator takes precendence
-		if (l_op == OperatorTypeEnum::op_mult && r_op == OperatorTypeEnum::op_div && r_op == OperatorTypeEnum::op_mod) {
+		if (l_op == OperatorTypeEnum::op_mult || r_op == OperatorTypeEnum::op_div || r_op == OperatorTypeEnum::op_mod) {
 			if (r_op == OperatorTypeEnum::op_plus || l_op == OperatorTypeEnum::op_min) {
 				return 1;
 			}
 		}
 		else if (l_op == OperatorTypeEnum::op_plus || l_op == OperatorTypeEnum::op_min) {
-			if (r_op == OperatorTypeEnum::op_mult && r_op == OperatorTypeEnum::op_div && r_op == OperatorTypeEnum::op_mod) {
+			if (r_op == OperatorTypeEnum::op_mult || r_op == OperatorTypeEnum::op_div || r_op == OperatorTypeEnum::op_mod) {
 				//-1 if right operator takes precedence
 				return -1;
 			}
@@ -914,3 +961,120 @@
 	}
 
 	//===== END OF HELPER FUNCTIONS =====
+
+	//===== START OF DEBUGGER FUNCTIONS =====
+	int Parser::printTree(AST_NODE_PTR parent_node_ptr) {
+		std::deque< AST_NODE_PTR> node_queue = std::deque< AST_NODE_PTR>();
+		node_queue.push_back(parent_node_ptr);
+
+		while (!node_queue.empty()) {
+			AST_NODE_PTR node_ptr = node_queue.front();
+			node_queue.pop_front();
+			NODE_TYPE node_type = node_ptr->getNodeType();
+			AST_NODE_PTR_LIST children_nodes = node_ptr->getChildrenNode();
+
+			// Get properties of current node, and print:
+			std::vector<std::string> node_properties = getProperties(node_ptr, node_type);
+
+			std::cout << "\n\n Node Type: ";
+;			for (STRING properties : node_properties) {
+				std::cout << properties << '\n';
+			}
+
+			// Enqueue currrent node's children nodes:
+			for (AST_NODE_PTR child : children_nodes) {
+				node_queue.push_back(child);
+			}
+
+			// Print number of children nodes:
+			std::cout << "No. of Children: " << children_nodes.size() << '\n';
+		}
+
+		return 0;
+	}
+
+	std::vector<std::string> Parser::getProperties(AST_NODE_PTR node_ptr, NODE_TYPE node_type) {
+		std::vector<std::string> node_properties;
+		ExpressionTypeEnum expr = std::static_pointer_cast<ExpressionNode>(node_ptr)->getExpressionType();
+		STRING expr_str = "ERROR NO EXPR";
+		switch (node_type) {
+		
+		case NODE_TYPE::assignNode:
+			node_properties.push_back("assignNode");
+			break;
+
+		case NODE_TYPE::conditionNode:
+			node_properties.push_back("conditionNode");
+			//node_properties.push_back(std::static_pointer_cast<ConditionNode>(node_ptr)->getConditionType());
+			break;
+
+		case NODE_TYPE::constantNode:
+			node_properties.push_back("constantNode");
+			node_properties.push_back(std::static_pointer_cast<ConstantNode>(node_ptr)->getValue());
+			break;
+
+		case NODE_TYPE::expressionNode:
+			node_properties.push_back("expressionNode");
+			
+			if (expr == ExpressionTypeEnum::div) {
+					expr_str = "DIVISION";
+			} else if(expr == ExpressionTypeEnum::mult) {
+				expr_str = "MULTIPLICATION";
+			} else if(expr == ExpressionTypeEnum::plus) {
+				expr_str = "PLUS";
+			} else if(expr == ExpressionTypeEnum::min) {
+				expr_str = "MINUS";
+			} else if(expr == ExpressionTypeEnum::mod) {
+				expr_str = "MODULO";
+			} else if(expr == ExpressionTypeEnum::none) {
+				expr_str = "VAR OR CONST";
+			}
+			node_properties.push_back(expr_str);
+			break;
+
+		case NODE_TYPE::ifNode:
+			node_properties.push_back("ifNode");
+			break;
+
+		case NODE_TYPE::printNode:
+			node_properties.push_back("printNode");
+			break;
+
+		case NODE_TYPE::procedureNode:
+			node_properties.push_back("procedureNode");
+			node_properties.push_back(std::static_pointer_cast<ProcedureNode>(node_ptr)->getProcedureName());
+			break;
+
+		case NODE_TYPE::programNode:
+			node_properties.push_back("programNode");
+			break;
+
+		case NODE_TYPE::readNode:
+			node_properties.push_back("readNode");
+			break;
+
+		case NODE_TYPE::relationNode:
+			node_properties.push_back("relationNode");
+			//node_properties.push_back(std::static_pointer_cast<RelationNode>(node_ptr)->getRelationType());
+			break;
+
+		case NODE_TYPE::statementListNode:
+			node_properties.push_back("statementListNode");
+			break;
+
+		case NODE_TYPE::variableNode:
+			node_properties.push_back("variableNode");
+			node_properties.push_back(std::static_pointer_cast<VariableNode>(node_ptr)->getVariableName());
+			break;
+
+		case NODE_TYPE::whileNode:
+			node_properties.push_back("whileNode");
+			break;
+
+		default:
+			node_properties.push_back("Error: No such node.");
+		}
+
+		return node_properties;
+	}
+
