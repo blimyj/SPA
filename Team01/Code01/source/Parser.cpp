@@ -397,15 +397,15 @@
 			//if isalpha(first_char) 
 			if (isalpha(temp_token.at(0))) {
 				//then create varnode enqueue to output_node_stack
-				//TODO: Need to add to varTable
 				std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>(temp_token);
+				this->pkb_builder_.addVariableNode(new_var_node);
 				//enqueue to output_stack
 				output_node_stack.push_back(new_var_node);
 			}
 			else if (isdigit(temp_token.at(0))) {
 				//else isdigit(first_char) then create const node
-				//TODO: Need to add to constTable
 				std::shared_ptr<ConstantNode> new_const_node = std::make_shared<ConstantNode>(temp_token);
+				this->pkb_builder_.addConstantNode(new_const_node);
 				//enqueue to output_stack
 				output_node_stack.push_back(new_const_node);
 			}
@@ -464,6 +464,7 @@
 						//TODO: Need parent, child pointers
 						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
 							, lhs_operand, rhs_operand);
+						
 						//Set parent pointers
 						lhs_operand->setParentNode(new_expr_node);
 						new_expr_node->addChildNode(lhs_operand);
@@ -611,7 +612,8 @@
 		
 		//Create lhs var token
 		std::shared_ptr<VariableNode> new_lhs_var_node = std::make_shared<VariableNode>(lhs_name_token);
-		
+		this->pkb_builder_.addVariableNode(new_lhs_var_node);
+
 		//Create AssignNode
 		std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>(new_lhs_var_node, rhs_expr_node);
 
@@ -632,7 +634,6 @@
 		//Need to add & new_assign_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_assign_node);
 		this->pkb_builder_.addAssignNode(new_assign_node);
-		//TODO: SET PARENT AND CHILDREN POINTERS FOR PREVIOUS CONSTRUCTION-> Done?
 		std::cout << "New Assign Node created.";
 		//USE BFS HERE
 		printTree(new_assign_node);
@@ -641,85 +642,6 @@
 		//TODO: TEST THIS ALGO INDIVIDUALLY, ONLY 1 ASSSIGN STMT
 
 		//REPLACEMENT END
-
-
-		/*
-		//OLD ASSIGNMENT HANDLER
-
-		//Third token is rhs expr (For now, it will just be a single var name or constant)
-		STRING rhs_token = this->process_token_stream_.front();
-		this->process_token_stream_.pop_front(); // Remove rhs var/const token
-		if (!isalpha(rhs_token.at(0)) && !isdigit(rhs_token.at(0))) {
-			return -1;
-		}
-
-		if (this->process_token_stream_.front() == ";") {
-			return -1;
-		}
-		this->process_token_stream_.pop_front(); // Pops out ';'
-
-		//Check if constant or var node to construct
-		if (isalpha(rhs_token.at(0))) {
-			//Construct var node
-			std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>(rhs_token);
-			//Construct ExprNode
-			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, new_var_node, nullptr);
-			//Construct assign node
-			std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>(new_lhs_var_node, new_expr_node);
-			
-			//Set AssignNode stmt_num
-			this->stmt_num_++;
-			new_assign_node->setStatementNumber(this->stmt_num_);
-
-			//Set child & parent pointers
-			new_var_node->setParentNode(new_expr_node);
-			new_expr_node->setParentNode(new_assign_node);
-			new_assign_node->setParentNode(this->current_parent_node_);
-			this->current_parent_node_->addChildNode(new_assign_node);
-
-			//Need to add new_var_node & new_assign_node to PKB tables
-			this->pkb_builder_.addStatementNode(new_assign_node);
-			this->pkb_builder_.addAssignNode(new_assign_node);
-			this->pkb_builder_.addVariableNode(new_var_node);
-			
-			//Debugging statement
-			std::cout << "\nCreated assign node with var: " << new_var_node->getVariableName();
-		}
-		else if (isdigit(rhs_token.at(0))) {
-			//Construct constant node
-			std::shared_ptr<ConstantNode> new_constant_node = std::make_shared<ConstantNode>(rhs_token);
-			//Construct ExprNode
-			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, new_constant_node, nullptr);
-			//Construct assign node
-			std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>(new_lhs_var_node, new_expr_node);
-
-			//Set AssignNode stmt_num
-			this->stmt_num_++;
-			new_assign_node->setStatementNumber(this->stmt_num_);
-
-			//Set child & parent pointers
-			new_constant_node->setParentNode(new_expr_node);
-			new_expr_node->setParentNode(new_assign_node);
-			this->current_parent_node_->addChildNode(new_assign_node);
-			new_constant_node->setParentNode(new_assign_node);
-
-			//Need to add new_constant_node & new_assign_node to PKB tables
-			this->pkb_builder_.addStatementNode(new_assign_node);
-			this->pkb_builder_.addAssignNode(new_assign_node);
-			this->pkb_builder_.addConstantNode(new_constant_node);
-
-			//Debugging statement
-			std::cout << "\nCreated constant node with var: " << new_constant_node->getValue();
-
-			//Set AssignNode
-
-		}
-		else {
-			return -1;
-		}
-
-		return 0;
-		*/
 		return 0;
 	}
 
