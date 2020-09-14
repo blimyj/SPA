@@ -10,7 +10,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTesting
 {
-	TEST_CLASS(VariableNodeTest)
+	TEST_CLASS(TestQueryNode)
 	{
 	public:
 
