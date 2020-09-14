@@ -1,10 +1,10 @@
 #include "ResultList.h"
 
-void ResultList::addColumn(std::string columnName, std::vector<std::string> columnValues) {
-	results.insert(std::pair<std::string, std::vector<std::string>>(columnName, columnValues));
+void ResultList::addColumn(SYNONYM_NAME columnName, SYNONYM_VALUES_LIST columnValues) {
+	results.insert(std::pair<SYNONYM_NAME, SYNONYM_VALUES_LIST>(columnName, columnValues));
 }
 
-void ResultList::removeColumn(std::string columnName) {
+void ResultList::removeColumn(SYNONYM_NAME columnName) {
 	results.erase(columnName);
 }
 
