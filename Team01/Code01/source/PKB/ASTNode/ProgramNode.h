@@ -17,17 +17,17 @@ class ProgramNode: public ASTNode {
 public:
 	ProgramNode();
 	/*
-	Description: Constructs a ProgramNode.
+	Description: Constructs an empty ProgramNode.
 	*/
 
 	BOOLEAN addProcedureNode(PROC_NODE_PTR proc_node_ptr);
 	/*
-	Description: Returns TRUE if able to add a PROC_NODE_PTR to PROC_NODE_PTR_LIST.
+	Description: Returns True if able to add the PROC_NODE_PTR to the PROC_NODE_PTR_LIST, false otherwise.
 	*/
 
 	PROC_NODE_PTR_LIST getProcedureNodeList();
 	/*
-	Description: Returns a PROC_NODE_PTR_LIST stored.
+	Description: Returns the PROC_NODE_PTR_LIST containing the list of PROC_NODE_PTR of the program.
 	*/
 
 private:
