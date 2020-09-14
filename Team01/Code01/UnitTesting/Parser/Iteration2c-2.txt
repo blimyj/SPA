@@ -1,0 +1,6 @@
+procedure main {
+	if (1 < x) then {
+	} else {
+		b = z;
+	}
+}
