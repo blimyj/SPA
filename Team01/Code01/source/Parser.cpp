@@ -102,6 +102,18 @@
 				continue;
 			}
 
+			if (stmt_token == "if") {
+				this->stmt_token_queue_.push_back(stmt_token); //This is "if" token
+				parseIfThen(&this->stmt_token_queue_, &this->process_token_stream_);
+				continue;
+			}
+
+			if (stmt_token == "else") {
+				this->stmt_token_queue_.push_back(stmt_token); //This is "else" token
+				parseElse(&this->stmt_token_queue_, &this->process_token_stream_);
+				continue;
+			}
+
 			if (stmt_token == "}") {
 				parseStmtListClose();
 				continue;
@@ -343,8 +355,6 @@
 	}
 	*/
 	int Parser::parseWhile(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
-		this->stmt_token_queue_;
-		this->process_token_stream_;
 
 		if (this->stmt_token_queue_.front() != "while") {
 			return -1;
@@ -458,21 +468,171 @@
 		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
 
 		//Debugging statement
-		std::cout << "\nCreated while node: " << new_while_node;
+		std::cout << "\nCreated while node: " << new_while_node << "\n";
 
 
 		return 0;
 	}
 
-	int Parser::parseIfThen(STRING str) {
+	int Parser::parseIfThen(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
 		//We assume that this opening segment will either terminate with '{' or ';' with the exception of whitespaces and newline?
 
+		if (this->stmt_token_queue_.front() != "if") {
+			return -1;
+		}
+		this->stmt_token_queue_.pop_front(); // Remove stmt type token
+
+		//Check for '('
+		if (this->process_token_stream_.front() != "(") {
+			return -1;
+		}
+		this->process_token_stream_.pop_front(); // Remove "(" type token
+
+
+
+		//Read in simple comparison (only 1 var/const on each side)	
+
+		//To read for simple comparison
+		STRING lhs_rel_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
+		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
+		std::shared_ptr<ASTNode> lhs_node;
+		//Create node & add to table
+		if (isalpha(lhs_rel_token.at(0))) {
+			lhs_node = std::make_shared<VariableNode>(lhs_rel_token);
+			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(lhs_node));
+		}
+		else if (isdigit(lhs_rel_token.at(0))) {
+			lhs_node = std::make_shared<ConstantNode>(lhs_rel_token);
+			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(lhs_node));
+		}
+		else {
+			return -1;
+		}
+
+		RelationTypeEnum rel_comp;
+		STRING rel_comp_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
+		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
+		if (rel_comp_token == "!=") {
+			rel_comp = RelationTypeEnum::neq;
+		}
+		else if (rel_comp_token == "==") {
+			rel_comp = RelationTypeEnum::eq;
+		}
+		else if (rel_comp_token == ">") {
+			rel_comp = RelationTypeEnum::gt;
+		}
+		else if (rel_comp_token == ">=") {
+			rel_comp = RelationTypeEnum::gte;
+		}
+		else if (rel_comp_token == "<=") {
+			rel_comp = RelationTypeEnum::lte;
+		}
+		else if (rel_comp_token == "<") {
+			rel_comp = RelationTypeEnum::lt;
+		}
+		else {
+			return -1;
+		}
+
+		STRING rhs_rel_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
+		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
+		std::shared_ptr<ASTNode> rhs_node;
+		//Create node & add to table
+		if (isalpha(rhs_rel_token.at(0))) {
+			rhs_node = std::make_shared<VariableNode>(rhs_rel_token);
+			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(rhs_node));
+		}
+		else if (isdigit(rhs_rel_token.at(0))) {
+			rhs_node = std::make_shared<ConstantNode>(rhs_rel_token);
+			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(rhs_node));
+		}
+		else {
+			return -1;
+		}
+
+		std::shared_ptr<RelationNode> relation_node = std::make_shared<RelationNode>(rel_comp
+			, lhs_node, rhs_node);
+
+		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>(ConditionTypeEnum::none
+			, relation_node, nullptr);
+
+		//Set parent, child pointers for Condition<->Relation
+		condition_node->addChildNode(relation_node);
+		relation_node->setParentNode(condition_node);
+		//Set parent, child pointers for Relation <-> (lhs & rhs)
+		relation_node->addChildNode(lhs_node);
+		lhs_node->setParentNode(condition_node);
+		relation_node->addChildNode(rhs_node);
+		rhs_node->setParentNode(condition_node);
+
+		//Check for ')' , "then" , '{'
+		if (this->process_token_stream_.front() != ")") {
+			return -1;
+		}
+		this->process_token_stream_.pop_front(); // Pops out '{'
+
+		if (this->process_token_stream_.front() != "then") {
+			return -1;
+		}
+		this->process_token_stream_.pop_front(); // Pops out '{'
+
+		if (this->process_token_stream_.front() != "{") {
+			return -1;
+		}
+		this->process_token_stream_.pop_front(); // Pops out '{'
+
+		//Construct new_stmt_list_node & new_procedure_node
+		std::shared_ptr<StatementListNode> if_stmt_list_node = std::make_shared<StatementListNode>();
+		std::shared_ptr<StatementListNode> else_stmt_list_node = std::make_shared<StatementListNode>();
+		std::shared_ptr<IfNode> new_if_node = std::make_shared<IfNode>(condition_node, if_stmt_list_node, else_stmt_list_node);
+
+		//Set child & parent pointers
+
+		condition_node->setParentNode(new_if_node);
+		new_if_node->addChildNode(condition_node);
+
+		if_stmt_list_node->setParentNode(new_if_node);
+		new_if_node->addChildNode(if_stmt_list_node);
+
+		else_stmt_list_node->setParentNode(new_if_node);
+		new_if_node->addChildNode(else_stmt_list_node);
+
+		this->current_parent_node_->addChildNode(new_if_node);
+		new_if_node->setParentNode(this->current_parent_node_);
+
+		//change parent tracker to stmtlistnode_ptr
+		this->current_parent_node_ = if_stmt_list_node;
+
+		//Need to add new_stmt_list_node & new_if_node to PKB tables
+		this->pkb_builder_.addIfNode(new_if_node);
+		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
+
+		//Debugging statement
+		std::cout << "\nCreated if node: " << new_if_node << "\n";
+
+
 		return 0;
 	}
 
-	int Parser::parseElse(STRING str) {
+	int Parser::parseElse(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
 		//We assume that '{' will follow 'else'
-		//We assume that this opening segment will either terminate with '{' or ';' with the exception of whitespaces and newline?
+
+		if (this->stmt_token_queue_.front() != "else") {
+			return -1;
+		}
+		this->stmt_token_queue_.pop_front(); // Remove stmt type token
+
+		//Check for "{"
+		if (this->process_token_stream_.front() != "{") {
+			return -1;
+		}
+		this->process_token_stream_.pop_front(); // Pops out '{'
+
+		//Due to parseStmtListClose changing current_parent_node_ there is no need change parent tracker to stmtlistnode_ptr
+		//This function exists just to remove the "else" & "{" tokens
+		//Debugging statement
+		std::cout << "\nParse else tokens\n";
+
 		return 0;
 	}
 
