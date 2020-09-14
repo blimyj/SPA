@@ -1,3 +1,4 @@
+#include <unordered_set>
 #include "VariableTable.h"
 
 INDEX VariableTable::addVariableNode(VAR_NODE_PTR node) {
@@ -7,18 +8,14 @@ INDEX VariableTable::addVariableNode(VAR_NODE_PTR node) {
 }
 
 VAR_NODE_PTR_LIST VariableTable::getVariableNodeList() {
-    VAR_NODE_PTR_LIST copy;
-    for (VAR_NODE_PTR node : nodes_) {
-        copy.push_back(node);
-    }
-    return copy;
+    return VAR_NODE_PTR_LIST(nodes_);
 }
 
 VAR_NAME_LIST VariableTable::getVariableNameList() {
-    std::vector<VAR_NAME> result;
+    std::unordered_set<VAR_NAME> set;
     for (VAR_NODE_PTR n : nodes_) {
         VAR_NAME v = n.get()->getVariableName();
-        result.push_back(v);
+        set.insert(v);
     }
-    return result;
+    return VAR_NAME_LIST(set.begin(), set.end());
 }
