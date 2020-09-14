@@ -373,11 +373,6 @@ namespace UnitTesting {
 			Assert::IsTrue(pkb2->isParentTransitive(2, 4));
 			Assert::IsTrue(pkb2->isParentTransitive(2, 5));
 			Assert::IsTrue(pkb2->isParentTransitive(2, 6));
-
-			Assert::IsTrue(pkb4->isParentTransitive(1, 4));
-			Assert::IsTrue(pkb4->isParentTransitive(1, 6));
-			Assert::IsTrue(pkb4->isParentTransitive(1, 8));
-			Assert::IsTrue(pkb4->isParentTransitive(1, 9));
 		}
 
 		TEST_METHOD(isParentT_Transitive_True) {
@@ -385,6 +380,11 @@ namespace UnitTesting {
 			Assert::IsTrue(pkb2->isParentTransitive(1, 4));
 			Assert::IsTrue(pkb2->isParentTransitive(1, 5));
 			Assert::IsTrue(pkb2->isParentTransitive(1, 6));
+
+			Assert::IsTrue(pkb4->isParentTransitive(1, 4));
+			Assert::IsTrue(pkb4->isParentTransitive(1, 6));
+			Assert::IsTrue(pkb4->isParentTransitive(1, 8));
+			Assert::IsTrue(pkb4->isParentTransitive(1, 9));
 		}
 
 		TEST_METHOD(isParentT_InvalidStmtNum_False) {
