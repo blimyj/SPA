@@ -1,8 +1,5 @@
 #include "QueryEvaluator.h"
 
-#include <string>
-#include <vector>
-#include <iostream>
 
 QueryEvaluator::QueryEvaluator(PKB pkb) {
 	this->pkb = pkb;
@@ -11,15 +8,14 @@ QueryEvaluator::QueryEvaluator(PKB pkb) {
 QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSED_CLAUSES clauses) {
 	ResultList result_list = ResultList(); //initialise to empty_result
 	ResultList* result_list_ptr = &result_list;
-	std::string result = "";
+	FINAL_RESULT result = "";
 	QueryNode chosen_return_type;
-	std::string chosen_synonym_name;
+	SYNONYM_NAME chosen_synonym_name;
 	
 	QUERY_NODE_POINTERS children = clauses.getChildren();
 	if (clauses.getNodeType() == QueryNodeType::select) {
 		chosen_return_type = children[0];
 		chosen_synonym_name = chosen_return_type.getSynonymName();
-		std::cout << chosen_synonym_name << std::endl;
 	}
 	else { //query tree is invalid
 		return "";
