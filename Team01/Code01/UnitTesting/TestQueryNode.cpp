@@ -82,55 +82,13 @@ namespace UnitTesting
 			NODE_TYPE type = query_node.getNodeType();
 			Assert::IsTrue(type == chosen_type);
 		}
-
-		TEST_METHOD(setChildren_EmptyArray_Success)
-		{
-
-		}
-
-		TEST_METHOD(setChildren_OneElementArray_Success)
-		{
-
-		}
-
-		TEST_METHOD(setChildren_ThreeElementArray_Success)
-		{
-
-		}
-
-		TEST_METHOD(setSynonymNode_AssignA1_Success)
-		{
-
-		}
-
-		TEST_METHOD(setSynonymNode_VariableV1_Success)
-		{
-
-		}
-
-		TEST_METHOD(setSynonymNode_NoArguments_Failure)
-		{
-
-		}
-
-		TEST_METHOD(setSynonymNode_OneArgument_Failure)
-		{
-
-		}
-
-		TEST_METHOD(setSynonymNode_InvalidArguments_Failure)
-		{
-
-		}
-
-		TEST_METHOD(getSynonymName_NoArguments_Success)
-		{
-
-		}
-
-		TEST_METHOD(getSynonymType_NoArguments_Success)
-		{
-
+		
+		TEST_METHOD(setSynonymNode_AssignA_Success) {
+			QueryNode query_node;
+			QuerySynonymType chosen_synonym = { QuerySynonymType::assign };
+			query_node.setSynonymNode({ QuerySynonymType::assign }, "a1");
+			Assert::IsTrue(query_node.getSynonymType() == chosen_synonym);
+			Assert::IsTrue(query_node.getSynonymName().compare("a1") == 0);
 		}
 	};
 }
