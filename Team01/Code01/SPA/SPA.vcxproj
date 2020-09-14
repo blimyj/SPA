@@ -74,6 +74,7 @@
     <ClCompile Include="..\source\PKB\Relationships\ModifiesTable.cpp" />
     <ClCompile Include="..\source\PKB\Relationships\ParentTable.cpp" />
     <ClCompile Include="..\source\PKB\Relationships\UsesTable.cpp" />
+    <ClCompile Include="..\source\QueryNode.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
