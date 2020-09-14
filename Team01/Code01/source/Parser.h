@@ -44,5 +44,15 @@ private:
 	//Helper variables & functions for parsing expressions
 	int takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op);
 	ExpressionTypeEnum getExpressionType(OperatorTypeEnum op);
+
+	//Debugger Functions to print out AST
+	int printTree(AST_NODE_PTR);
+		/*
+		Description: Prints the nodes in the AST out, given the root node.
+		*/
+	LIST_OF_STRINGS getProperties(AST_NODE_PTR, NODE_TYPE);
+	/*
+	Description: Returns a STRING_LIST of the properties of the given node. Return empty list if no properties.
+	*/
 };
 
