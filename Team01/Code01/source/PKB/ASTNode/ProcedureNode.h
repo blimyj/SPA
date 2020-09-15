@@ -39,6 +39,6 @@ public:
 
 private:
 	STRING proc_name_;
-	STMT_LIST_NODE_PTR stmt_list_node_ptr_;
+	STMT_LIST_NODE_PTR proc_stmt_list_node_ptr_;
 
 };

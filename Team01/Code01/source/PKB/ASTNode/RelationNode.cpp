@@ -3,6 +3,8 @@
 RelationNode::RelationNode() {
     relation_type_ = { RELATION_TYPE::undefined };
     node_type_ = { NODE_TYPE::relationNode };
+    left_node_ptr_ = nullptr;
+    right_node_ptr_ = nullptr;
 }
 
 BOOLEAN RelationNode::setRelationType(RELATION_TYPE relation_type) {

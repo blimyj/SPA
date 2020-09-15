@@ -2,6 +2,8 @@
 
 AssignNode::AssignNode() {
 	node_type_ = { NODE_TYPE::assignNode };
+	var_node_ptr_ = nullptr;
+	expr_node_ptr_ = nullptr;
 }
 
 BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {

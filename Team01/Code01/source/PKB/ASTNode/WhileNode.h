@@ -39,6 +39,6 @@ public:
 
 private:
 	CONDITION_NODE_PTR condition_node_ptr_;
-	STMT_LIST_NODE_PTR stmt_list_node_ptr_;
+	STMT_LIST_NODE_PTR while_stmt_list_node_ptr_;
 
 };
