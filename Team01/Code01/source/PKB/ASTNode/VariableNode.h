@@ -9,9 +9,9 @@ typedef bool BOOLEAN;
 class VariableNode : public ASTNode {
 
 public:
-	VariableNode(STRING var_name);
+	VariableNode();
 		/*
-		Description: Constructs an ProcedureNode consisting of a STRING variable name.
+		Description: Sets NODE_TYPE of node to be variableNode.
 		*/
 
 	BOOLEAN setVariableName(STRING var_name);

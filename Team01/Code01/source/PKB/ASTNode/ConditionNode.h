@@ -11,14 +11,13 @@ typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef ConditionTypeEnum CONDITION_TYPE;
 typedef bool BOOLEAN;
 
-class ConditionNode : public StatementNode {
+class ConditionNode : public StatementNode, std::enable_shared_from_this<ConditionNode> {
 /*Condition Node is !, &&, || or none*/
 
 public:
-	ConditionNode(CONDITION_TYPE condition_type, RELATION_NODE_PTR left_relation_node_ptr, RELATION_NODE_PTR right_relation_node_ptr);
+	ConditionNode();
 		/*
-		Description: Constructs a ConditionNode with the CONDITION_TYPE including the left child 
-		RELATION_NODE_PTR and right child RELATION_NODE_PTR of this CondtiionNode.
+		Description: Sets NODE_TYPE of node to be conditionNode.
 		*/
 
 	BOOLEAN setConditionType(CONDITION_TYPE condition_type);

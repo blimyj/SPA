@@ -14,6 +14,11 @@ typedef NodeTypeEnum NODE_TYPE;
 class ASTNode {
 
 public:
+	ASTNode();
+		/*
+		Description: Sets NODE_TYPE to be undefined.
+		*/
+
 	AST_NODE_PTR getParentNode();
 		/*
 		Description: Returns the parent AST_NODE_PTR of this ASTNode

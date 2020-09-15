@@ -1,7 +1,6 @@
 #include "ConstantNode.h"
 
-ConstantNode::ConstantNode(VALUE value) {
-    setValue(value);
+ConstantNode::ConstantNode() {
     node_type_ = { NODE_TYPE::constantNode };
 }
 

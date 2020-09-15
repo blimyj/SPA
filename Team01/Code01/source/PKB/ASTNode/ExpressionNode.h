@@ -9,14 +9,13 @@ typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef ExpressionTypeEnum EXPR_TYPE;
 typedef bool BOOLEAN;
 
-class ExpressionNode : public ASTNode {
+class ExpressionNode : public ASTNode, std::enable_shared_from_this<ExpressionNode> {
 /*ExpressionNode is +, -, *, / or none*/
 
 public:
-	ExpressionNode(EXPR_TYPE expr_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr);
+	ExpressionNode();
 		/*
-		Description: Constructs an ExpressionNode with the EXPR_TYPE including the 
-		left child AST_NODE_PTR and right child AST_NODE_PTR of this ExpressionNode.
+		Description: Sets NODE_TYPE of node to be expressionNode.
 		*/
 
 	BOOLEAN setExpressionType(EXPR_TYPE expr_type);

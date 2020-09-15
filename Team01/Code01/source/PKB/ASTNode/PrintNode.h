@@ -10,12 +10,12 @@ typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
 typedef std::string STRING;
 typedef bool BOOLEAN;
 
-class PrintNode : public StatementNode {
+class PrintNode : public StatementNode, std::enable_shared_from_this<PrintNode> {
 
 public:
-	PrintNode(VAR_NODE_PTR var_node_ptr);
+	PrintNode();
 		/*
-		Description: Constructs a PrintNode with the child VAR_NODE_PTR of the print statement.
+		Description: Sets NODE_TYPE of node to be printNode.
 		*/
 
 	BOOLEAN setVariableNode(VAR_NODE_PTR var_node_ptr);

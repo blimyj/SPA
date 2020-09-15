@@ -9,12 +9,12 @@ typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
 typedef std::string STRING;
 typedef bool BOOLEAN;
 
-class ProcedureNode : public ASTNode {
+class ProcedureNode : public ASTNode, std::enable_shared_from_this<ProcedureNode> {
 
 public:
-	ProcedureNode(STRING proc_name, STMT_LIST_NODE_PTR stmt_list_node_ptr);
+	ProcedureNode();
 		/*
-		Description: Constructs a ProcedureNode with the STRING of the procedure's name, and the child STMT_LIST_NODE_PTR.
+		Description: Sets NODE_TYPE of node to be procedureNode.
 		*/
 
 	BOOLEAN setProcedureName(STRING proc_name);

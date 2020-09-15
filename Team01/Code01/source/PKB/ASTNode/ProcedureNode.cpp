@@ -1,8 +1,6 @@
 #include "ProcedureNode.h"
 
-ProcedureNode::ProcedureNode(STRING proc_name, STMT_LIST_NODE_PTR stmt_list_node_ptr) {
-    setProcedureName(proc_name);
-    setProcedureStatementListNode(stmt_list_node_ptr);
+ProcedureNode::ProcedureNode() {
     node_type_ = { NODE_TYPE::procedureNode };
 }
 
@@ -22,7 +20,7 @@ BOOLEAN ProcedureNode::setProcedureStatementListNode(STMT_LIST_NODE_PTR stmt_lis
             return false;
         }
         addChildNode(stmt_list_node_ptr);
-        stmt_list_node_ptr->setParentNode(std::make_shared<ProcedureNode>(*this));
+        stmt_list_node_ptr->setParentNode(shared_from_this());
         stmt_list_node_ptr_ = stmt_list_node_ptr;
     } catch (int e) {
         (void)e;

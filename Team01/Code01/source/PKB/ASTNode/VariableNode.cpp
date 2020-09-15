@@ -1,7 +1,6 @@
 #include "VariableNode.h"
 
-VariableNode::VariableNode(STRING var_name) {
-	setVariableName(var_name);
+VariableNode::VariableNode() {
 	node_type_ = { NODE_TYPE::variableNode };
 }
 
