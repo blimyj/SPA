@@ -8,6 +8,9 @@ AssignNode::AssignNode(VAR_NODE_PTR var_node_ptr, EXPR_NODE_PTR expr_node_ptr) {
 
 BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	try {
+		if (var_node_ptr == NULL) {
+			return false;
+		}
 		addChildNode(var_node_ptr);
 		var_node_ptr->setParentNode(std::make_shared<AssignNode>(*this));
 		var_node_ptr_ = var_node_ptr;
@@ -20,6 +23,9 @@ BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 
 BOOLEAN AssignNode::setExpressionNode(EXPR_NODE_PTR expr_node_ptr) {
     try {
+		if (expr_node_ptr == NULL) {
+			return false;
+		}
 		expr_node_ptr_ = expr_node_ptr;
 		addChildNode(expr_node_ptr_);
 		expr_node_ptr_->setParentNode(std::make_shared<AssignNode>(*this));
