@@ -7,11 +7,7 @@ INDEX PrintTable::addPrintNode(PRINT_NODE_PTR node) {
 }
 
 PRINT_NODE_PTR_LIST PrintTable::getPrintNodeList() {
-    PRINT_NODE_PTR_LIST copy;
-    for (PRINT_NODE_PTR node : nodes_) {
-        copy.push_back(node);
-    }
-    return copy;
+    return PRINT_NODE_PTR_LIST(nodes_);
 }
 
 STMT_NUM_LIST PrintTable::getPrintNumList() {

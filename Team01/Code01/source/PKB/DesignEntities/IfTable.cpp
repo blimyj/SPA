@@ -7,11 +7,7 @@ INDEX IfTable::addIfNode(IF_NODE_PTR node) {
 }
 
 IF_NODE_PTR_LIST IfTable::getIfNodeList() {
-    IF_NODE_PTR_LIST copy;
-    for (IF_NODE_PTR node : nodes_) {
-        copy.push_back(node);
-    }
-    return copy;
+    return IF_NODE_PTR_LIST(nodes_);
 }
 
 STMT_NUM_LIST IfTable::getIfNumList() {
