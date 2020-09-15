@@ -8,7 +8,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTesting {
 	
-	TEST_CLASS(TestPKB) {
+	TEST_CLASS(PKBTest) {
 	public:
 		std::shared_ptr<PKB> pkb;
 		PKBBuilder pkb_builder;
@@ -23,10 +23,10 @@ namespace UnitTesting {
 		VAR_NODE_PTR var_8 = std::make_shared<VariableNode>("var8");
 		VAR_NODE_PTR var_9 = std::make_shared<VariableNode>("var9");
 
-		CONSTANT_NODE_PTR const_1 = std::make_shared<ConstantNode>(1);
-		CONSTANT_NODE_PTR const_2 = std::make_shared<ConstantNode>(2);
-		CONSTANT_NODE_PTR const_3 = std::make_shared<ConstantNode>(3);
-		CONSTANT_NODE_PTR const_4 = std::make_shared<ConstantNode>(4);
+		CONSTANT_NODE_PTR const_1 = std::make_shared<ConstantNode>("1");
+		CONSTANT_NODE_PTR const_2 = std::make_shared<ConstantNode>("2");
+		CONSTANT_NODE_PTR const_3 = std::make_shared<ConstantNode>("3");
+		CONSTANT_NODE_PTR const_4 = std::make_shared<ConstantNode>("4");
 		
 		EXPR_NODE_PTR expr = std::make_shared<ExpressionNode>(ExpressionTypeEnum::plus, var_1, var_2);
 
@@ -67,49 +67,49 @@ namespace UnitTesting {
 			pkb = std::make_shared<PKB>(pkb_builder.build());
 		}
 
-		TEST_METHOD(getAssigns) {
+		TEST_METHOD(GetAssigns_WithNodes_True) {
 			initializeTests();
 			ASSIGN_NODE_PTR actual = pkb->getAssigns().at(0);
 			Assert::IsTrue(typeid(*assign_1) == typeid(*actual));
 		}
 		
-		TEST_METHOD(getConstants) {
+		TEST_METHOD(GetConstants_WithNodes_True) {
 			initializeTests();
 			CONSTANT_NODE_PTR actual = pkb->getConstants().at(0);
 			Assert::IsTrue(typeid(*const_1) == typeid(*actual));
 		}
 
-		TEST_METHOD(getIfs) {
+		TEST_METHOD(GetIfs_WithNodes_True) {
 			initializeTests();
 			IF_NODE_PTR actual = pkb->getIfs().at(0);
 			Assert::IsTrue(typeid(*if_1) == typeid(*actual));
 		}
 
-		TEST_METHOD(getPrints) {
+		TEST_METHOD(GetPrints_WithNodes_True) {
 			initializeTests();
 			PRINT_NODE_PTR actual = pkb->getPrints().at(0);
 			Assert::IsTrue(typeid(*print_1) == typeid(*actual));
 		}
 
-		TEST_METHOD(getProcedures) {
+		TEST_METHOD(GetProcedures_WithNodes_True) {
 			initializeTests();
 			PROC_NODE_PTR actual = pkb->getProcedures().at(0);
 			Assert::IsTrue(typeid(*proc_1) == typeid(*actual));
 		}
 
-		TEST_METHOD(getReads) {
+		TEST_METHOD(GetReads_WithNodes_True) {
 			initializeTests();
 			READ_NODE_PTR actual = pkb->getReads().at(0);
 			Assert::IsTrue(typeid(*read_1) == typeid(*actual));
 		}
 
-		TEST_METHOD(getStatementLists) {
+		TEST_METHOD(GetStatementLists_WithNodes_True) {
 			initializeTests();
 			STMT_LIST_NODE_PTR actual = pkb->getStatementLists().at(0);
 			Assert::IsTrue(typeid(*stmt_1) == typeid(*actual));
 		}
 
-		TEST_METHOD(getStatements) {
+		TEST_METHOD(GetStatements_WithNodes_True) {
 			initializeTests();
 			STMT_NODE_PTR actual = pkb->getStatements().at(0);
 			Assert::IsTrue(assign_1.get()->getNodeType() == actual.get()->getNodeType());
@@ -119,13 +119,13 @@ namespace UnitTesting {
 			Assert::IsTrue(typeid(*var_1) == typeid(*var_node));
 		}
 
-		TEST_METHOD(getVariables) {
+		TEST_METHOD(GetVariables_WithNodes_True) {
 			initializeTests();
 			VAR_NODE_PTR actual = pkb->getVariables().at(0);
 			Assert::IsTrue(typeid(*var_1) == typeid(*actual));
 		}
 
-		TEST_METHOD(getWhiles) {
+		TEST_METHOD(GetWhiles_WithNodes_True) {
 			initializeTests();
 			WHILE_NODE_PTR actual = pkb->getWhiles().at(0);
 			Assert::IsTrue(typeid(*while_1) == typeid(*actual));
