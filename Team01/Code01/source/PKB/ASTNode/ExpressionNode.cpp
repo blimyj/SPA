@@ -19,7 +19,7 @@ BOOLEAN ExpressionNode::setExpressionType(EXPR_TYPE expr_type) {
 
 BOOLEAN ExpressionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     try {
-        if (left_node_ptr == NULL) {
+        if (left_node_ptr == nullptr) {
             return false;
         }
         addChildNode(left_node_ptr);
@@ -34,7 +34,7 @@ BOOLEAN ExpressionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
 
 BOOLEAN ExpressionNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
     try {
-        if (right_node_ptr == NULL) {
+        if (right_node_ptr == nullptr) {
             return false;
         }
         addChildNode(right_node_ptr);

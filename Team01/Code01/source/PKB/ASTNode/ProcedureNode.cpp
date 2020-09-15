@@ -18,7 +18,7 @@ BOOLEAN ProcedureNode::setProcedureName(STRING proc_name) {
 
 BOOLEAN ProcedureNode::setProcedureStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr) {
     try {
-        if (stmt_list_node_ptr == NULL) {
+        if (stmt_list_node_ptr == nullptr) {
             return false;
         }
         addChildNode(stmt_list_node_ptr);

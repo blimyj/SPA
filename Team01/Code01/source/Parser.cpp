@@ -425,7 +425,10 @@
 		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>(ConditionTypeEnum::none
 			, relation_node, nullptr);
 
+
+
 		//Set parent, child pointers for Condition<->Relation
+		/*
 		condition_node->addChildNode(relation_node);
 		relation_node->setParentNode(condition_node);
 		//Set parent, child pointers for Relation <-> (lhs & rhs)
@@ -433,6 +436,7 @@
 		lhs_node->setParentNode(condition_node);
 		relation_node->addChildNode(rhs_node);
 		rhs_node->setParentNode(condition_node);
+		*/
 
 		//Check for ')' & '{'
 		if (this->process_token_stream_.front() != ")") {
@@ -449,6 +453,7 @@
 		std::shared_ptr<StatementListNode> new_stmt_list_node = std::make_shared<StatementListNode>();
 		std::shared_ptr<WhileNode> new_while_node = std::make_shared<WhileNode>(condition_node, new_stmt_list_node);
 
+		/*
 		//Set child & parent pointers
 
 		condition_node->setParentNode(new_while_node);
@@ -459,7 +464,11 @@
 
 		this->current_parent_node_->addChildNode(new_while_node);
 		new_while_node->setParentNode(this->current_parent_node_);
-
+		*/
+		this->stmt_num_++;
+		new_while_node->setStatementNumber(this->stmt_num_);
+		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_while_node);
+		
 		//change parent tracker to stmtlistnode_ptr
 		this->current_parent_node_ = new_stmt_list_node;
 
@@ -556,6 +565,7 @@
 		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>(ConditionTypeEnum::none
 			, relation_node, nullptr);
 
+		/*
 		//Set parent, child pointers for Condition<->Relation
 		condition_node->addChildNode(relation_node);
 		relation_node->setParentNode(condition_node);
@@ -564,6 +574,7 @@
 		lhs_node->setParentNode(condition_node);
 		relation_node->addChildNode(rhs_node);
 		rhs_node->setParentNode(condition_node);
+		*/
 
 		//Check for ')' , "then" , '{'
 		if (this->process_token_stream_.front() != ")") {
@@ -586,6 +597,7 @@
 		std::shared_ptr<StatementListNode> else_stmt_list_node = std::make_shared<StatementListNode>();
 		std::shared_ptr<IfNode> new_if_node = std::make_shared<IfNode>(condition_node, if_stmt_list_node, else_stmt_list_node);
 
+		/*
 		//Set child & parent pointers
 
 		condition_node->setParentNode(new_if_node);
@@ -599,6 +611,11 @@
 
 		this->current_parent_node_->addChildNode(new_if_node);
 		new_if_node->setParentNode(this->current_parent_node_);
+		*/
+		this->stmt_num_++;
+		new_if_node->setStatementNumber(this->stmt_num_);
+		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_if_node);
+
 
 		//change parent tracker to stmtlistnode_ptr
 		this->current_parent_node_ = if_stmt_list_node;
@@ -754,13 +771,14 @@
 						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
 							, lhs_operand, rhs_operand);
 						
+						/*
 						//Set parent pointers
 						lhs_operand->setParentNode(new_expr_node);
 						new_expr_node->addChildNode(lhs_operand);
 
 						rhs_operand->setParentNode(new_expr_node);
 						new_expr_node->addChildNode(rhs_operand);
-
+						*/
 
 						//We then place this ExpressionNode into the output_node_stack
 						output_node_stack.push_back(new_expr_node);
@@ -803,12 +821,14 @@
 						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
 							, lhs_operand, rhs_operand);
 
+						/*
 						//Set parent pointers
 						lhs_operand->setParentNode(new_expr_node);
 						new_expr_node->addChildNode(lhs_operand);
 
 						rhs_operand->setParentNode(new_expr_node);
 						new_expr_node->addChildNode(rhs_operand);
+						*/
 
 						//We then place this ExpressionNode into the output_node_stack
 						output_node_stack.push_back(new_expr_node);
@@ -851,12 +871,15 @@
 
 			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
 				,lhs_operand, rhs_operand);
+			
+			/*
 			//Set parent pointers
 			lhs_operand->setParentNode(new_expr_node);
 			new_expr_node->addChildNode(lhs_operand);
 
 			rhs_operand->setParentNode(new_expr_node);
 			new_expr_node->addChildNode(rhs_operand);
+			*/
 
 			//We then place this ExpressionNode into the output_node_stack
 			output_node_stack.push_back(new_expr_node);
@@ -886,9 +909,13 @@
 			|| last_node->getNodeType() == NodeTypeEnum::constantNode) {
 			
 			result = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, last_node, nullptr);
+			
+			/*
 			//Set parent pointers
 			last_node->setParentNode(result);
 			result->addChildNode(last_node);
+			*/
+
 		} else {
 			result = last_node;
 		}
@@ -907,6 +934,7 @@
 		this->stmt_num_++;
 		new_assign_node->setStatementNumber(this->stmt_num_);
 
+		/*
 		//Set child & parent pointers
 		new_lhs_var_node->setParentNode(new_assign_node);
 		new_assign_node->addChildNode(new_lhs_var_node);
@@ -916,6 +944,8 @@
 
 		new_assign_node->setParentNode(this->current_parent_node_);
 		this->current_parent_node_->addChildNode(new_assign_node);
+		*/
+		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_assign_node);
 
 		//Need to add & new_assign_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_assign_node);
@@ -956,12 +986,15 @@
 		this->stmt_num_++;
 		new_read_node->setStatementNumber(this->stmt_num_);
 
+		/*
 		//Set child & parent pointers
 		new_read_node->setParentNode(this->current_parent_node_);
 		this->current_parent_node_->addChildNode(new_read_node);
 		
 		new_var_node->setParentNode(new_read_node);
 		new_read_node->addChildNode(new_var_node);
+		*/
+		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_read_node);
 
 		//Need to add new_var_node & new_read_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_read_node);
@@ -1000,12 +1033,15 @@
 		this->stmt_num_++;
 		new_print_node->setStatementNumber(this->stmt_num_);
 
+		/*
 		//Set child & parent pointers
 		new_print_node->setParentNode(this->current_parent_node_);
 		this->current_parent_node_->addChildNode(new_print_node);
 
 		new_var_node->setParentNode(new_print_node);
 		new_print_node->addChildNode(new_var_node);
+		*/
+		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_print_node);
 
 		//Need to add new_var_node & new_print_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_print_node);
@@ -1040,16 +1076,22 @@
 		std::shared_ptr<StatementListNode> new_stmt_list_node = std::make_shared<StatementListNode>();
 		std::shared_ptr<ProcedureNode> new_procedure_node = std::make_shared<ProcedureNode>(name_token, new_stmt_list_node);
 
+		/*
 		//Set child & parent pointers
 		new_stmt_list_node->setParentNode(new_procedure_node);
 		new_procedure_node->addChildNode(new_stmt_list_node);
 		new_procedure_node->setParentNode(this->current_parent_node_);
+		*/
 
 		//Check that we are actually adding this new procedure to programNode
 		if (this->current_parent_node_->getNodeType() != NodeTypeEnum::programNode) {
 			return -1;
 		}
+		
+		/*
 		this->current_parent_node_->addChildNode(new_procedure_node);
+		*/
+		std::static_pointer_cast<ProgramNode>(this->current_parent_node_)->addProcedureNode(new_procedure_node);
 
 		//change parent tracker to stmtlistnode_ptr
 		this->current_parent_node_ = new_stmt_list_node;

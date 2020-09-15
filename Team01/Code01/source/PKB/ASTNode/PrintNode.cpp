@@ -7,7 +7,7 @@ PrintNode::PrintNode(VAR_NODE_PTR var_node_ptr) {
 
 BOOLEAN PrintNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	try {
-		if (var_node_ptr == NULL) {
+		if (var_node_ptr == nullptr) {
 			return false;
 		}
 		addChildNode(var_node_ptr);
