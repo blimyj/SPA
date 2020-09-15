@@ -23,7 +23,7 @@ class PKB;
 
 typedef PKBBuilder PKB_BUILDER;
 
-typedef ProgramNode PROGRAM_NODE_PTR;
+typedef std::shared_ptr<ProgramNode> PROGRAM_NODE_PTR;
 
 typedef AssignTable ASSIGN_TABLE;
 typedef ConstantTable CONSTANT_TABLE;
