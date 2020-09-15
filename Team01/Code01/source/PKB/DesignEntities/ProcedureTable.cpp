@@ -7,11 +7,7 @@ INDEX ProcedureTable::addProcedureNode(PROC_NODE_PTR node) {
 }
 
 PROC_NODE_PTR_LIST ProcedureTable::getProcedureNodeList() {
-    PROC_NODE_PTR_LIST copy;
-    for (PROC_NODE_PTR node : nodes_) {
-        copy.push_back(node);
-    }
-    return copy;
+    return PROC_NODE_PTR_LIST(nodes_);
 }
 
 PROC_NAME_LIST ProcedureTable::getProcedureNameList() {
