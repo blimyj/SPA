@@ -40,6 +40,7 @@ private:
 		for (std::string result : raw_results) {
 			processed_results = processed_results + result + ", ";
 		}
+		processed_results = processed_results.substr(0, processed_results.size() - 2);
 		return processed_results;
 	};
 };
