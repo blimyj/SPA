@@ -12,13 +12,6 @@ namespace UnitTesting
 	TEST_CLASS(TestQueryEvaluator)
 	{
 	public:
-
-		TEST_METHOD_INITIALIZE(PKB_init)
-		{
-
-
-		}
-
 		TEST_METHOD(processQuery_ValidQuery_Success)
 		{
 			//PKBStub fills PKB with some variables already
