@@ -23,10 +23,10 @@ namespace UnitTesting {
 		VAR_NODE_PTR var_8 = std::make_shared<VariableNode>("var8");
 		VAR_NODE_PTR var_9 = std::make_shared<VariableNode>("var9");
 
-		CONSTANT_NODE_PTR const_1 = std::make_shared<ConstantNode>(1);
-		CONSTANT_NODE_PTR const_2 = std::make_shared<ConstantNode>(2);
-		CONSTANT_NODE_PTR const_3 = std::make_shared<ConstantNode>(3);
-		CONSTANT_NODE_PTR const_4 = std::make_shared<ConstantNode>(4);
+		CONSTANT_NODE_PTR const_1 = std::make_shared<ConstantNode>("1");
+		CONSTANT_NODE_PTR const_2 = std::make_shared<ConstantNode>("2");
+		CONSTANT_NODE_PTR const_3 = std::make_shared<ConstantNode>("3");
+		CONSTANT_NODE_PTR const_4 = std::make_shared<ConstantNode>("4");
 		
 		EXPR_NODE_PTR expr = std::make_shared<ExpressionNode>(ExpressionTypeEnum::plus, var_1, var_2);
 

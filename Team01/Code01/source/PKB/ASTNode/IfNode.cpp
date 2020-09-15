@@ -9,6 +9,8 @@ IfNode::IfNode(CONDITION_NODE_PTR condition_node_ptr, STMT_LIST_NODE_PTR then_st
 
 BOOLEAN IfNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
     try {
+        addChildNode(condition_node_ptr);
+        condition_node_ptr->setParentNode(std::make_shared<IfNode>(*this));
         condition_node_ptr_ = condition_node_ptr;
     } catch (int e) {
         (void)e;
@@ -19,6 +21,8 @@ BOOLEAN IfNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
 
 BOOLEAN IfNode::setThenStatementListNode(STMT_LIST_NODE_PTR then_stmt_list_node_ptr) {
     try {
+        addChildNode(then_stmt_list_node_ptr);
+        then_stmt_list_node_ptr->setParentNode(std::make_shared<IfNode>(*this));
         then_stmt_list_node_ptr_ = then_stmt_list_node_ptr;
     } catch (int e) {
         (void)e;
@@ -29,6 +33,8 @@ BOOLEAN IfNode::setThenStatementListNode(STMT_LIST_NODE_PTR then_stmt_list_node_
 
 BOOLEAN IfNode::setElseStatementListNode(STMT_LIST_NODE_PTR else_stmt_list_node_ptr) {
     try {
+        addChildNode(else_stmt_list_node_ptr);
+        else_stmt_list_node_ptr->setParentNode(std::make_shared<IfNode>(*this));
         else_stmt_list_node_ptr_ = else_stmt_list_node_ptr;
     } catch (int e) {
         (void)e;

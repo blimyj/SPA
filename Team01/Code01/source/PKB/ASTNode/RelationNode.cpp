@@ -19,6 +19,8 @@ BOOLEAN RelationNode::setRelationType(RELATION_TYPE relation_type) {
 
 BOOLEAN RelationNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     try {
+        addChildNode(left_node_ptr);
+        left_node_ptr->setParentNode(std::make_shared<RelationNode>(*this));
         left_node_ptr_ = left_node_ptr;
     } catch (int e) {
         (void)e;
@@ -29,6 +31,8 @@ BOOLEAN RelationNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
 
 BOOLEAN RelationNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
     try {
+        addChildNode(right_node_ptr);
+        right_node_ptr->setParentNode(std::make_shared<RelationNode>(*this));
         right_node_ptr_ = right_node_ptr;
     } catch (int e) {
         (void)e;

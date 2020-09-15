@@ -18,6 +18,8 @@ BOOLEAN ProcedureNode::setProcedureName(STRING proc_name) {
 
 BOOLEAN ProcedureNode::setProcedureStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr) {
     try {
+        addChildNode(stmt_list_node_ptr);
+        stmt_list_node_ptr->setParentNode(std::make_shared<ProcedureNode>(*this));
         stmt_list_node_ptr_ = stmt_list_node_ptr;
     } catch (int e) {
         (void)e;

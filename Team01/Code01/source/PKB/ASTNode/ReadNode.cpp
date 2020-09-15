@@ -7,6 +7,8 @@ ReadNode::ReadNode(VAR_NODE_PTR var_node_ptr) {
 
 BOOLEAN ReadNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	try {
+		addChildNode(var_node_ptr);
+		var_node_ptr->setParentNode(std::make_shared<ReadNode>(*this));
 		var_node_ptr_ = var_node_ptr;
 	} catch (int e) {
 		(void)e;
