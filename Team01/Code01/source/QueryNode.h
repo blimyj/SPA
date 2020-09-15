@@ -2,6 +2,7 @@
 
 #include "QueryNodeType.h"
 #include "QuerySynonymType.h"
+#include "QueryNodeContent.h"
 
 #include <string>
 
@@ -11,6 +12,7 @@ typedef QueryNodeType NODE_TYPE;
 typedef QueryNode* QUERY_NODE_POINTERS;
 typedef QuerySynonymType SYNONYM_TYPE;
 typedef std::string SYNONYM_NAME;
+typedef QueryNodeContent SYNONYM_CONTENT;
 
 class QueryNode {
 private:
