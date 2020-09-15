@@ -3,6 +3,8 @@
 ConditionNode::ConditionNode() {
     condition_type_ = { CONDITION_TYPE::undefined };
     node_type_ = { NODE_TYPE::conditionNode };
+    left_relation_node_ptr_ = nullptr;
+    right_relation_node_ptr_ = nullptr;
 }
 
 BOOLEAN ConditionNode::setConditionType(CONDITION_TYPE condition_type) {

@@ -2,6 +2,9 @@
 
 IfNode::IfNode() {
     node_type_ = { NODE_TYPE::ifNode };
+    condition_node_ptr_ = nullptr;
+    then_stmt_list_node_ptr_ = nullptr;
+    else_stmt_list_node_ptr_ = nullptr;
 }
 
 BOOLEAN IfNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {

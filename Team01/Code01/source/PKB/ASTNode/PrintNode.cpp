@@ -2,6 +2,7 @@
 
 PrintNode::PrintNode() {
 	node_type_ = { NODE_TYPE::printNode };
+	var_node_ptr_ = nullptr;
 }
 
 BOOLEAN PrintNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {

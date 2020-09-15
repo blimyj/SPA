@@ -3,6 +3,8 @@
 ExpressionNode::ExpressionNode() {
     expr_type_ = { EXPR_TYPE::undefined };
     node_type_ = { NODE_TYPE::expressionNode };
+    left_node_ptr_ = nullptr;
+    right_node_ptr_ = nullptr;
 }
 
 BOOLEAN ExpressionNode::setExpressionType(EXPR_TYPE expr_type) {

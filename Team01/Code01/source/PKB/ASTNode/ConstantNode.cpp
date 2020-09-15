@@ -2,6 +2,7 @@
 
 ConstantNode::ConstantNode() {
     node_type_ = { NODE_TYPE::constantNode };
+    value_ = "";
 }
 
 BOOLEAN ConstantNode::setValue(VALUE value) {

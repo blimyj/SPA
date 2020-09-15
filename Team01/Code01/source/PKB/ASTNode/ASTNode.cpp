@@ -2,6 +2,7 @@
 
 ASTNode::ASTNode() {
 	node_type_ = { NODE_TYPE::undefined };
+	parent_node_ptr_ = nullptr;
 }
 
 NODE_TYPE ASTNode::getNodeType() {

@@ -2,6 +2,8 @@
 
 WhileNode::WhileNode() {
 	node_type_ = { NODE_TYPE::whileNode };
+	condition_node_ptr_ = nullptr;
+	while_stmt_list_node_ptr_ = nullptr;
 }
 
 BOOLEAN WhileNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
@@ -19,14 +21,14 @@ BOOLEAN WhileNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
 	return true;
 }
 
-BOOLEAN WhileNode::setWhileStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr) {
+BOOLEAN WhileNode::setWhileStatementListNode(STMT_LIST_NODE_PTR while_stmt_list_node_ptr) {
 	try {
-		if (stmt_list_node_ptr == nullptr) {
+		if (while_stmt_list_node_ptr == nullptr) {
 			return false;
 		}
-		addChildNode(stmt_list_node_ptr);
-		stmt_list_node_ptr->setParentNode(shared_from_this());
-		stmt_list_node_ptr_ = stmt_list_node_ptr;
+		addChildNode(while_stmt_list_node_ptr);
+		while_stmt_list_node_ptr->setParentNode(shared_from_this());
+		while_stmt_list_node_ptr_ = while_stmt_list_node_ptr;
 	} catch (int e) {
 		(void)e;
 		return false;
@@ -39,7 +41,7 @@ CONDITION_NODE_PTR WhileNode::getConditionNode() {
 }
 
 STMT_LIST_NODE_PTR WhileNode::getWhileStatementListNode() {
-	return stmt_list_node_ptr_;
+	return while_stmt_list_node_ptr_;
 }
 
 

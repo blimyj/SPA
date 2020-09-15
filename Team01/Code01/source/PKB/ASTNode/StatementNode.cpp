@@ -2,6 +2,7 @@
 
 StatementNode::StatementNode() {
     stmt_num_ = NULL;
+    stmt_list_node_ptr_ = nullptr;
 }
 
 BOOLEAN StatementNode::setStatementNumber(STMT_NUM stmt_num) {
