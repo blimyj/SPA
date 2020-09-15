@@ -10,6 +10,7 @@ typedef ExpressionTypeEnum EXPR_TYPE;
 typedef bool BOOLEAN;
 
 class ExpressionNode : public ASTNode {
+/*ExpressionNode is +, -, *, / or none*/
 
 public:
 	ExpressionNode(EXPR_TYPE expr_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr);

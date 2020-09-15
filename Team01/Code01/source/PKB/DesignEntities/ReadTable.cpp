@@ -7,11 +7,7 @@ INDEX ReadTable::addReadNode(READ_NODE_PTR node) {
 }
 
 READ_NODE_PTR_LIST ReadTable::getReadNodeList() {
-    READ_NODE_PTR_LIST copy;
-    for (READ_NODE_PTR node : nodes_) {
-        copy.push_back(node);
-    }
-    return copy;
+    return READ_NODE_PTR_LIST(nodes_);
 }
 
 STMT_NUM_LIST ReadTable::getReadNumList() {

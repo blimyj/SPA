@@ -12,6 +12,7 @@ class PKB;
 #include "PKB/DesignEntities/PrintTable.h"
 #include "PKB/DesignEntities/ProcedureTable.h"
 #include "PKB/DesignEntities/ReadTable.h"
+#include "PKB/DesignEntities/StatementListTable.h"
 #include "PKB/DesignEntities/StatementTable.h"
 #include "PKB/DesignEntities/VariableTable.h"
 #include "PKB/DesignEntities/WhileTable.h"
@@ -30,6 +31,7 @@ typedef IfTable IF_TABLE;
 typedef PrintTable PRINT_TABLE;
 typedef ProcedureTable PROC_TABLE;
 typedef ReadTable READ_TABLE;
+typedef StatementListTable STMT_LIST_TABLE;
 typedef StatementTable STMT_TABLE;
 typedef VariableTable VAR_TABLE;
 typedef WhileTable WHILE_TABLE;
@@ -52,6 +54,13 @@ public:
         Description: Returns the STMT_NODE_PTR_LIST stored in STATEMENT_TABLE.
                      If there are no elements in the collection, returns an empty
                      STMT_NODE_PTR_LIST.
+        */
+
+    STMT_LIST_NODE_PTR_LIST getStatementLists();
+        /*
+        Description: Returns the STMT_NUM_LIST stored in STATEMENT_TABLE.
+                     If there are no elements in the collection, returns an empty
+                     STMT_NUM_LIST.
         */
 
     READ_NODE_PTR_LIST getReads();
@@ -238,6 +247,7 @@ private:
     PRINT_TABLE print_table_;
     PROC_TABLE proc_table_;
     READ_TABLE read_table_;
+    STMT_LIST_TABLE stmt_list_table_;
     STMT_TABLE stmt_table_;
     VAR_TABLE var_table_;
     WHILE_TABLE while_table_;

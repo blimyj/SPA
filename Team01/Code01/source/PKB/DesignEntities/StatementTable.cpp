@@ -7,7 +7,7 @@ INDEX StatementTable::addStatementNode(STMT_NODE_PTR node) {
 }
 
 STMT_NODE_PTR_LIST StatementTable::getStatementNodeList() {
-    return std::vector<STMT_NODE_PTR>(nodes_);
+    return STMT_NODE_PTR_LIST(nodes_);
 }
 
 STMT_NUM_LIST StatementTable::getStatementNumList() {
