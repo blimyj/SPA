@@ -1,3 +1,4 @@
+#include <unordered_set>
 #include "ConstantTable.h"
 
 INDEX ConstantTable::addConstantNode(CONSTANT_NODE_PTR node) {
@@ -7,15 +8,11 @@ INDEX ConstantTable::addConstantNode(CONSTANT_NODE_PTR node) {
 }
 
 CONSTANT_NODE_PTR_LIST ConstantTable::getConstantNodeList() {
-    CONSTANT_NODE_PTR_LIST copy;
-    for (CONSTANT_NODE_PTR node : nodes_) {
-        copy.push_back(node);
-    }
-    return copy;
+    return CONSTANT_NODE_PTR_LIST(nodes_);
 }
 
 CONSTANT_VALUE_LIST ConstantTable::getConstantValueList() {
-    std::vector<CONSTANT_VALUE> result;
+    std::unordered_set<CONSTANT_VALUE> set;
     for (CONSTANT_NODE_PTR n : nodes_) {
         // TODO: ConstantNode.h
         // Change constant value from int to string to prevent overflows
@@ -23,5 +20,5 @@ CONSTANT_VALUE_LIST ConstantTable::getConstantValueList() {
         //CONSTANT_VALUE c = std::to_string(v);
         result.push_back(v);
     }
-    return result;
+    return CONSTANT_VALUE_LIST(set.begin(), set.end());
 }
