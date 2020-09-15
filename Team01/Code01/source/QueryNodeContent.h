@@ -5,18 +5,43 @@
 
 class QueryNodeContent;
 
+typedef std::string STRING;
+typedef int INTEGER,
+typedef ASTNode AST_NODE;
+typedef int MODIFIED_FLAG;
 
 class QueryNodeContent {
 private:
-	std::string strings = NULL;
-	int integer = -1;
-	ASTNode astnode = NULL;
+	STRING strings = NULL;
+	INTEGER integer = -1;
+	AST_NODE astnode = ASTNode();
+	MODIFIED_FLAG modified = -1;
 	
 public:
-	void QueryNodeContent(T content) {
-		this->content = content;
+	QueryNodeContent(STRING content) {
+		this->strings = content;
+		this->modified = 1;
 	}
-	T getContent() {
-		return content;
+
+	QueryNodeContent(INTEGER integer) {
+		this->integer = integer;
+		this->modified = 2;
+	}
+
+	QueryNodeContent(AST_NODE astnode) {
+		this->astnode = astnode;
+		this->modified = 3;
+	}
+
+	STRING getString() {
+		return strings;
+	}
+
+	INTEGER getInt() {
+		return integer;
+	}
+
+	AST_NODE getAstNode() {
+		return astnode;
 	}
 };
