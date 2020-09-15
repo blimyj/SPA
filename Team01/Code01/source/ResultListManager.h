@@ -34,6 +34,29 @@ public:
 		return result_list.containsSynonym(synonym_name);
 	}
 
+	//More for debugging
+	static void PrintResultListValues(RESULT_LIST result_list) {
+		std::map<std::string, std::vector<std::string>>::iterator iter = result_list.begin();
+
+		std::cout << "Result list length: " << result_list.size();
+
+		while (iter != result_list.end()) {
+			std::pair<std::string, std::vector<std::string>> iter_value = *iter;
+			std::cout << "\nkey: " << iter_value.first;
+			std::vector<std::string> vector_value = iter_value.second;
+			std::vector<std::string>::iterator vector_iter = vector_value.begin();
+			while (vector_iter != vector_value.end()) {
+				std::string synonym_string = *vector_iter;
+				std::cout << "\nvalue: " << synonym_string;
+
+				++vector_iter;
+			}
+
+			++iter;
+		}
+
+	}
+
 private:
 	static FINAL_RESULT processReturnResult(SYNONYM_VALUES_LIST raw_results) {
 		std::string processed_results = "";
