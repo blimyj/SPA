@@ -11,7 +11,7 @@ typedef std::vector<std::shared_ptr<ASTNode>> AST_NODE_PTR_LIST;
 typedef bool BOOLEAN;
 typedef NodeTypeEnum NODE_TYPE;
 
-class ASTNode {
+class ASTNode : public std::enable_shared_from_this<ASTNode> {
 
 public:
 
