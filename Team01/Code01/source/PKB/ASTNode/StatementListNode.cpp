@@ -6,7 +6,7 @@ StatementListNode::StatementListNode() {
 
 BOOLEAN StatementListNode::addStatementNode(STMT_NODE_PTR stmt_node_ptr) {
     try {
-        if (stmt_node_ptr == NULL) {
+        if (stmt_node_ptr == nullptr) {
             return false;
         }
         addChildNode(stmt_node_ptr);

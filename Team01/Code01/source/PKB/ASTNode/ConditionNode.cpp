@@ -19,7 +19,7 @@ BOOLEAN ConditionNode::setConditionType(CONDITION_TYPE condition_type) {
 
 BOOLEAN ConditionNode::setLeftRelationNode(RELATION_NODE_PTR left_relation_node_ptr) {
     try {
-        if (left_relation_node_ptr == NULL) {
+        if (left_relation_node_ptr == nullptr) {
             return false;
         }
         addChildNode(left_relation_node_ptr);
@@ -34,7 +34,7 @@ BOOLEAN ConditionNode::setLeftRelationNode(RELATION_NODE_PTR left_relation_node_
 
 BOOLEAN ConditionNode::setRightRelationNode(RELATION_NODE_PTR right_relation_node_ptr) {
     try {
-        if (right_relation_node_ptr == NULL) {
+        if (right_relation_node_ptr == nullptr) {
             return false;
         }
         addChildNode(right_relation_node_ptr);

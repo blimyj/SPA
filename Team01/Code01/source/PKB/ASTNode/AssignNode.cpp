@@ -8,7 +8,7 @@ AssignNode::AssignNode(VAR_NODE_PTR var_node_ptr, EXPR_NODE_PTR expr_node_ptr) {
 
 BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	try {
-		if (var_node_ptr == NULL) {
+		if (var_node_ptr == nullptr) {
 			return false;
 		}
 		addChildNode(var_node_ptr);
@@ -23,7 +23,7 @@ BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 
 BOOLEAN AssignNode::setExpressionNode(EXPR_NODE_PTR expr_node_ptr) {
     try {
-		if (expr_node_ptr == NULL) {
+		if (expr_node_ptr == nullptr) {
 			return false;
 		}
 		expr_node_ptr_ = expr_node_ptr;

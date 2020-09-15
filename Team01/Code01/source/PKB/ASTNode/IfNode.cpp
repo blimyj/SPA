@@ -9,7 +9,7 @@ IfNode::IfNode(CONDITION_NODE_PTR condition_node_ptr, STMT_LIST_NODE_PTR then_st
 
 BOOLEAN IfNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
     try {
-        if (condition_node_ptr == NULL) {
+        if (condition_node_ptr == nullptr) {
             return false;
         }
         addChildNode(condition_node_ptr);
@@ -24,7 +24,7 @@ BOOLEAN IfNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
 
 BOOLEAN IfNode::setThenStatementListNode(STMT_LIST_NODE_PTR then_stmt_list_node_ptr) {
     try {
-        if (then_stmt_list_node_ptr == NULL) {
+        if (then_stmt_list_node_ptr == nullptr) {
             return false;
         }
         addChildNode(then_stmt_list_node_ptr);
@@ -39,7 +39,7 @@ BOOLEAN IfNode::setThenStatementListNode(STMT_LIST_NODE_PTR then_stmt_list_node_
 
 BOOLEAN IfNode::setElseStatementListNode(STMT_LIST_NODE_PTR else_stmt_list_node_ptr) {
     try {
-        if (else_stmt_list_node_ptr == NULL) {
+        if (else_stmt_list_node_ptr == nullptr) {
             return false;
         }
         addChildNode(else_stmt_list_node_ptr);
