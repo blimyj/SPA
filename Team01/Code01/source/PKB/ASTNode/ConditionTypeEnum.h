@@ -4,5 +4,6 @@ enum class ConditionTypeEnum {
     none,
     not,
     and,
-    or
+    or,
+    undefined
 };

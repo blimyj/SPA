@@ -1,5 +1,9 @@
 #include "ASTNode.h"
 
+ASTNode::ASTNode() {
+	node_type_ = { NODE_TYPE::undefined };
+}
+
 NODE_TYPE ASTNode::getNodeType() {
 	return node_type_;
 }

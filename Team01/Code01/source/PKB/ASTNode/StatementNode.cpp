@@ -1,5 +1,9 @@
 #include "StatementNode.h"
 
+StatementNode::StatementNode() {
+    stmt_num_ = NULL;
+}
+
 BOOLEAN StatementNode::setStatementNumber(STMT_NUM stmt_num) {
     try {
         stmt_num_ = stmt_num;

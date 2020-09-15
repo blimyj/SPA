@@ -1,7 +1,6 @@
 #include "PrintNode.h"
 
-PrintNode::PrintNode(VAR_NODE_PTR var_node_ptr) {
-	setVariableNode(var_node_ptr);
+PrintNode::PrintNode() {
 	node_type_ = { NODE_TYPE::printNode };
 }
 
@@ -11,7 +10,7 @@ BOOLEAN PrintNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 			return false;
 		}
 		addChildNode(var_node_ptr);
-		var_node_ptr->setParentNode(std::make_shared<PrintNode>(*this));
+		var_node_ptr->setParentNode(shared_from_this());
 		var_node_ptr_ = var_node_ptr;
 	} catch (int e) {
 		(void)e;
