@@ -14,17 +14,6 @@ typedef NodeTypeEnum NODE_TYPE;
 class ASTNode {
 
 public:
-
-	BOOLEAN setParentNode(AST_NODE_PTR parent_node_ptr);
-		/*
-		Description: Returns True if able to set AST_NODE_PTR as a parent of this node, false otherwise
-		*/
-
-	BOOLEAN addChildNode(AST_NODE_PTR child_node_ptr);
-		/*
-		Description: Returns True if able to set AST_NODE_PTR as a child of this node, false otherwise
-		*/
-
 	AST_NODE_PTR getParentNode();
 		/*
 		Description: Returns the parent AST_NODE_PTR of this ASTNode
@@ -41,9 +30,31 @@ public:
 		*/
 
 private:
+	friend class AssignNode;
+	friend class ConditionNode;
+	friend class ConstantNode;
+	friend class ExpressionNode;
+	friend class IfNode;
+	friend class PrintNode;
+	friend class ProcedureNode;
+	friend class ProgramNode;
+	friend class ReadNode;
+	friend class RelationNode;
+	friend class StatementListNode;
+	friend class VariableNode;
+	friend class WhileNode;
+
+	BOOLEAN setParentNode(AST_NODE_PTR parent_node_ptr);
+		/*
+		Description: Returns True if able to set AST_NODE_PTR as a parent of this node, false otherwise
+		*/
+
+	BOOLEAN addChildNode(AST_NODE_PTR child_node_ptr);
+		/*
+		Description: Returns True if able to set AST_NODE_PTR as a child of this node, false otherwise
+		*/
+
+	NODE_TYPE node_type_;
 	AST_NODE_PTR parent_node_ptr_;
 	AST_NODE_PTR_LIST children_node_ptr_;
-
-protected:
-	NODE_TYPE node_type_;
 };
