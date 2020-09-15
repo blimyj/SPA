@@ -14,11 +14,8 @@ CONSTANT_NODE_PTR_LIST ConstantTable::getConstantNodeList() {
 CONSTANT_VALUE_LIST ConstantTable::getConstantValueList() {
     std::unordered_set<CONSTANT_VALUE> set;
     for (CONSTANT_NODE_PTR n : nodes_) {
-        // TODO: ConstantNode.h
-        // Change constant value from int to string to prevent overflows
-        std::string v = n.get()->getValue();
-        //CONSTANT_VALUE c = std::to_string(v);
-        result.push_back(v);
+        VALUE v = n.get()->getValue();
+        set.insert(v);
     }
     return CONSTANT_VALUE_LIST(set.begin(), set.end());
 }
