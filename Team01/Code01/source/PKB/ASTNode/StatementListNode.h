@@ -11,7 +11,7 @@ typedef std::shared_ptr<StatementNode> STMT_NODE_PTR;
 typedef std::vector<std::shared_ptr<StatementNode>> STMT_NODE_PTR_LIST;
 typedef bool BOOLEAN;
 
-class StatementListNode : public ASTNode, std::enable_shared_from_this<StatementListNode> {
+class StatementListNode : public ASTNode, public std::enable_shared_from_this<StatementListNode> {
 
 public:
 	StatementListNode();

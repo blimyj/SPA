@@ -9,7 +9,7 @@ typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
 typedef std::string STRING;
 typedef bool BOOLEAN;
 
-class ProcedureNode : public ASTNode, std::enable_shared_from_this<ProcedureNode> {
+class ProcedureNode : public ASTNode, public std::enable_shared_from_this<ProcedureNode> {
 
 public:
 	ProcedureNode();

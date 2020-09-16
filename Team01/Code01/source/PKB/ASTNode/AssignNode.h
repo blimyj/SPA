@@ -9,7 +9,7 @@ typedef std::shared_ptr<ExpressionNode> EXPR_NODE_PTR;
 typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
 typedef bool BOOLEAN;
 
-class AssignNode : public StatementNode, std::enable_shared_from_this<AssignNode> {
+class AssignNode : public StatementNode, public std::enable_shared_from_this<AssignNode> {
 
 public:
 	AssignNode();

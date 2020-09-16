@@ -11,7 +11,7 @@ typedef std::shared_ptr<ProcedureNode> PROC_NODE_PTR;
 typedef std::vector<PROC_NODE_PTR> PROC_NODE_PTR_LIST;
 
 /*This class is the root node of the AST, also known as the program node*/
-class ProgramNode: public ASTNode, std::enable_shared_from_this<ProgramNode> {
+class ProgramNode: public ASTNode, public std::enable_shared_from_this<ProgramNode> {
 
 
 public:

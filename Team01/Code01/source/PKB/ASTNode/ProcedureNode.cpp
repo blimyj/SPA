@@ -22,7 +22,8 @@ BOOLEAN ProcedureNode::setProcedureStatementListNode(STMT_LIST_NODE_PTR proc_stm
             return false;
         }
         addChildNode(proc_stmt_list_node_ptr);
-        proc_stmt_list_node_ptr->setParentNode(shared_from_this());
+        std::shared_ptr<ProcedureNode> sp = shared_from_this();
+        proc_stmt_list_node_ptr->setParentNode(sp);
         proc_stmt_list_node_ptr_ = proc_stmt_list_node_ptr;
     } catch (int e) {
         (void)e;

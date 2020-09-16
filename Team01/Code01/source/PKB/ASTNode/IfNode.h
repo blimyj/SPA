@@ -9,7 +9,7 @@ typedef std::shared_ptr<ConditionNode> CONDITION_NODE_PTR;
 typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
 typedef bool BOOLEAN;
 
-class IfNode : public StatementNode, std::enable_shared_from_this<StatementNode> {
+class IfNode : public StatementNode, public std::enable_shared_from_this<StatementNode> {
 public:
 	IfNode();
 		/*
