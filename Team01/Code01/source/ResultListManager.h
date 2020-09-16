@@ -16,7 +16,6 @@ typedef std::string FINAL_RESULT;
 class ResultListManager {
 // Note to self: for methods that change result_list, return ResultList!
 public:
-	static std::string filter(std::string list1, std::string list2);
 	
 	static ResultList addSynonymAndValues(ResultList *result_list_ptr, SYNONYM_NAME synonym_name, SYNONYM_VALUES_LIST synonym_values) {
 		ResultList result_list = *result_list_ptr;
@@ -34,9 +33,9 @@ public:
 		return result_list.containsSynonym(synonym_name);
 	}
 
-	//More for debugging
-	static void PrintResultListValues(RESULT_LIST result_list) {
-		std::map<std::string, std::vector<std::string>>::iterator iter = result_list.begin();
+	// More for debugging
+	static void printResultListValues(RESULT_LIST result_list) {
+		auto iter = result_list.begin();
 
 		std::cout << "Result list length: " << result_list.size();
 
@@ -54,7 +53,53 @@ public:
 
 			++iter;
 		}
+	}
+	
+	static ResultList merge(ResultList list1, ResultList list2) {
+		// Get Common Synonyms
+		SYNONYM_NAME_LIST common_synonyms = getCommonSynonyms(list1, list2);
+		ResultList result;
+		for (auto r1 : list1.getRowList()) {
+			for (auto r2 : list2.getRowList()) {
+				if (common_synonyms.size() > 0 && !sameValuesForTheSameCommonSynonyms(r1, r2, common_synonyms)) {
+					continue;
+				}
+				result.addRow(joinRows(r1, r2));
+			}
+		}
+		return result;
+	}
 
+	static SYNONYM_NAME_LIST getCommonSynonyms(ResultList list1, ResultList list2) {
+		SYNONYM_NAME_LIST common_synonyms;
+		for (SYNONYM_NAME n1 : list1.getAllSynonyms()) {
+			for (SYNONYM_NAME n2 : list2.getAllSynonyms()) {
+				if (n1 == n2) {
+					common_synonyms.push_back(n1);
+				}
+			}
+		}
+		return common_synonyms;
+	}
+
+	static ROW joinRows(ROW r1, ROW r2) {
+		ROW joined_row;
+		for (ROW::iterator it = r1.begin(); it != r1.end(); it++) {
+			joined_row.insert(*it);
+		}
+		for (ROW::iterator it2 = r2.begin(); it2 != r2.end(); it2++) {
+			joined_row.insert(*it2);
+		}
+		return joined_row;
+	}
+
+	static bool sameValuesForTheSameCommonSynonyms(ROW r1, ROW r2, SYNONYM_NAME_LIST common_synonyms) {
+		for (SYNONYM_NAME n : common_synonyms) {
+			if (r1[n] != r2[n]) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 private:
