@@ -18,32 +18,17 @@ private:
 	MODIFIED_FLAG modified = -1;
 	
 public:
-	QueryNodeContent() {}
+	QueryNodeContent();
 
-	QueryNodeContent(STRING content) {
-		this->strings = content;
-		this->modified = 1;
-	}
+	QueryNodeContent(STRING content);
 
-	QueryNodeContent(INTEGER integer) {
-		this->integer = integer;
-		this->modified = 2;
-	}
+	QueryNodeContent(INTEGER integer);
 
-	QueryNodeContent(AST_NODE astnode) {
-		this->astnode = astnode;
-		this->modified = 3;
-	}
+	QueryNodeContent(AST_NODE astnode);
 
-	STRING getString() {
-		return strings;
-	}
+	STRING getString();
 
-	INTEGER getInt() {
-		return integer;
-	}
+	INTEGER getInt();
 
-	AST_NODE getAstNode() {
-		return astnode;
-	}
+	AST_NODE getAstNode();
 };

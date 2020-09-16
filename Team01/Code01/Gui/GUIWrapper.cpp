@@ -1,4 +1,5 @@
 #include "GUIWrapper.h"
+#include "../source/QueryNodeContent.cpp"
 #include "../source/QueryNode.cpp"
 #include "../source/QueryProcessor.cpp"
 #include "../source/QueryEvaluator.cpp"
