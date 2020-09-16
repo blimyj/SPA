@@ -125,8 +125,79 @@
 
 		PKB pkb = this->pkb_builder_.build();
 		
-		printTree(this->program_node_);
+		//Testing Functions
+		//printTree(this->program_node_);
 
+
+		//Relationship Testing 1: Does not include vars in conditions in while or if
+		std::unordered_set<int> stmt_num_set = {1, 2, 3, 4, 5, 6};
+		std::unordered_set<STRING> var_name_set = { "c1", "c2", "c3"
+			, "a1", "a2", "a3"
+			, "b1", "b2", "b3", "b4"
+			, "d1", "d2", "d3", "d4", "d5", "d6" };
+		std::unordered_set<STRING> proc_name_set = { "main" };
+
+		std::cout << "\n\n\n==================== Testing Relationships ====================\n\n\n";
+
+		//Test Follows
+		std::cout << "\nTesting Follows Relationships:\n";
+		for (int s1 : stmt_num_set) {
+			for (int s2 : stmt_num_set) {
+				if (pkb.isFollows(s1, s2)) {
+					std::cout << "(" << s1 << "," << s2 << ") ";
+				}
+			}
+		}
+		std::cout << "\nFollows Relationships Test Complete:\n";
+
+		//Test Parent
+		std::cout << "\nTesting Parent Relationships:\n";
+		for (int s1 : stmt_num_set) {
+			for (int s2 : stmt_num_set) {
+				if (pkb.isParent(s1, s2)) {
+					std::cout << "(" << s1 << "," << s2 << ") ";
+				}
+			}
+		}
+		std::cout << "\nParent Relationships Test Complete:\n";
+
+		//Test Modifies
+		std::cout << "\nTesting Modifies Relationships:\n";
+		for (STRING v : var_name_set) {
+			std::cout << "\nTesting Variable " << v << ":\n";
+			for (int s1 : stmt_num_set) {
+				if (pkb.isModifies(s1, v)) {
+					std::cout << "(" << s1 << "," << v << ") ";
+				}
+			}
+
+			for (STRING p1 : proc_name_set) {
+				if (pkb.isModifies(p1, v)) {
+					std::cout << "ProcedureModifies(" << p1 << "," << v << ") ";
+				}
+			}
+		}
+		std::cout << "\nModifies Relationships Test Complete:\n";
+
+		//Test Uses
+		std::cout << "\nTesting Uses Relationships:\n";
+		for (STRING v : var_name_set) {
+			std::cout << "\nTesting Variable " << v << ":\n";
+			for (int s1 : stmt_num_set) {
+				if (pkb.isUses(s1, v)) {
+					std::cout << "(" << s1 << "," << v << ") ";
+				}
+			}
+
+			for (STRING p1 : proc_name_set) {
+				if (pkb.isUses(p1, v)) {
+					std::cout << "ProcedureUses(" << p1 << "," << v << ") ";
+				}
+			}
+		}
+		std::cout << "\nUses Relationships Test Complete:\n";
+
+		std::cout << "\n\n\n==================== End of Testing Relationships ====================\n\n\n";
 		return pkb;
 	}
 
@@ -478,13 +549,34 @@
 		this->stmt_num_++;
 		new_while_node->setStatementNumber(this->stmt_num_);
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_while_node);
-		new_while_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
+		new_while_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));		
 		
+		
+
+		//add Parent relationship if this->current_parent_node_->getParentNode() is not procedureNode
+		if (this->current_parent_node_->getParentNode()->getNodeType() != NodeTypeEnum::procedureNode) {
+			this->pkb_builder_.addParent(std::static_pointer_cast<StatementNode>(this->current_parent_node_->getParentNode())->getStatementNumber()
+				, new_while_node->getStatementNumber());
+		}
+
+		//add Follows relationship if this statement is not the first statement of this->current_parent_node_
+		if (new_while_node != std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->getStatementNodeList().at(0)) {
+			int this_stmt_num = new_while_node->getStatementNumber();
+			STMT_LIST_NODE_PTR stmtList = std::static_pointer_cast<StatementListNode>(this->current_parent_node_);
+			STMT_NODE_PTR prevStmt = std::static_pointer_cast<StatementNode>(stmtList->getChildrenNode().end()[-2]);
+
+			this->pkb_builder_.addFollows(prevStmt->getStatementNumber()
+				, new_while_node->getStatementNumber());
+		}
+
+
+
 		//change parent tracker to stmtlistnode_ptr
 		this->current_parent_node_ = new_stmt_list_node;
 
 		//Need to add new_stmt_list_node & new_while_node to PKB tables
 		this->pkb_builder_.addWhileNode(new_while_node);
+
 		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
 
 		//Debugging statement
@@ -639,11 +731,32 @@
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_if_node);
 		new_if_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
 
+
+
+		//add Parent relationship if this->current_parent_node_->getParentNode() is not procedureNode
+		if (this->current_parent_node_->getParentNode()->getNodeType() != NodeTypeEnum::procedureNode) {
+			this->pkb_builder_.addParent(std::static_pointer_cast<StatementNode>(this->current_parent_node_->getParentNode())->getStatementNumber()
+				, new_if_node->getStatementNumber());
+		}
+
+		//add Follows relationship if this statement is not the first statement of this->current_parent_node_
+		if (new_if_node != std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->getStatementNodeList().at(0)) {
+			int this_stmt_num = new_if_node->getStatementNumber();
+			STMT_LIST_NODE_PTR stmtList = std::static_pointer_cast<StatementListNode>(this->current_parent_node_);
+			STMT_NODE_PTR prevStmt = std::static_pointer_cast<StatementNode>(stmtList->getChildrenNode().end()[-2]);
+
+			this->pkb_builder_.addFollows(prevStmt->getStatementNumber()
+				, new_if_node->getStatementNumber());
+		}
+
+
+
 		//change parent tracker to stmtlistnode_ptr
 		this->current_parent_node_ = if_stmt_list_node;
 
 		//Need to add new_stmt_list_node & new_if_node to PKB tables
 		this->pkb_builder_.addIfNode(new_if_node);
+
 		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
 
 		//Debugging statement
@@ -682,7 +795,7 @@
 			return -1;
 		}
 		this->stmt_token_queue_.pop_front(); // Remove stmt type token
-		
+
 		//Second token is lhs var name 
 		STRING lhs_name_token = this->stmt_token_queue_.front();
 		this->stmt_token_queue_.pop_front(); // Remove varname token
@@ -713,11 +826,13 @@
 			rhs_token = this->process_token_stream_.front();
 			this->process_token_stream_.pop_front(); // Remove rhs var/const/operator/parentheses token for the next token
 		}
-		
+
 		//They will form the expr that is assigned to new_expr_node
 		//Then they will be funneled through the shunting yard algo
 		STRING temp_token = "";
 		//While stmt_token_queue_ has tokens
+		std::unordered_set<STRING> used_vars_set;
+
 		while (!this->stmt_token_queue_.empty()) {
 			//Get & remove first token from stmt_token_queue_
 			temp_token = this->stmt_token_queue_.front();
@@ -731,6 +846,9 @@
 				this->pkb_builder_.addVariableNode(new_var_node);
 				//enqueue to output_stack
 				output_node_stack.push_back(new_var_node);
+
+				//add var to usedied_vars_set for Uses relationship
+				used_vars_set.insert(temp_token);
 			}
 			else if (isdigit(temp_token.at(0))) {
 				//else isdigit(first_char) then create const node
@@ -745,27 +863,35 @@
 				//Create a Operator TypeEnum object
 				if (temp_token == "+") {
 					op = OperatorTypeEnum::op_plus;
-				} else if (temp_token == "-") {
+				}
+				else if (temp_token == "-") {
 					op = OperatorTypeEnum::op_min;
-				} else if (temp_token == "*") {
+				}
+				else if (temp_token == "*") {
 					op = OperatorTypeEnum::op_mult;
-				} else if (temp_token == "/") {
+				}
+				else if (temp_token == "/") {
 					op = OperatorTypeEnum::op_div;
-				} else if (temp_token == "%") {
+				}
+				else if (temp_token == "%") {
 					op = OperatorTypeEnum::op_mod;
-				} else if (temp_token == "(") {
+				}
+				else if (temp_token == "(") {
 					op = OperatorTypeEnum::op_lparen;
-				} else if (temp_token == ")") {
+				}
+				else if (temp_token == ")") {
 					op = OperatorTypeEnum::op_rparen;
-				} else {
+				}
+				else {
 					//If not any of the above tokens, return an error.
 					return -1;
 				}
-				
+
 				//throw into operator stack
 				if (op == OperatorTypeEnum::op_lparen) {
 					operator_stack.push_back(op);
-				} else if (op == OperatorTypeEnum::op_rparen) {
+				}
+				else if (op == OperatorTypeEnum::op_rparen) {
 					while (!operator_stack.empty() && operator_stack.back() != OperatorTypeEnum::op_lparen) {
 						//Pop operator from operator stack onto the output queue. 
 						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
@@ -779,12 +905,12 @@
 						output_node_stack.pop_back();
 
 						//Note we must check if we are able to pop out 2 & the 2 is the type we want
-						if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
+						if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
 							&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
 							&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
-						if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
+						if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
 							&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
 							&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
@@ -814,36 +940,37 @@
 					if (operator_stack.back() == OperatorTypeEnum::op_lparen) {
 						operator_stack.pop_back();
 					}
-				} else {
+				}
+				else {
 					while (!operator_stack.empty() && operator_stack.back() != OperatorTypeEnum::op_lparen
-						&& ((takesPrecedent(operator_stack.back(), op) == 1) 
+						&& ((takesPrecedent(operator_stack.back(), op) == 1)
 							|| (takesPrecedent(operator_stack.back(), op) == 0))) {
 						//NOTE: Condition for takesPredence(op1, op2) == 0, i.e. same precedence also has the requirement
 						// of operators being left associative, which I think all of them are for this case.
 						temp_op = operator_stack.back();
 						operator_stack.pop_back();
-						
+
 						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
 						std::shared_ptr<ASTNode> rhs_operand = output_node_stack.back();
 						output_node_stack.pop_back();
-						
+
 						std::shared_ptr<ASTNode> lhs_operand = output_node_stack.back();
 						output_node_stack.pop_back();
 
 						//Note we must check if we are able to pop out 2 & the 2 is the type we want
-						if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
-							&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode 
+						if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+							&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
 							&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
-						if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
-							&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode 
+						if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+							&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
 							&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 							return -1;
 						}
-						
+
 						ExpressionTypeEnum expr_type = getExpressionType(temp_op);
-						
+
 						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
 						new_expr_node->setExpressionType(expr_type);
 						new_expr_node->setLeftAstNode(lhs_operand);
@@ -866,7 +993,7 @@
 				}
 			}
 		}
-		
+
 		//Handle remaining operators in operator_stack
 		while (!operator_stack.empty()) {
 			if (operator_stack.back() == OperatorTypeEnum::op_lparen || operator_stack.back() == OperatorTypeEnum::op_rparen) {
@@ -884,13 +1011,13 @@
 			output_node_stack.pop_back();
 
 			//Note we must check if we are able to pop out 2 & the 2 is the type we want
-			if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
-				&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode 
+			if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+				&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
 				&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 				return -1;
 			}
-			if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode 
-				&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode 
+			if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+				&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
 				&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
 				return -1;
 			}
@@ -925,7 +1052,7 @@
 		//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
 			//Note we must check if we are able to pop out 2 & the 2 is the type we want
 		//We then place this ExpressionNode into the output_node_stack
-		
+
 		//Once ';' is reached or stmt_token_queue_ is empty we should have only 1 expression node or VarNode/ConstNode in the output stack.
 		if (output_node_stack.size() != 1) {
 			return -1;
@@ -937,7 +1064,7 @@
 		output_node_stack.pop_back();
 		if (last_node->getNodeType() == NodeTypeEnum::variableNode
 			|| last_node->getNodeType() == NodeTypeEnum::constantNode) {
-			
+
 			result = std::make_shared<ExpressionNode>();
 			std::static_pointer_cast<ExpressionNode>(result)->setExpressionType(ExpressionTypeEnum::none);
 			std::static_pointer_cast<ExpressionNode>(result)->setLeftAstNode(last_node);
@@ -948,13 +1075,14 @@
 			result->addChildNode(last_node);
 			*/
 
-		} else {
+		}
+		else {
 			result = last_node;
 		}
 
 		//Finalise rhs_expr_node
 		std::shared_ptr<ExpressionNode> rhs_expr_node = std::static_pointer_cast<ExpressionNode>(result);
-		
+
 		//Create lhs var token
 		std::shared_ptr<VariableNode> new_lhs_var_node = std::make_shared<VariableNode>();
 		new_lhs_var_node->setVariableName(lhs_name_token);
@@ -985,6 +1113,107 @@
 		//Need to add & new_assign_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_assign_node);
 		this->pkb_builder_.addAssignNode(new_assign_node);
+
+		//add Parent relationship if this->current_parent_node_->getParentNode() is not procedureNode
+		if (this->current_parent_node_->getParentNode()->getNodeType() != NodeTypeEnum::procedureNode) {
+			this->pkb_builder_.addParent(std::static_pointer_cast<StatementNode>(this->current_parent_node_->getParentNode())->getStatementNumber()
+				, new_assign_node->getStatementNumber());
+		}
+
+		//add Follows relationship if this statement is not the first statement of this->current_parent_node_
+		if (new_assign_node != std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->getStatementNodeList().at(0)) {
+			int this_stmt_num = new_assign_node->getStatementNumber();
+			STMT_LIST_NODE_PTR stmtList = std::static_pointer_cast<StatementListNode>(this->current_parent_node_);
+			STMT_NODE_PTR prevStmt = std::static_pointer_cast<StatementNode>(stmtList->getChildrenNode().end()[-2]);
+
+			this->pkb_builder_.addFollows(prevStmt->getStatementNumber()
+				, new_assign_node->getStatementNumber());
+		}
+
+		//add Modifies Relationship for this statement
+		this->pkb_builder_.addModifies(new_assign_node->getStatementNumber()
+			, lhs_name_token);
+
+		//add Modifies Relationship for all containers of this statement by going up 2 steps until we hit ProcedureNode.
+		std::shared_ptr<ASTNode> curr_container = this->current_parent_node_->getParentNode();
+		STMT_NUM curr_stmtnum = 0;
+		while (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+			//Get stmt number of container
+			if (curr_container->getNodeType() == NodeTypeEnum::whileNode) {
+				curr_stmtnum = std::static_pointer_cast<WhileNode>(curr_container)->getStatementNumber();
+			}
+			else if (curr_container->getNodeType() == NodeTypeEnum::ifNode) {
+				curr_stmtnum = std::static_pointer_cast<IfNode>(curr_container)->getStatementNumber();
+			}
+			//call addModifies
+			this->pkb_builder_.addModifies(curr_stmtnum, lhs_name_token);
+
+			//Check if can go up 2 steps
+			if (curr_container->getParentNode()->getParentNode() == NULL) {
+				//Throw exception if cant
+				throw "Exception in parseRead: curr_container missing grandparent node.";
+			}
+			else {
+				//curr_container = go up 2 steps
+				curr_container = curr_container->getParentNode()->getParentNode();
+			}
+		}
+
+		//call addModifies for procedureNode
+		if (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+			//Throw exception if cant
+			throw "Exception in parseRead: curr_container should be ProcedureNode.";
+		}
+		else {
+			//addModifies for ProcedureNode
+			std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName();
+			this->pkb_builder_.addModifies(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
+				, lhs_name_token);
+		}
+
+		//TODO: add Uses Relationship for all rhs vars
+		for (STRING var_name : used_vars_set) {
+			//Set Uses Relationship for this statement
+			this->pkb_builder_.addUses(new_assign_node->getStatementNumber()
+				, var_name);
+
+			//Set Uses Relationship for all containers of this statement by going up 2 steps until we hit ProcedureNode.
+			std::shared_ptr<ASTNode> curr_container = this->current_parent_node_->getParentNode();
+			STMT_NUM curr_stmtnum = 0;
+			while (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+				//Get stmt number of container
+				if (curr_container->getNodeType() == NodeTypeEnum::whileNode) {
+					curr_stmtnum = std::static_pointer_cast<WhileNode>(curr_container)->getStatementNumber();
+				}
+				else if (curr_container->getNodeType() == NodeTypeEnum::ifNode) {
+					curr_stmtnum = std::static_pointer_cast<IfNode>(curr_container)->getStatementNumber();
+				}
+				//call addUses
+				this->pkb_builder_.addUses(curr_stmtnum, var_name);
+
+				//Check if can go up 2 steps
+				if (curr_container->getParentNode()->getParentNode() == NULL) {
+					//Throw exception if cant
+					throw "Exception in parseRead: curr_container missing grandparent node.";
+				}
+				else {
+					//curr_container = go up 2 steps
+					curr_container = curr_container->getParentNode()->getParentNode();
+				}
+			}
+			//call addUses for procedureNode
+			if (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+				//Throw exception if cant
+				throw "Exception in parseRead: curr_container should be ProcedureNode.";
+			}
+			else {
+				//addUses for ProcedureNode
+				std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName();
+				this->pkb_builder_.addUses(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
+					, var_name);
+			}
+		}
+
 		std::cout << "New Assign Node created.";
 		//TODO: Remove Debugging statements.
 		//USE BFS HERE
@@ -1039,6 +1268,65 @@
 		this->pkb_builder_.addReadNode(new_read_node);
 		this->pkb_builder_.addVariableNode(new_var_node);
 
+		//add Parent relationship if this->current_parent_node_->getParentNode() is not procedureNode
+		if (this->current_parent_node_->getParentNode()->getNodeType() != NodeTypeEnum::procedureNode) {
+			this->pkb_builder_.addParent(std::static_pointer_cast<StatementNode>(this->current_parent_node_->getParentNode())->getStatementNumber()
+				, new_read_node->getStatementNumber());
+		}
+
+		//add Follows relationship if this statement is not the first statement of this->current_parent_node_
+		if (new_read_node != std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->getStatementNodeList().at(0)) {
+			int this_stmt_num = new_read_node->getStatementNumber();
+			STMT_LIST_NODE_PTR stmtList = std::static_pointer_cast<StatementListNode>(this->current_parent_node_);
+			STMT_NODE_PTR prevStmt = std::static_pointer_cast<StatementNode>(stmtList->getChildrenNode().end()[-2]);
+
+			this->pkb_builder_.addFollows(prevStmt->getStatementNumber()
+				, new_read_node->getStatementNumber());
+		}
+
+		//TODO: Set Modifies Relationship this is actually relative to constNode/varNode creation & operation on it
+		//Set Modifies Relationship for this statement
+		VAR_NAME var_name = new_var_node->getVariableName();
+		this->pkb_builder_.addModifies(new_read_node->getStatementNumber()
+			, var_name);
+
+		//Set Modifies Relationship for all containers of this statement by going up 2 steps until we hit ProcedureNode.
+		std::shared_ptr<ASTNode> curr_container = this->current_parent_node_->getParentNode();
+		STMT_NUM curr_stmtnum = 0;
+		while (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+			//Get stmt number of container
+			if (curr_container->getNodeType() == NodeTypeEnum::whileNode) {
+				curr_stmtnum = std::static_pointer_cast<WhileNode>(curr_container)->getStatementNumber();
+			}
+			else if (curr_container->getNodeType() == NodeTypeEnum::ifNode) {
+				curr_stmtnum = std::static_pointer_cast<IfNode>(curr_container)->getStatementNumber();
+			}
+			//call addModifies
+			this->pkb_builder_.addModifies(curr_stmtnum, var_name);
+
+			//Check if can go up 2 steps
+			if (curr_container->getParentNode()->getParentNode() == NULL) {
+				//Throw exception if cant
+				throw "Exception in parseRead: curr_container missing grandparent node.";
+			}
+			else {
+				//curr_container = go up 2 steps
+				curr_container = curr_container->getParentNode()->getParentNode();
+			}
+		}
+
+		//call addModifies for procedureNode
+		if (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+			//Throw exception if cant
+			throw "Exception in parseRead: curr_container should be ProcedureNode.";
+		}
+		else {
+			//addModifies for ProcedureNode
+			std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName();
+			this->pkb_builder_.addModifies(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
+				, var_name);
+		}
+
 		//Debugging statement
 		std::cout << "\nCreated read node with var: " << new_var_node->getVariableName();
 
@@ -1088,6 +1376,64 @@
 		this->pkb_builder_.addStatementNode(new_print_node);
 		this->pkb_builder_.addPrintNode(new_print_node);
 		this->pkb_builder_.addVariableNode(new_var_node);
+
+		//add Parent relationship if this->current_parent_node_->getParentNode() is not procedureNode
+		if (this->current_parent_node_->getParentNode()->getNodeType() != NodeTypeEnum::procedureNode) {
+			this->pkb_builder_.addParent(std::static_pointer_cast<StatementNode>(this->current_parent_node_->getParentNode())->getStatementNumber()
+				, new_print_node->getStatementNumber());
+		}
+
+		//add Follows relationship if this statement is not the first statement of this->current_parent_node_
+		if (new_print_node != std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->getStatementNodeList().at(0)) {
+			int this_stmt_num = new_print_node->getStatementNumber();
+			STMT_LIST_NODE_PTR stmtList = std::static_pointer_cast<StatementListNode>(this->current_parent_node_);
+			STMT_NODE_PTR prevStmt = std::static_pointer_cast<StatementNode>(stmtList->getChildrenNode().end()[-2]);
+
+			this->pkb_builder_.addFollows(prevStmt->getStatementNumber()
+				, new_print_node->getStatementNumber());
+		}
+
+		//TODO: Set Uses Relationship this is actually relative to constNode/varNode creation & operation on it
+		//Set Uses Relationship for this statement
+		VAR_NAME var_name = new_var_node->getVariableName();
+		this->pkb_builder_.addUses(new_print_node->getStatementNumber()
+			, var_name);
+
+		//Set Uses Relationship for all containers of this statement by going up 2 steps until we hit ProcedureNode.
+		std::shared_ptr<ASTNode> curr_container = this->current_parent_node_->getParentNode();
+		STMT_NUM curr_stmtnum = 0;
+		while (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+			//Get stmt number of container
+			if (curr_container->getNodeType() == NodeTypeEnum::whileNode) {
+				curr_stmtnum = std::static_pointer_cast<WhileNode>(curr_container)->getStatementNumber();
+			}
+			else if (curr_container->getNodeType() == NodeTypeEnum::ifNode) {
+				curr_stmtnum = std::static_pointer_cast<IfNode>(curr_container)->getStatementNumber();
+			}
+			//call addUses
+			this->pkb_builder_.addUses(curr_stmtnum, var_name);
+
+			//Check if can go up 2 steps
+			if (curr_container->getParentNode()->getParentNode() == NULL) {
+				//Throw exception if cant
+				throw "Exception in parseRead: curr_container missing grandparent node.";
+			}
+			else {
+				//curr_container = go up 2 steps
+				curr_container = curr_container->getParentNode()->getParentNode();
+			}
+		}
+		//call addUses for procedureNode
+		if (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+			//Throw exception if cant
+			throw "Exception in parseRead: curr_container should be ProcedureNode.";
+		}
+		else {
+			//addUses for ProcedureNode
+			std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName();
+			this->pkb_builder_.addUses(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
+				, var_name);
+		}
 
 		//Debugging statement
 		std::cout << "\nCreated print node with var: " << new_var_node->getVariableName();
