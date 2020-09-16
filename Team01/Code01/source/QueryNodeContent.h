@@ -6,18 +6,20 @@
 class QueryNodeContent;
 
 typedef std::string STRING;
-typedef int INTEGER,
+typedef int INTEGER;
 typedef ASTNode AST_NODE;
 typedef int MODIFIED_FLAG;
 
 class QueryNodeContent {
 private:
-	STRING strings = NULL;
+	STRING strings = "";
 	INTEGER integer = -1;
 	AST_NODE astnode = ASTNode();
 	MODIFIED_FLAG modified = -1;
 	
 public:
+	QueryNodeContent() {}
+
 	QueryNodeContent(STRING content) {
 		this->strings = content;
 		this->modified = 1;

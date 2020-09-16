@@ -15,7 +15,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 	QUERY_NODE_POINTERS children = clauses.getChildren();
 	if (clauses.getNodeType() == QueryNodeType::select) {
 		chosen_return_type = children[0];
-		chosen_synonym_name = chosen_return_type.getSynonymName();
+		chosen_synonym_name = chosen_return_type.getString();
 	}
 	else { //query tree is invalid
 		return "";
