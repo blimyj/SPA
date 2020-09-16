@@ -7,7 +7,7 @@
 typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
 typedef bool BOOLEAN;
 
-class ReadNode : public StatementNode, std::enable_shared_from_this<ReadNode> {
+class ReadNode : public StatementNode, public std::enable_shared_from_this<ReadNode> {
 
 public:
 	ReadNode();

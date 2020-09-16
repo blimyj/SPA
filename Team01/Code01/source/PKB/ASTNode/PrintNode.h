@@ -10,7 +10,7 @@ typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
 typedef std::string STRING;
 typedef bool BOOLEAN;
 
-class PrintNode : public StatementNode, std::enable_shared_from_this<PrintNode> {
+class PrintNode : public StatementNode, public std::enable_shared_from_this<PrintNode> {
 
 public:
 	PrintNode();

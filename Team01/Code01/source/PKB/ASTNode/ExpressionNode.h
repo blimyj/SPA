@@ -9,7 +9,7 @@ typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef ExpressionTypeEnum EXPR_TYPE;
 typedef bool BOOLEAN;
 
-class ExpressionNode : public ASTNode, std::enable_shared_from_this<ExpressionNode> {
+class ExpressionNode : public ASTNode, public std::enable_shared_from_this<ExpressionNode> {
 /*ExpressionNode is +, -, *, / or none*/
 
 public:

@@ -375,10 +375,12 @@
 		std::shared_ptr<ASTNode> lhs_node;
 		//Create node & add to table
 		if (isalpha(lhs_rel_token.at(0))) {
-			lhs_node = std::make_shared<VariableNode>(lhs_rel_token);
+			lhs_node = std::make_shared<VariableNode>();
+			std::static_pointer_cast<VariableNode>(lhs_node)->setVariableName(lhs_rel_token);
 			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(lhs_node));
 		} else if (isdigit(lhs_rel_token.at(0))) {
-			lhs_node = std::make_shared<ConstantNode>(lhs_rel_token);
+			lhs_node = std::make_shared<ConstantNode>();
+			std::static_pointer_cast<ConstantNode>(lhs_node)->setValue(lhs_rel_token);
 			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(lhs_node));
 		}else {
 			return -1;
@@ -408,22 +410,27 @@
 		std::shared_ptr<ASTNode> rhs_node;
 		//Create node & add to table
 		if (isalpha(rhs_rel_token.at(0))) {
-			rhs_node = std::make_shared<VariableNode>(rhs_rel_token);
+			rhs_node = std::make_shared<VariableNode>();
+			std::static_pointer_cast<VariableNode>(rhs_node)->setVariableName(rhs_rel_token);
 			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(rhs_node));
 		}
 		else if (isdigit(rhs_rel_token.at(0))) {
-			rhs_node = std::make_shared<ConstantNode>(rhs_rel_token);
+			rhs_node = std::make_shared<ConstantNode>();
+			std::static_pointer_cast<ConstantNode>(rhs_node)->setValue(rhs_rel_token);
 			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(rhs_node));
 		}
 		else {
 			return -1;
 		}
 		
-		std::shared_ptr<RelationNode> relation_node = std::make_shared<RelationNode>(rel_comp
-			, lhs_node, rhs_node);
+		std::shared_ptr<RelationNode> relation_node = std::make_shared<RelationNode>();
+		relation_node->setRelationType(rel_comp);
+		relation_node->setLeftAstNode(lhs_node);
+		relation_node->setRightAstNode(rhs_node);
 
-		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>(ConditionTypeEnum::none
-			, relation_node, nullptr);
+		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>();
+		condition_node->setConditionType(ConditionTypeEnum::none);
+		condition_node->setLeftRelationNode(relation_node);
 
 
 
@@ -451,8 +458,11 @@
 
 		//Construct new_stmt_list_node & new_procedure_node
 		std::shared_ptr<StatementListNode> new_stmt_list_node = std::make_shared<StatementListNode>();
-		std::shared_ptr<WhileNode> new_while_node = std::make_shared<WhileNode>(condition_node, new_stmt_list_node);
 
+		std::shared_ptr<WhileNode> new_while_node = std::make_shared<WhileNode>();
+		new_while_node->setConditionNode(condition_node);
+		new_while_node->setWhileStatementListNode(new_stmt_list_node);
+		
 		/*
 		//Set child & parent pointers
 
@@ -468,6 +478,7 @@
 		this->stmt_num_++;
 		new_while_node->setStatementNumber(this->stmt_num_);
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_while_node);
+		new_while_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
 		
 		//change parent tracker to stmtlistnode_ptr
 		this->current_parent_node_ = new_stmt_list_node;
@@ -507,11 +518,13 @@
 		std::shared_ptr<ASTNode> lhs_node;
 		//Create node & add to table
 		if (isalpha(lhs_rel_token.at(0))) {
-			lhs_node = std::make_shared<VariableNode>(lhs_rel_token);
+			lhs_node = std::make_shared<VariableNode>();
+			std::static_pointer_cast<VariableNode>(lhs_node)->setVariableName(lhs_rel_token);
 			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(lhs_node));
 		}
 		else if (isdigit(lhs_rel_token.at(0))) {
-			lhs_node = std::make_shared<ConstantNode>(lhs_rel_token);
+			lhs_node = std::make_shared<ConstantNode>();
+			std::static_pointer_cast<ConstantNode>(lhs_node)->setValue(lhs_rel_token);
 			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(lhs_node));
 		}
 		else {
@@ -548,22 +561,28 @@
 		std::shared_ptr<ASTNode> rhs_node;
 		//Create node & add to table
 		if (isalpha(rhs_rel_token.at(0))) {
-			rhs_node = std::make_shared<VariableNode>(rhs_rel_token);
+			rhs_node = std::make_shared<VariableNode>();
+			std::static_pointer_cast<VariableNode>(rhs_node)->setVariableName(rhs_rel_token);
 			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(rhs_node));
 		}
 		else if (isdigit(rhs_rel_token.at(0))) {
-			rhs_node = std::make_shared<ConstantNode>(rhs_rel_token);
+			rhs_node = std::make_shared<ConstantNode>();
+			std::static_pointer_cast<ConstantNode>(rhs_node)->setValue(rhs_rel_token);
 			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(rhs_node));
 		}
 		else {
 			return -1;
 		}
 
-		std::shared_ptr<RelationNode> relation_node = std::make_shared<RelationNode>(rel_comp
-			, lhs_node, rhs_node);
+		std::shared_ptr<RelationNode> relation_node = std::make_shared<RelationNode>();
+		relation_node->setRelationType(rel_comp);
+		relation_node->setLeftAstNode(lhs_node);
+		relation_node->setRightAstNode(rhs_node);
 
-		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>(ConditionTypeEnum::none
-			, relation_node, nullptr);
+		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>();
+		condition_node->setConditionType(ConditionTypeEnum::none);
+		condition_node->setLeftRelationNode(relation_node);
+
 
 		/*
 		//Set parent, child pointers for Condition<->Relation
@@ -595,7 +614,10 @@
 		//Construct new_stmt_list_node & new_procedure_node
 		std::shared_ptr<StatementListNode> if_stmt_list_node = std::make_shared<StatementListNode>();
 		std::shared_ptr<StatementListNode> else_stmt_list_node = std::make_shared<StatementListNode>();
-		std::shared_ptr<IfNode> new_if_node = std::make_shared<IfNode>(condition_node, if_stmt_list_node, else_stmt_list_node);
+		std::shared_ptr<IfNode> new_if_node = std::make_shared<IfNode>();
+		new_if_node->setConditionNode(condition_node);
+		new_if_node->setThenStatementListNode(if_stmt_list_node);
+		new_if_node->setElseStatementListNode(else_stmt_list_node);
 
 		/*
 		//Set child & parent pointers
@@ -615,7 +637,7 @@
 		this->stmt_num_++;
 		new_if_node->setStatementNumber(this->stmt_num_);
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_if_node);
-
+		new_if_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
 
 		//change parent tracker to stmtlistnode_ptr
 		this->current_parent_node_ = if_stmt_list_node;
@@ -704,14 +726,16 @@
 			//if isalpha(first_char) 
 			if (isalpha(temp_token.at(0))) {
 				//then create varnode enqueue to output_node_stack
-				std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>(temp_token);
+				std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>();
+				new_var_node->setVariableName(temp_token);
 				this->pkb_builder_.addVariableNode(new_var_node);
 				//enqueue to output_stack
 				output_node_stack.push_back(new_var_node);
 			}
 			else if (isdigit(temp_token.at(0))) {
 				//else isdigit(first_char) then create const node
-				std::shared_ptr<ConstantNode> new_const_node = std::make_shared<ConstantNode>(temp_token);
+				std::shared_ptr<ConstantNode> new_const_node = std::make_shared<ConstantNode>();
+				new_const_node->setValue(temp_token);
 				this->pkb_builder_.addConstantNode(new_const_node);
 				//enqueue to output_stack
 				output_node_stack.push_back(new_const_node);
@@ -768,9 +792,11 @@
 
 						ExpressionTypeEnum expr_type = getExpressionType(temp_op);
 
-						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
-							, lhs_operand, rhs_operand);
-						
+						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
+						new_expr_node->setExpressionType(expr_type);
+						new_expr_node->setLeftAstNode(lhs_operand);
+						new_expr_node->setRightAstNode(rhs_operand);
+
 						/*
 						//Set parent pointers
 						lhs_operand->setParentNode(new_expr_node);
@@ -818,8 +844,10 @@
 						
 						ExpressionTypeEnum expr_type = getExpressionType(temp_op);
 						
-						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
-							, lhs_operand, rhs_operand);
+						std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
+						new_expr_node->setExpressionType(expr_type);
+						new_expr_node->setLeftAstNode(lhs_operand);
+						new_expr_node->setRightAstNode(rhs_operand);
 
 						/*
 						//Set parent pointers
@@ -869,9 +897,11 @@
 
 			ExpressionTypeEnum expr_type = getExpressionType(temp_op);
 
-			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>(expr_type
-				,lhs_operand, rhs_operand);
-			
+			std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
+			new_expr_node->setExpressionType(expr_type);
+			new_expr_node->setLeftAstNode(lhs_operand);
+			new_expr_node->setRightAstNode(rhs_operand);
+
 			/*
 			//Set parent pointers
 			lhs_operand->setParentNode(new_expr_node);
@@ -908,8 +938,10 @@
 		if (last_node->getNodeType() == NodeTypeEnum::variableNode
 			|| last_node->getNodeType() == NodeTypeEnum::constantNode) {
 			
-			result = std::make_shared<ExpressionNode>(ExpressionTypeEnum::none, last_node, nullptr);
-			
+			result = std::make_shared<ExpressionNode>();
+			std::static_pointer_cast<ExpressionNode>(result)->setExpressionType(ExpressionTypeEnum::none);
+			std::static_pointer_cast<ExpressionNode>(result)->setLeftAstNode(last_node);
+
 			/*
 			//Set parent pointers
 			last_node->setParentNode(result);
@@ -924,12 +956,14 @@
 		std::shared_ptr<ExpressionNode> rhs_expr_node = std::static_pointer_cast<ExpressionNode>(result);
 		
 		//Create lhs var token
-		std::shared_ptr<VariableNode> new_lhs_var_node = std::make_shared<VariableNode>(lhs_name_token);
+		std::shared_ptr<VariableNode> new_lhs_var_node = std::make_shared<VariableNode>();
+		new_lhs_var_node->setVariableName(lhs_name_token);
 		this->pkb_builder_.addVariableNode(new_lhs_var_node);
 
 		//Create AssignNode
-		std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>(new_lhs_var_node, rhs_expr_node);
-
+		std::shared_ptr<AssignNode> new_assign_node = std::make_shared<AssignNode>();
+		new_assign_node->setVariableNode(new_lhs_var_node);
+		new_assign_node->setExpressionNode(rhs_expr_node);
 		//Set AssignNode stmt_num
 		this->stmt_num_++;
 		new_assign_node->setStatementNumber(this->stmt_num_);
@@ -946,6 +980,7 @@
 		this->current_parent_node_->addChildNode(new_assign_node);
 		*/
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_assign_node);
+		new_assign_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
 
 		//Need to add & new_assign_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_assign_node);
@@ -979,8 +1014,10 @@
 		this->process_token_stream_.pop_front(); // Pops out ';'
 
 		//Construct new_var_node & new_read_node
-		std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>(name_token);
-		std::shared_ptr<ReadNode> new_read_node = std::make_shared<ReadNode>(new_var_node);
+		std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>();
+		new_var_node->setVariableName(name_token);
+		std::shared_ptr<ReadNode> new_read_node = std::make_shared<ReadNode>();
+		new_read_node->setVariableNode(new_var_node);
 
 		//Set ReadNode stmt_num
 		this->stmt_num_++;
@@ -995,6 +1032,7 @@
 		new_read_node->addChildNode(new_var_node);
 		*/
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_read_node);
+		new_read_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
 
 		//Need to add new_var_node & new_read_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_read_node);
@@ -1026,8 +1064,10 @@
 		this->process_token_stream_.pop_front(); // Pops out ';'
 
 		//Construct new_var_node & new_print_node
-		std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>(name_token);
-		std::shared_ptr<PrintNode> new_print_node = std::make_shared<PrintNode>(new_var_node);
+		std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>();
+		new_var_node->setVariableName(name_token);
+		std::shared_ptr<PrintNode> new_print_node = std::make_shared<PrintNode>();
+		new_print_node->setVariableNode(new_var_node);
 
 		//Set PrintNode stmt_num
 		this->stmt_num_++;
@@ -1042,6 +1082,7 @@
 		new_print_node->addChildNode(new_var_node);
 		*/
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_print_node);
+		new_print_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
 
 		//Need to add new_var_node & new_print_node to PKB tables
 		this->pkb_builder_.addStatementNode(new_print_node);
@@ -1074,7 +1115,9 @@
 
 		//Construct new_stmt_list_node & new_procedure_node
 		std::shared_ptr<StatementListNode> new_stmt_list_node = std::make_shared<StatementListNode>();
-		std::shared_ptr<ProcedureNode> new_procedure_node = std::make_shared<ProcedureNode>(name_token, new_stmt_list_node);
+		std::shared_ptr<ProcedureNode> new_procedure_node = std::make_shared<ProcedureNode>();
+		new_procedure_node->setProcedureName(name_token);
+		new_procedure_node->setProcedureStatementListNode(new_stmt_list_node);
 
 		/*
 		//Set child & parent pointers

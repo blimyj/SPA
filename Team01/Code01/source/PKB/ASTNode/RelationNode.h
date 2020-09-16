@@ -10,7 +10,7 @@ typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef RelationTypeEnum RELATION_TYPE;
 typedef bool BOOLEAN;
 
-class RelationNode : public ASTNode, std::enable_shared_from_this<RelationNode> {
+class RelationNode : public ASTNode, public std::enable_shared_from_this<RelationNode> {
 /*RelationNode is ==, !=, <=, >=, <, >*/
 
 public:

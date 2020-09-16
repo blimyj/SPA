@@ -11,7 +11,7 @@ typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef ConditionTypeEnum CONDITION_TYPE;
 typedef bool BOOLEAN;
 
-class ConditionNode : public StatementNode, std::enable_shared_from_this<ConditionNode> {
+class ConditionNode : public StatementNode, public std::enable_shared_from_this<ConditionNode> {
 /*Condition Node is !, &&, || or none*/
 
 public:
