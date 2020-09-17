@@ -1,19 +1,22 @@
 #pragma once
 
-#include <memory>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
+#include "../Hashing.h"
 
 typedef void VOID;
 typedef bool BOOLEAN;
-typedef std::shared_ptr<int> STMT_NUM;
-typedef std::shared_ptr<std::string> PROC_NAME;
-typedef std::shared_ptr<std::string> VAR_NAME;
+typedef int STMT_NUM;
+typedef std::string PROC_NAME;
+typedef std::string VAR_NAME;
 
 class ModifiesTable {
 /* Overview: This is a data structure*/
 
-public:
+private:
+    friend class PKB;
+    friend class PKBBuilder;
+
     VOID addModifies(STMT_NUM s, VAR_NAME v);
         /*
         Description: Adds to a collection that maps s to v.
@@ -34,8 +37,7 @@ public:
         Description: Returns a BOOLEAN indicating whether or not Modifies(p, v) holds.
         */
 
-private:
-    std::unordered_map<STMT_NUM, VAR_NAME> statement_table_;
-    std::unordered_map<PROC_NAME, VAR_NAME> procedure_table_;
+    std::unordered_set<std::pair<STMT_NUM, VAR_NAME>> modifies_s_;
+    std::unordered_set<std::pair<PROC_NAME, VAR_NAME>> modifies_p_;
 
 };

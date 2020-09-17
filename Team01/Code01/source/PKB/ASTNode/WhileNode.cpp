@@ -3,6 +3,7 @@
 WhileNode::WhileNode(CONDITION_NODE_PTR condition_node_ptr, STMT_LIST_NODE_PTR stmt_list_node_ptr) {
 	setConditionNode(condition_node_ptr);
 	setWhileStatementListNode(stmt_list_node_ptr);
+	node_type_ = { NODE_TYPE::whileNode };
 }
 
 BOOLEAN WhileNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
