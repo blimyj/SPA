@@ -40,8 +40,22 @@ SPLIT_DECLARATIONS splitDeclarations(DECLARATIONS d) {
 	return split_d;
 }
 
-PARSED_EXPRESSION parsePatternExpression(EXPRESSION e) {
-	return 0;
+QueryNode createExpressionNode(EXPRESSION e) {
+	/*
+		expression-spec:    ‘_’ ‘"’ factor ‘"’ ‘_’ | ‘_’
+
+		factor: var_name | const_value
+	*/
+	QueryNode exp_node = QueryNode();
+/*
+	if (std::regex_match(e, std::regex("_"))) {
+		exp_node.setASTNode({ QueryNodeType::wild_card }, );
+	}
+	else {
+		exp_node.setASTNode({ QueryNodeType::expression }, )
+	}
+	*/
+	return exp_node;
 }
 
 QueryNode createArgumentNode(PROCESSED_SYNONYMS proc_s, ARGUMENT arg) {
@@ -93,8 +107,7 @@ QueryNode createPatternNode(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s,
 
 	QueryNode syn_node = createArgumentNode(proc_s, s);
 	QueryNode first_arg_node = createArgumentNode(proc_s, first_arg);
-	QueryNode second_arg_node = QueryNode();
-	parsePatternExpression(second_arg);
+	QueryNode second_arg_node = createExpressionNode(second_arg);
 
 	QueryNode pattern_node_children[3] = { syn_node, first_arg_node, second_arg_node };
 
