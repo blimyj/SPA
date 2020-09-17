@@ -1,6 +1,7 @@
 #pragma once
 
 enum class QueryNodeType {
+	unassigned,
 	select,
 	synonym,
 	integer,
@@ -12,7 +13,7 @@ enum class QueryNodeType {
 	parentT,
 	follows,
 	followsT,
-	uses,
-	modifies,
+	usesS,
+	modifiesS,
 	pattern
 };
