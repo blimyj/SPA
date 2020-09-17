@@ -88,7 +88,7 @@ namespace UnitTesting
 			QuerySynonymType chosen_synonym = { QuerySynonymType::assign };
 			query_node.setSynonymNode({ QuerySynonymType::assign }, "a1");
 			Assert::IsTrue(query_node.getSynonymType() == chosen_synonym);
-			Assert::IsTrue(query_node.getSynonymName().compare("a1") == 0);
+			Assert::IsTrue(query_node.getString().compare("a1") == 0);
 		}
 	};
 }
