@@ -9,6 +9,14 @@ void ResultList::addColumn(SYNONYM_NAME columnName, SYNONYM_VALUES_LIST columnVa
 	num_rows_ = columnValues.size();
 }
 
+void ResultList::addColumn(SYNONYM_NAME columnName, SYNONYM_INT_VALUES_LIST columnValues) {
+	SYNONYM_VALUES_LIST strColumnValues;
+	for (int s : columnValues) {
+		strColumnValues.push_back(std::to_string(s));
+	}
+	ResultList::addColumn(columnName, strColumnValues);
+}
+
 void ResultList::addRow(ROW row) {
 	// Iterate each column of this resultlist
 	for (auto &r : results) {

@@ -1,12 +1,13 @@
 #include "QueryNode.h"
 #include "QueryNodeType.h"
+#include <iterator>
 
 
-void QueryNode::setNodeType(NODE_TYPE node_type) {
+void QueryNode::setNodeType(QUERY_NODE_TYPE node_type) {
 	this->node_type = node_type;
 }
 
-NODE_TYPE QueryNode::getNodeType() {
+QUERY_NODE_TYPE QueryNode::getNodeType() {
 	return node_type;
 }
 
@@ -22,7 +23,7 @@ INTEGER QueryNode::getInteger() {
 }
 
 
-void QueryNode::setASTNode(NODE_TYPE node_type, AST_NODE astnode) {
+void QueryNode::setASTNode(QUERY_NODE_TYPE node_type, AST_NODE astnode) {
 	//NODE_TYPE can be expression or wild_card
 	this->node_type = node_type;
 	QueryNodeContent content = QueryNodeContent(astnode);
@@ -48,16 +49,15 @@ STRING QueryNode::getString() {
 	return node_content.getString();
 }
 
-
-void QueryNode::setChildren(QUERY_NODE_POINTERS children) {
-	this->children = children;
+void QueryNode::setChildren(QUERY_NODE_POINTERS children, int size) {
+	for (int i = 0; i < size; i++) {
+		this->children.push_back(children[i]);
+	}
 }
 
-QUERY_NODE_POINTERS QueryNode::getChildren() {
-	return children;
+QUERY_NODE_LIST QueryNode::getChildren() {
+	return QUERY_NODE_LIST(children);
 }
-
-
 
 QUERY_NODE_CONTENT QueryNode::getQueryNodeContent() {
 	return node_content;
