@@ -6,5 +6,6 @@ enum class ExpressionTypeEnum {
     min,
     times,
     div,
-    mod
+    mod,
+    undefined
 };

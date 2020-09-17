@@ -38,7 +38,13 @@ void GUIWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
 	std::cout << "parsed " << filename;
 	Parser parser = Parser();
-	parser.parseFile(filename);
+	
+	try {
+		parser.parseFile(filename);
+	}
+	catch (const char* msg) {
+		std::cout << msg << "\n";
+	}
 	// ...rest of your code...
 }
 

@@ -18,7 +18,6 @@ typedef QueryNode PROCESSED_CLAUSES;
 typedef std::string RELATIONSHIP;
 typedef std::string ARGUMENT;
 typedef bool VALIDATION_RESULT;
-typedef int PARSED_EXPRESSION;
 typedef std::string EXPRESSION;
 typedef std::string STRING;
 
@@ -53,7 +52,7 @@ private:
 		  Normal: Returns SPLIT_DECLARATIONS
 		*/
 
-	PARSED_EXPRESSION parsePatternExpression(EXPRESSION e);
+	QueryNode createExpressionNode(EXPRESSION e);
 	/*
 		Description:
 		  Normal: Returns SPLIT_DECLARATIONS

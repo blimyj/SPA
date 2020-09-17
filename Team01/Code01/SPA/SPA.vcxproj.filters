@@ -153,6 +153,9 @@
     <ClInclude Include="..\source\ResultListManager.h">
 		<Filter>Header Files</Filter>
 	</ClInclude>
+    <ClInclude Include="RelOperatorTypeEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp">
