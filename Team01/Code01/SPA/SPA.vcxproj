@@ -48,6 +48,7 @@
     <ClInclude Include="..\source\PKB\Relationships\ModifiesTable.h" />
     <ClInclude Include="..\source\PKB\Relationships\ParentTable.h" />
     <ClInclude Include="..\source\PKB\Relationships\UsesTable.h" />
+    <ClInclude Include="RelOperatorTypeEnum.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp" />

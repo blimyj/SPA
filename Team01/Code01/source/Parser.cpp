@@ -126,7 +126,7 @@
 		PKB pkb = this->pkb_builder_.build();
 		
 		//Testing Functions
-		//printTree(this->program_node_);
+		printTree(this->program_node_);
 
 
 		//Relationship Testing 1: Does not include vars in conditions in while or if
@@ -252,7 +252,11 @@
 			if (*iter != eos && **iter == '=') {
 				curr_token += **iter;
 				++* iter;
-			} else {}
+			} else {
+				curr_token = "UNEXPECTED TOKEN:" + curr_token;
+				curr_token += **iter;
+				++* iter;
+			}
 			return curr_token;
 		}
 
@@ -262,21 +266,79 @@
 			++* iter;
 			return curr_token;
 		}
-		
 
-		//Check for boolean terminal tokens
-
-
-		//Check for arithmetic comparison terminal tokens
-		if (**iter == '!=' || **iter == '==' 
-			|| **iter == '>' || **iter == '>=' 
-			|| **iter == '<' || **iter == '<=') {
+		//Check for "<" vs "<=" comparison terminal tokens
+		if (*iter != eos && **iter == '<') { //Checks if first letter matches '<' terminal
 			curr_token += **iter;
 			++* iter;
+			if (*iter != eos && **iter == '=') {
+				curr_token += **iter;
+				++* iter;
+			}
+			else {}
 			return curr_token;
 		}
 
-		//Check for unexpected tokens
+		//Check for ">" vs ">=" comparison terminal tokens
+		if (*iter != eos && **iter == '>') { //Checks if first letter matches '>' terminal
+			curr_token += **iter;
+			++* iter;
+			if (*iter != eos && **iter == '=') {
+				curr_token += **iter;
+				++* iter;
+			}
+			else {}
+			return curr_token;
+		}
+
+
+		//Check for boolean terminal "&&" tokens
+		if (*iter != eos && **iter == '&') { //Checks if first letter matches "&" terminal
+			curr_token += **iter;
+			++* iter;
+			if (*iter != eos && **iter == '&') {
+				curr_token += **iter;
+				++* iter;
+				return curr_token;
+			}
+			else {
+				curr_token = "UNEXPECTED TOKEN:" + curr_token;
+				curr_token += **iter;
+				++* iter;
+				return curr_token;
+			}
+		}
+
+		//Check for boolean terminal "||" tokens
+		if (*iter != eos && **iter == '|') { //Checks if first letter matches '|' terminal
+			curr_token += **iter;
+			++* iter;
+			if (*iter != eos && **iter == '|') {
+				curr_token += **iter;
+				++* iter;
+				return curr_token;
+			}
+			else {
+				curr_token = "UNEXPECTED TOKEN:" + curr_token;
+				curr_token += **iter;
+				++* iter;
+				return curr_token;
+			}
+		}
+
+		//Check for '' vs '!=' terminal tokens
+		if (*iter != eos && **iter == '!') { //Checks if first letter matches '=' terminal
+			curr_token += **iter;
+			++* iter;
+			if (*iter != eos && **iter == '=') {
+				curr_token += **iter;
+				++* iter;
+			}
+			else {}
+			return curr_token;
+		}
+
+		//Check for other unexpected tokens
 		curr_token += "UNEXPECTED TOKEN:";
 		curr_token += **iter;
 		++* iter;
@@ -345,86 +407,6 @@
 	Note that for cond_expr, if a boolean operator is applied to it, the operand(s) cond_expr will each be encapsulated by the terminals '(', ')'
 	*/
 
-	//AST_NODE_PTR current_parent_node_ = PROGRAM_NODE();
-
-	/*
-	int Parser::parseFirstStreamToken(std::deque<STRING>* stmt_token_stream, std::deque<STRING>* ) {
-
-		//Taking a string, we want to tokenize 1 at a time, with each token telling us what we expect next.
-		//We must maintain class member curr_token_stream_ <--- A vector of important tokens, I believe we can ignore the following tokens: '{', '}', ';'
-
-		//Takes out only first set of whitespaces
-		int Parser::str_ind = ind;
-		int Parser::str_size = str.size();
-		while (str_ind < str_size && std::isspace(str.at(str_ind))) {
-			str_ind++;
-		}
-
-		//If empty line, skips to next line
-		if (str_ind == str_size) { return 0; }
-		//After this, we know str.at(str_ind)is not whitespace nor the end.
-
-		//First Token Checker
-		if (curr_token_stream_.empty() && isalnum(str.at(str_ind))) {
-			int Parser::old_ind = str_ind;
-			//read in first token of the form LETTER(LETTER|DIGIT)* ---> could be a NAME or a terminal
-			while (str_ind < str_size && isalnum(str.at(str_ind))) {
-				str_ind++;
-			}
-			//take substr(old_ind, (str_ind - old_ind)) as first token and put into curr_token_stream_
-			std::string token = str.substr(old_ind, (str_ind - old_ind));
-
-			//Note that first token could always be var name instead of actual stmt type.
-			curr_token_stream_.push_back(token);
-			parseFirstStreamToken(str, str_ind);
-		}
-
-
-		else {
-			//Takes out only first set of whitespaces
-			int Parser::str_ind = ind;
-			while (str_ind < str_size && std::isspace(str.at(str_ind))) {
-				str_ind++;
-			}
-
-			//If empty line, skips to next line
-			if (str_ind == str_size) return 0;
-			//After this, we know str.at(str_ind)is not whitespace nor the end.
-
-			if (curr_token_stream_.size() == 1) {
-				//Check if second token is '=' to differentiate assign statement from other statements
-				if (str.at(str_ind)== '=') {
-					//Change stmt type in curr_token_stream_ to assignment
-					curr_token_stream_.insert(curr_token_stream_.begin(), "assign");
-				} else {
-					STRING token = curr_token_stream_.at(0);
-					PARSE_FUNC_PTR parse_func = parse_func_table_[token];
-					parse_func(str, str_ind);
-				}
-			}
-			//could be another alnum token
-			//could be assign operator
-			//could be a terminal like '{', '}', ';', '(', ')', arithmetic operators, boolean operators
-			//not sure if it could be terminals such as comparison operators
-		}
-		//check for 'if' / 'while' in the first 2 and 5 chars  respectively & a '(' exists (Otherwise it could be a var name)
-			//call parseIf & parseWhile respectively
-
-		//check for '='
-			//call parseAssign
-
-		//check for 'read' / 'print' / 'procedure' / 'call'
-			//call parseRead & parsePrint & parseProc & parseCall respectively
-
-		//check for '}'
-			//call parseStmtListClose;
-
-		//check for 'else'
-			//call parseElse
-
-		return 0;
-	}
-	*/
 	int Parser::parseWhile(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
 
 		if (this->stmt_token_queue_.front() != "while") {
@@ -436,116 +418,592 @@
 		if (this->process_token_stream_.front() != "(") {
 			return -1;
 		}
-		this->process_token_stream_.pop_front(); // Remove stmt type token
-		//Read in simple comparison (only 1 var/const on each side)	
-		
-		
-		//To read for simple comparison
-		STRING lhs_rel_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
-		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
-		std::shared_ptr<ASTNode> lhs_node;
-		//Create node & add to table
-		if (isalpha(lhs_rel_token.at(0))) {
-			lhs_node = std::make_shared<VariableNode>();
-			std::static_pointer_cast<VariableNode>(lhs_node)->setVariableName(lhs_rel_token);
-			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(lhs_node));
-		} else if (isdigit(lhs_rel_token.at(0))) {
-			lhs_node = std::make_shared<ConstantNode>();
-			std::static_pointer_cast<ConstantNode>(lhs_node)->setValue(lhs_rel_token);
-			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(lhs_node));
-		}else {
-			return -1;
+		//We no longer need to remove "(" terminal required because we parse this along with ')'
+		//this->process_token_stream_.pop_front(); // Remove stmt type token
+
+		//REPLACEMENT FOR THIRD TOKEN CONSUMPTION
+		std::deque<std::shared_ptr<ASTNode>> output_node_stack = std::deque<std::shared_ptr<ASTNode>>();
+		std::deque<RelOperatorTypeEnum> operator_stack = std::deque<RelOperatorTypeEnum>();
+		RelOperatorTypeEnum op;
+		RelOperatorTypeEnum temp_op;
+
+		//===== Actual Code ======
+		//Here we will keep consuming tokens until we reach '{'
+
+		STRING rhs_token = this->process_token_stream_.front(); //Starts taking in tokens for condition
+		this->process_token_stream_.pop_front(); // Remove var/const/operator/parentheses token for the next token
+
+		//TODO: HANDLERS FOR EMPTY STACKS / UNEXCPECTED TOKENS
+		//Need to handle gracefully
+
+		while (!process_token_stream_.empty() && rhs_token != "{") {
+			//These tokens will populate this->stmt_token_queue_
+			this->stmt_token_queue_.push_back(rhs_token);
+			rhs_token = this->process_token_stream_.front();
+			this->process_token_stream_.pop_front(); // Remove var/const/operator/parentheses token for the next token
 		}
 
-		RelationTypeEnum rel_comp;
-		STRING rel_comp_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
-		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
-		if (rel_comp_token == "!=") {
-			rel_comp = RelationTypeEnum::neq;
-		} else if (rel_comp_token == "==") {
-			rel_comp = RelationTypeEnum::eq;
-		} else if (rel_comp_token == ">") {
-			rel_comp = RelationTypeEnum::gt;
-		} else if (rel_comp_token == ">=") {
-			rel_comp = RelationTypeEnum::gte;
-		} else if (rel_comp_token == "<=") {
-			rel_comp = RelationTypeEnum::lte;
-		} else if (rel_comp_token == "<") {
-			rel_comp = RelationTypeEnum::lt;
-		} else {
-			return -1;
+		if (process_token_stream_.empty()) {
+			throw "Error: Expected '{' terminal but was not found.";
+		}
+		
+		//TODO:REMOVE DEBUGGING HERE
+		std::cout << "\nWhile Condition Tokens: \n";
+		for (STRING x : stmt_token_queue_) {
+			std::cout << x << ", ";
 		}
 
-		STRING rhs_rel_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
-		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
-		std::shared_ptr<ASTNode> rhs_node;
-		//Create node & add to table
-		if (isalpha(rhs_rel_token.at(0))) {
-			rhs_node = std::make_shared<VariableNode>();
-			std::static_pointer_cast<VariableNode>(rhs_node)->setVariableName(rhs_rel_token);
-			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(rhs_node));
+		std::cout << "\nFront Token" << this->process_token_stream_.front() << "\n";
+
+		//They will form the expr that is assigned to new_expr_node
+		//Then they will be funneled through the shunting yard algo
+		STRING temp_token = "";
+		//While stmt_token_queue_ has tokens
+		std::unordered_set<STRING> used_vars_set;
+
+		while (!this->stmt_token_queue_.empty()) {
+			//Get & remove first token from stmt_token_queue_
+			temp_token = this->stmt_token_queue_.front();
+			std::cout << "\nFront Token: " << temp_token << "\n";
+			this->stmt_token_queue_.pop_front();
+
+			//if isalpha(first_char) 
+			if (isalpha(temp_token.at(0))) {
+				//then create varnode enqueue to output_node_stack
+				std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>();
+				new_var_node->setVariableName(temp_token);
+				this->pkb_builder_.addVariableNode(new_var_node);
+				//enqueue to output_stack
+				output_node_stack.push_back(new_var_node);
+
+				//add var to usedied_vars_set for Uses relationship
+				used_vars_set.insert(temp_token);
+			}
+			else if (isdigit(temp_token.at(0))) {
+				//else isdigit(first_char) then create const node
+				std::shared_ptr<ConstantNode> new_const_node = std::make_shared<ConstantNode>();
+				new_const_node->setValue(temp_token);
+				this->pkb_builder_.addConstantNode(new_const_node);
+				//enqueue to output_stack
+				output_node_stack.push_back(new_const_node);
+			}
+			else {
+				//Else means token is operator or parentheses
+				//Create a Operator TypeEnum object
+				if (temp_token == "+") {
+					op = RelOperatorTypeEnum::ropPlus;
+				}
+				else if (temp_token == "-") {
+					op = RelOperatorTypeEnum::ropMin;
+				}
+				else if (temp_token == "*") {
+					op = RelOperatorTypeEnum::ropMult;
+				}
+				else if (temp_token == "/") {
+					op = RelOperatorTypeEnum::ropDiv;
+				}
+				else if (temp_token == "%") {
+					op = RelOperatorTypeEnum::ropMod;
+				}
+				else if (temp_token == "(") {
+					op = RelOperatorTypeEnum::ropLparen;
+				}
+				else if (temp_token == ")") {
+					op = RelOperatorTypeEnum::ropRparen;
+				}
+				else if (temp_token == "==") {
+					op = RelOperatorTypeEnum::ropEq;
+				}
+				else if (temp_token == "!+") {
+					op = RelOperatorTypeEnum::ropNeq;
+				}
+				else if (temp_token == ">") {
+					op = RelOperatorTypeEnum::ropGt;
+				}
+				else if (temp_token == ">=") {
+					op = RelOperatorTypeEnum::ropGte;
+				}
+				else if (temp_token == "<") {
+					op = RelOperatorTypeEnum::ropLt;
+				}
+				else if (temp_token == "<=") {
+					op = RelOperatorTypeEnum::ropLte;
+				}
+				else if (temp_token == "!") {
+					op = RelOperatorTypeEnum::ropNot;
+				}
+				else if (temp_token == "||") {
+					op = RelOperatorTypeEnum::ropOr;
+				}
+				else if (temp_token == "&&") {
+					op = RelOperatorTypeEnum::ropAnd;
+				}
+				else {
+					//If not any of the above tokens, return an error.
+					throw "Error: Expected a operator, but none found.";
+				}
+
+				//throw into operator stack
+				if (op == RelOperatorTypeEnum::ropLparen) {
+					operator_stack.push_back(op);
+				}
+				else if (op == RelOperatorTypeEnum::ropRparen) {
+					while (!operator_stack.empty() && operator_stack.back() != RelOperatorTypeEnum::ropLparen) {
+						//Pop operator from operator stack onto the output queue. 
+						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
+						temp_op = operator_stack.back();
+						operator_stack.pop_back();
+						
+						std::shared_ptr<ASTNode> rhs_operand;
+						std::shared_ptr<ASTNode> lhs_operand;
+
+						//Create a rel_node or expr_node based on whether temp_op is a relation or arithmetic operator
+						if (isBooleanOp(temp_op) && temp_op == RelOperatorTypeEnum::ropNot) {
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 1 operand & the 1 operand is the type we want
+							if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode 
+								&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+							if (temp_op == RelOperatorTypeEnum::ropNot) {
+
+								std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+								new_cond_node->setConditionType(cond_type);
+								//Even though the operand is techincally on the right of the not operator,
+								//it is placed on the left for the sake of consistency when accessing.
+								new_cond_node->setLeftAstNode(lhs_operand);
+
+								//We then place this ConditionNode into the output_node_stack
+								output_node_stack.push_back(new_cond_node);
+							}
+						}
+						else if (isArithmeticOp(temp_op)) {
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							ExpressionTypeEnum expr_type = getExpressionType(temp_op);
+
+							std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
+							new_expr_node->setExpressionType(expr_type);
+							new_expr_node->setLeftAstNode(lhs_operand);
+							new_expr_node->setRightAstNode(rhs_operand);
+
+							//We then place this ExpressionNode into the output_node_stack
+							output_node_stack.push_back(new_expr_node);
+						}
+						else if (isRelationOp(temp_op)) {
+							RelationTypeEnum rel_type = getArithmeticRelationType(temp_op);
+
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							std::shared_ptr<RelationNode> new_rel_node = std::make_shared<RelationNode>();
+							new_rel_node->setRelationType(rel_type);
+							new_rel_node->setLeftAstNode(lhs_operand);
+							new_rel_node->setRightAstNode(rhs_operand);
+
+							//We then place this RelationNode into the output_node_stack
+							output_node_stack.push_back(new_rel_node);
+						}
+						else if (isBooleanOp(temp_op)) {
+							ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							if (temp_op == RelOperatorTypeEnum::ropAnd || temp_op == RelOperatorTypeEnum::ropOr) {
+								std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+								new_cond_node->setConditionType(cond_type);
+								new_cond_node->setLeftAstNode(lhs_operand);
+								new_cond_node->setRightAstNode(rhs_operand);
+
+								//We then place this ConditionNode into the output_node_stack
+								output_node_stack.push_back(new_cond_node);
+							}
+							else {
+								throw "Error: Undefined behaviour.";
+							}
+						}
+						else {
+							throw "Error: Undefined behaviour.";
+						}
+					}
+					// If operator_stack.empty() that means there are mismatched parentheses
+					if (operator_stack.empty()) throw "Error: Mismatched parentheses found.";
+					if (operator_stack.back() == RelOperatorTypeEnum::ropLparen) {
+						operator_stack.pop_back();
+					}
+				}
+				else {
+					//This is when arithmetic operators are being handled
+					while (!operator_stack.empty() && operator_stack.back() != RelOperatorTypeEnum::ropLparen
+						&& ((takesPrecedent(operator_stack.back(), op) == 1)
+							|| (takesPrecedent(operator_stack.back(), op) == 0))) {
+						temp_op = operator_stack.back();
+						operator_stack.pop_back();
+
+						std::shared_ptr<ASTNode> rhs_operand;
+						std::shared_ptr<ASTNode> lhs_operand;
+
+						//Create a rel_node or expr_node based on whether temp_op is a relation or arithmetic operator
+						if (isBooleanOp(temp_op) && temp_op == RelOperatorTypeEnum::ropNot) {
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 1 operand & the 1 operand is the type we want
+							if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+							if (temp_op == RelOperatorTypeEnum::ropNot) {
+
+								std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+								new_cond_node->setConditionType(cond_type);
+								//Even though the operand is techincally on the right of the not operator,
+								//it is placed on the left for the sake of consistency when accessing.
+								new_cond_node->setLeftAstNode(lhs_operand);
+
+								//We then place this ConditionNode into the output_node_stack
+								output_node_stack.push_back(new_cond_node);
+							}
+						}
+						else if (isArithmeticOp(temp_op)) {
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							ExpressionTypeEnum expr_type = getExpressionType(temp_op);
+
+							std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
+							new_expr_node->setExpressionType(expr_type);
+							new_expr_node->setLeftAstNode(lhs_operand);
+							new_expr_node->setRightAstNode(rhs_operand);
+
+							//We then place this ExpressionNode into the output_node_stack
+							output_node_stack.push_back(new_expr_node);
+						}
+						else if (isRelationOp(temp_op)) {
+							RelationTypeEnum rel_type = getArithmeticRelationType(temp_op);
+
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							std::shared_ptr<RelationNode> new_rel_node = std::make_shared<RelationNode>();
+							new_rel_node->setRelationType(rel_type);
+							new_rel_node->setLeftAstNode(lhs_operand);
+							new_rel_node->setRightAstNode(rhs_operand);
+
+							//We then place this RelationNode into the output_node_stack
+							output_node_stack.push_back(new_rel_node);
+						}
+						else if (isBooleanOp(temp_op)) {
+							ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							if (temp_op == RelOperatorTypeEnum::ropAnd || temp_op == RelOperatorTypeEnum::ropOr) {
+								std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+								new_cond_node->setConditionType(cond_type);
+								new_cond_node->setLeftAstNode(lhs_operand);
+								new_cond_node->setRightAstNode(rhs_operand);
+
+								//We then place this ConditionNode into the output_node_stack
+								output_node_stack.push_back(new_cond_node);
+							}
+							else {
+								throw "Error: Undefined behaviour.";
+							}
+						}
+						else {
+							throw "Error: Undefined behaviour.";
+						}
+					}
+					//Push operator to operator stack
+					operator_stack.push_back(op);
+				}
+			}
 		}
-		else if (isdigit(rhs_rel_token.at(0))) {
-			rhs_node = std::make_shared<ConstantNode>();
-			std::static_pointer_cast<ConstantNode>(rhs_node)->setValue(rhs_rel_token);
-			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(rhs_node));
+
+		//Handle remaining operators in operator_stack
+		while (!operator_stack.empty()) {
+			if (operator_stack.back() == RelOperatorTypeEnum::ropLparen || operator_stack.back() == RelOperatorTypeEnum::ropRparen) {
+				//Presence of parenthesis indicates mismatched parenthesis as they should have all been discarded earlier.
+				throw "Error: Mismatched parenthesis found.";
+			}
+			temp_op = operator_stack.back();
+			operator_stack.pop_back();
+
+			std::shared_ptr<ASTNode> rhs_operand;
+			std::shared_ptr<ASTNode> lhs_operand;
+
+			//Create a rel_node or expr_node based on whether temp_op is a relation or arithmetic operator
+			if (isBooleanOp(temp_op) && temp_op == RelOperatorTypeEnum::ropNot) {
+				lhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				//Note we must check if we are able to pop out 1 operand & the 1 operand is the type we want
+				if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+					throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+				}
+
+				ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+				if (temp_op == RelOperatorTypeEnum::ropNot) {
+
+					std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+					new_cond_node->setConditionType(cond_type);
+					//Even though the operand is techincally on the right of the not operator,
+					//it is placed on the left for the sake of consistency when accessing.
+					new_cond_node->setLeftAstNode(lhs_operand);
+
+					//We then place this ConditionNode into the output_node_stack
+					output_node_stack.push_back(new_cond_node);
+				}
+			}
+			else if (isArithmeticOp(temp_op)) {
+				rhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				lhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+				if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+					throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+				}
+
+				if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+					throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+				}
+
+				ExpressionTypeEnum expr_type = getExpressionType(temp_op);
+
+				std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
+				new_expr_node->setExpressionType(expr_type);
+				new_expr_node->setLeftAstNode(lhs_operand);
+				new_expr_node->setRightAstNode(rhs_operand);
+
+				//We then place this ExpressionNode into the output_node_stack
+				output_node_stack.push_back(new_expr_node);
+			}
+			else if (isRelationOp(temp_op)) {
+				RelationTypeEnum rel_type = getArithmeticRelationType(temp_op);
+
+				rhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				lhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+				if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+					throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+				}
+
+				if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+					throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+				}
+
+				std::shared_ptr<RelationNode> new_rel_node = std::make_shared<RelationNode>();
+				new_rel_node->setRelationType(rel_type);
+				new_rel_node->setLeftAstNode(lhs_operand);
+				new_rel_node->setRightAstNode(rhs_operand);
+
+				//We then place this RelationNode into the output_node_stack
+				output_node_stack.push_back(new_rel_node);
+			}
+			else if (isBooleanOp(temp_op)) {
+				ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+
+				rhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				lhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+				if (rhs_operand->getNodeType() != NodeTypeEnum::relationNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+					throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+				}
+
+				if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+					throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+				}
+
+				if (temp_op == RelOperatorTypeEnum::ropAnd || temp_op == RelOperatorTypeEnum::ropOr) {
+					std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+					new_cond_node->setConditionType(cond_type);
+					new_cond_node->setLeftAstNode(lhs_operand);
+					new_cond_node->setRightAstNode(rhs_operand);
+
+					//We then place this ConditionNode into the output_node_stack
+					output_node_stack.push_back(new_cond_node);
+				}
+				else {
+					throw "Error: Undefined behaviour.";
+				}
+			}
+			else {
+				throw "Error: Undefined behaviour.";
+			}
+		}
+
+		//Once ';' is reached or stmt_token_queue_ is empty we should have only 1 expression node or VarNode/ConstNode in the output stack.
+		if (output_node_stack.size() != 1) {
+			return -1;
+		}
+		//Note that we must check if we need to encapsulate RelationNode to return a proper ConditionNode
+		std::shared_ptr<ASTNode> last_node = output_node_stack.back();
+		std::shared_ptr<ConditionNode> result;
+		output_node_stack.pop_back();
+		if (last_node->getNodeType() == NodeTypeEnum::variableNode
+			|| last_node->getNodeType() == NodeTypeEnum::constantNode) {
+
+			//TODO: Check if such node types are valid as condition.
+			throw "Error: ConditionNode/RelationNode expected but VariableNode/ConstantNode found.";
+		}
+		else if (last_node->getNodeType() == NodeTypeEnum::expressionNode) {
+			//TODO: Check if such node types are valid as condition.
+			throw "Error: ConditionNode/RelationNode expected but ExpressionNode found.";
+		}
+		else if (last_node->getNodeType() == NodeTypeEnum::relationNode) {
+			result = std::make_shared<ConditionNode>();
+			std::static_pointer_cast<ConditionNode>(result)->setConditionType(ConditionTypeEnum::none);
+			std::static_pointer_cast<ConditionNode>(result)->setLeftAstNode(last_node);
+		}
+		else if (last_node->getNodeType() == NodeTypeEnum::conditionNode) {
+			result = std::static_pointer_cast<ConditionNode>(last_node);
 		}
 		else {
-			return -1;
+			throw "Error: ConditionNode/RelationNode expected, unknown node type found.";
 		}
-		
-		std::shared_ptr<RelationNode> relation_node = std::make_shared<RelationNode>();
-		relation_node->setRelationType(rel_comp);
-		relation_node->setLeftAstNode(lhs_node);
-		relation_node->setRightAstNode(rhs_node);
 
-		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>();
-		condition_node->setConditionType(ConditionTypeEnum::none);
-		condition_node->setLeftRelationNode(relation_node);
-
-
-
-		//Set parent, child pointers for Condition<->Relation
-		/*
-		condition_node->addChildNode(relation_node);
-		relation_node->setParentNode(condition_node);
-		//Set parent, child pointers for Relation <-> (lhs & rhs)
-		relation_node->addChildNode(lhs_node);
-		lhs_node->setParentNode(condition_node);
-		relation_node->addChildNode(rhs_node);
-		rhs_node->setParentNode(condition_node);
-		*/
-
-		//Check for ')' & '{'
-		if (this->process_token_stream_.front() != ")") {
-			return -1;
-		}
-		this->process_token_stream_.pop_front(); // Pops out '{'
+		/* This is now covered earlier
+		//Check for '{'
 
 		if (this->process_token_stream_.front() != "{") {
-			return -1;
+			std::string msg = "Error: Expected '{' but found '" + this->process_token_stream_.front() + "'";
+			throw msg;
 		}
 		this->process_token_stream_.pop_front(); // Pops out '{'
+		*/
+
 
 		//Construct new_stmt_list_node & new_procedure_node
 		std::shared_ptr<StatementListNode> new_stmt_list_node = std::make_shared<StatementListNode>();
 
 		std::shared_ptr<WhileNode> new_while_node = std::make_shared<WhileNode>();
-		new_while_node->setConditionNode(condition_node);
+		new_while_node->setConditionNode(result);
 		new_while_node->setWhileStatementListNode(new_stmt_list_node);
 		
-		/*
-		//Set child & parent pointers
-
-		condition_node->setParentNode(new_while_node);
-		new_while_node->addChildNode(condition_node);
-
-		new_stmt_list_node->setParentNode(new_while_node);
-		new_while_node->addChildNode(new_stmt_list_node);
-
-		this->current_parent_node_->addChildNode(new_while_node);
-		new_while_node->setParentNode(this->current_parent_node_);
-		*/
 		this->stmt_num_++;
 		new_while_node->setStatementNumber(this->stmt_num_);
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_while_node);
@@ -569,6 +1027,48 @@
 				, new_while_node->getStatementNumber());
 		}
 
+		//add Uses Relationship for all vars
+		for (STRING var_name : used_vars_set) {
+			//Set Uses Relationship for this statement
+			this->pkb_builder_.addUses(new_while_node->getStatementNumber()
+				, var_name);
+
+			//Set Uses Relationship for all containers of this statement by going up 2 steps until we hit ProcedureNode.
+			std::shared_ptr<ASTNode> curr_container = this->current_parent_node_->getParentNode();
+			STMT_NUM curr_stmtnum = 0;
+			while (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+				//Get stmt number of container
+				if (curr_container->getNodeType() == NodeTypeEnum::whileNode) {
+					curr_stmtnum = std::static_pointer_cast<WhileNode>(curr_container)->getStatementNumber();
+				}
+				else if (curr_container->getNodeType() == NodeTypeEnum::ifNode) {
+					curr_stmtnum = std::static_pointer_cast<IfNode>(curr_container)->getStatementNumber();
+				}
+				//call addUses
+				this->pkb_builder_.addUses(curr_stmtnum, var_name);
+
+				//Check if can go up 2 steps
+				if (curr_container->getParentNode()->getParentNode() == NULL) {
+					//Throw exception if cant
+					throw "Exception in parseWhile: curr_container missing grandparent node.";
+				}
+				else {
+					//curr_container = go up 2 steps
+					curr_container = curr_container->getParentNode()->getParentNode();
+				}
+			}
+			//call addUses for procedureNode
+			if (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+				//Throw exception if cant
+				throw "Exception in parseWhile: curr_container should be ProcedureNode.";
+			}
+			else {
+				//addUses for ProcedureNode
+				std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName();
+				this->pkb_builder_.addUses(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
+					, var_name);
+			}
+		}
 
 
 		//change parent tracker to stmtlistnode_ptr
@@ -598,6 +1098,567 @@
 		if (this->process_token_stream_.front() != "(") {
 			return -1;
 		}
+		//We no longer need to remove "(" terminal required because we parse this along with ')'
+		//this->process_token_stream_.pop_front(); // Remove stmt type token
+
+		//REPLACEMENT FOR THIRD TOKEN CONSUMPTION
+		std::deque<std::shared_ptr<ASTNode>> output_node_stack = std::deque<std::shared_ptr<ASTNode>>();
+		std::deque<RelOperatorTypeEnum> operator_stack = std::deque<RelOperatorTypeEnum>();
+		RelOperatorTypeEnum op;
+		RelOperatorTypeEnum temp_op;
+
+		//===== Actual Code ======
+		//Here we will keep consuming tokens until we reach '{'
+
+		STRING rhs_token = this->process_token_stream_.front(); //Starts taking in tokens for condition
+		this->process_token_stream_.pop_front(); // Remove var/const/operator/parentheses token for the next token
+
+		//TODO: HANDLERS FOR EMPTY STACKS / UNEXCPECTED TOKENS
+		//Need to handle gracefully
+
+		while (!process_token_stream_.empty() && rhs_token != "then") {
+			//These tokens will populate this->stmt_token_queue_
+			this->stmt_token_queue_.push_back(rhs_token);
+			rhs_token = this->process_token_stream_.front();
+			this->process_token_stream_.pop_front(); // Remove var/const/operator/parentheses token for the next token
+		}
+
+		if (process_token_stream_.empty()) {
+			throw "Error: Expected 'then' terminal but was not found.";
+		}
+
+		//They will form the expr that is assigned to new_expr_node
+		//Then they will be funneled through the shunting yard algo
+		STRING temp_token = "";
+		//While stmt_token_queue_ has tokens
+		std::unordered_set<STRING> used_vars_set;
+
+		while (!this->stmt_token_queue_.empty()) {
+			//Get & remove first token from stmt_token_queue_
+			temp_token = this->stmt_token_queue_.front();
+			std::cout << "\nFront Token: " << temp_token << "\n";
+			this->stmt_token_queue_.pop_front();
+
+			//if isalpha(first_char) 
+			if (isalpha(temp_token.at(0))) {
+				//then create varnode enqueue to output_node_stack
+				std::shared_ptr<VariableNode> new_var_node = std::make_shared<VariableNode>();
+				new_var_node->setVariableName(temp_token);
+				this->pkb_builder_.addVariableNode(new_var_node);
+				//enqueue to output_stack
+				output_node_stack.push_back(new_var_node);
+
+				//add var to usedied_vars_set for Uses relationship
+				used_vars_set.insert(temp_token);
+			}
+			else if (isdigit(temp_token.at(0))) {
+				//else isdigit(first_char) then create const node
+				std::shared_ptr<ConstantNode> new_const_node = std::make_shared<ConstantNode>();
+				new_const_node->setValue(temp_token);
+				this->pkb_builder_.addConstantNode(new_const_node);
+				//enqueue to output_stack
+				output_node_stack.push_back(new_const_node);
+			}
+			else {
+				//Else means token is operator or parentheses
+				//Create a Operator TypeEnum object
+				if (temp_token == "+") {
+					op = RelOperatorTypeEnum::ropPlus;
+				}
+				else if (temp_token == "-") {
+					op = RelOperatorTypeEnum::ropMin;
+				}
+				else if (temp_token == "*") {
+					op = RelOperatorTypeEnum::ropMult;
+				}
+				else if (temp_token == "/") {
+					op = RelOperatorTypeEnum::ropDiv;
+				}
+				else if (temp_token == "%") {
+					op = RelOperatorTypeEnum::ropMod;
+				}
+				else if (temp_token == "(") {
+					op = RelOperatorTypeEnum::ropLparen;
+				}
+				else if (temp_token == ")") {
+					op = RelOperatorTypeEnum::ropRparen;
+				}
+				else if (temp_token == "==") {
+					op = RelOperatorTypeEnum::ropEq;
+				}
+				else if (temp_token == "!+") {
+					op = RelOperatorTypeEnum::ropNeq;
+				}
+				else if (temp_token == ">") {
+					op = RelOperatorTypeEnum::ropGt;
+				}
+				else if (temp_token == ">=") {
+					op = RelOperatorTypeEnum::ropGte;
+				}
+				else if (temp_token == "<") {
+					op = RelOperatorTypeEnum::ropLt;
+				}
+				else if (temp_token == "<=") {
+					op = RelOperatorTypeEnum::ropLte;
+				}
+				else if (temp_token == "!") {
+					op = RelOperatorTypeEnum::ropNot;
+				}
+				else if (temp_token == "||") {
+					op = RelOperatorTypeEnum::ropOr;
+				}
+				else if (temp_token == "&&") {
+					op = RelOperatorTypeEnum::ropAnd;
+				}
+				else {
+					//If not any of the above tokens, return an error.
+					throw "Error: Expected a operator, but none found.";
+				}
+
+				//throw into operator stack
+				if (op == RelOperatorTypeEnum::ropLparen) {
+					operator_stack.push_back(op);
+				}
+				else if (op == RelOperatorTypeEnum::ropRparen) {
+					while (!operator_stack.empty() && operator_stack.back() != RelOperatorTypeEnum::ropLparen) {
+						//Pop operator from operator stack onto the output queue. 
+						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
+						temp_op = operator_stack.back();
+						operator_stack.pop_back();
+
+						std::shared_ptr<ASTNode> rhs_operand;
+						std::shared_ptr<ASTNode> lhs_operand;
+
+						//Create a rel_node or expr_node based on whether temp_op is a relation or arithmetic operator
+						if (isBooleanOp(temp_op) && temp_op == RelOperatorTypeEnum::ropNot) {
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 1 operand & the 1 operand is the type we want
+							if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+							if (temp_op == RelOperatorTypeEnum::ropNot) {
+
+								std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+								new_cond_node->setConditionType(cond_type);
+								//Even though the operand is techincally on the right of the not operator,
+								//it is placed on the left for the sake of consistency when accessing.
+								new_cond_node->setLeftAstNode(lhs_operand);
+
+								//We then place this ConditionNode into the output_node_stack
+								output_node_stack.push_back(new_cond_node);
+							}
+						}
+						else if (isArithmeticOp(temp_op)) {
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							ExpressionTypeEnum expr_type = getExpressionType(temp_op);
+
+							std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
+							new_expr_node->setExpressionType(expr_type);
+							new_expr_node->setLeftAstNode(lhs_operand);
+							new_expr_node->setRightAstNode(rhs_operand);
+
+							//We then place this ExpressionNode into the output_node_stack
+							output_node_stack.push_back(new_expr_node);
+						}
+						else if (isRelationOp(temp_op)) {
+							RelationTypeEnum rel_type = getArithmeticRelationType(temp_op);
+
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							std::shared_ptr<RelationNode> new_rel_node = std::make_shared<RelationNode>();
+							new_rel_node->setRelationType(rel_type);
+							new_rel_node->setLeftAstNode(lhs_operand);
+							new_rel_node->setRightAstNode(rhs_operand);
+
+							//We then place this RelationNode into the output_node_stack
+							output_node_stack.push_back(new_rel_node);
+						}
+						else if (isBooleanOp(temp_op)) {
+							ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							if (temp_op == RelOperatorTypeEnum::ropAnd || temp_op == RelOperatorTypeEnum::ropOr) {
+								std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+								new_cond_node->setConditionType(cond_type);
+								new_cond_node->setLeftAstNode(lhs_operand);
+								new_cond_node->setRightAstNode(rhs_operand);
+
+								//We then place this ConditionNode into the output_node_stack
+								output_node_stack.push_back(new_cond_node);
+							}
+							else {
+								throw "Error: Undefined behaviour.";
+							}
+						}
+						else {
+							throw "Error: Undefined behaviour.";
+						}
+					}
+					// If operator_stack.empty() that means there are mismatched parentheses
+					if (operator_stack.empty()) throw "Error: Mismatched parentheses found.";
+					if (operator_stack.back() == RelOperatorTypeEnum::ropLparen) {
+						operator_stack.pop_back();
+					}
+				}
+				else {
+					//This is when arithmetic operators are being handled
+					while (!operator_stack.empty() && operator_stack.back() != RelOperatorTypeEnum::ropLparen
+						&& ((takesPrecedent(operator_stack.back(), op) == 1)
+							|| (takesPrecedent(operator_stack.back(), op) == 0))) {
+						temp_op = operator_stack.back();
+						operator_stack.pop_back();
+
+						std::shared_ptr<ASTNode> rhs_operand;
+						std::shared_ptr<ASTNode> lhs_operand;
+
+						//Create a rel_node or expr_node based on whether temp_op is a relation or arithmetic operator
+						if (isBooleanOp(temp_op) && temp_op == RelOperatorTypeEnum::ropNot) {
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 1 operand & the 1 operand is the type we want
+							if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+							if (temp_op == RelOperatorTypeEnum::ropNot) {
+
+								std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+								new_cond_node->setConditionType(cond_type);
+								//Even though the operand is techincally on the right of the not operator,
+								//it is placed on the left for the sake of consistency when accessing.
+								new_cond_node->setLeftAstNode(lhs_operand);
+
+								//We then place this ConditionNode into the output_node_stack
+								output_node_stack.push_back(new_cond_node);
+							}
+						}
+						else if (isArithmeticOp(temp_op)) {
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							ExpressionTypeEnum expr_type = getExpressionType(temp_op);
+
+							std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
+							new_expr_node->setExpressionType(expr_type);
+							new_expr_node->setLeftAstNode(lhs_operand);
+							new_expr_node->setRightAstNode(rhs_operand);
+
+							//We then place this ExpressionNode into the output_node_stack
+							output_node_stack.push_back(new_expr_node);
+						}
+						else if (isRelationOp(temp_op)) {
+							RelationTypeEnum rel_type = getArithmeticRelationType(temp_op);
+
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+								throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+							}
+
+							std::shared_ptr<RelationNode> new_rel_node = std::make_shared<RelationNode>();
+							new_rel_node->setRelationType(rel_type);
+							new_rel_node->setLeftAstNode(lhs_operand);
+							new_rel_node->setRightAstNode(rhs_operand);
+
+							//We then place this RelationNode into the output_node_stack
+							output_node_stack.push_back(new_rel_node);
+						}
+						else if (isBooleanOp(temp_op)) {
+							ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+
+							rhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							lhs_operand = output_node_stack.back();
+							output_node_stack.pop_back();
+
+							//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+							if (rhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& rhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+								&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+								throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+							}
+
+							if (temp_op == RelOperatorTypeEnum::ropAnd || temp_op == RelOperatorTypeEnum::ropOr) {
+								std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+								new_cond_node->setConditionType(cond_type);
+								new_cond_node->setLeftAstNode(lhs_operand);
+								new_cond_node->setRightAstNode(rhs_operand);
+
+								//We then place this ConditionNode into the output_node_stack
+								output_node_stack.push_back(new_cond_node);
+							}
+							else {
+								throw "Error: Undefined behaviour.";
+							}
+						}
+						else {
+							throw "Error: Undefined behaviour.";
+						}
+					}
+					//Push operator to operator stack
+					operator_stack.push_back(op);
+				}
+			}
+		}
+
+		//Handle remaining operators in operator_stack
+		while (!operator_stack.empty()) {
+			if (operator_stack.back() == RelOperatorTypeEnum::ropLparen || operator_stack.back() == RelOperatorTypeEnum::ropRparen) {
+				//Presence of parenthesis indicates mismatched parenthesis as they should have all been discarded earlier.
+				throw "Error: Mismatched parenthesis found.";
+			}
+			temp_op = operator_stack.back();
+			operator_stack.pop_back();
+
+			std::shared_ptr<ASTNode> rhs_operand;
+			std::shared_ptr<ASTNode> lhs_operand;
+
+			//Create a rel_node or expr_node based on whether temp_op is a relation or arithmetic operator
+			if (isBooleanOp(temp_op) && temp_op == RelOperatorTypeEnum::ropNot) {
+				lhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				//Note we must check if we are able to pop out 1 operand & the 1 operand is the type we want
+				if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+					throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+				}
+
+				ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+				if (temp_op == RelOperatorTypeEnum::ropNot) {
+
+					std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+					new_cond_node->setConditionType(cond_type);
+					//Even though the operand is techincally on the right of the not operator,
+					//it is placed on the left for the sake of consistency when accessing.
+					new_cond_node->setLeftAstNode(lhs_operand);
+
+					//We then place this ConditionNode into the output_node_stack
+					output_node_stack.push_back(new_cond_node);
+				}
+			}
+			else if (isArithmeticOp(temp_op)) {
+				rhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				lhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+				if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+					throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+				}
+
+				if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+					throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+				}
+
+				ExpressionTypeEnum expr_type = getExpressionType(temp_op);
+
+				std::shared_ptr<ExpressionNode> new_expr_node = std::make_shared<ExpressionNode>();
+				new_expr_node->setExpressionType(expr_type);
+				new_expr_node->setLeftAstNode(lhs_operand);
+				new_expr_node->setRightAstNode(rhs_operand);
+
+				//We then place this ExpressionNode into the output_node_stack
+				output_node_stack.push_back(new_expr_node);
+			}
+			else if (isRelationOp(temp_op)) {
+				RelationTypeEnum rel_type = getArithmeticRelationType(temp_op);
+
+				rhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				lhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+				if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+					throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+				}
+
+				if (lhs_operand->getNodeType() != NodeTypeEnum::expressionNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::variableNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
+					throw "Error: Expected ExpressionNode/VariableNode/ConstantNode, but received another type instead.";
+				}
+
+				std::shared_ptr<RelationNode> new_rel_node = std::make_shared<RelationNode>();
+				new_rel_node->setRelationType(rel_type);
+				new_rel_node->setLeftAstNode(lhs_operand);
+				new_rel_node->setRightAstNode(rhs_operand);
+
+				//We then place this RelationNode into the output_node_stack
+				output_node_stack.push_back(new_rel_node);
+			}
+			else if (isBooleanOp(temp_op)) {
+				ConditionTypeEnum cond_type = getBooleanRelationType(temp_op);
+
+				rhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				lhs_operand = output_node_stack.back();
+				output_node_stack.pop_back();
+
+				//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
+				if (rhs_operand->getNodeType() != NodeTypeEnum::relationNode
+					&& rhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+					throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+				}
+
+				if (lhs_operand->getNodeType() != NodeTypeEnum::relationNode
+					&& lhs_operand->getNodeType() != NodeTypeEnum::conditionNode) {
+					throw "Error: Expected RelationNode/ConditionNode, but received another type instead.";
+				}
+
+				if (temp_op == RelOperatorTypeEnum::ropAnd || temp_op == RelOperatorTypeEnum::ropOr) {
+					std::shared_ptr<ConditionNode> new_cond_node = std::make_shared<ConditionNode>();
+					new_cond_node->setConditionType(cond_type);
+					new_cond_node->setLeftAstNode(lhs_operand);
+					new_cond_node->setRightAstNode(rhs_operand);
+
+					//We then place this ConditionNode into the output_node_stack
+					output_node_stack.push_back(new_cond_node);
+				}
+				else {
+					throw "Error: Undefined behaviour.";
+				}
+			}
+			else {
+				throw "Error: Undefined behaviour.";
+			}
+		}
+
+		//Once ';' is reached or stmt_token_queue_ is empty we should have only 1 expression node or VarNode/ConstNode in the output stack.
+		if (output_node_stack.size() != 1) {
+			return -1;
+		}
+		//Note that we must check if we need to encapsulate RelationNode to return a proper ConditionNode
+		std::shared_ptr<ASTNode> last_node = output_node_stack.back();
+		std::shared_ptr<ConditionNode> result;
+		output_node_stack.pop_back();
+		if (last_node->getNodeType() == NodeTypeEnum::variableNode
+			|| last_node->getNodeType() == NodeTypeEnum::constantNode) {
+
+			//TODO: Check if such node types are valid as condition.
+			throw "Error: ConditionNode/RelationNode expected but VariableNode/ConstantNode found.";
+		}
+		else if (last_node->getNodeType() == NodeTypeEnum::expressionNode) {
+			//TODO: Check if such node types are valid as condition.
+			throw "Error: ConditionNode/RelationNode expected but ExpressionNode found.";
+		}
+		else if (last_node->getNodeType() == NodeTypeEnum::relationNode) {
+			result = std::make_shared<ConditionNode>();
+			std::static_pointer_cast<ConditionNode>(result)->setConditionType(ConditionTypeEnum::none);
+			std::static_pointer_cast<ConditionNode>(result)->setLeftAstNode(last_node);
+		}
+		else if (last_node->getNodeType() == NodeTypeEnum::conditionNode) {
+			result = std::static_pointer_cast<ConditionNode>(last_node);
+		}
+		else {
+			throw "Error: ConditionNode/RelationNode expected, unknown node type found.";
+		}
+
+		/*OLD
 		this->process_token_stream_.pop_front(); // Remove "(" type token
 
 
@@ -673,30 +1734,21 @@
 
 		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>();
 		condition_node->setConditionType(ConditionTypeEnum::none);
-		condition_node->setLeftRelationNode(relation_node);
-
-
-		/*
-		//Set parent, child pointers for Condition<->Relation
-		condition_node->addChildNode(relation_node);
-		relation_node->setParentNode(condition_node);
-		//Set parent, child pointers for Relation <-> (lhs & rhs)
-		relation_node->addChildNode(lhs_node);
-		lhs_node->setParentNode(condition_node);
-		relation_node->addChildNode(rhs_node);
-		rhs_node->setParentNode(condition_node);
-		*/
+		condition_node->setLeftAstNode(relation_node);
 
 		//Check for ')' , "then" , '{'
 		if (this->process_token_stream_.front() != ")") {
 			return -1;
 		}
 		this->process_token_stream_.pop_front(); // Pops out '{'
+		*/
 
+		/*No longer required as it has already been popped earlier
 		if (this->process_token_stream_.front() != "then") {
 			return -1;
 		}
 		this->process_token_stream_.pop_front(); // Pops out '{'
+		*/
 
 		if (this->process_token_stream_.front() != "{") {
 			return -1;
@@ -707,25 +1759,10 @@
 		std::shared_ptr<StatementListNode> if_stmt_list_node = std::make_shared<StatementListNode>();
 		std::shared_ptr<StatementListNode> else_stmt_list_node = std::make_shared<StatementListNode>();
 		std::shared_ptr<IfNode> new_if_node = std::make_shared<IfNode>();
-		new_if_node->setConditionNode(condition_node);
+		new_if_node->setConditionNode(result);
 		new_if_node->setThenStatementListNode(if_stmt_list_node);
 		new_if_node->setElseStatementListNode(else_stmt_list_node);
 
-		/*
-		//Set child & parent pointers
-
-		condition_node->setParentNode(new_if_node);
-		new_if_node->addChildNode(condition_node);
-
-		if_stmt_list_node->setParentNode(new_if_node);
-		new_if_node->addChildNode(if_stmt_list_node);
-
-		else_stmt_list_node->setParentNode(new_if_node);
-		new_if_node->addChildNode(else_stmt_list_node);
-
-		this->current_parent_node_->addChildNode(new_if_node);
-		new_if_node->setParentNode(this->current_parent_node_);
-		*/
 		this->stmt_num_++;
 		new_if_node->setStatementNumber(this->stmt_num_);
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_if_node);
@@ -747,6 +1784,49 @@
 
 			this->pkb_builder_.addFollows(prevStmt->getStatementNumber()
 				, new_if_node->getStatementNumber());
+		}
+
+		//add Uses Relationship for all vars
+		for (STRING var_name : used_vars_set) {
+			//Set Uses Relationship for this statement
+			this->pkb_builder_.addUses(new_if_node->getStatementNumber()
+				, var_name);
+
+			//Set Uses Relationship for all containers of this statement by going up 2 steps until we hit ProcedureNode.
+			std::shared_ptr<ASTNode> curr_container = this->current_parent_node_->getParentNode();
+			STMT_NUM curr_stmtnum = 0;
+			while (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+				//Get stmt number of container
+				if (curr_container->getNodeType() == NodeTypeEnum::whileNode) {
+					curr_stmtnum = std::static_pointer_cast<WhileNode>(curr_container)->getStatementNumber();
+				}
+				else if (curr_container->getNodeType() == NodeTypeEnum::ifNode) {
+					curr_stmtnum = std::static_pointer_cast<IfNode>(curr_container)->getStatementNumber();
+				}
+				//call addUses
+				this->pkb_builder_.addUses(curr_stmtnum, var_name);
+
+				//Check if can go up 2 steps
+				if (curr_container->getParentNode()->getParentNode() == NULL) {
+					//Throw exception if cant
+					throw "Exception in parseWhile: curr_container missing grandparent node.";
+				}
+				else {
+					//curr_container = go up 2 steps
+					curr_container = curr_container->getParentNode()->getParentNode();
+				}
+			}
+			//call addUses for procedureNode
+			if (curr_container->getNodeType() != NodeTypeEnum::procedureNode) {
+				//Throw exception if cant
+				throw "Exception in parseWhile: curr_container should be ProcedureNode.";
+			}
+			else {
+				//addUses for ProcedureNode
+				std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName();
+				this->pkb_builder_.addUses(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
+					, var_name);
+			}
 		}
 
 
@@ -862,25 +1942,25 @@
 				//Else means token is operator or parentheses
 				//Create a Operator TypeEnum object
 				if (temp_token == "+") {
-					op = OperatorTypeEnum::op_plus;
+					op = OperatorTypeEnum::opPlus;
 				}
 				else if (temp_token == "-") {
-					op = OperatorTypeEnum::op_min;
+					op = OperatorTypeEnum::opMin;
 				}
 				else if (temp_token == "*") {
-					op = OperatorTypeEnum::op_mult;
+					op = OperatorTypeEnum::opMult;
 				}
 				else if (temp_token == "/") {
-					op = OperatorTypeEnum::op_div;
+					op = OperatorTypeEnum::opDiv;
 				}
 				else if (temp_token == "%") {
-					op = OperatorTypeEnum::op_mod;
+					op = OperatorTypeEnum::opMod;
 				}
 				else if (temp_token == "(") {
-					op = OperatorTypeEnum::op_lparen;
+					op = OperatorTypeEnum::opLparen;
 				}
 				else if (temp_token == ")") {
-					op = OperatorTypeEnum::op_rparen;
+					op = OperatorTypeEnum::opRparen;
 				}
 				else {
 					//If not any of the above tokens, return an error.
@@ -888,11 +1968,11 @@
 				}
 
 				//throw into operator stack
-				if (op == OperatorTypeEnum::op_lparen) {
+				if (op == OperatorTypeEnum::opLparen) {
 					operator_stack.push_back(op);
 				}
-				else if (op == OperatorTypeEnum::op_rparen) {
-					while (!operator_stack.empty() && operator_stack.back() != OperatorTypeEnum::op_lparen) {
+				else if (op == OperatorTypeEnum::opRparen) {
+					while (!operator_stack.empty() && operator_stack.back() != OperatorTypeEnum::opLparen) {
 						//Pop operator from operator stack onto the output queue. 
 						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
 						temp_op = operator_stack.back();
@@ -904,7 +1984,7 @@
 						std::shared_ptr<ASTNode> lhs_operand = output_node_stack.back();
 						output_node_stack.pop_back();
 
-						//Note we must check if we are able to pop out 2 & the 2 is the type we want
+						//Note we must check if we are able to pop out 2 operands & the 2 operands is the type we want
 						if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
 							&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
 							&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
@@ -923,26 +2003,17 @@
 						new_expr_node->setLeftAstNode(lhs_operand);
 						new_expr_node->setRightAstNode(rhs_operand);
 
-						/*
-						//Set parent pointers
-						lhs_operand->setParentNode(new_expr_node);
-						new_expr_node->addChildNode(lhs_operand);
-
-						rhs_operand->setParentNode(new_expr_node);
-						new_expr_node->addChildNode(rhs_operand);
-						*/
-
 						//We then place this ExpressionNode into the output_node_stack
 						output_node_stack.push_back(new_expr_node);
 					}
 					// If operator_stack.empty() that means there are mismatched parentheses
 					if (operator_stack.empty()) return -1;
-					if (operator_stack.back() == OperatorTypeEnum::op_lparen) {
+					if (operator_stack.back() == OperatorTypeEnum::opLparen) {
 						operator_stack.pop_back();
 					}
 				}
 				else {
-					while (!operator_stack.empty() && operator_stack.back() != OperatorTypeEnum::op_lparen
+					while (!operator_stack.empty() && operator_stack.back() != OperatorTypeEnum::opLparen
 						&& ((takesPrecedent(operator_stack.back(), op) == 1)
 							|| (takesPrecedent(operator_stack.back(), op) == 0))) {
 						//NOTE: Condition for takesPredence(op1, op2) == 0, i.e. same precedence also has the requirement
@@ -950,14 +2021,14 @@
 						temp_op = operator_stack.back();
 						operator_stack.pop_back();
 
-						//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
+						//When we want to place an operator into the output stack, we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
 						std::shared_ptr<ASTNode> rhs_operand = output_node_stack.back();
 						output_node_stack.pop_back();
 
 						std::shared_ptr<ASTNode> lhs_operand = output_node_stack.back();
 						output_node_stack.pop_back();
 
-						//Note we must check if we are able to pop out 2 & the 2 is the type we want
+						//Note we must check if we are able to pop out 2 operands & the 2 is the type we want
 						if (rhs_operand->getNodeType() != NodeTypeEnum::expressionNode
 							&& rhs_operand->getNodeType() != NodeTypeEnum::variableNode
 							&& rhs_operand->getNodeType() != NodeTypeEnum::constantNode) {
@@ -975,15 +2046,6 @@
 						new_expr_node->setExpressionType(expr_type);
 						new_expr_node->setLeftAstNode(lhs_operand);
 						new_expr_node->setRightAstNode(rhs_operand);
-
-						/*
-						//Set parent pointers
-						lhs_operand->setParentNode(new_expr_node);
-						new_expr_node->addChildNode(lhs_operand);
-
-						rhs_operand->setParentNode(new_expr_node);
-						new_expr_node->addChildNode(rhs_operand);
-						*/
 
 						//We then place this ExpressionNode into the output_node_stack
 						output_node_stack.push_back(new_expr_node);
@@ -996,7 +2058,7 @@
 
 		//Handle remaining operators in operator_stack
 		while (!operator_stack.empty()) {
-			if (operator_stack.back() == OperatorTypeEnum::op_lparen || operator_stack.back() == OperatorTypeEnum::op_rparen) {
+			if (operator_stack.back() == OperatorTypeEnum::opLparen || operator_stack.back() == OperatorTypeEnum::opRparen) {
 				//Presence of parenthesis indicates mismatched parenthesis as they should have all been discarded earlier.
 				return -1;
 			}
@@ -1029,15 +2091,6 @@
 			new_expr_node->setLeftAstNode(lhs_operand);
 			new_expr_node->setRightAstNode(rhs_operand);
 
-			/*
-			//Set parent pointers
-			lhs_operand->setParentNode(new_expr_node);
-			new_expr_node->addChildNode(lhs_operand);
-
-			rhs_operand->setParentNode(new_expr_node);
-			new_expr_node->addChildNode(rhs_operand);
-			*/
-
 			//We then place this ExpressionNode into the output_node_stack
 			output_node_stack.push_back(new_expr_node);
 		}
@@ -1069,12 +2122,6 @@
 			std::static_pointer_cast<ExpressionNode>(result)->setExpressionType(ExpressionTypeEnum::none);
 			std::static_pointer_cast<ExpressionNode>(result)->setLeftAstNode(last_node);
 
-			/*
-			//Set parent pointers
-			last_node->setParentNode(result);
-			result->addChildNode(last_node);
-			*/
-
 		}
 		else {
 			result = last_node;
@@ -1096,17 +2143,6 @@
 		this->stmt_num_++;
 		new_assign_node->setStatementNumber(this->stmt_num_);
 
-		/*
-		//Set child & parent pointers
-		new_lhs_var_node->setParentNode(new_assign_node);
-		new_assign_node->addChildNode(new_lhs_var_node);
-
-		rhs_expr_node->setParentNode(new_assign_node);
-		new_assign_node->addChildNode(rhs_expr_node);
-
-		new_assign_node->setParentNode(this->current_parent_node_);
-		this->current_parent_node_->addChildNode(new_assign_node);
-		*/
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_assign_node);
 		new_assign_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
 
@@ -1171,7 +2207,7 @@
 				, lhs_name_token);
 		}
 
-		//TODO: add Uses Relationship for all rhs vars
+		//add Uses Relationship for all rhs vars
 		for (STRING var_name : used_vars_set) {
 			//Set Uses Relationship for this statement
 			this->pkb_builder_.addUses(new_assign_node->getStatementNumber()
@@ -1563,13 +2599,13 @@
 	//===== START OF HELPER FUNCTIONS =====
 	int Parser::takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op) {
 		//Returns 1 if left operator takes precendence
-		if (l_op == OperatorTypeEnum::op_mult || r_op == OperatorTypeEnum::op_div || r_op == OperatorTypeEnum::op_mod) {
-			if (r_op == OperatorTypeEnum::op_plus || l_op == OperatorTypeEnum::op_min) {
+		if (l_op == OperatorTypeEnum::opMult || l_op == OperatorTypeEnum::opDiv || l_op == OperatorTypeEnum::opMod) {
+			if (r_op == OperatorTypeEnum::opPlus || l_op == OperatorTypeEnum::opMin) {
 				return 1;
 			}
 		}
-		else if (l_op == OperatorTypeEnum::op_plus || l_op == OperatorTypeEnum::op_min) {
-			if (r_op == OperatorTypeEnum::op_mult || r_op == OperatorTypeEnum::op_div || r_op == OperatorTypeEnum::op_mod) {
+		else if (l_op == OperatorTypeEnum::opPlus || l_op == OperatorTypeEnum::opMin) {
+			if (r_op == OperatorTypeEnum::opMult || r_op == OperatorTypeEnum::opDiv || r_op == OperatorTypeEnum::opMod) {
 				//-1 if right operator takes precedence
 				return -1;
 			}
@@ -1583,19 +2619,19 @@
 	}
 
 	ExpressionTypeEnum Parser::getExpressionType(OperatorTypeEnum op) {
-		if (op == OperatorTypeEnum::op_plus) {
+		if (op == OperatorTypeEnum::opPlus) {
 			return ExpressionTypeEnum::plus;
 		}
-		else if (op == OperatorTypeEnum::op_min) {
+		else if (op == OperatorTypeEnum::opMin) {
 			return ExpressionTypeEnum::min;
 		}
-		else if (op == OperatorTypeEnum::op_mult) {
+		else if (op == OperatorTypeEnum::opMult) {
 			return ExpressionTypeEnum::times;
 		}
-		else if (op == OperatorTypeEnum::op_div) {
+		else if (op == OperatorTypeEnum::opDiv) {
 			return ExpressionTypeEnum::div;
 		}
-		else if (op == OperatorTypeEnum::op_mod) {
+		else if (op == OperatorTypeEnum::opMod) {
 			return ExpressionTypeEnum::mod;
 		}
 		else {
@@ -1604,6 +2640,157 @@
 	}
 
 	//===== END OF HELPER FUNCTIONS =====
+
+	//===== START OF HELPER FUNCTIONS FOR RELATION NODE =====
+	int Parser::takesPrecedent(RelOperatorTypeEnum l_op, RelOperatorTypeEnum r_op) {
+		//Returns 1 if left operator takes precendence
+		if (l_op == RelOperatorTypeEnum::ropMult || l_op == RelOperatorTypeEnum::ropDiv || l_op == RelOperatorTypeEnum::ropMod) {
+			if (r_op == RelOperatorTypeEnum::ropMult || r_op == RelOperatorTypeEnum::ropDiv || r_op == RelOperatorTypeEnum::ropMod) {
+				return 0;
+			}
+			else {
+				return 1;
+			}
+		}
+		else if (l_op == RelOperatorTypeEnum::ropPlus || l_op == RelOperatorTypeEnum::ropMin) {
+			if (r_op == RelOperatorTypeEnum::ropEq || r_op == RelOperatorTypeEnum::ropNeq
+				|| r_op == RelOperatorTypeEnum::ropGt || r_op == RelOperatorTypeEnum::ropGte
+				|| r_op == RelOperatorTypeEnum::ropLt || r_op == RelOperatorTypeEnum::ropLte
+				//Boolean comparison operator
+				|| r_op == RelOperatorTypeEnum::ropNot || r_op == RelOperatorTypeEnum::ropAnd || r_op == RelOperatorTypeEnum::ropOr) {
+				//1 if left operator takes precedence
+				return 1;
+			}
+			else if (r_op == RelOperatorTypeEnum::ropMult || r_op == RelOperatorTypeEnum::ropDiv || r_op == RelOperatorTypeEnum::ropMod) {
+				//-1 if right operator takes precedence
+				return -1;
+			}
+			else {
+				return 0;
+			}
+		}
+		else if (l_op == RelOperatorTypeEnum::ropEq || l_op == RelOperatorTypeEnum::ropNeq
+			|| l_op == RelOperatorTypeEnum::ropGt || l_op == RelOperatorTypeEnum::ropGte
+			|| l_op == RelOperatorTypeEnum::ropLt || l_op == RelOperatorTypeEnum::ropLte) {
+			if (r_op == RelOperatorTypeEnum::ropNot || r_op == RelOperatorTypeEnum::ropAnd || r_op == RelOperatorTypeEnum::ropOr) {
+				//1 if left operator takes precedence
+				return 1;
+			}
+			else if (r_op == RelOperatorTypeEnum::ropEq || r_op == RelOperatorTypeEnum::ropNeq
+				|| r_op == RelOperatorTypeEnum::ropGt || r_op == RelOperatorTypeEnum::ropGte
+				|| r_op == RelOperatorTypeEnum::ropLt || r_op == RelOperatorTypeEnum::ropLte) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+		else if (l_op == RelOperatorTypeEnum::ropNot || l_op == RelOperatorTypeEnum::ropAnd || l_op == RelOperatorTypeEnum::ropOr) {
+			if (r_op == RelOperatorTypeEnum::ropNot || r_op == RelOperatorTypeEnum::ropAnd || r_op == RelOperatorTypeEnum::ropOr) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+		else {
+			throw "Error undefined comparison.";
+		}
+	}
+
+	ExpressionTypeEnum Parser::getExpressionType(RelOperatorTypeEnum op) {
+		if (op == RelOperatorTypeEnum::ropPlus) {
+			return ExpressionTypeEnum::plus;
+		}
+		else if (op == RelOperatorTypeEnum::ropMin) {
+			return ExpressionTypeEnum::min;
+		}
+		else if (op == RelOperatorTypeEnum::ropMult) {
+			return ExpressionTypeEnum::times;
+		}
+		else if (op == RelOperatorTypeEnum::ropDiv) {
+			return ExpressionTypeEnum::div;
+		}
+		else if (op == RelOperatorTypeEnum::ropMod) {
+			return ExpressionTypeEnum::mod;
+		}
+		else {
+			return ExpressionTypeEnum::none;
+		}
+	}
+
+	RelationTypeEnum Parser::getArithmeticRelationType(RelOperatorTypeEnum op) {
+		if (op == RelOperatorTypeEnum::ropEq) {
+			return RelationTypeEnum::eq;
+		}
+		else if (op == RelOperatorTypeEnum::ropNeq) {
+			return RelationTypeEnum::neq;
+		}
+		else if (op == RelOperatorTypeEnum::ropGt) {
+			return RelationTypeEnum::gt;
+		}
+		else if (op == RelOperatorTypeEnum::ropGte) {
+			return RelationTypeEnum::gte;
+		}
+		else if (op == RelOperatorTypeEnum::ropLt) {
+			return RelationTypeEnum::lt;
+		}
+		else if (op == RelOperatorTypeEnum::ropLte) {
+			return RelationTypeEnum::lte;
+		}
+		else {
+			return RelationTypeEnum::undefined;
+		}
+	}
+
+	ConditionTypeEnum Parser::getBooleanRelationType(RelOperatorTypeEnum op) {
+		if (op == RelOperatorTypeEnum::ropNot) {
+			return ConditionTypeEnum::not;
+		}
+		else if (op == RelOperatorTypeEnum::ropOr) {
+			return ConditionTypeEnum::or;
+		}
+		else if (op == RelOperatorTypeEnum::ropAnd) {
+			return ConditionTypeEnum::and;
+		}
+		else {
+			return ConditionTypeEnum::undefined;
+		}
+	}
+
+	bool Parser::isArithmeticOp(RelOperatorTypeEnum op) {
+		if (op == RelOperatorTypeEnum::ropPlus || op == RelOperatorTypeEnum::ropMin
+			|| op == RelOperatorTypeEnum::ropMult || op == RelOperatorTypeEnum::ropDiv
+			|| op == RelOperatorTypeEnum::ropMod) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool Parser::isRelationOp(RelOperatorTypeEnum op) {
+		if (op == RelOperatorTypeEnum::ropEq || op == RelOperatorTypeEnum::ropNeq
+			|| op == RelOperatorTypeEnum::ropGt || op == RelOperatorTypeEnum::ropGte
+			|| op == RelOperatorTypeEnum::ropLt || op == RelOperatorTypeEnum::ropLte) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool Parser::isBooleanOp(RelOperatorTypeEnum op) {
+		if (op == RelOperatorTypeEnum::ropBoolNone || op == RelOperatorTypeEnum::ropNot
+			|| op == RelOperatorTypeEnum::ropAnd || op == RelOperatorTypeEnum::ropOr) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	//===== END OF HELPER FUNCTIONS FOR RELATION NODE =====
 
 	//===== START OF DEBUGGER FUNCTIONS =====
 	int Parser::printTree(AST_NODE_PTR parent_node_ptr) {
