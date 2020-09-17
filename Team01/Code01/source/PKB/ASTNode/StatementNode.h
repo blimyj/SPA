@@ -13,6 +13,11 @@ typedef int STMT_NUM;
 class StatementNode : public ASTNode {
 
 public:
+	StatementNode();
+		/*
+		Description: Constructs a StatementNode with NULL value for its STMT_NUM.
+		*/
+
 	BOOLEAN setStatementNumber(STMT_NUM stmt_num);
 		/*
 		Description: Returns True if able to set a STMT_NUM of this StatementNode.

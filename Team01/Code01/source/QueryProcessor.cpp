@@ -1,4 +1,5 @@
 #include "QueryProcessor.h"
+#include "QueryPreProcessor.h"
 #include "QueryEvaluator.h"
 #include "QueryNode.h"
 #include "QueryNodeType.h"
@@ -14,6 +15,7 @@ QueryProcessor::QueryProcessor(PKB pkb) {
 }
 
 QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
+
 	/* Uncomment when preprocessor is done
 	
 	// QPP
@@ -24,6 +26,18 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 		if (processed_synonyms.empty()) { return empty_result; } // either no synonym or syntax error, both should return emptyresult
 	PROCESSED_CLAUSES processed_clauses = pre_processor.preProcessClauses(QUERY q); //returns query tree of clause nodes
 		 if (processed_queries == NULL) { return empty_result; } // null result means that there is syntax error, return empty result
+
+	// Wait for preprocessor
+	
+	const std::string empty_result = "";
+	QueryPreProcessor pre_processor = QueryPreProcessor();
+	SPLIT_QUERY split_query = pre_processor.splitQuery(query); // returns vector containing seperated declarations and clauses
+	PROCESSED_SYNONYMS processed_synonyms = pre_processor.preProcessSynonyms(split_query.at(0)); // returns table of synonym nodes
+		if (processed_synonyms.empty()) { return empty_result; } // either no synonym or syntax error, both should return emptyresult
+		PROCESSED_CLAUSES processed_clauses = pre_processor.preProcessClauses(processed_synonyms, split_query.at(1)); //returns query tree of clause nodes
+		if (processed_clauses.getNodeType() == QueryNodeType::unassigned) { return empty_result; } // null result means that there is syntax error, return empty result
+	
+
 
 	// QE
 	QueryEvaluator query_evaluator = QueryEvaluator(this->pkb);
@@ -56,6 +70,7 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	QueryNode child2 = QueryNode();
 	child2.setSynonymNode(QuerySynonymType::variable, "v");
 
+
 	QueryNode such_that = QueryNode();
 	such_that.setNodeType(QueryNodeType::such_that);
 
@@ -63,6 +78,7 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	root.setNodeType(QueryNodeType::select);
 	QueryNode root_children[] = { child2 };
 	root.setChildren(root_children, 1);
+
 
 	QueryNode processed_clauses = root; //stores root node of the tree
 	*/
