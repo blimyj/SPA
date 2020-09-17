@@ -113,7 +113,7 @@ void QueryNode::setSynonymNode(SYNONYM_TYPE_STRING synonym_type_string, SYNONYM_
 	this->node_content = content;
 }
 
-void setIdentityNode(STRING identity) {
+void QueryNode::setIdentityNode(STRING identity) {
 	this->node_type = { QueryNodeType::ident };
 	QueryNodeContent content = QueryNodeContent(identity);
 	this->node_content = content;
