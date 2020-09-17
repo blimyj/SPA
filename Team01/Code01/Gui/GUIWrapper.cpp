@@ -31,6 +31,7 @@
 GUIWrapper::GUIWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
+	this->pkb = PKBBuilder().build();
 }
 
 // method for parsing the SIMPLE source
@@ -40,7 +41,9 @@ void GUIWrapper::parse(std::string filename) {
 	Parser parser = Parser();
 	
 	try {
-		parser.parseFile(filename);
+		
+		this->pkb = parser.parseFile(filename);
+
 	}
 	catch (const char* msg) {
 		std::cout << msg << "\n";
@@ -58,8 +61,9 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 	PKB pkbstub = pkb_init.addVariables();
 
 
-	QueryProcessor qp = QueryProcessor(pkbstub);
-	QueryNode qn = QueryNode();
+	QueryProcessor qp = QueryProcessor(this->pkb);
+	//QueryProcessor qp = QueryProcessor(pkbstub);
+	//QueryNode qn = QueryNode();
 	QUERY_RESULT query_result = qp.processQuery(query);
 
 

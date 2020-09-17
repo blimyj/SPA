@@ -127,7 +127,7 @@ QueryNode QueryPreProcessor::createRelationNode(PROCESSED_SYNONYMS proc_s, RELAT
 	QueryNode second_arg_node = createArgumentNode(proc_s, second_arg);
 
 	QueryNode relation_node_children[2] = { first_arg_node, second_arg_node };
-	relation_node.setChildren(relation_node_children);
+	relation_node.setChildren(relation_node_children, 2);
 
 	return relation_node;
 }
@@ -515,7 +515,7 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 				QueryNode select_syn_node = QueryNode();
 				select_syn_node.setSynonymNode({ proc_s.find(select_syn)->second.getSynonymType() }, select_syn);
 				QueryNode select_children[] = { select_syn_node };
-				select_node.setChildren(select_children);
+				select_node.setChildren(select_children, 1);
 			}
 			else {
 				is_valid = false;
@@ -614,7 +614,7 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 			}
 
 			// set children of select node
-			select_node.setChildren(select_children);
+			select_node.setChildren(select_children, child_index);
 		}
 	}
 

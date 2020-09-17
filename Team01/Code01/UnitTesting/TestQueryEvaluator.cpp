@@ -32,32 +32,40 @@ namespace UnitTesting
 			// PKB
 			PKBBuilder builder;
 			
-			std::shared_ptr<VariableNode> v1 = std::make_shared<VariableNode>("a");
-			std::shared_ptr<VariableNode> v2 = std::make_shared<VariableNode>("b");
-			std::shared_ptr<VariableNode> v3 = std::make_shared<VariableNode>("c");
-			std::shared_ptr<VariableNode> v4 = std::make_shared<VariableNode>("d");
-			std::shared_ptr<VariableNode> v5 = std::make_shared<VariableNode>("e");
+			std::shared_ptr<VariableNode> v1 = std::make_shared<VariableNode>();
+			v1->setVariableName("a");
+			std::shared_ptr<VariableNode> v2 = std::make_shared<VariableNode>();
+			v2->setVariableName("b");
+			std::shared_ptr<VariableNode> v3 = std::make_shared<VariableNode>();
+			v3->setVariableName("c");
+			std::shared_ptr<VariableNode> v4 = std::make_shared<VariableNode>();
+			v4->setVariableName("d");
+			std::shared_ptr<VariableNode> v5 = std::make_shared<VariableNode>();
+			v5->setVariableName("e");
+
 			builder.addVariableNode(v1);
 			builder.addVariableNode(v2);
 			builder.addVariableNode(v3);
 			builder.addVariableNode(v4);
 			builder.addVariableNode(v5);
 
-			PrintNode p1(v1);
-			p1.setStatementNumber(1);
-			PrintNode p2(v2);
-			p2.setStatementNumber(2);
-			PrintNode p3(v3);
-			p3.setStatementNumber(3);
-			PrintNode p4(v4);
-			p4.setStatementNumber(4);
-			PrintNode p5(v5);
-			p5.setStatementNumber(5);
-			builder.addPrintNode(std::make_shared<PrintNode>(p1));
-			builder.addPrintNode(std::make_shared<PrintNode>(p2));
-			builder.addPrintNode(std::make_shared<PrintNode>(p3));
-			builder.addPrintNode(std::make_shared<PrintNode>(p4));
-			builder.addPrintNode(std::make_shared<PrintNode>(p5));
+			std::shared_ptr<PrintNode> p1 = std::make_shared<PrintNode>();
+			p1->setStatementNumber(1);
+			std::shared_ptr<PrintNode> p2 = std::make_shared<PrintNode>();
+			p2->setStatementNumber(2);
+			std::shared_ptr<PrintNode> p3 = std::make_shared<PrintNode>();
+			p3->setStatementNumber(3);
+			std::shared_ptr<PrintNode> p4 = std::make_shared<PrintNode>();
+			p4->setStatementNumber(4);
+			std::shared_ptr<PrintNode> p5 = std::make_shared<PrintNode>();
+			p5->setStatementNumber(5);
+
+
+			builder.addPrintNode(p1);
+			builder.addPrintNode(p2);
+			builder.addPrintNode(p3);
+			builder.addPrintNode(p4);
+			builder.addPrintNode(p5);
 
 			StatementNode s1;
 			s1.setStatementNumber(1);
