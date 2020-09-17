@@ -113,11 +113,11 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 
 			} else if (relationship_type == QueryNodeType::parentT) {
 
-			} else if (relationship_type == QueryNodeType::uses) {
+			} else if (relationship_type == QueryNodeType::usesS) {
 				std::vector<std::pair<int, std::string>> stmt_cross; 
 				std::vector<std::pair<std::string, std::string>> proc_cross; 
 
-			} else if (relationship_type == QueryNodeType::modifies) {
+			} else if (relationship_type == QueryNodeType::modifiesS) {
 
 			}
 		} else if (clause_type == QueryNodeType::pattern) {
