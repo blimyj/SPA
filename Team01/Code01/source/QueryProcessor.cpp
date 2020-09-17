@@ -1,4 +1,5 @@
 #include "QueryProcessor.h"
+#include "QueryPreProcessor.h"
 #include "QueryEvaluator.h"
 #include "QueryNode.h"
 #include "QueryNodeType.h"
@@ -15,20 +16,20 @@ QueryProcessor::QueryProcessor(PKB pkb) {
 
 QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	// Wait for preprocessor
-	/*
-	* const std::string empty_result = "";
-	* QueryPreProcessor pre_processor = QueryPreProcessor();
-	* PROCESSED_QUERY process_queries = pre_processor.parse(QUERY q);
-	* PROCESSED_SYNONYMS processed_synonyms = pre_processor.preProcessSynonyms(QUERY q); //returns table of synonym nodes
-	*	if (processed_synonyms.empty()) { return empty_result; } // either no synonym or syntax error, both should return emptyresult
-	* PROCESSED_CLAUSES processed_clauses = pre_processor.preProcessClauses(QUERY q); //returns query tree of clause nodes
-	* 	 if (processed_queries == NULL) { return empty_result; } // null result means that there is syntax error, return empty result
-	*/
+	
+	const std::string empty_result = "";
+	QueryPreProcessor pre_processor = QueryPreProcessor();
+	SPLIT_QUERY split_query = pre_processor.splitQuery(query); // returns vector containing seperated declarations and clauses
+	PROCESSED_SYNONYMS processed_synonyms = pre_processor.preProcessSynonyms(split_query.at(0)); // returns table of synonym nodes
+		if (processed_synonyms.empty()) { return empty_result; } // either no synonym or syntax error, both should return emptyresult
+		PROCESSED_CLAUSES processed_clauses = pre_processor.preProcessClauses(processed_synonyms, split_query.at(1)); //returns query tree of clause nodes
+		if (processed_clauses.getNodeType() == QueryNodeType::unassigned) { return empty_result; } // null result means that there is syntax error, return empty result
+	
 
 
 	QueryEvaluator query_evaluator = QueryEvaluator(this->pkb);
 
-
+	/*
 	// Create fake synonyms and clauses for now
 	QueryNode assign_node = QueryNode();
 	assign_node.setSynonymNode({ QuerySynonymType::assign }, "a");
@@ -56,7 +57,7 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	child1.setChildren(child1_children);
 
 	QueryNode processed_clauses = child1; //stores root node of the tree
-
+	*/
 
 	QUERY_RESULT query_result = "";
 	//QUERY_RESULT query_result = query_evaluator.evaluateQuery(processed_synonyms, processed_clauses);

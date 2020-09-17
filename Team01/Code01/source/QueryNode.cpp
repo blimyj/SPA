@@ -3,6 +3,9 @@
 #include "QueryNode.h"
 #include "QueryNodeType.h"
 
+QueryNode::QueryNode() {
+	this->node_type = QueryNodeType::unassigned;
+}
 
 void QueryNode::setNodeType(NODE_TYPE node_type) {
 	this->node_type = node_type;
@@ -106,11 +109,14 @@ void QueryNode::setSynonymNode(SYNONYM_TYPE_STRING synonym_type_string, SYNONYM_
 		this->synonym_type = QuerySynonymType::procedure;
 	}
 
-	this->synonym_name = synonym_name;
+	QueryNodeContent content = QueryNodeContent(synonym_name);
+	this->node_content = content;
 }
 
-NODE_TYPE QueryNode::getNodeType() {
-	return node_type;
+void setIdentityNode(STRING identity) {
+	this->node_type = { QueryNodeType::ident };
+	QueryNodeContent content = QueryNodeContent(identity);
+	this->node_content = content;
 }
 
 SYNONYM_TYPE QueryNode::getSynonymType() {

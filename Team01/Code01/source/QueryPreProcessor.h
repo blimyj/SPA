@@ -59,6 +59,27 @@ private:
 		  Normal: Returns SPLIT_DECLARATIONS
 		*/
 
+	QueryNode createArgumentNode(PROCESSED_SYNONYMS proc_s, ARGUMENT arg);
+	/*
+		Description:
+		  Normal: Returns a QueryNode for the argument
+		*/
+
+	QueryNode createRelationNode(PROCESSED_SYNONYMS proc_s, RELATIONSHIP rel,
+		ARGUMENT first_arg, ARGUMENT second_arg);
+	/*
+		Description:
+		  Normal: Returns a QueryNode for the relationship
+		*/
+
+	QueryNode createPatternNode(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s,
+		ARGUMENT first_arg, ARGUMENT second_arg);
+	/*
+		Description:
+		  Normal: Returns a QueryNode for the pattern
+		*/
+
+
 	VALIDATION_RESULT isValidStructure(QUERY q);
 	/*
 		Description:
