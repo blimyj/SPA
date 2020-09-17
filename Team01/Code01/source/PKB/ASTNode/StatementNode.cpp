@@ -1,6 +1,6 @@
 #include "StatementNode.h"
 
-BOOLEAN StatementNode::setStatementNumber(STMT_NUMBER stmt_num) {
+BOOLEAN StatementNode::setStatementNumber(STMT_NUM stmt_num) {
     try {
         stmt_num_ = stmt_num;
     } catch (int e) {
@@ -20,7 +20,7 @@ BOOLEAN StatementNode::setStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_pt
     return true;
 }
 
-STMT_NUMBER StatementNode::getStatementNumber() {
+STMT_NUM StatementNode::getStatementNumber() {
     return stmt_num_;
 }
 

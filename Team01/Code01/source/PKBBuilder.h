@@ -3,12 +3,14 @@
 class PKBBuilder;
 
 #include "PKB.h"
+#include "PKB/ASTNode/ProgramNode.h"
 #include "PKB/DesignEntities/AssignTable.h"
 #include "PKB/DesignEntities/ConstantTable.h"
 #include "PKB/DesignEntities/IfTable.h"
 #include "PKB/DesignEntities/PrintTable.h"
 #include "PKB/DesignEntities/ProcedureTable.h"
 #include "PKB/DesignEntities/ReadTable.h"
+#include "PKB/DesignEntities/StatementListTable.h"
 #include "PKB/DesignEntities/StatementTable.h"
 #include "PKB/DesignEntities/VariableTable.h"
 #include "PKB/DesignEntities/WhileTable.h"
@@ -17,12 +19,15 @@ class PKBBuilder;
 #include "PKB/Relationships/UsesTable.h"
 #include "PKB/Relationships/ModifiesTable.h"
 
+typedef std::shared_ptr<ProgramNode> PROGRAM_NODE_PTR;
+
 typedef AssignTable ASSIGN_TABLE;
 typedef ConstantTable CONSTANT_TABLE;
 typedef IfTable IF_TABLE;
 typedef PrintTable PRINT_TABLE;
 typedef ProcedureTable PROC_TABLE;
 typedef ReadTable READ_TABLE;
+typedef StatementListTable STMT_LIST_TABLE;
 typedef StatementTable STMT_TABLE;
 typedef VariableTable VAR_TABLE;
 typedef WhileTable WHILE_TABLE;
@@ -41,6 +46,12 @@ public:
         /*
         Description: Adds a STMT_NODE_PTR to the STATEMENT_TABLE when building the PKB.
                      Returns the INDEX of the STMT_NODE_PTR in the STATEMENT_TABLE.
+        */
+
+    INDEX addStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);
+        /*
+        Description: Adds a STMT_LIST_NODE_PTR to the STATEMENT_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_LIST_NODE_PTR in the STATEMENT_TABLE.
         */
 
     INDEX addReadNode(READ_NODE_PTR read_node_ptr);
@@ -126,9 +137,9 @@ public:
                      the MODIFIES_TABLE when building the PKB.
         */
 
-    VOID setRootNode(AST_NODE_PTR root_node);
+    VOID setProgramNode(PROGRAM_NODE_PTR program_node_ptr);
         /*
-        Description: Stores the source program's AST into the PKB when building the PKB.
+        Description: Stores the root/program node pointer into the PKB.
         */
 
     PKB build();
@@ -140,7 +151,7 @@ public:
 private:
     friend class PKB;
 
-    AST_NODE_PTR root_node_;
+    PROGRAM_NODE_PTR program_node_ptr;
 
     ASSIGN_TABLE assign_table_;
     CONSTANT_TABLE constant_table_;
@@ -148,6 +159,7 @@ private:
     PRINT_TABLE print_table_;
     PROC_TABLE proc_table_;
     READ_TABLE read_table_;
+    STMT_LIST_TABLE stmt_list_table_;
     STMT_TABLE stmt_table_;
     VAR_TABLE var_table_;
     WHILE_TABLE while_table_;

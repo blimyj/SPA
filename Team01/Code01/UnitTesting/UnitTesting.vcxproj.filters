@@ -30,10 +30,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestResultListManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="TestQueryNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestQueryEvaluator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPKB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
