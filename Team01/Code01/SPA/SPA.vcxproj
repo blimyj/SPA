@@ -48,6 +48,15 @@
     <ClInclude Include="..\source\PKB\Relationships\ModifiesTable.h" />
     <ClInclude Include="..\source\PKB\Relationships\ParentTable.h" />
     <ClInclude Include="..\source\PKB\Relationships\UsesTable.h" />
+    <ClInclude Include="..\source\QueryEvaluator.h" />
+    <ClInclude Include="..\source\QueryNode.h" />
+    <ClInclude Include="..\source\QueryNodeContent.h" />
+    <ClInclude Include="..\source\QueryNodeType.h" />
+    <ClInclude Include="..\source\QueryPreProcessor.h" />
+    <ClInclude Include="..\source\QueryProcessor.h" />
+    <ClInclude Include="..\source\QuerySynonymType.h" />
+    <ClInclude Include="..\source\ResultList.h" />
+    <ClInclude Include="..\source\ResultListManager.h" />
     <ClInclude Include="RelOperatorTypeEnum.h" />
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +93,12 @@
     <ClCompile Include="..\source\PKB\Relationships\ModifiesTable.cpp" />
     <ClCompile Include="..\source\PKB\Relationships\ParentTable.cpp" />
     <ClCompile Include="..\source\PKB\Relationships\UsesTable.cpp" />
+    <ClCompile Include="..\source\QueryEvaluator.cpp" />
+    <ClCompile Include="..\source\QueryNode.cpp" />
+    <ClCompile Include="..\source\QueryNodeContent.cpp" />
+    <ClCompile Include="..\source\QueryPreProcessor.cpp" />
+    <ClCompile Include="..\source\QueryProcessor.cpp" />
+    <ClCompile Include="..\source\ResultList.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
