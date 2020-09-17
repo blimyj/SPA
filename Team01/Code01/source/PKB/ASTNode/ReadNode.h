@@ -12,17 +12,17 @@ class ReadNode : public StatementNode {
 public:
 	ReadNode(VAR_NODE_PTR var_node_ptr);
 		/*
-		Description: Constructs an PrintNode consisting of a VAR_NODE of the variable it prints.
+		Description: Constructs a ReadNode with the child VAR_NODE_PTR of the read statement.
 		*/
 
 	BOOLEAN setVariableNode(VAR_NODE_PTR var_node_ptr);
 		/*
-		Description: Returns True if able to set var_node_ as var_node, false otherwise.
+		Description: Returns True if able to set the child VAR_NODE_PTR of the read statement, false otherwise.
 		*/
 
 	VAR_NODE_PTR getVariableNode();
 		/*
-		Description: Returns a VAR_NODE_PTR of the variable it prints.
+		Description: Returns the child VAR_NODE_PTR of the read statement.
 		*/
 
 private:

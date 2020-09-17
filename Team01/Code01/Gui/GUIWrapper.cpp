@@ -1,16 +1,7 @@
-#include "GUIWrapper.h"
-#include "../source/QueryNodeContent.cpp"
-#include "../source/QueryNode.cpp"
-#include "../source/QueryProcessor.cpp"
-#include "../source/QueryEvaluator.cpp"
-#include "../source/ResultList.cpp"
-#include "../source/ResultListManager.h"
-#include "../source/PKB.cpp"
-#include "../source/PKBBuilder.cpp"
-#include "../source/PKB/ASTNode/VariableNode.cpp"
-#include "../source/PKBStub.cpp"
 #include <iostream>
 
+#include "GUIWrapper.h"
+#include "../source/Parser.h"
 #include "../source/PKB/DesignEntities/AssignTable.cpp"
 #include "../source/PKB/DesignEntities/ConstantTable.cpp"
 #include "../source/PKB/DesignEntities/IfTable.cpp"
@@ -24,7 +15,16 @@
 #include "../source/PKB/Relationships/ParentTable.cpp"
 #include "../source/PKB/Relationships/UsesTable.cpp"
 #include "../source/PKB/Relationships/ModifiesTable.cpp"
-
+#include "../source/QueryNodeContent.cpp"
+#include "../source/QueryNode.cpp"
+#include "../source/QueryProcessor.cpp"
+#include "../source/QueryEvaluator.cpp"
+#include "../source/ResultList.cpp"
+#include "../source/ResultListManager.h"
+#include "../source/PKB.cpp"
+#include "../source/PKBBuilder.cpp"
+#include "../source/PKB/ASTNode/VariableNode.cpp"
+#include "../source/PKBStub.cpp"
 
 
 // a default constructor
@@ -36,8 +36,10 @@ GUIWrapper::GUIWrapper() {
 // method for parsing the SIMPLE source
 void GUIWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
-	std::cout << "parsed " << filename << std::endl;
-  // ...rest of your code...
+	std::cout << "parsed " << filename;
+	Parser parser = Parser();
+	parser.parseFile(filename);
+	// ...rest of your code...
 }
 
 // method to evaluating a query
