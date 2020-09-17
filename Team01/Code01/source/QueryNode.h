@@ -24,6 +24,7 @@ private:
 	QUERY_NODE_CONTENT node_content = QueryNodeContent();
 
 public:
+	QueryNode();
 	void setNodeType(NODE_TYPE node_type);
 	void setNodeType(NODE_TYPE_STRING node_type_string);
 	NODE_TYPE getNodeType();
