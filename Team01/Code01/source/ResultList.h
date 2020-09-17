@@ -17,7 +17,8 @@ typedef std::unordered_map<SYNONYM_NAME, SYNONYM_VALUES_LIST> RESULT_LIST;
 
 class ResultList {
 private:
-	 RESULT_LIST results;
+	int num_rows_ = 0;
+	RESULT_LIST results;
 public:
 	void addColumn(SYNONYM_NAME column_name);
 	void addColumn(SYNONYM_NAME column_name, SYNONYM_VALUES_LIST column_values);

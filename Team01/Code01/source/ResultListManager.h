@@ -56,11 +56,23 @@ public:
 	}
 	
 	static ResultList merge(ResultList list1, ResultList list2) {
+		// Add columns of result
+		ResultList result;
+		for (SYNONYM_NAME n1 : list1.getAllSynonyms()) {
+			result.addColumn(n1);
+		}
+		for (SYNONYM_NAME n2 : list2.getAllSynonyms()) {
+			result.addColumn(n2);
+		}
+		
 		// Get Common Synonyms
 		SYNONYM_NAME_LIST common_synonyms = getCommonSynonyms(list1, list2);
-		ResultList result;
+
+		// Permutate all common values
 		for (auto r1 : list1.getRowList()) {
 			for (auto r2 : list2.getRowList()) {
+				// If the two rows do not share the same values for all the same common synonyms,
+				// filter out these two rows from the final result! :)
 				if (common_synonyms.size() > 0 && !sameValuesForTheSameCommonSynonyms(r1, r2, common_synonyms)) {
 					continue;
 				}
@@ -70,6 +82,7 @@ public:
 		return result;
 	}
 
+private:
 	static SYNONYM_NAME_LIST getCommonSynonyms(ResultList list1, ResultList list2) {
 		SYNONYM_NAME_LIST common_synonyms;
 		for (SYNONYM_NAME n1 : list1.getAllSynonyms()) {
@@ -102,7 +115,6 @@ public:
 		return true;
 	}
 
-private:
 	static FINAL_RESULT processReturnResult(SYNONYM_VALUES_LIST raw_results) {
 		std::string processed_results = "";
 		for (std::string result : raw_results) {
