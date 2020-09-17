@@ -1,2 +1,7 @@
-Pattern/Iteration1_Exact_Variable&Partial_Match_Global_1
+Pattern/Iteration1_Any_Match_Global_1
+Pattern/Iteration1_Any_Variable&Partial_Single_Match_Global_1
+Pattern/Iteration1_Exact_Variable&Partial_Single_Match_Global_1
+Pattern/Iteration2_Exact_Variable&Exact_Match_Global_1
+Pattern/Iteration2_Exact_Variable&Partial_Match_Global_1
 Such_That/Parent/Iteration1_Global_1
+
