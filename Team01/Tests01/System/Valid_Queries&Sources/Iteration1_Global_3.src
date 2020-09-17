@@ -19,7 +19,7 @@ procedure vtuber {
                         ame = kiara;
                         print ame;
                         ame = calli;
-                        if (ame != kiara && kiara == gura || kiara != calli) then {
+                        if (((ame != kiara) && (kiara == gura)) || (kiara != calli)) then {
                             ina = 7;
                             print ina;
                         } else {
@@ -47,7 +47,7 @@ procedure vtuber {
     } else {
         if (kiara < calli) then {
             if (ame > calli) then {
-                while (kiara == ame / (calli + ina)) {
+                while (kiara == (ame / (calli + ina))) {
                     print kiara;
                     kiara = ame + calli;
                     while(ina % calli != gura) {
@@ -56,11 +56,11 @@ procedure vtuber {
                     }
                     print kiara;
                 }
-                while(calli >= calli || calli <= calli) {
+                while((calli >= calli) || (calli <= calli)) {
                     calli = calli;
                     calli = calli;
                 }
-                if (ina == gura + calli) then {
+                if (ina == (gura + calli)) then {
                     read ina;
                     read ina;
                 } else {
@@ -79,7 +79,7 @@ procedure vtuber {
             } else {
                 read ina;
             }
-            while (ame * ina * gura <= calli * kiara) {
+            while ((ame * (ina * gura)) <= (calli * kiara)) {
                 read ame;
             }
             read ame;
