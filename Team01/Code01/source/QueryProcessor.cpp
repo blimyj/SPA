@@ -47,15 +47,19 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 
 
 	// Build fake query tree for clauses
-	// eg Select a
-	QueryNode child1 = QueryNode();
-	child1.setNodeType({QueryNodeType::select});
+	// eg Select v such that Follows(3,v)
 	QueryNode child2 = QueryNode();
-	child2.setSynonymNode({ QuerySynonymType::variable }, "v");
-	QueryNode child1_children[] = { child2 };
-	child1.setChildren(child1_children);
+	child2.setSynonymNode(QuerySynonymType::variable, "v");
 
-	QueryNode processed_clauses = child1; //stores root node of the tree
+	QueryNode such_that = QueryNode();
+	such_that.setNodeType(QueryNodeType::such_that);
+
+	QueryNode root = QueryNode();
+	root.setNodeType(QueryNodeType::select);
+	QueryNode root_children[] = { child2 };
+	root.setChildren(root_children);
+
+	QueryNode processed_clauses = root; //stores root node of the tree
 
 
 	QUERY_RESULT query_result = "";
