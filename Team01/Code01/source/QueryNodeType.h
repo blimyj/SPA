@@ -11,5 +11,8 @@ enum class QueryNodeType {
 	parent,
 	parentT,
 	follows,
-	followsT
+	followsT,
+	uses,
+	modifies,
+	pattern
 };

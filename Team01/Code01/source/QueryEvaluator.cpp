@@ -1,6 +1,5 @@
 #include "QueryEvaluator.h"
 
-
 QueryEvaluator::QueryEvaluator(PKB pkb) {
 	this->pkb = pkb;
 }
@@ -15,21 +14,74 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 	QUERY_NODE_POINTERS children = clauses.getChildren();
 	if (clauses.getNodeType() == QueryNodeType::select) {
 		chosen_return_type = children[0];
-		chosen_synonym_name = chosen_return_type.getString();
+		chosen_synonym_name = chosen_return_type.getString(); // "v"
+		int children_size = sizeof(children) / sizeof(QueryNode);
+		for (int i = 1; i < children_size; i++) {
+			QueryNode clause = children[i];
+			QueryNodeType clause_type = clause.getNodeType();
+			if (clause_type == QueryNodeType::such_that) {
+				QueryNode relationship = clause.getChildren()[0];
+				QueryNodeType relationship_type = relationship.getNodeType();
+				QueryNode child1 = relationship.getChildren()[0];
+				QueryNode child2 = relationship.getChildren()[1];
+				QueryNodeType child1_type = child1.getNodeType();
+				QueryNodeType child2_type = child2.getNodeType();
+
+				// let's not cross here
+
+				if (relationship_type == QueryNodeType::follows) {
+					/* Follows(s1, s2)
+					s1 = [1, 2, 3] if assign
+					s2 = [1, 2, 3]
+					cross = [[1,1], [1,2], [1,3]...]
+
+					filter the cross with PKB
+
+					then add to ResultList*/
+					std::vector<int> list1;
+					std::vector<int> list2;
+					
+					if (child1_type == QueryNodeType::integer) {
+						list1.push_back(child1.getInteger());
+					} else if (child1_type == QueryNodeType::synonym) {
+						QuerySynonymType child1_syn_type = child1.getSynonymType();
+						if (child1_syn_type == QuerySynonymType::assign) {
+							list1.emplace_back(pkb.getAssignNumList());
+						}
+						// fill in the blanks :)
+					}
+
+					std::vector<std::pair<int, int>> cross;
+					for (int s1 : list1) {
+						for (int s2 : list2) {
+							cross.push_back({s1, s2});
+						}
+					}
+
+					// filter the cross with PKB.isFollows
+					// and add to ResultList!
+
+				} else if (relationship_type == QueryNodeType::followsT) {
+
+				} else if (relationship_type == QueryNodeType::parent) {
+
+				} else if (relationship_type == QueryNodeType::parentT) {
+
+				} else if (relationship_type == QueryNodeType::uses) {
+					std::vector<std::pair<int, std::string>> stmt_cross; 
+					std::vector<std::pair<std::string, std::string>> proc_cross; 
+
+				} else if (relationship_type == QueryNodeType::modifies) {
+
+				}
+			} else if (clause_type == QueryNodeType::pattern) {
+				// magic
+			}
+		}
 	}
-	else { //query tree is invalid
-		return "";
-	}
-	
-	// Hard coded result from PKBStub
-	VAR_NODE_PTR_LIST all_variables = pkb.getVariables();
-	
-	/* --- check if PKB has method to return all variable names as string */
-	std::vector<std::string> variable_names = {};
-	for (VAR_NODE_PTR variable_ptr : all_variables) {
-		VariableNode variable = *variable_ptr;
-		variable_names.push_back(variable.getVariableName());
-	}
+
+
+	VAR_NAME_LIST variable_names = pkb.getVariableNameList();
 
 	//intermediate result_list can have many synonyms
 	//but final result should return just 1 string/empty
@@ -50,63 +102,3 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 	return result;
 }
 
-// to Iterate through Map of string:vector<string> pair
-/*
-int main() {
-  std::vector<int> v1 = {1,2,3};
-  std::vector<int> v2 = {5,4,3};
-  //std::cout << v1.size() << "\n";
-
-  std::map<int, std::vector<int>> m1;
-  m1.insert(std::pair(0,v1));
-  m1.insert(std::pair(1,v2));
-  m1.insert(std::pair(2,v1));
-  m1.insert(std::pair(3,v2));
-
-  std::map<int, std::vector<int>>::iterator iter = m1.begin();
-  std::cout << "initial map: \n";
-  std::cout << "initial size: " << m1.size() << "";
-  //print out values in map
-  iter = m1.begin();
-  while (iter != m1.end()) {
-	std::pair<int, std::vector<int>> iter_value = *iter;
-	std::cout << "\nkey: " << iter_value.first;
-	std::cout << "\nvalue: " << iter_value.second[0];
-	++iter;
-  }
-
-  iter = m1.begin();
-  while(iter != m1.end()) {
-	std::pair<int, std::vector<int>> iter_value = *iter;
-	//std::cout << "key: " << iter_value.first;
-	//std::cout << "value: " << iter_value.second;
-	if (ShouldDelete(iter_value)) {
-	  iter = m1.erase(iter);
-	} else {
-	  ++iter;
-	}
-  }
-
-  std::cout << "\nend map";
-  //print out values in map
-  iter = m1.begin();
-  while (iter != m1.end()) {
-	std::pair<int, std::vector<int>> iter_value = *iter;
-	std::cout << "\nkey: " << iter_value.first;
-	std::cout << "\nvalue: " << iter_value.second[0];
-	++iter;
-  }
-
-  std::string output = ResultListManager::Filter("h", "i");
-  std::cout << "ResultListManager: " << output;
-}
-
-bool ShouldDelete(std::pair<int, std::vector<int>> iter_value) {
-  std::vector<int> values = iter_value.second;
-  if (std::find(values.begin(), values.end(), 2) != values.end()) {
-	return true;
-  } else {
-	return false;
-  }
-}
-*/
