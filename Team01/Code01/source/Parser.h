@@ -48,12 +48,12 @@ private:
 
 	int takesPrecedent(RelOperatorTypeEnum l_op, RelOperatorTypeEnum r_op);
 	ExpressionTypeEnum getExpressionType(RelOperatorTypeEnum op);
-	RelationTypeEnum getRelationType(RelOperatorTypeEnum op);
+	RelationTypeEnum getArithmeticRelationType(RelOperatorTypeEnum op);
+	ConditionTypeEnum getBooleanRelationType(RelOperatorTypeEnum op);
 
 	bool isArithmeticOp(RelOperatorTypeEnum op);
-
 	bool isRelationOp(RelOperatorTypeEnum op);
-	bool isBooleanOp(OperatorTypeEnum op);
+	bool isBooleanOp(RelOperatorTypeEnum op);
 
 	//Debugger Functions to print out AST
 	int printTree(AST_NODE_PTR);
