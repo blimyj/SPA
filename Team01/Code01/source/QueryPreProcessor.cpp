@@ -19,6 +19,27 @@ const std::regex stmt_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|^[+-]?[1-9]\\d*|0$");
 const std::regex ent_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")");
 const std::regex expression_spec_format_("(_\\s*\"\\s*([a-zA-Z][a-zA-Z0-9]*|^[+-]?[1-9]\\d*|0$)\\s*\"\\s*_|_)");
 
+SPLIT_DECLARATIONS splitDeclarations(DECLARATIONS d) {
+	SPLIT_DECLARATIONS split_d;
+
+	std::string delimiter = ";";
+	int index = 0;
+	int split_index = d.find(delimiter);
+
+	if (split_index == -1) {
+		split_d.push_back(d);
+	}
+	else {
+		while (split_index != -1) {
+			split_d.push_back(d.substr(index, split_index - index));
+			index = split_index + 1;
+			split_index = d.find(delimiter, index);
+		}
+	}
+
+	return split_d;
+}
+
 PARSED_EXPRESSION parsePatternExpression(EXPRESSION e) {
 	return 0;
 }
@@ -399,14 +420,14 @@ PROCESSED_SYNONYMS preProcessSynonyms(DECLARATIONS d) {
 
 		// get design entity
 		int first_space_index = single_d.find(" ");
-		SYNONYM_TYPE design_entity = single_d.substr(0, first_space_index);
+		STRING design_entity = single_d.substr(0, first_space_index);
 
 		// break into synonyms
 		// create synonym nodes
 		// add node to map
 		std::string delimiter = ",";
-		int index = first_space + 1;
-		int split_index = s.find(delimiter);
+		int index = first_space_index + 1;
+		int split_index = d.find(delimiter);
 
 		if (split_index == -1) {
 			QueryNode new_node = QueryNode();
@@ -433,7 +454,9 @@ PROCESSED_SYNONYMS preProcessSynonyms(DECLARATIONS d) {
 		return proc_s;
 	}
 	else {
-		return PROCESSED_SYNONYMS empty_map;
+		PROCESSED_SYNONYMS empty_map;
+
+		return empty_map;
 	}
 }
 
@@ -569,25 +592,4 @@ PROCESSED_CLAUSES preProcessClauses(PROCESSED_SYNONYMS proc_s, CLAUSES c) {
 
 		return null_node;
 	}
-}
-
-SPLIT_DECLARATIONS splitDeclarations(DECLARATIONS d) {
-	SPLIT_DECLARATIONS split_d;
-
-	std::string delimiter = ";";
-	int index = 0;
-	int split_index = d.find(delimiter);
-
-	if (split_index == -1) {
-		split_d.push_back(d);
-	}
-	else {
-		while (split_index != -1) {
-			split_d.push_back(d.substr(index, split_index - index));
-			index = split_index + 1;
-			split_index = d.find(delimiter, index);
-		}
-	}
-
-	return split_d;
 }
