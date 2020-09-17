@@ -170,6 +170,8 @@
     </ClCompile>
     <ClCompile Include="TestAST.cpp" />
     <ClCompile Include="TestResultListManager.cpp" />
+    <ClCompile Include="TestQueryEvaluator.cpp" />
+    <ClCompile Include="TestQueryNode.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

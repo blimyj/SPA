@@ -55,6 +55,7 @@
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
     <ClCompile Include="..\source\PKBBuilder.cpp" />
+    <ClCompile Include="..\source\PKBStub.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\AssignNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\ASTNode.cpp" />
     <ClCompile Include="..\source\PKB\ASTNode\ConditionNode.cpp" />
