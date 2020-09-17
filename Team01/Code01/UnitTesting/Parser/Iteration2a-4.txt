@@ -1,0 +1,5 @@
+procedure main {
+ x = 2;
+ y = 3;
+	z = (a - 3 * 4) * (y + 8 % 6);
+}

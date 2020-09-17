@@ -1,0 +1,5 @@
+procedure main {
+	while ( ( !( (x > 6) && (15 * a1 + 21 < 37) ) ) || (d2 * d3 == 49)) {
+		print a;
+	}
+}
