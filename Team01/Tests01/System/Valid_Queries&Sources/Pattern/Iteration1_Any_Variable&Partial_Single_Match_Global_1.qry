@@ -1,0 +1,40 @@
+1 - Synonym, Partial Match a
+assign a; variable v;
+Select a pattern a (_, _"a"_);
+15, 17, 20, 22, 24, 28, 40, 60, 61, 75
+5000
+2 - Synonym, Partial Match b
+assign a; variable v;
+Select a pattern a (_, _"b"_);
+15, 17, 20, 28, 40, 60, 61, 62, 75, 76
+5000
+3 - Synonym, Partial Match c
+assign a; variable v;
+Select a pattern a (_, _"c"_);
+15, 17, 20, 23, 28, 40, 60, 61, 75, 77
+5000
+4 - Synonym, Partial Match d
+assign a; variable v;
+Select a pattern a (_, _"d"_);
+17, 18, 20, 28, 40, 60, 61, 62, 75, 78
+5000
+5 - Synonym, Partial Match e
+assign a; variable v;
+Select a pattern a (_, _"e"_);
+80, 81, 82, 83, 97
+5000
+6 - Synonym, Partial Match x
+assign a; variable v;
+Select a pattern a (_, _"x"_);
+104
+5000
+7 - Synonym, Partial Match y
+assign a; variable v;
+Select a pattern a (_, _"y"_);
+104
+5000
+8 - Synonym, Partial Match z
+assign a; variable v;
+Select a pattern a (_, _"z"_);
+none
+5000
