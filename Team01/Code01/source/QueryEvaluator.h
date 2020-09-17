@@ -21,6 +21,8 @@ typedef QueryNode PROCESSED_CLAUSES;
 class QueryEvaluator {
 private:
 	PKB pkb = (PKBBuilder().build()); // because PKB has no default constructor
+	STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode child1);
+
 public:
 	QueryEvaluator(PKB pkb);
 	QUERY_RESULT evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSED_CLAUSES clauses);

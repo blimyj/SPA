@@ -14,21 +14,26 @@ QueryProcessor::QueryProcessor(PKB pkb) {
 }
 
 QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
-	// Wait for preprocessor
-	/*
-	* const std::string empty_result = "";
-	* QueryPreProcessor pre_processor = QueryPreProcessor();
-	* PROCESSED_QUERY process_queries = pre_processor.parse(QUERY q);
-	* PROCESSED_SYNONYMS processed_synonyms = pre_processor.preProcessSynonyms(QUERY q); //returns table of synonym nodes
-	*	if (processed_synonyms.empty()) { return empty_result; } // either no synonym or syntax error, both should return emptyresult
-	* PROCESSED_CLAUSES processed_clauses = pre_processor.preProcessClauses(QUERY q); //returns query tree of clause nodes
-	* 	 if (processed_queries == NULL) { return empty_result; } // null result means that there is syntax error, return empty result
-	*/
+	/* Uncomment when preprocessor is done
+	
+	// QPP
+	const std::string empty_result = "";
+	QueryPreProcessor pre_processor = QueryPreProcessor();
+	PROCESSED_QUERY process_queries = pre_processor.parse(QUERY q);
+	PROCESSED_SYNONYMS processed_synonyms = pre_processor.preProcessSynonyms(QUERY q); //returns table of synonym nodes
+		if (processed_synonyms.empty()) { return empty_result; } // either no synonym or syntax error, both should return emptyresult
+	PROCESSED_CLAUSES processed_clauses = pre_processor.preProcessClauses(QUERY q); //returns query tree of clause nodes
+		 if (processed_queries == NULL) { return empty_result; } // null result means that there is syntax error, return empty result
 
-
+	// QE
 	QueryEvaluator query_evaluator = QueryEvaluator(this->pkb);
 
+	QUERY_RESULT query_result = query_evaluator.evaluateQuery(processed_synonyms, processed_clauses);
+	return query_result;
+	*/
+	return "";
 
+	/*
 	// Create fake synonyms and clauses for now
 	QueryNode assign_node = QueryNode();
 	assign_node.setSynonymNode({ QuerySynonymType::assign }, "a");
@@ -57,15 +62,9 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	QueryNode root = QueryNode();
 	root.setNodeType(QueryNodeType::select);
 	QueryNode root_children[] = { child2 };
-	root.setChildren(root_children);
+	root.setChildren(root_children, 1);
 
 	QueryNode processed_clauses = root; //stores root node of the tree
-
-
-	QUERY_RESULT query_result = "";
-	//QUERY_RESULT query_result = query_evaluator.evaluateQuery(processed_synonyms, processed_clauses);
-	query_result = query_evaluator.evaluateQuery(processed_synonyms, processed_clauses);
-	return query_result;
-
+	*/
 }
 

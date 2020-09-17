@@ -63,7 +63,7 @@ namespace UnitTesting
 				Logger::WriteMessage("\n");
 			}
 
-			Assert::IsTrue(result.getRowList().size() == 0);
+			Assert::IsTrue(result.getRowList().size() == r1.getRowList().size());
 		}
 	};
 }

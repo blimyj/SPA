@@ -56,6 +56,16 @@ public:
 	}
 	
 	static ResultList merge(ResultList list1, ResultList list2) {
+		// If either list is empty, return the other list
+		ROW_LIST rows1 = list1.getRowList();
+		ROW_LIST rows2 = list2.getRowList();
+		if (rows1.size() == 0) {
+			return list2;
+		}
+		if (rows2.size() == 0) {
+			return list1;
+		}
+
 		// Add columns of result
 		ResultList result;
 		for (SYNONYM_NAME n1 : list1.getAllSynonyms()) {
@@ -69,8 +79,8 @@ public:
 		SYNONYM_NAME_LIST common_synonyms = getCommonSynonyms(list1, list2);
 
 		// Permutate all common values
-		for (auto r1 : list1.getRowList()) {
-			for (auto r2 : list2.getRowList()) {
+		for (auto r1 : rows1) {
+			for (auto r2 : rows2) {
 				// If the two rows do not share the same values for all the same common synonyms,
 				// filter out these two rows from the final result! :)
 				if (common_synonyms.size() > 0 && !sameValuesForTheSameCommonSynonyms(r1, r2, common_synonyms)) {

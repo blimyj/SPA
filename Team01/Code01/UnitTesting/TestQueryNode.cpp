@@ -14,18 +14,12 @@ namespace UnitTesting
 	{
 	public:
 
-		TEST_METHOD(Constructor_Default_Success)
-		{
-			QueryNode query_node;
-			Assert::IsNull(query_node.getChildren());
-		}
-
 		TEST_METHOD(setNodeType_Select_Success)
 		{
 			QueryNode query_node;
 			QueryNodeType chosen_type = { QueryNodeType::select };
 			query_node.setNodeType({ QueryNodeType::select });
-			NODE_TYPE type = query_node.getNodeType();
+			QUERY_NODE_TYPE type = query_node.getNodeType();
 			Assert::IsTrue(type == chosen_type);
 		}
 
@@ -34,7 +28,7 @@ namespace UnitTesting
 			QueryNode query_node;
 			QueryNodeType chosen_type = { QueryNodeType::synonym };
 			query_node.setNodeType({ QueryNodeType::synonym });
-			NODE_TYPE type = query_node.getNodeType();
+			QUERY_NODE_TYPE type = query_node.getNodeType();
 			Assert::IsTrue(type == chosen_type);
 		}
 
@@ -43,7 +37,7 @@ namespace UnitTesting
 			QueryNode query_node;
 			QueryNodeType chosen_type = { QueryNodeType::such_that };
 			query_node.setNodeType({ QueryNodeType::such_that });
-			NODE_TYPE type = query_node.getNodeType();
+			QUERY_NODE_TYPE type = query_node.getNodeType();
 			Assert::IsTrue(type == chosen_type);
 		}
 
@@ -52,7 +46,7 @@ namespace UnitTesting
 			QueryNode query_node;
 			QueryNodeType chosen_type = { QueryNodeType::parent };
 			query_node.setNodeType({ QueryNodeType::parent });
-			NODE_TYPE type = query_node.getNodeType();
+			QUERY_NODE_TYPE type = query_node.getNodeType();
 			Assert::IsTrue(type == chosen_type);
 		}
 
@@ -61,7 +55,7 @@ namespace UnitTesting
 			QueryNode query_node;
 			QueryNodeType chosen_type = { QueryNodeType::parentT };
 			query_node.setNodeType({ QueryNodeType::parentT });
-			NODE_TYPE type = query_node.getNodeType();
+			QUERY_NODE_TYPE type = query_node.getNodeType();
 			Assert::IsTrue(type == chosen_type);
 		}
 
@@ -70,7 +64,7 @@ namespace UnitTesting
 			QueryNode query_node;
 			QueryNodeType chosen_type = { QueryNodeType::follows };
 			query_node.setNodeType({ QueryNodeType::follows });
-			NODE_TYPE type = query_node.getNodeType();
+			QUERY_NODE_TYPE type = query_node.getNodeType();
 			Assert::IsTrue(type == chosen_type);
 		}
 
@@ -79,7 +73,7 @@ namespace UnitTesting
 			QueryNode query_node;
 			QueryNodeType chosen_type = { QueryNodeType::followsT };
 			query_node.setNodeType({ QueryNodeType::followsT });
-			NODE_TYPE type = query_node.getNodeType();
+			QUERY_NODE_TYPE type = query_node.getNodeType();
 			Assert::IsTrue(type == chosen_type);
 		}
 		
