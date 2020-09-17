@@ -1,12 +1,13 @@
 #include "ConditionNode.h"
 
-ConditionNode::ConditionNode(CONDITION_TYPE condition_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr) {
-    setRelationType(condition_type);
-    setLeftAstNode(left_node_ptr);
-    setRightAstNode(right_node_ptr);
+ConditionNode::ConditionNode(CONDITION_TYPE condition_type, RELATION_NODE_PTR left_relation_node_ptr, RELATION_NODE_PTR right_relation_node_ptr) {
+    setConditionType(condition_type);
+    setLeftRelationNode(left_relation_node_ptr);
+    setRightRelationNode(right_relation_node_ptr);
+    node_type_ = { NODE_TYPE::conditionNode };
 }
 
-BOOLEAN ConditionNode::setRelationType(CONDITION_TYPE condition_type) {
+BOOLEAN ConditionNode::setConditionType(CONDITION_TYPE condition_type) {
     try {
         condition_type_ = condition_type;
     } catch (int e) {
@@ -16,9 +17,9 @@ BOOLEAN ConditionNode::setRelationType(CONDITION_TYPE condition_type) {
     return true;
 }
 
-BOOLEAN ConditionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
+BOOLEAN ConditionNode::setLeftRelationNode(RELATION_NODE_PTR left_relation_node_ptr) {
     try {
-        left_node_ptr_ = left_node_ptr;
+        left_relation_node_ptr_ = left_relation_node_ptr;
     } catch (int e) {
         (void)e;
         return false;
@@ -26,9 +27,9 @@ BOOLEAN ConditionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     return true;
 }
 
-BOOLEAN ConditionNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
+BOOLEAN ConditionNode::setRightRelationNode(RELATION_NODE_PTR right_relation_node_ptr) {
     try {
-        right_node_ptr_ = right_node_ptr;
+        right_relation_node_ptr_ = right_relation_node_ptr;
     } catch (int e) {
         (void)e;
         return false;
@@ -40,11 +41,14 @@ CONDITION_TYPE ConditionNode::getConditionType() {
     return condition_type_;
 }
 
-AST_NODE_PTR ConditionNode::getLeftAstNode() {
-    return left_node_ptr_;
+RELATION_NODE_PTR ConditionNode::getLeftRelationNode() {
+    return left_relation_node_ptr_;
 }
 
-AST_NODE_PTR ConditionNode::getRightAstNode() {
-    return right_node_ptr_;
+RELATION_NODE_PTR ConditionNode::getRightRelationNode() {
+    if (right_relation_node_ptr_ == NULL) {
+        throw "Relation is of 'none' Type, there is no right relation node!";
+    }
+    return right_relation_node_ptr_;
 }
 

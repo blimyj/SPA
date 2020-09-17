@@ -4,6 +4,10 @@ INDEX PKBBuilder::addStatementNode(STMT_NODE_PTR stmt_node_ptr) {
     return stmt_table_.addStatementNode(stmt_node_ptr);
 }
 
+INDEX PKBBuilder::addStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr) {
+    return stmt_list_table_.addStatementListNode(stmt_list_node_ptr);
+}
+
 INDEX PKBBuilder::addReadNode(READ_NODE_PTR read_node_ptr) {
     return read_table_.addReadNode(read_node_ptr);
 }
@@ -60,8 +64,8 @@ VOID PKBBuilder::addModifies(PROC_NAME p, VAR_NAME v) {
     modifies_table_.addModifies(p, v);
 }
 
-VOID PKBBuilder::setRootNode(AST_NODE_PTR root_node) {
-    root_node_ = root_node;
+VOID PKBBuilder::setProgramNode(PROGRAM_NODE_PTR program_node_ptr) {
+    program_node_ptr = program_node_ptr;
 }
 
 PKB PKBBuilder::build() {

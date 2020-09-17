@@ -7,7 +7,7 @@ QueryNode::QueryNode() {
 	this->node_type = QueryNodeType::unassigned;
 }
 
-void QueryNode::setNodeType(NODE_TYPE node_type) {
+void QueryNode::setNodeType(QUERY_NODE_TYPE node_type) {
 	this->node_type = node_type;
 }
 
@@ -44,7 +44,7 @@ void QueryNode::setNodeType(NODE_TYPE_STRING node_type_string) {
 	}
 }
 
-NODE_TYPE QueryNode::getNodeType() {
+QUERY_NODE_TYPE QueryNode::getNodeType() {
 	return node_type;
 }
 
@@ -60,7 +60,7 @@ INTEGER QueryNode::getInteger() {
 }
 
 
-void QueryNode::setASTNode(NODE_TYPE node_type, AST_NODE astnode) {
+void QueryNode::setASTNode(QUERY_NODE_TYPE node_type, AST_NODE astnode) {
 	//NODE_TYPE can be expression or wild_card
 	this->node_type = node_type;
 	QueryNodeContent content = QueryNodeContent(astnode);
