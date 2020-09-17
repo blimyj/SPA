@@ -21,7 +21,7 @@ const std::regex stmt_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|^[+-]?[1-9]\\d*|0$");
 const std::regex ent_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")");
 const std::regex expression_spec_format_("(_\\s*\"\\s*([a-zA-Z][a-zA-Z0-9]*|^[+-]?[1-9]\\d*|0$)\\s*\"\\s*_|_)");
 
-STRING trimWhitespaces(STRING s) {
+STRING QueryPreProcessor::trimWhitespaces(STRING s) {
 	int start = s.find_first_not_of(" \n\r\t\f\v");
 	int end = s.find_last_not_of(" \n\r\t\f\v");
 
@@ -33,7 +33,7 @@ STRING trimWhitespaces(STRING s) {
 	}
 }
 
-SPLIT_DECLARATIONS splitDeclarations(DECLARATIONS d) {
+SPLIT_DECLARATIONS QueryPreProcessor::splitDeclarations(DECLARATIONS d) {
 	SPLIT_DECLARATIONS split_d;
 
 	std::string delimiter = ";";
@@ -54,7 +54,7 @@ SPLIT_DECLARATIONS splitDeclarations(DECLARATIONS d) {
 	return split_d;
 }
 
-QueryNode createExpressionNode(EXPRESSION e) {
+QueryNode QueryPreProcessor::createExpressionNode(EXPRESSION e) {
 	/*
 		expression-spec:    ‘_’ ‘"’ factor ‘"’ ‘_’ | ‘_’
 
@@ -91,7 +91,7 @@ QueryNode createExpressionNode(EXPRESSION e) {
 	return exp_node;
 }
 
-QueryNode createArgumentNode(PROCESSED_SYNONYMS proc_s, ARGUMENT arg) {
+QueryNode QueryPreProcessor::createArgumentNode(PROCESSED_SYNONYMS proc_s, ARGUMENT arg) {
 	QueryNode arg_node = QueryNode();
 
 	if (std::regex_match(arg, name_format_)) {
@@ -117,7 +117,7 @@ QueryNode createArgumentNode(PROCESSED_SYNONYMS proc_s, ARGUMENT arg) {
 
 }
 
-QueryNode createRelationNode(PROCESSED_SYNONYMS proc_s, RELATIONSHIP rel,
+QueryNode QueryPreProcessor::createRelationNode(PROCESSED_SYNONYMS proc_s, RELATIONSHIP rel,
 	ARGUMENT first_arg, ARGUMENT second_arg) {
 
 	QueryNode relation_node = QueryNode();
@@ -132,7 +132,7 @@ QueryNode createRelationNode(PROCESSED_SYNONYMS proc_s, RELATIONSHIP rel,
 	return relation_node;
 }
 
-QueryNode createPatternNode(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s,
+QueryNode QueryPreProcessor::createPatternNode(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s,
 	ARGUMENT first_arg, ARGUMENT second_arg) {
 
 	QueryNode pattern_node = QueryNode();
@@ -148,7 +148,7 @@ QueryNode createPatternNode(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s,
 
 }
 
-VALIDATION_RESULT isValidStructure(QUERY q) {
+VALIDATION_RESULT QueryPreProcessor::isValidStructure(QUERY q) {
 	/*
 	Validation rules:
 		- Query is not empty
@@ -169,7 +169,7 @@ VALIDATION_RESULT isValidStructure(QUERY q) {
 	}
 }
 
-VALIDATION_RESULT isValidDeclaration(SINGLE_DECLARATION single_d) {
+VALIDATION_RESULT QueryPreProcessor::isValidDeclaration(SINGLE_DECLARATION single_d) {
 	/*
 	Validation rules:
 		- Declaration must not be empty
@@ -188,7 +188,7 @@ VALIDATION_RESULT isValidDeclaration(SINGLE_DECLARATION single_d) {
 	}
 }
 
-VALIDATION_RESULT isValidClause(CLAUSES c) {
+VALIDATION_RESULT QueryPreProcessor::isValidClause(CLAUSES c) {
 	/*
 	Validation rules:
 		- There is a synonym after 'Select'
@@ -209,11 +209,11 @@ VALIDATION_RESULT isValidClause(CLAUSES c) {
 
 }
 
-VALIDATION_RESULT isSynonymDeclared(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s) {
+VALIDATION_RESULT QueryPreProcessor::isSynonymDeclared(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s) {
 	return (proc_s.find(s) != proc_s.end());
 }
 
-VALIDATION_RESULT isValidRelationFormat(SINGLE_CLAUSE single_c) {
+VALIDATION_RESULT QueryPreProcessor::isValidRelationFormat(SINGLE_CLAUSE single_c) {
 	/*
 	Validation rules:
 		- Check if declared relationship is valid
@@ -227,7 +227,7 @@ VALIDATION_RESULT isValidRelationFormat(SINGLE_CLAUSE single_c) {
 	}
 }
 
-VALIDATION_RESULT isValidRelationArguments(PROCESSED_SYNONYMS proc_s, RELATIONSHIP rel,
+VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS proc_s, RELATIONSHIP rel,
 	ARGUMENT first_arg, ARGUMENT second_arg) {
 	/*
 	Validation rules:
@@ -371,7 +371,7 @@ VALIDATION_RESULT isValidRelationArguments(PROCESSED_SYNONYMS proc_s, RELATIONSH
 	return false;
 }
 
-VALIDATION_RESULT isValidPatternFormat(SINGLE_CLAUSE single_c) {
+VALIDATION_RESULT QueryPreProcessor::isValidPatternFormat(SINGLE_CLAUSE single_c) {
 	/*
 	Validation rules:
 		- Check if declared relationship is valid
@@ -386,7 +386,7 @@ VALIDATION_RESULT isValidPatternFormat(SINGLE_CLAUSE single_c) {
 
 }
 
-VALIDATION_RESULT isValidPatternArguments(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s, 
+VALIDATION_RESULT QueryPreProcessor::isValidPatternArguments(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s,
 	ARGUMENT first_arg, ARGUMENT second_arg) {
 	/*
 	Validation rules:
@@ -414,7 +414,7 @@ VALIDATION_RESULT isValidPatternArguments(PROCESSED_SYNONYMS proc_s, SYNONYM_NAM
 
 }
 
-SPLIT_QUERY splitQuery(QUERY q) {
+SPLIT_QUERY QueryPreProcessor::splitQuery(QUERY q) {
 	SPLIT_QUERY split_q;
 	DECLARATIONS d = "";
 	CLAUSES c = "";
@@ -432,7 +432,7 @@ SPLIT_QUERY splitQuery(QUERY q) {
 	return split_q;
 }
 
-PROCESSED_SYNONYMS preProcessSynonyms(DECLARATIONS d) {
+PROCESSED_SYNONYMS QueryPreProcessor::preProcessSynonyms(DECLARATIONS d) {
 	PROCESSED_SYNONYMS proc_s;
 	VALIDATION_RESULT is_valid = true;
 
@@ -494,7 +494,7 @@ PROCESSED_SYNONYMS preProcessSynonyms(DECLARATIONS d) {
 	}
 }
 
-PROCESSED_CLAUSES preProcessClauses(PROCESSED_SYNONYMS proc_s, CLAUSES c) {
+PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s, CLAUSES c) {
 	PROCESSED_CLAUSES select_node = QueryNode();
 	VALIDATION_RESULT is_valid = true;
 

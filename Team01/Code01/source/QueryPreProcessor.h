@@ -103,7 +103,7 @@ private:
 		  Normal: Returns a VALIDATION_RESULT based on whether synonym has been declared
 		*/
 
-	VALIDATION_RESULT isValidRelationFormat(PROCESSED_SYNONYMS proc_s, SINGLE_CLAUSE single_c);
+	VALIDATION_RESULT isValidRelationFormat(SINGLE_CLAUSE single_c);
 	/*
 		Description:
 		  Normal: Returns a VALIDATION_RESULT based on relationship format
@@ -116,7 +116,7 @@ private:
 		  Normal: Returns a VALIDATION_RESULT based on relationship argument validity
 		*/
 
-	VALIDATION_RESULT isValidPatternFormat(PROCESSED_SYNONYMS proc_s, SINGLE_CLAUSE single_c);
+	VALIDATION_RESULT isValidPatternFormat(SINGLE_CLAUSE single_c);
 	/*
 		Description:
 		  Normal: Returns a VALIDATION_RESULT based on pattern format
