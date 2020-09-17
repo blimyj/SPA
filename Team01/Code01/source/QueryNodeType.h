@@ -1,6 +1,7 @@
 #pragma once
 
 enum class QueryNodeType {
+	unassigned,
 	select,
 	synonym,
 	integer,

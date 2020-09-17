@@ -26,13 +26,12 @@ private:
 public:
 	void setNodeType(NODE_TYPE node_type);
 	void setNodeType(NODE_TYPE_STRING node_type_string);
-	void setSynonymNode(SYNONYM_TYPE synonym_type, SYNONYM_NAME synonym_name); //synonym nodes MUST have snyonym name
-	void setSynonymNode(SYNONYM_TYPE_STRING synonym_type_string, SYNONYM_NAME synonym_name); //synonym nodes MUST have snyonym name
-
 	NODE_TYPE getNodeType();
 
 	void setSynonymNode(SYNONYM_TYPE synonym_type, STRING synonym_name); //synonym nodes MUST have snyonym name
+	void setSynonymNode(SYNONYM_TYPE_STRING synonym_type_string, SYNONYM_NAME synonym_name); //synonym nodes MUST have snyonym name
 	SYNONYM_TYPE getSynonymType();
+	void setIdentityNode(STRING identity);
 	STRING getString();
 
 	void setIntegerNode(INTEGER integer);
