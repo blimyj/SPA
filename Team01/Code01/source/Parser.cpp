@@ -360,15 +360,15 @@
 	*/
 
 	/*Note: We assume that the first 4 terminals of the while stmt must be on the same line
-	‘while’ ‘(’ cond_expr ‘)’ ‘{‘ stmtLst <----- Terminals must be on the same line, stmtLst could be on same or diff.
+	ï¿½whileï¿½ ï¿½(ï¿½ cond_expr ï¿½)ï¿½ ï¿½{ï¿½ stmtLst <----- Terminals must be on the same line, stmtLst could be on same or diff.
 
-	stmtLst ‘}’ <---- Can be on a different line, we make no assumption if stmtLst & ‘}’ must be on the same line
+	stmtLst ï¿½}ï¿½ <---- Can be on a different line, we make no assumption if stmtLst & ï¿½}ï¿½ must be on the same line
 	*/
 
 	/*Note: We assume that the first 4 terminals of the if stmt must be on the same line
-	‘if’ ‘(’ cond_expr ‘)’ ‘then’ ‘{‘ stmtLst <----- Terminals must be on the same line, stmtLst could be on same or diff.
+	ï¿½ifï¿½ ï¿½(ï¿½ cond_expr ï¿½)ï¿½ ï¿½thenï¿½ ï¿½{ï¿½ stmtLst <----- Terminals must be on the same line, stmtLst could be on same or diff.
 
-	stmtLst ‘}’ ‘else’ ‘{‘ stmtLst ‘}’ <- Can be on a different line,
+	stmtLst ï¿½}ï¿½ ï¿½elseï¿½ ï¿½{ï¿½ stmtLst ï¿½}ï¿½ <- Can be on a different line,
 											we make no assumption if any of these terminals & non-terminals must be on the same line
 	*/
 
