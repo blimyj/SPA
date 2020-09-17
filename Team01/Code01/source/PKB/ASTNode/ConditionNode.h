@@ -11,14 +11,13 @@ typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef ConditionTypeEnum CONDITION_TYPE;
 typedef bool BOOLEAN;
 
-class ConditionNode : public StatementNode {
+class ConditionNode : public StatementNode, public std::enable_shared_from_this<ConditionNode> {
 /*Condition Node is !, &&, || or none*/
 
 public:
-	ConditionNode(CONDITION_TYPE condition_type, RELATION_NODE_PTR left_relation_node_ptr, RELATION_NODE_PTR right_relation_node_ptr);
+	ConditionNode();
 		/*
-		Description: Constructs a ConditionNode with the CONDITION_TYPE including the left child 
-		RELATION_NODE_PTR and right child RELATION_NODE_PTR of this CondtiionNode.
+		Description: Sets NODE_TYPE of node to be conditionNode.
 		*/
 
 	BOOLEAN setConditionType(CONDITION_TYPE condition_type);
@@ -26,14 +25,14 @@ public:
 		Description: Returns True if able to set the CONDITION_TYPE of this ConditionNode, false otherwise.
 		*/
 
-	BOOLEAN setLeftRelationNode(RELATION_NODE_PTR leftRelationNode);
+	BOOLEAN setLeftAstNode(AST_NODE_PTR leftAstNode);
 		/*
-		Description: Returns True if able to set RELATION_NODE_PTR to be the left-hand side child of this Condition, false otherwise
+		Description: Returns True if able to set AST_NODE_PTR to be the left-hand side child of this Condition, false otherwise
 		*/
 
-	BOOLEAN setRightRelationNode(RELATION_NODE_PTR rightRelationNode);
+	BOOLEAN setRightAstNode(AST_NODE_PTR rightAstNode);
 		/*
-		Description: Returns True if able to set RELATION_NODE_PTR to be the right-hand side child of this Condition, false otherwise.
+		Description: Returns True if able to set AST_NODE_PTR to be the right-hand side child of this Condition, false otherwise.
 		*/
 
 	CONDITION_TYPE getConditionType();
@@ -41,19 +40,19 @@ public:
 		Description: Returns the CONDITION_TYPE of this ConditionNode
 		*/
 
-	RELATION_NODE_PTR getLeftRelationNode();
+	AST_NODE_PTR getLeftAstNode();
 		/*
-		Description: Returns the left-hand side child RELATION_NODE_PTR of this Condition.
+		Description: Returns the left-hand side child AST_NODE_PTR of this Condition.
 		*/
 
-	RELATION_NODE_PTR getRightRelationNode();
+	AST_NODE_PTR getRightAstNode();
 		/*
-		Description: Returns the right-hand side child RELATION_NODE_PTR of this Condition.
+		Description: Returns the right-hand side child AST_NODE_PTR of this Condition.
 		*/
 
 private:
 	CONDITION_TYPE condition_type_;
-	RELATION_NODE_PTR left_relation_node_ptr_;
-	RELATION_NODE_PTR right_relation_node_ptr_;
+	AST_NODE_PTR left_node_ptr_;
+	AST_NODE_PTR right_node_ptr_;
 
 };
