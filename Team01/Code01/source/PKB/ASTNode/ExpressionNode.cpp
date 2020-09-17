@@ -1,10 +1,10 @@
 #include "ExpressionNode.h"
 
-ExpressionNode::ExpressionNode(EXPR_TYPE expr_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr) {
-    setExpressionType(expr_type);
-    setLeftAstNode(left_node_ptr);
-    setRightAstNode(right_node_ptr);
+ExpressionNode::ExpressionNode() {
+    expr_type_ = { EXPR_TYPE::undefined };
     node_type_ = { NODE_TYPE::expressionNode };
+    left_node_ptr_ = nullptr;
+    right_node_ptr_ = nullptr;
 }
 
 BOOLEAN ExpressionNode::setExpressionType(EXPR_TYPE expr_type) {
@@ -19,6 +19,11 @@ BOOLEAN ExpressionNode::setExpressionType(EXPR_TYPE expr_type) {
 
 BOOLEAN ExpressionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     try {
+        if (left_node_ptr == nullptr) {
+            return false;
+        }
+        addChildNode(left_node_ptr);
+        left_node_ptr->setParentNode(shared_from_this());
         left_node_ptr_ = left_node_ptr;
     } catch (int e) {
         (void)e;
@@ -29,6 +34,11 @@ BOOLEAN ExpressionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
 
 BOOLEAN ExpressionNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
     try {
+        if (right_node_ptr == nullptr) {
+            return false;
+        }
+        addChildNode(right_node_ptr);
+        right_node_ptr->setParentNode(shared_from_this());
         right_node_ptr_ = right_node_ptr;
     } catch (int e) {
         (void)e;

@@ -13,5 +13,6 @@ enum class NodeTypeEnum {
     relationNode, 
     statementListNode,
     variableNode, 
-    whileNode
+    whileNode,
+    undefined
 };
