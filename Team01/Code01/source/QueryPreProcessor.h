@@ -8,13 +8,19 @@
 
 typedef std::string QUERY;
 typedef std::vector<std::string> SPLIT_QUERY;
-typedef std::string SINGLE_DECLARATION;
 typedef std::string DECLARATIONS;
+typedef std::vector<std::string> SPLIT_DECLARATIONS;
+typedef std::string SINGLE_DECLARATION;
 typedef std::unordered_map<std::string, QueryNode> PROCESSED_SYNONYMS;
 typedef std::string CLAUSES;
+typedef std::string SINGLE_CLAUSE;
 typedef QueryNode PROCESSED_CLAUSES;
-typedef QueryNode PROCESSED_CLAUSE;
+typedef std::string RELATIONSHIP;
+typedef std::string ARGUMENT;
 typedef bool VALIDATION_RESULT;
+typedef int PARSED_EXPRESSION;
+typedef std::string EXPRESSION;
+typedef std::string STRING;
 
 class QueryPreProcessor {
 	/* Overview: Pre-processes queries into a suitable data structure for the evaluator */
@@ -41,6 +47,18 @@ public:
 		*/
 
 private:
+	SPLIT_DECLARATIONS splitDeclarations(DECLARATIONS d);
+	/*
+		Description:
+		  Normal: Returns SPLIT_DECLARATIONS
+		*/
+
+	PARSED_EXPRESSION parsePatternExpression(EXPRESSION e);
+	/*
+		Description:
+		  Normal: Returns SPLIT_DECLARATIONS
+		*/
+
 	VALIDATION_RESULT isValidStructure(QUERY q);
 	/*
 		Description:
@@ -59,21 +77,41 @@ private:
 		  Normal: Returns a VALIDATION_RESULT based on grammar for clauses
 		*/
 
-	VALIDATION_RESULT isValidQuery(PROCESSED_SYNONYMS proc_s, PROCESSED_CLAUSES proc_c);
+	VALIDATION_RESULT isSynonymDeclared(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s);
 	/*
 		Description:
-		  Normal: Returns VALIDATION_RESULT based on looking at the query as a whole
+		  Normal: Returns a VALIDATION_RESULT based on whether synonym has been declared
 		*/
 
-	VALIDATION_RESULT isValidRelation(PROCESSED_SYNONYMS proc_s, PROCESSED_CLAUSE proc_c);
+	VALIDATION_RESULT isValidRelationFormat(PROCESSED_SYNONYMS proc_s, SINGLE_CLAUSE single_c);
 	/*
 		Description:
-		  Normal: Returns a VALIDATION_RESULT based on relationship semantics
+		  Normal: Returns a VALIDATION_RESULT based on relationship format
 		*/
 
-	VALIDATION_RESULT isValidPattern(PROCESSED_SYNONYMS proc_s, PROCESSED_CLAUSE proc_c);
+	VALIDATION_RESULT isValidRelationArguments(PROCESSED_SYNONYMS proc_s, RELATIONSHIP rel,
+		ARGUMENT first_arg, ARGUMENT second_arg);
 	/*
 		Description:
-		  Normal: Returns a VALIDATION_RESULT based on pattern semantics
+		  Normal: Returns a VALIDATION_RESULT based on relationship argument validity
 		*/
+
+	VALIDATION_RESULT isValidPatternFormat(PROCESSED_SYNONYMS proc_s, SINGLE_CLAUSE single_c);
+	/*
+		Description:
+		  Normal: Returns a VALIDATION_RESULT based on pattern format
+		*/
+
+	VALIDATION_RESULT isValidPatternArguments(PROCESSED_SYNONYMS proc_s, SYNONYM_NAME s,
+		ARGUMENT first_arg, ARGUMENT second_arg);
+	/*
+		Description:
+		  Normal: Returns a VALIDATION_RESULT based on pattern argument validity
+		*/
+
+	STRING trimWhitespaces(STRING s);
+	/*
+		Description:
+		  Normal: Trims whitespaces from front and back of STRING and returns it
+	*/
 };

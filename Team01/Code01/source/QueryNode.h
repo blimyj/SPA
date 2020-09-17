@@ -8,8 +8,10 @@
 class QueryNode;
 
 typedef QueryNodeType NODE_TYPE;
+typedef std::string NODE_TYPE_STRING;
 typedef QueryNode* QUERY_NODE_POINTERS;
 typedef QuerySynonymType SYNONYM_TYPE;
+typedef std::string SYNONYM_TYPE_STRING;
 typedef std::string SYNONYM_NAME;
 
 class QueryNode {
@@ -21,7 +23,9 @@ private:
 
 public: 
 	void setNodeType(NODE_TYPE node_type);
+	void setNodeType(NODE_TYPE_STRING node_type_string);
 	void setSynonymNode(SYNONYM_TYPE synonym_type, SYNONYM_NAME synonym_name); //synonym nodes MUST have snyonym name
+	void setSynonymNode(SYNONYM_TYPE_STRING synonym_type_string, SYNONYM_NAME synonym_name); //synonym nodes MUST have snyonym name
 	NODE_TYPE getNodeType();
 	void setChildren(QUERY_NODE_POINTERS children); //need to add all children at once, in the right order
 	QUERY_NODE_POINTERS getChildren();
