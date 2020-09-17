@@ -236,6 +236,9 @@
     <ClCompile Include="..\source\QueryProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\PKBStub.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\ResultList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
