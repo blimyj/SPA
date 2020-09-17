@@ -3,10 +3,13 @@
 #include "QueryNode.h"
 #include "QueryNodeType.h"
 #include "QuerySynonymType.h"
+#include "ResultList.h"
+#include "ResultListManager.h"
 #include "PKB.h"
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class QueryEvaluator;
 

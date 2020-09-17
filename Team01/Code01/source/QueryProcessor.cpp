@@ -51,7 +51,7 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	QueryNode child1 = QueryNode();
 	child1.setNodeType({QueryNodeType::select});
 	QueryNode child2 = QueryNode();
-	child2.setSynonymNode({ QuerySynonymType::assign }, "a");
+	child2.setSynonymNode({ QuerySynonymType::variable }, "v");
 	QueryNode child1_children[] = { child2 };
 	child1.setChildren(child1_children);
 
