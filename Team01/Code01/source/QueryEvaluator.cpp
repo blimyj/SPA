@@ -5,7 +5,7 @@ QueryEvaluator::QueryEvaluator(PKB pkb) {
 }
 
 QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSED_CLAUSES clauses) {
-	ResultList result_list = ResultList(); //initialise to empty_result
+	ResultList result_list; //initialise to empty_result
 	ResultList* result_list_ptr = &result_list;
 	FINAL_RESULT result = "";
 	QueryNode chosen_return_type;
@@ -15,8 +15,13 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 	if (clauses.getNodeType() == QueryNodeType::select) {
 		chosen_return_type = children[0];
 		chosen_synonym_name = chosen_return_type.getString(); // "v"
+
+		// fill resultList with chosen_return_type
+
 		int children_size = sizeof(children) / sizeof(QueryNode);
 		for (int i = 1; i < children_size; i++) {
+			// define resultList
+
 			QueryNode clause = children[i];
 			QueryNodeType clause_type = clause.getNodeType();
 			if (clause_type == QueryNodeType::such_that) {
@@ -26,8 +31,6 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 				QueryNode child2 = relationship.getChildren()[1];
 				QueryNodeType child1_type = child1.getNodeType();
 				QueryNodeType child2_type = child2.getNodeType();
-
-				// let's not cross here
 
 				if (relationship_type == QueryNodeType::follows) {
 					/* Follows(s1, s2)
@@ -77,24 +80,27 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 			} else if (clause_type == QueryNodeType::pattern) {
 				// magic
 			}
+			
+			// if ResultList is empty, then return ""
+
+			// merge resultList
+			// resultList = merge(resultList, relationship_resultList)
 		}
 	}
 
 
-	VAR_NAME_LIST variable_names = pkb.getVariableNameList();
-
 	//intermediate result_list can have many synonyms
 	//but final result should return just 1 string/empty
 
-	result_list = ResultListManager::addSynonymAndValues(result_list_ptr, chosen_synonym_name, variable_names);
+	//result_list = ResultListManager::addSynonymAndValues(result_list_ptr, chosen_synonym_name, variable_names);
 
-	if (ResultListManager::containsSynonym(result_list, chosen_synonym_name)) {
-		result = ResultListManager::getValues(result_list, chosen_synonym_name);
-	}
-	else {
+	//if (ResultListManager::containsSynonym(result_list, chosen_synonym_name)) {
+	//	result = ResultListManager::getValues(result_list, chosen_synonym_name);
+	//}
+	//else {
 	// Don't need to "print" anything if ResultList is empty
-		result = "";
-	}
+	//	result = "";
+	//}
 	
 	//select v such that Uses(a,v)
 	//select v such that Follows(2,s)
