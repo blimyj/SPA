@@ -4,6 +4,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include "PKB/ASTNode/ConstantNode.h"
+#include "PKB/ASTNode/VariableNode.h"
 #include "QueryNode.h"
 #include "QueryNodeType.h"
 #include "QueryPreProcessor.h"
@@ -18,6 +20,18 @@ const std::regex clause_pattern_format_("pattern\\s+[a-zA-Z][a-zA-Z0-9]*\\s*\\(\
 const std::regex stmt_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|^[+-]?[1-9]\\d*|0$");
 const std::regex ent_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")");
 const std::regex expression_spec_format_("(_\\s*\"\\s*([a-zA-Z][a-zA-Z0-9]*|^[+-]?[1-9]\\d*|0$)\\s*\"\\s*_|_)");
+
+STRING trimWhitespaces(STRING s) {
+	int start = s.find_first_not_of(" \n\r\t\f\v");
+	int end = s.find_last_not_of(" \n\r\t\f\v");
+
+	if (start == std::string::npos) {
+		return "";
+	}
+	else {
+		return s.substr(start, end - start + 1);
+	}
+}
 
 SPLIT_DECLARATIONS splitDeclarations(DECLARATIONS d) {
 	SPLIT_DECLARATIONS split_d;
@@ -47,14 +61,33 @@ QueryNode createExpressionNode(EXPRESSION e) {
 		factor: var_name | const_value
 	*/
 	QueryNode exp_node = QueryNode();
-/*
+
 	if (std::regex_match(e, std::regex("_"))) {
-		exp_node.setASTNode({ QueryNodeType::wild_card }, );
+		// is wild card
+		exp_node.setNodeType({ QueryNodeType::wild_card });
 	}
 	else {
-		exp_node.setASTNode({ QueryNodeType::expression }, )
+		// partial matching of ast node
+		int open_quote_index = e.find("\"");
+		int close_quote_index = e.rfind("\"");
+		std::string trimmed_exp = trimWhitespaces(e.substr(open_quote_index + 1,
+			close_quote_index - open_quote_index - 1));
+
+
+		if (std::regex_match(trimmed_exp, std::regex(name_format_))) {
+			// expression is a var_name
+			std::shared_ptr<VariableNode> var_node = std::make_shared<VariableNode>();
+			var_node->setVariableName(trimmed_exp);
+			exp_node.setASTNode(var_node);
+		}
+		else {
+			// expression is a const_value
+			std::shared_ptr<ConstantNode> const_node = std::make_shared<ConstantNode>();
+			const_node->setValue(trimmed_exp);
+			exp_node.setASTNode(const_node);
+		}
 	}
-	*/
+	
 	return exp_node;
 }
 
@@ -381,18 +414,6 @@ VALIDATION_RESULT isValidPatternArguments(PROCESSED_SYNONYMS proc_s, SYNONYM_NAM
 
 }
 
-STRING trimWhitespaces(STRING s) {
-	int start = s.find_first_not_of(" \n\r\t\f\v");
-	int end = s.find_last_not_of(" \n\r\t\f\v");
-
-	if (start == std::string::npos) {
-		return "";
-	}
-	else {
-		return s.substr(start, end - start + 1);
-	}
-}
-
 SPLIT_QUERY splitQuery(QUERY q) {
 	SPLIT_QUERY split_q;
 	DECLARATIONS d = "";
@@ -545,7 +566,7 @@ PROCESSED_CLAUSES preProcessClauses(PROCESSED_SYNONYMS proc_s, CLAUSES c) {
 					ARGUMENT first_arg = trimWhitespaces(current_c.substr(open_brac_index + 1,
 						comma_index - open_brac_index + 1));
 					ARGUMENT second_arg = trimWhitespaces(current_c.substr(comma_index + 1,
-						closed_brac_index - comma_index + 1));
+						closed_brac_index - comma_index - 1));
 
 					// get relation
 					RELATIONSHIP rel = trimWhitespaces(current_c.substr(0, open_brac_index));

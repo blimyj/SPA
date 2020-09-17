@@ -7,14 +7,14 @@ class QueryNodeContent;
 
 typedef std::string STRING;
 typedef int INTEGER;
-typedef ASTNode AST_NODE;
+typedef std::shared_ptr<ASTNode> AST_NODE;
 typedef int MODIFIED_FLAG;
 
 class QueryNodeContent {
 private:
 	STRING strings = "";
 	INTEGER integer = -1;
-	AST_NODE astnode = ASTNode();
+	AST_NODE astnode;
 	MODIFIED_FLAG modified = -1;
 	
 public:
