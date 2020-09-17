@@ -1,0 +1,5 @@
+procedure main {
+	while (15 + a1 + a2 / a3 * a4 % a6 + 21 < 37 - d2 * d3 + d4 - d5 + d6 * 49) {
+		print a;
+	}
+}

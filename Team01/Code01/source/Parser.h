@@ -5,7 +5,8 @@
 #include <deque>
 
 #include "../source/PKB.h"
-#include "../source/OperatorTypeEnum.h"
+#include "OperatorTypeEnum.h"
+#include "RelOperatorTypeEnum.h"
 
 typedef std::string STRING;
 typedef std::vector<std::string> LIST_OF_STRINGS;
@@ -24,11 +25,11 @@ private:
 	int parsePrint(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
 	int parseAssign(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
 
-	int Parser::parseWhile(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
-	int Parser::parseIfThen(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
-	int Parser::parseElse(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
-	int Parser::parseCall(STRING str);
-	int Parser::parseStmtListClose();
+	int parseWhile(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
+	int parseIfThen(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
+	int parseElse(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
+	int parseCall(STRING str);
+	int parseStmtListClose();
 
 	STRING getNextToken(std::istreambuf_iterator<char>* iter, std::istreambuf_iterator<char> eos);
 
@@ -45,14 +46,23 @@ private:
 	int takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op);
 	ExpressionTypeEnum getExpressionType(OperatorTypeEnum op);
 
+	int takesPrecedent(RelOperatorTypeEnum l_op, RelOperatorTypeEnum r_op);
+	ExpressionTypeEnum getExpressionType(RelOperatorTypeEnum op);
+	RelationTypeEnum getRelationType(RelOperatorTypeEnum op);
+
+	bool isArithmeticOp(RelOperatorTypeEnum op);
+
+	bool isRelationOp(RelOperatorTypeEnum op);
+	bool isBooleanOp(OperatorTypeEnum op);
+
 	//Debugger Functions to print out AST
 	int printTree(AST_NODE_PTR);
 		/*
 		Description: Prints the nodes in the AST out, given the root node.
 		*/
 	LIST_OF_STRINGS getProperties(AST_NODE_PTR, NODE_TYPE);
-	/*
-	Description: Returns a STRING_LIST of the properties of the given node. Return empty list if no properties.
-	*/
+		/*
+		Description: Returns a STRING_LIST of the properties of the given node. Return empty list if no properties.
+		*/
 };
 
