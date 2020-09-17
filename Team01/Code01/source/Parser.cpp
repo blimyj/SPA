@@ -252,11 +252,7 @@
 			if (*iter != eos && **iter == '=') {
 				curr_token += **iter;
 				++* iter;
-			} else {
-				curr_token = "UNEXPECTED TOKEN:" + curr_token;
-				curr_token += **iter;
-				++* iter;
-			}
+			} else {}
 			return curr_token;
 		}
 
@@ -514,7 +510,7 @@
 				else if (temp_token == "==") {
 					op = RelOperatorTypeEnum::ropEq;
 				}
-				else if (temp_token == "!+") {
+				else if (temp_token == "!=") {
 					op = RelOperatorTypeEnum::ropNeq;
 				}
 				else if (temp_token == ">") {
@@ -540,7 +536,8 @@
 				}
 				else {
 					//If not any of the above tokens, return an error.
-					throw "Error: Expected a operator, but none found.";
+					STRING msg = "Error: Expected an operator, but \"" + temp_token + "\" found instead.";
+					throw msg;
 				}
 
 				//throw into operator stack
@@ -1212,7 +1209,8 @@
 				}
 				else {
 					//If not any of the above tokens, return an error.
-					throw "Error: Expected a operator, but none found.";
+					STRING msg = "Error: Expected an operator, but \"" + temp_token + "\" found instead.";
+					throw msg;
 				}
 
 				//throw into operator stack
