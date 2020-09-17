@@ -377,6 +377,66 @@ SPLIT_QUERY splitQuery(QUERY q) {
 	return split_q;
 }
 
+PROCESSED_SYNONYMS preProcessSynonyms(DECLARATIONS d) {
+	PROCESSED_SYNONYMS proc_s;
+	VALIDATION_RESULT is_valid = true;
+
+	SPLIT_DECLARATIONS split_d = splitDeclarations(d);
+
+
+	for (int i = 0; i < split_d.size(); i++) {
+		// loop through each declaration
+		// check validity of each declaration
+
+		// trim whitespaces at front and back of declaration
+		SINGLE_DECLARATION single_d = trimWhitespaces(split_d[i]);
+
+		if (!isValidDeclaration(single_d)) {
+			// break out of loop if not valid
+			is_valid = false;
+			break;
+		}
+
+		// get design entity
+		int first_space_index = single_d.find(" ");
+		SYNONYM_TYPE design_entity = single_d.substr(0, first_space_index);
+
+		// break into synonyms
+		// create synonym nodes
+		// add node to map
+		std::string delimiter = ",";
+		int index = first_space + 1;
+		int split_index = s.find(delimiter);
+
+		if (split_index == -1) {
+			QueryNode new_node = QueryNode();
+			SYNONYM_NAME syn_name = trimWhitespaces(single_d.substr(index));
+
+			new_node.setSynonymNode(design_entity, syn_name);
+			proc_s.insert({ syn_name, new_node });
+		}
+		else {
+			while (split_index != -1) {
+				QueryNode new_node = QueryNode();
+				SYNONYM_NAME syn_name = trimWhitespaces(single_d.substr(index, split_index - index));
+
+				new_node.setSynonymNode(design_entity, syn_name);
+				proc_s.insert({ syn_name, new_node });
+
+				index = split_index + 1;
+				split_index = d.find(delimiter, index);
+			}
+		}
+	}
+
+	if (is_valid) {
+		return proc_s;
+	}
+	else {
+		return PROCESSED_SYNONYMS empty_map;
+	}
+}
+
 PROCESSED_CLAUSES preProcessClauses(PROCESSED_SYNONYMS proc_s, CLAUSES c) {
 	PROCESSED_CLAUSES select_node = QueryNode();
 	VALIDATION_RESULT is_valid = true;
