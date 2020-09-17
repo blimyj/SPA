@@ -1,9 +1,9 @@
 #include "ProcedureNode.h"
 
-ProcedureNode::ProcedureNode(STRING proc_name, STMT_LIST_NODE_PTR stmt_list_node_ptr) {
-    setProcedureName(proc_name);
-    setProcedureStatementListNode(stmt_list_node_ptr);
+ProcedureNode::ProcedureNode() {
     node_type_ = { NODE_TYPE::procedureNode };
+    proc_name_ = "";
+    proc_stmt_list_node_ptr_ = nullptr;
 }
 
 BOOLEAN ProcedureNode::setProcedureName(STRING proc_name) {
@@ -16,9 +16,15 @@ BOOLEAN ProcedureNode::setProcedureName(STRING proc_name) {
     return true;
 }
 
-BOOLEAN ProcedureNode::setProcedureStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr) {
+BOOLEAN ProcedureNode::setProcedureStatementListNode(STMT_LIST_NODE_PTR proc_stmt_list_node_ptr) {
     try {
-        stmt_list_node_ptr_ = stmt_list_node_ptr;
+        if (proc_stmt_list_node_ptr == nullptr) {
+            return false;
+        }
+        addChildNode(proc_stmt_list_node_ptr);
+        std::shared_ptr<ProcedureNode> sp = shared_from_this();
+        proc_stmt_list_node_ptr->setParentNode(sp);
+        proc_stmt_list_node_ptr_ = proc_stmt_list_node_ptr;
     } catch (int e) {
         (void)e;
         return false;
@@ -31,5 +37,5 @@ STRING ProcedureNode::getProcedureName() {
 }
 
 STMT_LIST_NODE_PTR ProcedureNode::getProcedureStatementListNode() {
-    return stmt_list_node_ptr_;
+    return proc_stmt_list_node_ptr_;
 }

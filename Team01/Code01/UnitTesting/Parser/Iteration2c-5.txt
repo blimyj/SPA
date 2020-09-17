@@ -1,0 +1,17 @@
+procedure main {
+	while (w < 36) {
+		a = 20;
+		if (37 < x) then {
+			b = 21;	
+		} else {
+			while (y < 38) {
+				c = 22;
+				if (39 < z) then {
+					d = 23;	
+				} else {
+					e = 24;
+				}
+			}
+		}
+	}
+}
