@@ -60,14 +60,13 @@ INTEGER QueryNode::getInteger() {
 }
 
 
-void QueryNode::setASTNode(QUERY_NODE_TYPE node_type, AST_NODE astnode) {
-	//NODE_TYPE can be expression or wild_card
-	this->node_type = node_type;
+void QueryNode::setASTNode(AST_NODE astnode) {
+	this->node_type = { QueryNodeType::expression };
 	QueryNodeContent content = QueryNodeContent(astnode);
 	this->node_content = content;
 }
 
-ASTNode QueryNode::getAstNode() {
+AST_NODE QueryNode::getAstNode() {
 	return node_content.getAstNode();
 }
 
