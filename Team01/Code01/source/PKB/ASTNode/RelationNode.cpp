@@ -4,6 +4,7 @@ RelationNode::RelationNode(RELATION_TYPE relation_type, AST_NODE_PTR left_node_p
     setRelationType(relation_type);
     setLeftAstNode(left_node_ptr);
     setRightAstNode(right_node_ptr);
+    node_type_ = { NODE_TYPE::relationNode };
 }
 
 BOOLEAN RelationNode::setRelationType(RELATION_TYPE relation_type) {

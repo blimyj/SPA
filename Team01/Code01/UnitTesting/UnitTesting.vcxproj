@@ -172,6 +172,12 @@
     <ClCompile Include="TestResultListManager.cpp" />
     <ClCompile Include="TestQueryEvaluator.cpp" />
     <ClCompile Include="TestQueryNode.cpp" />
+    <ClCompile Include="TestPKB.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SPA\SPA.vcxproj">
+      <Project>{dc21a1ea-d2c6-4d14-a2b4-e025b64bde81}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

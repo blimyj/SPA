@@ -13,12 +13,12 @@ class WhileNode : public StatementNode {
 public:
 	WhileNode(CONDITION_NODE_PTR condition_node_ptr, STMT_LIST_NODE_PTR stmt_list_node_ptr);
 		/*
-		Description: Constructs an WhileNode with the given CONDITION_NODE_PTR condition and STMT_LIST_NODE_PTR statement body.
+		Description: Constructs a WhileNode with a child CONDITION_NODE_PTR and STMT_LIST_NODE_PTR.
 		*/
 
 	BOOLEAN setConditionNode(CONDITION_NODE_PTR condition_node_ptr);
 		/*
-		Description: Returns True if able to set the condition_node_ptr_ as condition_node_ptr  of IfNode condition.
+		Description: Returns True if able to set the CONDITION_NODE_PTR of this while statement, false otherwise.
 		*/
 
 	BOOLEAN setWhileStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);

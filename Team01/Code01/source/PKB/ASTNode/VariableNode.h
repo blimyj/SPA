@@ -6,7 +6,7 @@
 typedef std::string STRING;
 typedef bool BOOLEAN;
 
-class VariableNode : public StatementNode {
+class VariableNode : public ASTNode {
 
 public:
 	VariableNode(STRING var_name);

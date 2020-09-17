@@ -3,6 +3,7 @@
 ProcedureNode::ProcedureNode(STRING proc_name, STMT_LIST_NODE_PTR stmt_list_node_ptr) {
     setProcedureName(proc_name);
     setProcedureStatementListNode(stmt_list_node_ptr);
+    node_type_ = { NODE_TYPE::procedureNode };
 }
 
 BOOLEAN ProcedureNode::setProcedureName(STRING proc_name) {

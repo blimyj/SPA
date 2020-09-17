@@ -9,6 +9,7 @@
 #include "../source/PKBBuilder.cpp"
 #include "../source/PKB/ASTNode/VariableNode.cpp"
 #include "../source/PKBStub.cpp"
+#include "../source/Parser.h"
 #include <iostream>
 
 #include "../source/PKB/DesignEntities/AssignTable.cpp"
@@ -36,8 +37,10 @@ GUIWrapper::GUIWrapper() {
 // method for parsing the SIMPLE source
 void GUIWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
-	std::cout << "parsed " << filename << std::endl;
-  // ...rest of your code...
+	std::cout << "parsed " << filename;
+	Parser parser = Parser();
+	parser.parseFile(filename);
+	// ...rest of your code...
 }
 
 // method to evaluating a query
