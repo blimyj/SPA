@@ -40,9 +40,12 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 		result = ResultListManager::getValues(result_list, chosen_synonym_name);
 	}
 	else {
+	// Don't need to "print" anything if ResultList is empty
 		result = "";
 	}
 	
+	//select v such that Uses(a,v)
+	//select v such that Follows(2,s)
 
 	return result;
 }

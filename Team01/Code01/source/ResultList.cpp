@@ -6,11 +6,12 @@ void ResultList::addColumn(SYNONYM_NAME columnName) {
 
 void ResultList::addColumn(SYNONYM_NAME columnName, SYNONYM_VALUES_LIST columnValues) {
 	results.insert({ columnName, columnValues });
+	num_rows_ = columnValues.size();
 }
 
 void ResultList::addRow(ROW row) {
 	// Iterate each column of this resultlist
-	for (auto r : results) {
+	for (auto &r : results) {
 		// Check if row contains that column
 		auto it = row.find(r.first);
 		if (it == row.end()) {
@@ -18,6 +19,7 @@ void ResultList::addRow(ROW row) {
 		}
 		r.second.push_back(it->second);
 	}
+	num_rows_++;
 }
 
 void ResultList::removeColumn(SYNONYM_NAME columnName) {
@@ -42,11 +44,11 @@ SYNONYM_NAME_LIST ResultList::getAllSynonyms() {
 
 ROW_LIST ResultList::getRowList() {
 	ROW_LIST all_rows;
-	for (int i = 0; i < results.begin()->second.size(); i++) {
+	for (int i = 0; i < num_rows_ ; ++i) {
 		ROW current_row;
 		for (RESULT_LIST::iterator it = results.begin(); it != results.end(); ++it) {
 			SYNONYM_NAME synonym = it->first;
-			SYNONYM_VALUE value = it->second[i];
+			SYNONYM_VALUE value = it->second.at(i);
 			current_row.insert({ synonym, value });
 		}
 		all_rows.push_back(current_row);

@@ -22,7 +22,7 @@ INTEGER QueryNode::getInteger() {
 }
 
 
-void QueryNode::setASTNode(NODE_TYPE node_type, ASTNode astnode) {
+void QueryNode::setASTNode(NODE_TYPE node_type, AST_NODE astnode) {
 	//NODE_TYPE can be expression or wild_card
 	this->node_type = node_type;
 	QueryNodeContent content = QueryNodeContent(astnode);
