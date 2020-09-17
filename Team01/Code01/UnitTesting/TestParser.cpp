@@ -2,6 +2,13 @@
 
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include "TestParser.h"
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
 #include "../source/Parser.h"
 #include "../source/PKB.h"
 
@@ -10,33 +17,19 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace UnitTesting {
 	TEST_CLASS(TestParser) {
 	public:
-
 		TEST_METHOD(TestBasicProcedure)
 		{	
-			std::shared_ptr<PKB> pkb;
-			PKB_BUILDER pkb_builder;
-			
-			STMT_LIST_NODE_PTR stmt_1 = std::make_shared<StatementListNode>();
-			PROC_NODE_PTR proc_1 = std::make_shared<ProcedureNode>("main", stmt_1);
-			pkb_builder.addProcedureNode(proc_1);
-			pkb_builder.addStatementListNode(stmt_1);
-			pkb = std::make_shared<PKB>(pkb_builder.build());
+			ParserPrintTree printer;
+			Parser parser = Parser();
+			std::shared_ptr <PKB> pkb = 
+				std::make_shared<PKB> (parser.parseFile("../UnitTesting/Parser/TestParser-1.txt"));			
+			AST_NODE_PTR parent_node = pkb->getProcedures().at(0);
+			std::string actual = printer.parserPrintTree(parent_node);
 
-			Parser test_parser = Parser();
-			std::shared_ptr <PKB> test_pkb = 
-				std::make_shared<PKB> (test_parser.parseFile("../UnitTesting/Parser/TestParser-1.txt"));			
-			
-			PROC_NODE_PTR actual = test_pkb->getProcedures().at(0);
-			PROC_NODE_PTR for_testing = pkb->getProcedures().at(0);
-			Assert::IsTrue(typeid(*for_testing) == typeid(*actual));
+			std::ifstream infile{ "../UnitTesting/Parser/TestParser-1-out.txt" };
+			std::string expected{ std::istreambuf_iterator<char>(infile), std::istreambuf_iterator<char>() };
 
-			ASSIGN_NODE_PTR actual = test_pkb->getAssigns().at(0);
-			ASSIGN_NODE_PTR for_testing = pkb->getAssigns().at(0);
-			Assert::IsTrue(typeid(*for_testing) == typeid(*actual));
-
-			VAR_NODE_PTR actual = test_pkb->getVariables().at(0);
-			VAR_NODE_PTR for_testing = pkb->getVariables().at(0);
-			Assert::IsTrue(typeid(*for_testing) == typeid(*actual));
+			Assert::IsTrue(actual == expected);
 		}
 
 	};
