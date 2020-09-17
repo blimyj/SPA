@@ -38,7 +38,7 @@ public:
 	void setIntegerNode(INTEGER integer);
 	INTEGER getInteger();
 
-	void setASTNode(QUERY_NODE_TYPE node_type, AST_NODE astnode);
+	void setASTNode(AST_NODE astnode);
 	AST_NODE getAstNode();
 
 	void setChildren(QUERY_NODE_POINTERS children); //need to add all children at once, in the right order
