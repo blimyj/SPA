@@ -7,5 +7,8 @@ enum class QueryNodeType {
 	parent,
 	parentT,
 	follows,
-	followsT
+	followsT,
+	usesS,
+	modifiesS,
+	pattern
 };
