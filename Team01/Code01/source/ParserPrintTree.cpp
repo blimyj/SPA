@@ -2,10 +2,10 @@
 
 #include "ParserPrintTree.h"
 
-std::string ParserPrintTree::parserPrintTree (AST_NODE_PTR parent_node_ptr) {
+std::string ParserPrintTree::parserPrintTree(AST_NODE_PTR parent_node_ptr) {
 	std::deque< AST_NODE_PTR> node_queue = std::deque< AST_NODE_PTR>();
 	node_queue.push_back(parent_node_ptr);
-	STRING output_tree;
+	std::string result;
 
 	while (!node_queue.empty()) {
 		AST_NODE_PTR node_ptr = node_queue.front();
@@ -16,9 +16,9 @@ std::string ParserPrintTree::parserPrintTree (AST_NODE_PTR parent_node_ptr) {
 		// Get properties of current node, and print:
 		std::vector<std::string> node_properties = getNodeProperties(node_ptr, node_type);
 
-		output_tree += "\n\n Node Type: ";
+		result.append("\n\n Node Type: ");
 		;			for (STRING properties : node_properties) {
-			output_tree += properties + '\n';
+			result.append(properties + '\n');
 		}
 
 		// Enqueue currrent node's children nodes:
@@ -27,10 +27,10 @@ std::string ParserPrintTree::parserPrintTree (AST_NODE_PTR parent_node_ptr) {
 		}
 
 		// Print number of children nodes:
-		output_tree += "No. of Children: " + children_nodes.size() + '\n';
+		result.append("No. of Children: " + children_nodes.size() + '\n');
 	}
 
-	return output_tree;
+	return result;
 }
 
 std::vector<std::string> ParserPrintTree::getNodeProperties(AST_NODE_PTR node_ptr, NODE_TYPE node_type) {

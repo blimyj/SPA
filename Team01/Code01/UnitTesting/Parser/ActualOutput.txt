@@ -1,0 +1,23 @@
+
+
+ Node Type: procedureNode
+main
+dren: 
+
+ Node Type: statementListNode
+dren: 
+
+ Node Type: assignNode
+ren: 
+
+ Node Type: variableNode
+a
+ldren: 
+
+ Node Type: expressionNode
+VAR OR CONST
+dren: 
+
+ Node Type: constantNode
+1
+ldren: 
