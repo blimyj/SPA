@@ -13,11 +13,11 @@
 
 const std::regex name_format_("[a-zA-Z][a-zA-Z0-9]*");
 const std::regex integer_format_("^[+-]?[1-9]\\d*|0$");
-const std::regex declaration_format_("(stmt|read|print|while|if|assign|variable|constant|procedure)\\s+[a-zA-Z][a-zA-Z0-9]*\\s*(\\,\\s*[a-zA-Z][a-zA-Z0-9]*)*\\s*\\;");
+const std::regex declaration_format_("(stmt|read|print|while|if|assign|variable|constant|procedure)\\s+[a-zA-Z][a-zA-Z0-9]*\\s*(\\,\\s*[a-zA-Z][a-zA-Z0-9]*)*\\s*");
 const std::regex clause_select_format_("Select\\s+[a-zA-Z][a-zA-Z0-9]*.*");
-const std::regex clause_relation_format_("(Follows|FollowsT|Parent|ParentT|UsesS|UsesP|ModifiesS|ModifiesP)\\s+\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*\\)");
+const std::regex clause_relation_format_("(Follows|FollowsT|Parent|ParentT|UsesS|UsesP|ModifiesS|ModifiesP)\\s*\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*\\)");
 const std::regex clause_pattern_format_("pattern\\s+[a-zA-Z][a-zA-Z0-9]*\\s*\\(\\s*[a-zA-Z_][a-zA-Z0-9]*\\s*,\\s*\"\\s*[^\\s].*\\s*\"\\s*\\)");
-const std::regex stmt_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|^[+-]?[1-9]\\d*|0$");
+const std::regex stmt_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|^[+-]?[1-9]\\d*|0$)");
 const std::regex ent_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")");
 const std::regex expression_spec_format_("(_\\s*\"\\s*([a-zA-Z][a-zA-Z0-9]*|^[+-]?[1-9]\\d*|0$)\\s*\"\\s*_|_)");
 
@@ -262,13 +262,13 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 	}
 
 	if (std::regex_match(rel, std::regex("Follows")) || std::regex_match(rel, std::regex("FollowsT"))) {
-		if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(first_arg, stmt_ref_format_)) {
+		if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(second_arg, stmt_ref_format_)) {
 			return false;
 		}
-		else if (proc_s.find(first_arg)->second.getSynonymType() != QuerySynonymType:: stmt) {
+		else if (std::regex_match(first_arg, name_format_) && proc_s.find(first_arg)->second.getSynonymType() != QuerySynonymType:: stmt) {
 			return false;
 		}
-		else if (proc_s.find(second_arg)->second.getSynonymType() != QuerySynonymType::stmt) {
+		else if (std::regex_match(second_arg, name_format_) && proc_s.find(second_arg)->second.getSynonymType() != QuerySynonymType::stmt) {
 			return false;
 		}
 		else {
@@ -279,10 +279,10 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 		if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(first_arg, stmt_ref_format_)) {
 			return false;
 		}
-		else if (proc_s.find(first_arg)->second.getSynonymType() != QuerySynonymType::stmt) {
+		else if (std::regex_match(first_arg, name_format_) && proc_s.find(first_arg)->second.getSynonymType() != QuerySynonymType::stmt) {
 			return false;
 		}
-		else if (proc_s.find(second_arg)->second.getSynonymType() != QuerySynonymType::stmt) {
+		else if (std::regex_match(second_arg, name_format_) && proc_s.find(second_arg)->second.getSynonymType() != QuerySynonymType::stmt) {
 			return false;
 		}
 		else {
@@ -504,7 +504,19 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 		SYNONYM_NAME select_syn;
 		int such_that_index = c.find("such that");
 		int pattern_index = c.find("pattern");
-		int next_index = std::min(such_that_index, pattern_index);
+		int next_index;
+
+		if (such_that_index != -1 && pattern_index != -1) {
+			next_index = std::min(such_that_index, pattern_index);
+		}
+		else if (such_that_index == -1) {
+			// 'such that' is not found
+			next_index = pattern_index;
+		}
+		else {
+			// 'pattern' is not found
+			next_index = such_that_index;
+		}
 
 		if (next_index == -1) {
 			// no such that nor pattern clause
@@ -549,7 +561,7 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 				// create clause node
 				// add to children array
 				if (next_index == such_that_index) {
-					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index + 8, pattern_index - next_index));
+					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index + 9, pattern_index - next_index));
 
 					if (!isValidRelationFormat(current_c)) {
 						is_valid = false;
@@ -564,7 +576,7 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 					int comma_index = current_c.find(",");
 					int closed_brac_index = current_c.find(")");
 					ARGUMENT first_arg = trimWhitespaces(current_c.substr(open_brac_index + 1,
-						comma_index - open_brac_index + 1));
+						comma_index - open_brac_index - 1));
 					ARGUMENT second_arg = trimWhitespaces(current_c.substr(comma_index + 1,
 						closed_brac_index - comma_index - 1));
 
@@ -583,7 +595,7 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 					child_index++;
 				}
 				else {
-					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index + 7, such_that_index - next_index));
+					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index + 8, such_that_index - next_index));
 
 					if (!isValidPatternFormat(current_c)) {
 						is_valid = false;
@@ -594,9 +606,9 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 					int comma_index = current_c.find(",");
 					int closed_brac_index = current_c.find(")");
 					ARGUMENT first_arg = trimWhitespaces(current_c.substr(open_brac_index + 1,
-						comma_index - open_brac_index + 1));
+						comma_index - open_brac_index - 1));
 					ARGUMENT second_arg = trimWhitespaces(current_c.substr(comma_index + 1,
-						closed_brac_index - comma_index + 1));
+						closed_brac_index - comma_index - 1));
 
 					// get synonym
 					SYNONYM_NAME pattern_syn = trimWhitespaces(current_c.substr(0, open_brac_index));
@@ -611,6 +623,8 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 					select_children[child_index] = pattern_node;
 					child_index++;
 				}
+
+				// set new next_index
 			}
 
 			// set children of select node
