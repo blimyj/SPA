@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <typeinfo>
 #include <exception>
 #include "RelationNode.h"
 #include "StatementNode.h"
@@ -26,12 +27,12 @@ public:
 		Description: Returns True if able to set the CONDITION_TYPE of this ConditionNode, false otherwise.
 		*/
 
-	BOOLEAN setLeftAstNode(AST_NODE_PTR leftAstNode);
+	BOOLEAN setLeftAstNode(AST_NODE_PTR left_node_ptr);
 		/*
 		Description: Returns True if able to set AST_NODE_PTR to be the left-hand side child of this Condition, false otherwise
 		*/
 
-	BOOLEAN setRightAstNode(AST_NODE_PTR rightAstNode);
+	BOOLEAN setRightAstNode(AST_NODE_PTR right_node_ptr);
 		/*
 		Description: Returns True if able to set AST_NODE_PTR to be the right-hand side child of this Condition, false otherwise.
 		*/
