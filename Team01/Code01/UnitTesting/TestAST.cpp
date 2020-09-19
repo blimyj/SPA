@@ -12,14 +12,17 @@ namespace UnitTesting {
 	public:
 		VAR_NODE_PTR var = std::make_shared<VariableNode>();
 		PRINT_NODE_PTR print = std::make_shared<PrintNode>();
+
 		TEST_METHOD(GetParent_WithNodes_True) {
 			Assert::IsTrue(var->getParentNode() == nullptr);
+			print->setVariableNode(var);
 			PrintNode* parent = static_cast<PrintNode*>(var->getParentNode().get());
 			Assert::IsTrue(typeid(*print) == typeid(*parent));
 		}
 
 		TEST_METHOD(GetChildren_WithNodes_True) {
 			Assert::IsTrue(var->getChildrenNode().size() == 0);
+			print->setVariableNode(var);
 			VariableNode* child = static_cast<VariableNode*>(print->getChildrenNode().at(0).get());
 			Assert::IsTrue(typeid(*var) == typeid(*child));
 		}
@@ -70,6 +73,7 @@ namespace UnitTesting {
 	TEST_CLASS(ConditionNodeTest) {
 	public:
 		CONDITION_NODE_PTR cond = std::make_shared<ConditionNode>();
+		CONDITION_NODE_PTR cond_2 = std::make_shared<ConditionNode>();
 		RELATION_NODE_PTR relation = std::make_shared<RelationNode>();
 
 		TEST_METHOD(SetConditionType_GetConditionType_True) {
@@ -80,18 +84,20 @@ namespace UnitTesting {
 
 		}
 
-		TEST_METHOD(SetLeftRelationNode_GetLeftRelationNode_True) {
-			Assert::IsTrue(cond->getLeftRelationNode() == nullptr);
-			cond->setLeftRelationNode(relation);
-			RELATION_NODE_PTR child = cond->getLeftRelationNode();
-			Assert::IsTrue(typeid(*cond) == typeid(*child));
+		TEST_METHOD(SetLeftstNode_GetLeftAstNode_True) {
+			Assert::IsTrue(cond->getLeftAstNode() == nullptr);
+			cond->setLeftAstNode(relation);
+			RelationNode* child = static_cast<RelationNode*>(cond->getLeftAstNode().get());
+			Assert::IsTrue(typeid(*relation) == typeid(*child));
 		}
 
-		TEST_METHOD(SetRightRelationNode_GetRightRelationNode_True) {
-			Assert::IsTrue(cond->getRightRelationNode() == nullptr);
-			cond->setLeftRelationNode(relation);
-			RELATION_NODE_PTR child = cond->getLeftRelationNode();
-			Assert::IsTrue(typeid(*cond) == typeid(*child));
+
+		TEST_METHOD(SetRightAstNode_GetRightAstNode_True) {
+			auto func = [this] {cond->getRightAstNode() == nullptr;};
+			Assert::ExpectException<std::exception>(func);
+			cond->setRightAstNode(cond_2);
+			ConditionNode* child = static_cast<ConditionNode*>(cond->getRightAstNode().get());
+			Assert::IsTrue(typeid(*cond_2) == typeid(*child));
 		}
 	};
 
@@ -128,10 +134,11 @@ namespace UnitTesting {
 		}
 		
 		TEST_METHOD(SetRightAstNode_GetRightAstNode_True) {
-				Assert::IsTrue(expr->getRightAstNode() == nullptr);
-				expr->setRightAstNode(constant);
-				ConstantNode* child = static_cast<ConstantNode*>(expr->getRightAstNode().get());
-				Assert::IsTrue(typeid(*constant) == typeid(*child));
+			auto func = [this] {expr->getRightAstNode() == nullptr;};
+			Assert::ExpectException<std::exception>(func);
+			expr->setRightAstNode(constant);
+			ConstantNode* child = static_cast<ConstantNode*>(expr->getRightAstNode().get());
+			Assert::IsTrue(typeid(*constant) == typeid(*child));
 		}
 	};
 

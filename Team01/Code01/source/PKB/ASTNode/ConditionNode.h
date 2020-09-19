@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <exception>
 #include "RelationNode.h"
 #include "StatementNode.h"
 #include "ConditionTypeEnum.h"
