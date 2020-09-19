@@ -259,26 +259,37 @@ VALIDATION_RESULT QueryPreProcessor::isStatementArgument(PROCESSED_SYNONYMS proc
 	if (!std::regex_match(a, stmt_ref_format_)) {
 		return false;
 	}
-	else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::stmt) {
+	else if (std::regex_match(a, std::regex("_"))) {
 		return true;
 	}
-	else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::read) {
+	else if (std::regex_match(a, integer_format_)) {
 		return true;
 	}
-	else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::print) {
-		return true;
-	}
-	else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::call) {
-		return true;
-	}
-	else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::whiles) {
-		return true;
-	}
-	else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::ifs) {
-		return true;
-	}
-	else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::assign) {
-		return true;
+	else if (std::regex_match(a, name_format_)) {
+		if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::stmt) {
+			return true;
+		}
+		else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::read) {
+			return true;
+		}
+		else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::print) {
+			return true;
+		}
+		else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::call) {
+			return true;
+		}
+		else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::whiles) {
+			return true;
+		}
+		else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::ifs) {
+			return true;
+		}
+		else if (proc_s.find(a)->second.getSynonymType() == QuerySynonymType::assign) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	else {
 		return false;
@@ -631,6 +642,7 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 					QueryNode relation_node = createRelationNode(proc_s, rel, first_arg, second_arg);
 
 					QueryNode such_that_node_children[1] = { relation_node };
+					such_that_node.setChildren(such_that_node_children, 1);
 					select_children[child_index] = such_that_node;
 					child_index++;
 				}
@@ -664,8 +676,8 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 					child_index++;
 				}
 
-				such_that_index = c.find("such that", next_index);
-				pattern_index = c.find("pattern", next_index);
+				such_that_index = c.find("such that", next_index + 1);
+				pattern_index = c.find("pattern", next_index + 1);
 				next_index = getNextClauseIndex(c, next_index, such_that_index, pattern_index);
 			}
 
