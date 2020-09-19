@@ -7,7 +7,7 @@
 
 typedef std::shared_ptr<ConditionNode> CONDITION_NODE_PTR;
 typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
-typedef bool BOOLEAN;
+typedef bool BOOLEAN_TYPE;
 
 class WhileNode : public StatementNode, public std::enable_shared_from_this<WhileNode> {
 public:
@@ -16,12 +16,12 @@ public:
 		Description: Sets NODE_TYPE of node to be assignNode.
 		*/
 
-	BOOLEAN setConditionNode(CONDITION_NODE_PTR condition_node_ptr);
+	BOOLEAN_TYPE setConditionNode(CONDITION_NODE_PTR condition_node_ptr);
 		/*
 		Description: Returns True if able to set the CONDITION_NODE_PTR of this while statement, false otherwise.
 		*/
 
-	BOOLEAN setWhileStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);
+	BOOLEAN_TYPE setWhileStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);
 		/*
 		Description: Returns True if able to set stmt_list_node_ptr_ as stmt_list_node_ptr, false otherwise.
 		*/
