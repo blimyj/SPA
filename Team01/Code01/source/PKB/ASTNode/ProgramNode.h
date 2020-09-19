@@ -6,7 +6,7 @@
 #include "ProcedureNode.h"
 #include "ASTNode.h"
 
-typedef bool BOOLEAN;
+typedef bool BOOLEAN_TYPE;
 typedef std::shared_ptr<ProcedureNode> PROC_NODE_PTR;
 typedef std::vector<PROC_NODE_PTR> PROC_NODE_PTR_LIST;
 
@@ -20,7 +20,7 @@ public:
 		Description: Constructs an empty ProgramNode.
 		*/
 
-	BOOLEAN addProcedureNode(PROC_NODE_PTR proc_node_ptr);
+	BOOLEAN_TYPE addProcedureNode(PROC_NODE_PTR proc_node_ptr);
 		/*
 		Description: Returns True if able to add the PROC_NODE_PTR to the PROC_NODE_PTR_LIST, false otherwise.
 		*/
