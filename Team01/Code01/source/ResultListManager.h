@@ -11,7 +11,8 @@
 
 class ResultListManager;
 
-typedef std::string FINAL_RESULT;
+typedef std::string STRING_RESULT;
+typedef std::vector<std::string> VALUE_LIST;
 
 class ResultListManager {
 // Note to self: for methods that change result_list, return ResultList!
@@ -23,10 +24,13 @@ public:
 		return result_list;
 	};
 
-	static FINAL_RESULT getValues(ResultList result_list, SYNONYM_NAME synonym_name) {
+	static VALUE_LIST getSynonymValues(ResultList result_list, SYNONYM_NAME target_synonym) {
+		return result_list.getValuesOfSynonym(target_synonym);
+	}
+
+	static STRING_RESULT getStringValues(VALUE_LIST result_list) {
 		// Return all the values of this synonym_name
-		SYNONYM_VALUES_LIST raw_result = result_list.getValuesOfSynonym(synonym_name);
-		return processReturnResult(raw_result);
+		return processReturnResult(result_list);
 	}
 	
 	static bool containsSynonym(ResultList result_list, SYNONYM_NAME synonym_name) {
@@ -125,7 +129,7 @@ private:
 		return true;
 	}
 
-	static FINAL_RESULT processReturnResult(SYNONYM_VALUES_LIST raw_results) {
+	static STRING_RESULT processReturnResult(SYNONYM_VALUES_LIST raw_results) {
 		std::string processed_results = "";
 		for (std::string result : raw_results) {
 			processed_results = processed_results + result + ", ";

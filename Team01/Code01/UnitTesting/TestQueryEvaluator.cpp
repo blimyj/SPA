@@ -115,9 +115,11 @@ namespace UnitTesting
 
 			QueryEvaluator qe = QueryEvaluator(*pkb);
 			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
-			Logger::WriteMessage(result.c_str());
-			QUERY_RESULT correct_result = "a, b, c, d, e";
-			Assert::IsTrue(result.compare(correct_result) == 0);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "a, b, c, d, e";
+			
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
 		}
 		
 		TEST_METHOD(evaluateQuery_SelectS1FollowsS1S2_ReturnsS1)
@@ -157,9 +159,11 @@ namespace UnitTesting
 			// Evaluate
 			QueryEvaluator qe = QueryEvaluator(*pkb);
 			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
-			Logger::WriteMessage(result.c_str());
-			QUERY_RESULT correct_result = "1, 2, 3, 4";
-			Assert::IsTrue(result.compare(correct_result) == 0);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "1, 2, 3, 4";
+
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
 		}
 		
 		TEST_METHOD(evaluateQuery_SelectAFollows1A_ReturnsEmpty)
@@ -195,9 +199,11 @@ namespace UnitTesting
 			// Evaluate
 			QueryEvaluator qe = QueryEvaluator(*pkb);
 			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
-			Logger::WriteMessage(result.c_str());
-			QUERY_RESULT correct_result = "";
-			Assert::IsTrue(result.compare(correct_result) == 0);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "";
+
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
 		}
 
 		TEST_METHOD(evaluateQuery_SelectPnFollows2_3_ReturnsPn)
@@ -233,9 +239,11 @@ namespace UnitTesting
 			// Evaluate
 			QueryEvaluator qe = QueryEvaluator(*pkb);
 			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
-			QUERY_RESULT correct_result = "1, 2, 3, 4, 5";
-			Logger::WriteMessage(result.c_str());
-			Assert::IsTrue(result.compare(correct_result) == 0);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "1, 2, 3, 4, 5";
+			
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
 		}
 
 		TEST_METHOD(evaluateQuery_SelectVFollowsT1_S_ReturnsV)
@@ -271,16 +279,19 @@ namespace UnitTesting
 			// Evaluate
 			QueryEvaluator qe = QueryEvaluator(*pkb);
 			QUERY_RESULT result;
+			STRING_RESULT result_string;
+
 			try {
 				result = qe.evaluateQuery(processed_synonyms, processed_clauses);
-
+				result_string = ResultListManager::getStringValues(result);
 			}
 			catch (const char* msg) {
 				Logger::WriteMessage("Evaluate exception caught");
 			}
-			QUERY_RESULT correct_result = "a, b, c, d, e";
-			Logger::WriteMessage(result.c_str());
-			Assert::IsTrue(result.compare(correct_result) == 0);
+			STRING_RESULT correct_result = "a, b, c, d, e";
+			
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
 		}
 	};
 }

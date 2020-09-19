@@ -6,6 +6,17 @@ QueryEvaluator::QueryEvaluator(PKB pkb) {
 
 QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSED_CLAUSES clauses) {
 	ResultList result_list;
+	const QUERY_RESULT no_result = QUERY_RESULT();
+
+	// If no synonyms are declared, Query is INVALID. Return no result.
+	if (synonyms.size() == 0) {
+		return no_result;
+	}
+
+	// If root of clauses tree is unassigned, then the clause is syntactically incorrect. Return no result.
+	if (clauses.getNodeType() == QueryNodeType::unassigned) {
+		return no_result;
+	}
 
 	QUERY_NODE_LIST children = clauses.getChildren();
 	if (children.size() == 0) {
@@ -69,8 +80,19 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 				filter the cross with PKB
 
 				then add to ResultList*/
-				std::vector<int> list1 = getStmtList(child1);
-				std::vector<int> list2 = getStmtList(child2);
+
+				// Initialize with list of all values for the given synonym
+				std::vector<int> list1;
+				std::vector<int> list2;
+
+				try {
+					list1 = getStmtList(child1);
+					list2 = getStmtList(child2);
+				}
+				catch (const char* msg) {
+					std::cout << msg << "\n";
+				}
+
 
 				// create all possible pairs of list1 and list2 values
 				std::vector<std::pair<int, int>> cross;
@@ -216,32 +238,13 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 				result_list = ResultListManager::merge(result_list, clause_result_list);
 			}
 			else {
-				return "";
+				return no_result;
 			}
 		}
-
-
-		// notes:
-
-		//intermediate result_list can have many synonyms
-		//but final result should return just 1 string/empty
-
-		//result_list = ResultListManager::addSynonymAndValues(result_list_ptr, chosen_synonym_name, variable_names);
-
-		//if (ResultListManager::containsSynonym(result_list, chosen_synonym_name)) {
-		//	result = ResultListManager::getValues(result_list, chosen_synonym_name);
-		//}
-	//else {
-	// Don't need to "print" anything if ResultList is empty
-	//	result = "";
-	//}
-
-	//select v such that Uses(a,v)
-	//select v such that Follows(2,s)
 	}
 
 	// convert result_list to string output
-	return ResultListManager::getValues(result_list, return_synonym_name);
+	return ResultListManager::getSynonymValues(result_list, return_synonym_name);
 }
 
 STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode child1) {

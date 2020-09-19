@@ -31,7 +31,6 @@ QUERY_RESULT QueryProcessor::processQuery(QUERY query) {
 	QUERY_RESULT query_result = query_evaluator.evaluateQuery(processed_synonyms, processed_clauses);
 	return query_result;
 	
-	return "";
 
 	/*
 	// Create fake synonyms and clauses for now
