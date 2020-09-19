@@ -7,7 +7,7 @@
 
 typedef std::shared_ptr<ExpressionNode> EXPR_NODE_PTR;
 typedef std::shared_ptr<VariableNode> VAR_NODE_PTR;
-typedef bool BOOLEAN;
+typedef bool BOOLEAN_TYPE;
 
 class AssignNode : public StatementNode, public std::enable_shared_from_this<AssignNode> {
 
@@ -17,12 +17,12 @@ public:
 		Description: Sets NODE_TYPE of node to be assignNode.
 		*/
 
-	BOOLEAN setVariableNode(VAR_NODE_PTR var_node_ptr);
+	BOOLEAN_TYPE setVariableNode(VAR_NODE_PTR var_node_ptr);
 		/*
 		Description: Returns True if able to set VAR_NODE_PTR as a child of this AssignNode, false otherwise
 		*/
 
-	BOOLEAN setExpressionNode(EXPR_NODE_PTR expr_node_ptr);
+	BOOLEAN_TYPE setExpressionNode(EXPR_NODE_PTR expr_node_ptr);
 		/*
 		Description: Returns True if able to set EXPR_NODE_PTR as a child of this AssignNode, false otherwise
 		*/

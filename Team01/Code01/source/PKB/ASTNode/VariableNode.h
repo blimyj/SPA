@@ -4,7 +4,7 @@
 #include "StatementNode.h"
 
 typedef std::string STRING;
-typedef bool BOOLEAN;
+typedef bool BOOLEAN_TYPE;
 
 class VariableNode : public ASTNode {
 
@@ -14,7 +14,7 @@ public:
 		Description: Sets NODE_TYPE of node to be variableNode.
 		*/
 
-	BOOLEAN setVariableName(STRING var_name);
+	BOOLEAN_TYPE setVariableName(STRING var_name);
 		/*
 		Description: Returns True if able to set var_name_ as var_name, false otherwise.
 		*/
