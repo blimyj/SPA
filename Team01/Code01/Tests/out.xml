@@ -1,79 +1,12 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>AutoTester</name><parsing_time_taken>0.000000</parsing_time_taken>
+<name>AutoTester</name><parsing_time_taken>585.000000</parsing_time_taken>
 </info>
 <queries>
 <query>
-<id ReturnTuple="1" CondNum="1" RelNum="0" comment="comment">1</id><querystr><![CDATA[variable v; Select v]]></querystr>
-<stuans></stuans>
-<correct>a,b,c,d,e</correct>
-<time_taken>65.000000</time_taken>
-<failed>
-<missing>a,b,c,d,e</missing>
-<additional></additional>
-<summary>
-<expected>5</expected>
-<matched>0</matched>
-<missing>5</missing>
-<additional>0</additional>
-</summary>
-</failed>
-</query>
-<query>
-<id ReturnTuple="1" CondNum="1" RelNum="0" comment="comment">2</id><querystr><![CDATA[print pn; Select pn]]></querystr>
-<stuans></stuans>
-<correct>1,2,3,4,5</correct>
-<time_taken>51.000000</time_taken>
-<failed>
-<missing>1,2,3,4,5</missing>
-<additional></additional>
-<summary>
-<expected>5</expected>
-<matched>0</matched>
-<missing>5</missing>
-<additional>0</additional>
-</summary>
-</failed>
-</query>
-<query>
-<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">3</id><querystr><![CDATA[stmt s1, s2; variable v; Select s1 such that Follows(s1,s2)]]></querystr>
-<stuans></stuans>
-<correct>1,2,3,4</correct>
-<time_taken>78.000000</time_taken>
-<failed>
-<missing>1,2,3,4</missing>
-<additional></additional>
-<summary>
-<expected>4</expected>
-<matched>0</matched>
-<missing>4</missing>
-<additional>0</additional>
-</summary>
-</failed>
-</query>
-<query>
-<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">4</id><querystr><![CDATA[assign a; Select a such that Follows(1,a)]]></querystr>
-<stuans></stuans>
-<correct></correct>
-<time_taken>76.000000</time_taken>
-<passed/>
-</query>
-<query>
-<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">5</id><querystr><![CDATA[stmt s; Select s such that Follows(3,s)]]></querystr>
-<stuans></stuans>
-<correct>4</correct>
-<time_taken>110.000000</time_taken>
-<failed>
-<missing>4</missing>
-<additional></additional>
-<summary>
-<expected>1</expected>
-<matched>0</matched>
-<missing>1</missing>
-<additional>0</additional>
-</summary>
-</failed>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="comment">1</id><querystr><![CDATA[stmt s1; Select s1]]></querystr>
+<timeout/>
 </query>
 </queries>
 </test_results>
