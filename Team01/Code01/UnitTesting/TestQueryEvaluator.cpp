@@ -51,14 +51,19 @@ namespace UnitTesting
 
 			std::shared_ptr<PrintNode> p1 = std::make_shared<PrintNode>();
 			p1->setStatementNumber(1);
+			p1->setVariableNode(v1);
 			std::shared_ptr<PrintNode> p2 = std::make_shared<PrintNode>();
 			p2->setStatementNumber(2);
+			p2->setVariableNode(v2);
 			std::shared_ptr<PrintNode> p3 = std::make_shared<PrintNode>();
 			p3->setStatementNumber(3);
+			p3->setVariableNode(v3);
 			std::shared_ptr<PrintNode> p4 = std::make_shared<PrintNode>();
 			p4->setStatementNumber(4);
+			p4->setVariableNode(v4);
 			std::shared_ptr<PrintNode> p5 = std::make_shared<PrintNode>();
 			p5->setStatementNumber(5);
+			p5->setVariableNode(v5);
 
 
 			builder.addPrintNode(p1);
@@ -108,9 +113,9 @@ namespace UnitTesting
 
 			QueryNode processed_clauses = child1; //stores root node of the tree
 
-
 			QueryEvaluator qe = QueryEvaluator(*pkb);
 			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+			Logger::WriteMessage(result.c_str());
 			QUERY_RESULT correct_result = "a, b, c, d, e";
 			Assert::IsTrue(result.compare(correct_result) == 0);
 		}
@@ -152,6 +157,7 @@ namespace UnitTesting
 			// Evaluate
 			QueryEvaluator qe = QueryEvaluator(*pkb);
 			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+			Logger::WriteMessage(result.c_str());
 			QUERY_RESULT correct_result = "1, 2, 3, 4";
 			Assert::IsTrue(result.compare(correct_result) == 0);
 		}
@@ -189,6 +195,7 @@ namespace UnitTesting
 			// Evaluate
 			QueryEvaluator qe = QueryEvaluator(*pkb);
 			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+			Logger::WriteMessage(result.c_str());
 			QUERY_RESULT correct_result = "";
 			Assert::IsTrue(result.compare(correct_result) == 0);
 		}
@@ -227,6 +234,51 @@ namespace UnitTesting
 			QueryEvaluator qe = QueryEvaluator(*pkb);
 			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
 			QUERY_RESULT correct_result = "1, 2, 3, 4, 5";
+			Logger::WriteMessage(result.c_str());
+			Assert::IsTrue(result.compare(correct_result) == 0);
+		}
+
+		TEST_METHOD(evaluateQuery_SelectVFollowsT1_S_ReturnsV)
+		{
+			// Query: "variable v; Select v such that FollowsT(1,v)"
+			// Get processed_synonyms and processed clauses
+			QueryNode variable_node = QueryNode();
+			variable_node.setSynonymNode({ QuerySynonymType::variable }, "v");
+			std::unordered_map<std::string, QueryNode> processed_synonyms = { {"v", variable_node} };
+
+			QueryNode child1 = QueryNode();
+			child1.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode child2 = QueryNode();
+			child2.setNodeType({ QueryNodeType::such_that });
+			QueryNode child_child1 = QueryNode();
+			child_child1.setNodeType({ QueryNodeType::followsT });
+			QueryNode child_child_child1 = QueryNode();
+			child_child_child1.setIntegerNode(1);
+			QueryNode child_child_child2 = QueryNode();
+			child_child_child2.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode child_child1_children[] = { child_child_child1, child_child_child2 };
+			child_child1.setChildren(child_child1_children, 2);
+			QueryNode child2_children[] = { child_child1 };
+			child2.setChildren(child2_children, 1);
+
+			QueryNode root = QueryNode();
+			root.setNodeType({ QueryNodeType::select });
+			QueryNode root_children[] = { child1, child2 };
+			root.setChildren(root_children, 2);
+
+			QueryNode processed_clauses = root; //stores root node of the tree
+
+			// Evaluate
+			QueryEvaluator qe = QueryEvaluator(*pkb);
+			QUERY_RESULT result;
+			try {
+				result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+
+			}
+			catch (const char* msg) {
+				Logger::WriteMessage("Evaluate exception caught");
+			}
+			QUERY_RESULT correct_result = "a, b, c, d, e";
 			Logger::WriteMessage(result.c_str());
 			Assert::IsTrue(result.compare(correct_result) == 0);
 		}
