@@ -13,7 +13,7 @@
 
 class QueryEvaluator;
 
-typedef std::string QUERY_RESULT;
+typedef std::vector<std::string> QUERY_RESULT;
 /*may need to typedef processed_synonyms? check with huiming on the type from preprocessor*/
 typedef std::unordered_map<std::string, QueryNode> PROCESSED_SYNONYMS;
 typedef QueryNode PROCESSED_CLAUSES;

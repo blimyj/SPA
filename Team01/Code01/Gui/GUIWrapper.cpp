@@ -59,19 +59,23 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 
 	QueryProcessor qp = QueryProcessor(this->pkb);
 	QUERY_RESULT query_result;
+	STRING_RESULT result_string;
 
 	try {
 		query_result = qp.processQuery(query);
+		result_string = ResultListManager::getStringValues(query_result);
 	}
 	catch (const char* msg) {
 		std::cout << msg << "\n";
 	}
 
+	// store the answers to the query in the results list (it is initially empty)
+	// each result must be a string.
+	for (auto query : query_result) {
+		results.push_back(query);
+	}
 
 	std::cout << "query=  " << query << std::endl;
-	std::cout << "query result= " << query_result << std::endl;
-	results.push_back(query + "\nQuery result: ");
-  // store the answers to the query in the results list (it is initially empty)
-  // each result must be a string.
-	results.push_back(query_result);
+	std::cout << "query result= " << result_string << std::endl;
+
 }
