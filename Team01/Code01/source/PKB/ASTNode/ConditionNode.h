@@ -9,7 +9,7 @@
 typedef std::shared_ptr<RelationNode> RELATION_NODE_PTR;
 typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef ConditionTypeEnum CONDITION_TYPE;
-typedef bool BOOLEAN;
+typedef bool BOOLEAN_TYPE;
 
 class ConditionNode : public StatementNode, public std::enable_shared_from_this<ConditionNode> {
 /*Condition Node is !, &&, || or none*/
@@ -20,17 +20,17 @@ public:
 		Description: Sets NODE_TYPE of node to be conditionNode.
 		*/
 
-	BOOLEAN setConditionType(CONDITION_TYPE condition_type);
+	BOOLEAN_TYPE setConditionType(CONDITION_TYPE condition_type);
 		/*
 		Description: Returns True if able to set the CONDITION_TYPE of this ConditionNode, false otherwise.
 		*/
 
-	BOOLEAN setLeftAstNode(AST_NODE_PTR leftAstNode);
+	BOOLEAN_TYPE setLeftAstNode(AST_NODE_PTR leftAstNode);
 		/*
 		Description: Returns True if able to set AST_NODE_PTR to be the left-hand side child of this Condition, false otherwise
 		*/
 
-	BOOLEAN setRightAstNode(AST_NODE_PTR rightAstNode);
+	BOOLEAN_TYPE setRightAstNode(AST_NODE_PTR rightAstNode);
 		/*
 		Description: Returns True if able to set AST_NODE_PTR to be the right-hand side child of this Condition, false otherwise.
 		*/
