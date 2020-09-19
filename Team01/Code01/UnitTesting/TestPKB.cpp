@@ -76,7 +76,7 @@ namespace UnitTesting {
 			ASSIGN_NODE_PTR expected = std::make_shared<AssignNode>();
 			pkb_builder.addStatementNode(expected);
 			PKB pkb = pkb_builder.build();
-			AssignNode* actual = static_cast<AssignNode*>(pkb.getStatements().at(0).get());
+			STMT_NODE_PTR actual = pkb.getStatements().at(0);
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
