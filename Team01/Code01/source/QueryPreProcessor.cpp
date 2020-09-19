@@ -538,7 +538,14 @@ PROCESSED_SYNONYMS QueryPreProcessor::preProcessSynonyms(DECLARATIONS d) {
 
 			while (split_index != -1) {
 				QueryNode new_node = QueryNode();
-				SYNONYM_NAME syn_name = trimWhitespaces(single_d.substr(index, split_index - index));
+				SYNONYM_NAME syn_name;
+
+				if (isNotLast) {
+					syn_name = trimWhitespaces(single_d.substr(index, split_index - index));
+				}
+				else {
+					syn_name = trimWhitespaces(single_d.substr(index));
+				}
 
 				new_node.setSynonymNode(design_entity, syn_name);
 				proc_s.insert({ syn_name, new_node });
