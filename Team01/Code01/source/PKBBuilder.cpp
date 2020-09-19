@@ -40,31 +40,31 @@ INDEX PKBBuilder::addProcedureNode(PROC_NODE_PTR proc_node_ptr) {
     return proc_table_.addProcedureNode(proc_node_ptr);
 }
 
-VOID PKBBuilder::addFollows(STMT_NUM s1, STMT_NUM s2) {
+void PKBBuilder::addFollows(STMT_NUM s1, STMT_NUM s2) {
     follows_table_.addFollows(s1, s2);
 }
 
-VOID PKBBuilder::addParent(STMT_NUM s1, STMT_NUM s2) {
+void PKBBuilder::addParent(STMT_NUM s1, STMT_NUM s2) {
     parent_table_.addParent(s1, s2);
 }
 
-VOID PKBBuilder::addUses(STMT_NUM s, VAR_NAME v) {
+void PKBBuilder::addUses(STMT_NUM s, VAR_NAME v) {
     uses_table_.addUses(s, v);
 }
 
-VOID PKBBuilder::addUses(PROC_NAME p, VAR_NAME v) {
+void PKBBuilder::addUses(PROC_NAME p, VAR_NAME v) {
     uses_table_.addUses(p, v);
 }
 
-VOID PKBBuilder::addModifies(STMT_NUM s, VAR_NAME v) {
+void PKBBuilder::addModifies(STMT_NUM s, VAR_NAME v) {
     modifies_table_.addModifies(s, v);
 }
 
-VOID PKBBuilder::addModifies(PROC_NAME p, VAR_NAME v) {
+void PKBBuilder::addModifies(PROC_NAME p, VAR_NAME v) {
     modifies_table_.addModifies(p, v);
 }
 
-VOID PKBBuilder::setProgramNode(PROGRAM_NODE_PTR program_node_ptr) {
+void PKBBuilder::setProgramNode(PROGRAM_NODE_PTR program_node_ptr) {
     program_node_ptr = program_node_ptr;
 }
 
