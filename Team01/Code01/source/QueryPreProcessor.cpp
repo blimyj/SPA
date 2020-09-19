@@ -534,6 +534,8 @@ PROCESSED_SYNONYMS QueryPreProcessor::preProcessSynonyms(DECLARATIONS d) {
 			proc_s.insert({ syn_name, new_node });
 		}
 		else {
+			bool isNotLast = true;
+
 			while (split_index != -1) {
 				QueryNode new_node = QueryNode();
 				SYNONYM_NAME syn_name = trimWhitespaces(single_d.substr(index, split_index - index));
@@ -543,6 +545,11 @@ PROCESSED_SYNONYMS QueryPreProcessor::preProcessSynonyms(DECLARATIONS d) {
 
 				index = split_index + 1;
 				split_index = d.find(delimiter, index);
+
+				if (split_index == -1 && isNotLast) {
+					split_index = index;
+					isNotLast = false;
+				}
 			}
 		}
 	}
