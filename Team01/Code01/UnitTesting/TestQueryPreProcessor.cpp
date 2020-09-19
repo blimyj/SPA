@@ -1,8 +1,10 @@
 #include <typeinfo>
+#include <string>
 
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "QueryPreProcessor.h"
+#include "../source/QueryPreProcessor.h"
+#include "../source/QueryNode.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -10,80 +12,58 @@ namespace UnitTesting
 {
 	TEST_CLASS(TestQueryPreProcessor) {
 	public:
-		/*
-		- procedure main {
-		1   while (x > 0) then {
-		2     if (y > 0) then {
-		3       read x;
-		4       read y;
-		-     } else {
-		5       read z;
-		6       y = y + 1;
-		-     }
-		-   }
-		- }
-		*/
-		std::shared_ptr<> pkb;
-
-		TEST_METHOD_INITIALIZE(QueryPreProcessorInitialize)
-		{
-			PKBBuilder b;
-			b.addFollows(3, 4);
-			b.addFollows(5, 6);
-			b.addParent(1, 2);
-			b.addParent(2, 3);
-			b.addParent(2, 4);
-			b.addParent(2, 5);
-			b.addParent(2, 6);
-			b.addUses("main", "x");
-			b.addUses("main", "y");
-			b.addUses(1, "x");
-			b.addUses(1, "y");
-			b.addUses(2, "y");
-			b.addUses(6, "y");
-			b.addModifies("main", "x");
-			b.addModifies("main", "y");
-			b.addModifies("main", "z");
-			b.addModifies(1, "x");
-			b.addModifies(2, "y");
-			b.addModifies(3, "z");
-			b.addModifies(2, "x");
-			b.addModifies(2, "y");
-			b.addModifies(2, "z");
-			b.addModifies(3, "x");
-			b.addModifies(4, "y");
-			b.addModifies(5, "z");
-			b.addModifies(6, "y");
-			pkb = std::make_shared<PKB>(b.build());
-		}
-
-		/* Trim whitespace */
-		TEST_METHOD(TrimWhitespaces) {
-
-		}
-
-		/* Validate general query structure */
-		TEST_METHOD() {
-
-		}
 
 		/* Split query  */
-		TEST_METHOD() {
+		TEST_METHOD(splitQuery_Valid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
 
+			SPLIT_QUERY split_base = qpp.splitQuery("stmt s; Select s");
+			SPLIT_QUERY split_base_var1 = qpp.splitQuery(" stmt s; Select s");
+			SPLIT_QUERY split_base_var2 = qpp.splitQuery("stmt s; Select s ");
+			SPLIT_QUERY split_base_var3 = qpp.splitQuery(" stmt s; Select s ");
+			SPLIT_QUERY split_base_var4 = qpp.splitQuery("  stmt s; Select s  ");
+
+			SPLIT_QUERY correct_split_base;
+			correct_split_base.push_back("stmt s");
+			correct_split_base.push_back("Select s");
+
+			Assert::IsTrue(split_base[0].compare(correct_split_base[0]) == 0);
+			Assert::IsTrue(split_base[1].compare(correct_split_base[1]) == 0);
+
+			Assert::IsTrue(split_base_var1[0].compare(correct_split_base[0]) == 0);
+			Assert::IsTrue(split_base_var1[1].compare(correct_split_base[1]) == 0);
+
+			Assert::IsTrue(split_base_var2[0].compare(correct_split_base[0]) == 0);
+			Assert::IsTrue(split_base_var2[1].compare(correct_split_base[1]) == 0);
+
+			Assert::IsTrue(split_base_var3[0].compare(correct_split_base[0]) == 0);
+			Assert::IsTrue(split_base_var3[1].compare(correct_split_base[1]) == 0);
+
+			Assert::IsTrue(split_base_var4[0].compare(correct_split_base[0]) == 0);
+			Assert::IsTrue(split_base_var4[1].compare(correct_split_base[1]) == 0);
 		}
 
-		/* Split declaration */
-		TEST_METHOD() {
+		TEST_METHOD(splitQuery_Invalid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
 
-		}
+			SPLIT_QUERY split_base = qpp.splitQuery("");
+			SPLIT_QUERY split_base_var1 = qpp.splitQuery(" ");
+			SPLIT_QUERY split_base_var2 = qpp.splitQuery("stmt s;");
+			SPLIT_QUERY split_base_var3 = qpp.splitQuery("Select s");
+			SPLIT_QUERY split_base_var4 = qpp.splitQuery("stmt s; select s");
+			SPLIT_QUERY split_base_var5 = qpp.splitQuery("test");
 
-		/* Validate declaration */
-		TEST_METHOD() {
-
+			Assert::IsTrue(split_base[0].compare("") == 0 && split_base[1].compare("") == 0);
+			Assert::IsTrue(split_base_var1[0].compare("") == 0 && split_base_var1[1].compare("") == 0);
+			Assert::IsTrue(split_base_var2[0].compare("") == 0 && split_base_var2[1].compare("") == 0);
+			Assert::IsTrue(split_base_var3[0].compare("") == 0 && split_base_var3[1].compare("") == 0);
+			Assert::IsTrue(split_base_var4[0].compare("") == 0 && split_base_var4[1].compare("") == 0);
+			Assert::IsTrue(split_base_var5[0].compare("") == 0 && split_base_var5[1].compare("") == 0);
 		}
 
 		/* Parse declaration */
-		TEST_METHOD() {
+		TEST_METHOD(preProcessSynonyms_Valid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
 			// stmt s;
 			std::string query1 = "stmt s;";
 
@@ -95,61 +75,15 @@ namespace UnitTesting
 			// variable v;
 			// constant c;
 			// procedure p;
+
+			Assert::IsTrue(0 == 0);
 		}
 
-		/* Create expression node */
-		TEST_METHOD() {
+		/* Parse clauses */
+		TEST_METHOD(preProcessClauses_Valid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
 
-		}
-
-		/* Create argument node */
-		TEST_METHOD() {
-
-		}
-
-		/* Create relationship node */
-		TEST_METHOD() {
-
-		}
-
-		/* Create pattern node */
-		TEST_METHOD() {
-
-		}
-
-		/* Validate general clause structure */
-		TEST_METHOD() {
-
-		}
-
-		/* Check if synonym declared */
-		TEST_METHOD() {
-
-		}
-
-		/* Validate relationship clause format */
-		TEST_METHOD() {
-
-		}
-
-		/* Validate relationship clause arguments */
-		TEST_METHOD() {
-
-		}
-
-		/* Validate pattern clause format */
-		TEST_METHOD() {
-
-		}
-
-		/* Validate patternclause arguments */
-		TEST_METHOD() {
-
-		}
-
-		/* Clause parsing*/
-		TEST_METHOD() {
-
+			Assert::IsTrue(0 == 0);
 		}
 	};
 }
