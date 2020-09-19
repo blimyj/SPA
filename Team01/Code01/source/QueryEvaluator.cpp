@@ -144,102 +144,184 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 
 			}
 			else if (relationship_type == QueryNodeType::followsT) {
-				QueryNode relationship = clause.getChildren()[0];
-				QueryNodeType relationship_type = relationship.getNodeType();
-				QueryNode child1 = relationship.getChildren()[0];
-				QueryNode child2 = relationship.getChildren()[1];
-				QueryNodeType child1_type = child1.getNodeType();
-				QueryNodeType child2_type = child2.getNodeType();
 
-				if (relationship_type == QueryNodeType::follows) {
-					/* Follows(s1, s2)
-					s1 = [1, 2, 3] if assign
-					s2 = [1, 2, 3]
-					cross = [[1,1], [1,2], [1,3]...]
+				std::vector<int> list1 = getStmtList(child1);
+				std::vector<int> list2 = getStmtList(child2);
 
-					filter the cross with PKB
-
-					then add to ResultList*/
-					std::vector<int> list1 = getStmtList(child1);
-					std::vector<int> list2 = getStmtList(child2);
-
-					// create all possible pairs of list1 and list2 values
-					std::vector<std::pair<int, int>> cross;
-					for (int s1 : list1) {
-						for (int s2 : list2) {
-							cross.push_back({ s1, s2 });
-						}
+				// create all possible pairs of list1 and list2 values
+				std::vector<std::pair<int, int>> cross;
+				for (int s1 : list1) {
+					for (int s2 : list2) {
+						cross.push_back({ s1, s2 });
 					}
+				}
 
-					// filter the cross with PKB.isFollows
-					std::vector<std::pair<int, int>> filter;
-					for (std::pair<int, int> p : cross) {
-						if (pkb.isFollowsTransitive(p.first, p.second)) {
-							filter.push_back(p);
-						}
+				// filter the cross with PKB.isFollows
+				std::vector<std::pair<int, int>> filter;
+				for (std::pair<int, int> p : cross) {
+					if (pkb.isFollowsTransitive(p.first, p.second)) {
+						filter.push_back(p);
 					}
+				}
 
-					// after filtering:
-					// if the filtered list is empty, then we say that this clause is FALSE
-					// else, this clause is TRUE
-					clause_bool = (filter.size() > 0);
+				// after filtering:
+				// if the filtered list is empty, then we say that this clause is FALSE
+				// else, this clause is TRUE
+				clause_bool = (filter.size() > 0);
 
-					// Add the filtered to ResultList!
-					// 1. Add the synonym names to as column headers
+				// Add the filtered to ResultList!
+				// 1. Add the synonym names to as column headers
+				if (child1_type == QueryNodeType::synonym) {
+					SYNONYM_NAME synonym_name = child1.getString();
+					clause_result_list.addColumn(synonym_name);
+				}
+				if (child2_type == QueryNodeType::synonym) {
+					SYNONYM_NAME synonym_name = child2.getString();
+					clause_result_list.addColumn(synonym_name);
+				}
+
+				// 2. Add synonym values to the Resultlist row wise
+				for (std::pair<int, int> p : filter) {
+					ROW row;
 					if (child1_type == QueryNodeType::synonym) {
-						SYNONYM_NAME synonym_name = child1.getString();
-						clause_result_list.addColumn(synonym_name);
+						SYNONYM_NAME child1_synonym_name = child1.getString();
+						SYNONYM_VALUE child1_synonym_value = std::to_string(p.first);
+						row.insert({ child1_synonym_name, child1_synonym_value });
 					}
 					if (child2_type == QueryNodeType::synonym) {
-						SYNONYM_NAME synonym_name = child2.getString();
-						clause_result_list.addColumn(synonym_name);
+						SYNONYM_NAME child2_synonym_name = child2.getString();
+						SYNONYM_VALUE child2_synonym_value = std::to_string(p.second);
+						row.insert({ child2_synonym_name, child2_synonym_value });
 					}
+					clause_result_list.addRow(row);
+				}
+			}
+			else if (relationship_type == QueryNodeType::parent) {
+				
+				std::vector<int> list1 = getStmtList(child1);
+				std::vector<int> list2 = getStmtList(child2);
 
-					// 2. Add synonym values to the Resultlist row wise
-					for (std::pair<int, int> p : filter) {
-						ROW row;
-						if (child1_type == QueryNodeType::synonym) {
-							SYNONYM_NAME child1_synonym_name = child1.getString();
-							SYNONYM_VALUE child1_synonym_value = std::to_string(p.first);
-							row.insert({ child1_synonym_name, child1_synonym_value });
-						}
-						if (child2_type == QueryNodeType::synonym) {
-							SYNONYM_NAME child2_synonym_name = child2.getString();
-							SYNONYM_VALUE child2_synonym_value = std::to_string(p.second);
-							row.insert({ child2_synonym_name, child2_synonym_value });
-						}
-						clause_result_list.addRow(row);
+				// create all possible pairs of list1 and list2 values
+				std::vector<std::pair<int, int>> cross;
+				for (int s1 : list1) {
+					for (int s2 : list2) {
+						cross.push_back({ s1, s2 });
 					}
-
-
 				}
-				else if (relationship_type == QueryNodeType::parent) {
 
+				// filter the cross with PKB.isFollows
+				std::vector<std::pair<int, int>> filter;
+				for (std::pair<int, int> p : cross) {
+					if (pkb.isParent(p.first, p.second)) {
+						filter.push_back(p);
+					}
 				}
-				else if (relationship_type == QueryNodeType::parentT) {
 
+				// after filtering:
+				// if the filtered list is empty, then we say that this clause is FALSE
+				// else, this clause is TRUE
+				clause_bool = (filter.size() > 0);
+
+				// Add the filtered to ResultList!
+				// 1. Add the synonym names to as column headers
+				if (child1_type == QueryNodeType::synonym) {
+					SYNONYM_NAME synonym_name = child1.getString();
+					clause_result_list.addColumn(synonym_name);
 				}
-				else if (relationship_type == QueryNodeType::usesS) {
-					std::vector<std::pair<int, std::string>> stmt_cross;
-					std::vector<std::pair<std::string, std::string>> proc_cross;
-
+				if (child2_type == QueryNodeType::synonym) {
+					SYNONYM_NAME synonym_name = child2.getString();
+					clause_result_list.addColumn(synonym_name);
 				}
-				else if (relationship_type == QueryNodeType::modifiesS) {
 
+				// 2. Add synonym values to the Resultlist row wise
+				for (std::pair<int, int> p : filter) {
+					ROW row;
+					if (child1_type == QueryNodeType::synonym) {
+						SYNONYM_NAME child1_synonym_name = child1.getString();
+						SYNONYM_VALUE child1_synonym_value = std::to_string(p.first);
+						row.insert({ child1_synonym_name, child1_synonym_value });
+					}
+					if (child2_type == QueryNodeType::synonym) {
+						SYNONYM_NAME child2_synonym_name = child2.getString();
+						SYNONYM_VALUE child2_synonym_value = std::to_string(p.second);
+						row.insert({ child2_synonym_name, child2_synonym_value });
+					}
+					clause_result_list.addRow(row);
 				}
 			}
-			else if (clause_type == QueryNodeType::pattern) {
-				// magic
-			}
+			else if (relationship_type == QueryNodeType::parentT) {
+				
+				std::vector<int> list1 = getStmtList(child1);
+				std::vector<int> list2 = getStmtList(child2);
 
-			// if the clause_bool is true => merge result_list with clause_result_list
-			// if the clause_bool is false => return ""
-			if (clause_bool) {
-				result_list = ResultListManager::merge(result_list, clause_result_list);
+				// create all possible pairs of list1 and list2 values
+				std::vector<std::pair<int, int>> cross;
+				for (int s1 : list1) {
+					for (int s2 : list2) {
+						cross.push_back({ s1, s2 });
+					}
+				}
+
+				// filter the cross with PKB.isFollows
+				std::vector<std::pair<int, int>> filter;
+				for (std::pair<int, int> p : cross) {
+					if (pkb.isParentTransitive(p.first, p.second)) {
+						filter.push_back(p);
+					}
+				}
+
+				// after filtering:
+				// if the filtered list is empty, then we say that this clause is FALSE
+				// else, this clause is TRUE
+				clause_bool = (filter.size() > 0);
+
+				// Add the filtered to ResultList!
+				// 1. Add the synonym names to as column headers
+				if (child1_type == QueryNodeType::synonym) {
+					SYNONYM_NAME synonym_name = child1.getString();
+					clause_result_list.addColumn(synonym_name);
+				}
+				if (child2_type == QueryNodeType::synonym) {
+					SYNONYM_NAME synonym_name = child2.getString();
+					clause_result_list.addColumn(synonym_name);
+				}
+
+				// 2. Add synonym values to the Resultlist row wise
+				for (std::pair<int, int> p : filter) {
+					ROW row;
+					if (child1_type == QueryNodeType::synonym) {
+						SYNONYM_NAME child1_synonym_name = child1.getString();
+						SYNONYM_VALUE child1_synonym_value = std::to_string(p.first);
+						row.insert({ child1_synonym_name, child1_synonym_value });
+					}
+					if (child2_type == QueryNodeType::synonym) {
+						SYNONYM_NAME child2_synonym_name = child2.getString();
+						SYNONYM_VALUE child2_synonym_value = std::to_string(p.second);
+						row.insert({ child2_synonym_name, child2_synonym_value });
+					}
+					clause_result_list.addRow(row);
+				}
 			}
-			else {
-				return no_result;
+			else if (relationship_type == QueryNodeType::usesS) {
+				std::vector<std::pair<int, std::string>> stmt_cross;
+				std::vector<std::pair<std::string, std::string>> proc_cross;
+
 			}
+			else if (relationship_type == QueryNodeType::modifiesS) {
+
+			}
+		}
+		else if (clause_type == QueryNodeType::pattern) {
+			// magic
+		}
+
+		// if the clause_bool is true => merge result_list with clause_result_list
+		// if the clause_bool is false => return ""
+		if (clause_bool) {
+			result_list = ResultListManager::merge(result_list, clause_result_list);
+		}
+		else {
+			return no_result;
 		}
 	}
 
