@@ -53,7 +53,7 @@ private:
 		  Normal: Returns SPLIT_DECLARATIONS
 		*/
 
-	INDEX getNextClauseIndex(CLAUSES c, INDEX current_index);
+	INDEX getNextClauseIndex(CLAUSES c, INDEX current_index, INDEX such_that_index, INDEX pattern_index);
 	/*
 		Description:
 		  Normal: Returns the INDEX of the next clause

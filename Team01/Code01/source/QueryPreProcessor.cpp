@@ -54,9 +54,7 @@ SPLIT_DECLARATIONS QueryPreProcessor::splitDeclarations(DECLARATIONS d) {
 	return split_d;
 }
 
-INDEX getNextClauseIndex(CLAUSES c, INDEX current_index) {
-	int such_that_index = c.find("such that", current_index);
-	int pattern_index = c.find("pattern", current_index);
+INDEX QueryPreProcessor::getNextClauseIndex(CLAUSES c, INDEX current_index, INDEX such_that_index, INDEX pattern_index) {
 	int next_index;
 
 	if (such_that_index != -1 && pattern_index != -1) {
@@ -247,7 +245,7 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationFormat(SINGLE_CLAUSE single_
 	}
 }
 
-VALIDATION_RESULT isStatementArgument(PROCESSED_SYNONYMS proc_s, ARGUMENT a) {
+VALIDATION_RESULT QueryPreProcessor::isStatementArgument(PROCESSED_SYNONYMS proc_s, ARGUMENT a) {
 	/*
 	List of synonyms that return statement number:
 		- stmt
@@ -556,7 +554,9 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 		select_node.setNodeType({ QueryNodeType::select });
 
 		SYNONYM_NAME select_syn;
-		int next_index = getNextClauseIndex(c, 0);
+		int such_that_index = c.find("such that");
+		int pattern_index = c.find("pattern");
+		int next_index = getNextClauseIndex(c, 0, such_that_index, pattern_index);
 
 		if (next_index == -1) {
 			// no such that nor pattern clause
@@ -664,7 +664,9 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 					child_index++;
 				}
 
-				next_index = getNextClauseIndex(c, next_index);
+				such_that_index = c.find("such that", next_index);
+				pattern_index = c.find("pattern", next_index);
+				next_index = getNextClauseIndex(c, next_index, such_that_index, pattern_index);
 			}
 
 			// set children of select node
