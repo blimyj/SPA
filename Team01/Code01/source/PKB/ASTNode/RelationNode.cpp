@@ -1,10 +1,10 @@
 #include "RelationNode.h"
 
-RelationNode::RelationNode(RELATION_TYPE relation_type, AST_NODE_PTR left_node_ptr, AST_NODE_PTR right_node_ptr) {
-    setRelationType(relation_type);
-    setLeftAstNode(left_node_ptr);
-    setRightAstNode(right_node_ptr);
+RelationNode::RelationNode() {
+    relation_type_ = { RELATION_TYPE::undefined };
     node_type_ = { NODE_TYPE::relationNode };
+    left_node_ptr_ = nullptr;
+    right_node_ptr_ = nullptr;
 }
 
 BOOLEAN RelationNode::setRelationType(RELATION_TYPE relation_type) {
@@ -19,6 +19,11 @@ BOOLEAN RelationNode::setRelationType(RELATION_TYPE relation_type) {
 
 BOOLEAN RelationNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     try {
+        if (left_node_ptr == nullptr) {
+            return false;
+        }
+        addChildNode(left_node_ptr);
+        left_node_ptr->setParentNode(shared_from_this());
         left_node_ptr_ = left_node_ptr;
     } catch (int e) {
         (void)e;
@@ -29,6 +34,11 @@ BOOLEAN RelationNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
 
 BOOLEAN RelationNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
     try {
+        if (right_node_ptr == nullptr) {
+            return false;
+        }
+        addChildNode(right_node_ptr);
+        right_node_ptr->setParentNode(shared_from_this());
         right_node_ptr_ = right_node_ptr;
     } catch (int e) {
         (void)e;

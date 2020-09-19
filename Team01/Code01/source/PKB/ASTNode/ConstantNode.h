@@ -10,9 +10,9 @@ typedef bool BOOLEAN;
 class ConstantNode : public ASTNode {
 
 public:
-	ConstantNode(VALUE value);
+	ConstantNode();
 		/*
-		Description: Constructs a ConstantNode with the VALUE of the Constant.
+		Description: Sets NODE_TYPE of node to be constantNode.
 		*/
 
 	BOOLEAN setValue(VALUE value);
