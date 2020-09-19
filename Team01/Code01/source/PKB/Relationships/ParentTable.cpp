@@ -1,17 +1,17 @@
 #include "ParentTable.h"
 
-VOID ParentTable::addParent(STMT_NUM s1, STMT_NUM s2) {
+void ParentTable::addParent(STMT_NUM s1, STMT_NUM s2) {
     statements_[s1].push_back(s2);
     parent_.insert({ s1, s2 });
     parent_transitive_.insert({ { s1, s2 }, true });
 }
 
-BOOLEAN ParentTable::isParent(STMT_NUM s1, STMT_NUM s2) {
+BOOLEAN_TYPE ParentTable::isParent(STMT_NUM s1, STMT_NUM s2) {
     // Check if Parent(s1, s2) exists
     return parent_.count({ s1, s2 }) > 0;
 }
 
-BOOLEAN ParentTable::isParentTransitive(STMT_NUM s1, STMT_NUM s2) {
+BOOLEAN_TYPE ParentTable::isParentTransitive(STMT_NUM s1, STMT_NUM s2) {
     // Check if Parent*(s1, s2) exists, and return it's value
     auto it1 = parent_transitive_.find({ s1, s2 });
     if (it1 != parent_transitive_.end()) {
