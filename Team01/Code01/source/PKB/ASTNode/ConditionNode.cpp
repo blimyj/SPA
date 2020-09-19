@@ -60,7 +60,7 @@ AST_NODE_PTR ConditionNode::getLeftAstNode() {
 
 AST_NODE_PTR ConditionNode::getRightAstNode() {
     if (right_node_ptr_ == NULL) {
-        throw "Relation is of 'none' Type, there is no right relation node!";
+        throw std::exception("Relation is of 'none' Type, there is no right relation node!");
     }
     return right_node_ptr_;
 }

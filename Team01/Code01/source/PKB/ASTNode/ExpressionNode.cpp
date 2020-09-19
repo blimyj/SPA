@@ -57,7 +57,7 @@ AST_NODE_PTR ExpressionNode::getLeftAstNode() {
 
 AST_NODE_PTR ExpressionNode::getRightAstNode() {
     if (right_node_ptr_ == NULL) {
-        throw "ASTNode is of 'none' Type, there is right AST Node!";
+        throw std::exception("ASTNode is of 'none' Type, there is right AST Node!");
     }
     return right_node_ptr_;
 }
