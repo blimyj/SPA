@@ -56,10 +56,6 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 // call your evaluator to evaluate the query here
   // ...code to evaluate query...
 
-	// Create PKBStub -- to be deleted
-	PKBStub pkb_init = PKBStub();
-	PKB pkbstub = pkb_init.addVariables();
-
 
 	QueryProcessor qp = QueryProcessor(this->pkb);
 	QUERY_RESULT query_result;
