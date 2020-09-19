@@ -5,7 +5,7 @@ StatementNode::StatementNode() {
     stmt_list_node_ptr_ = nullptr;
 }
 
-BOOLEAN StatementNode::setStatementNumber(STMT_NUM stmt_num) {
+BOOLEAN_TYPE StatementNode::setStatementNumber(STMT_NUM stmt_num) {
     try {
         stmt_num_ = stmt_num;
     } catch (int e) {
@@ -15,7 +15,7 @@ BOOLEAN StatementNode::setStatementNumber(STMT_NUM stmt_num) {
     return true;
 }
 
-BOOLEAN StatementNode::setStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr) {
+BOOLEAN_TYPE StatementNode::setStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr) {
     try {
         stmt_list_node_ptr_ = stmt_list_node_ptr;
     } catch (int e) {

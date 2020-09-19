@@ -8,7 +8,7 @@ class ASTNode;
 
 typedef std::shared_ptr<ASTNode> AST_NODE_PTR;
 typedef std::vector<std::shared_ptr<ASTNode>> AST_NODE_PTR_LIST;
-typedef bool BOOLEAN;
+typedef bool BOOLEAN_TYPE;
 typedef NodeTypeEnum NODE_TYPE;
 
 class ASTNode {
@@ -49,12 +49,12 @@ private:
 	friend class VariableNode;
 	friend class WhileNode;
 
-	BOOLEAN setParentNode(AST_NODE_PTR parent_node_ptr);
+	BOOLEAN_TYPE setParentNode(AST_NODE_PTR parent_node_ptr);
 		/*
 		Description: Returns True if able to set AST_NODE_PTR as a parent of this node, false otherwise
 		*/
 
-	BOOLEAN addChildNode(AST_NODE_PTR child_node_ptr);
+	BOOLEAN_TYPE addChildNode(AST_NODE_PTR child_node_ptr);
 		/*
 		Description: Returns True if able to set AST_NODE_PTR as a child of this node, false otherwise
 		*/

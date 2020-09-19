@@ -7,7 +7,7 @@ ExpressionNode::ExpressionNode() {
     right_node_ptr_ = nullptr;
 }
 
-BOOLEAN ExpressionNode::setExpressionType(EXPR_TYPE expr_type) {
+BOOLEAN_TYPE ExpressionNode::setExpressionType(EXPR_TYPE expr_type) {
     try {
         expr_type_ = expr_type;
     } catch (int e) {
@@ -17,7 +17,7 @@ BOOLEAN ExpressionNode::setExpressionType(EXPR_TYPE expr_type) {
     return true;
 }
 
-BOOLEAN ExpressionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
+BOOLEAN_TYPE ExpressionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     try {
         if (left_node_ptr == nullptr) {
             return false;
@@ -32,7 +32,7 @@ BOOLEAN ExpressionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     return true;
 }
 
-BOOLEAN ExpressionNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
+BOOLEAN_TYPE ExpressionNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
     try {
         if (right_node_ptr == nullptr) {
             return false;
