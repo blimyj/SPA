@@ -8,6 +8,9 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 	ResultList result_list;
 	
 	QUERY_NODE_LIST children = clauses.getChildren();
+	if (children.size() == 0) {
+		throw "Error: Select has no children, it should have at least 1 child (ie Select v)";
+	}
 	QueryNode return_synonym = children[0];
 	QuerySynonymType return_synonym_type = return_synonym.getSynonymType();
 	SYNONYM_NAME return_synonym_name = return_synonym.getString(); // "v"
@@ -39,6 +42,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 
 		QueryNode clause = children[i];
 		QueryNodeType clause_type = clause.getNodeType();
+		
 		if (clause_type == QueryNodeType::such_that) {
 			QueryNode relationship = clause.getChildren()[0];
 			QueryNodeType relationship_type = relationship.getNodeType();
@@ -78,10 +82,10 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 				// after filtering:
 				// if the filtered list is empty, then we say that this clause is FALSE
 				// else, this clause is TRUE
-				clause_bool = filter.size() > 0;
+				clause_bool = (filter.size() > 0);
 				
-				// add the filtered to ResultList!
-				// first add the synonym names to as column headers
+				// Add the filtered to ResultList!
+				// 1. Add the synonym names to as column headers
 				if (child1_type == QueryNodeType::synonym) {
 					SYNONYM_NAME synonym_name = child1.getString();
 					clause_result_list.addColumn(synonym_name);
@@ -91,7 +95,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 					clause_result_list.addColumn(synonym_name);
 				}
 				
-				// add values to the Resultlist row wise
+				// 2. Add synonym values to the Resultlist row wise
 				for (std::pair<int, int> p : filter) {
 					ROW row;
 					if (child1_type == QueryNodeType::synonym) {
