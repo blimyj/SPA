@@ -376,6 +376,9 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 				else if (isStatementArgument(proc_s, first_arg)) {
 					return true;
 				}
+				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::procedure) {
+					return true;
+				}
 				else {
 					return false;
 				}
@@ -407,6 +410,9 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 					return false;
 				}
 				else if (isStatementArgument(proc_s, first_arg)) {
+					return true;
+				}
+				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::procedure) {
 					return true;
 				}
 				else {
