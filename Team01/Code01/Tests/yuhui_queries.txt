@@ -73,3 +73,8 @@ stmt s; variable v;
 Select s such that ModifiesS(6, v)
 1, 2, 3, 4, 5, 6
 5000
+16 - comment
+procedure p; variable v;
+Select v such that UsesP(p, v)
+a, b, c, d, e
+5000
