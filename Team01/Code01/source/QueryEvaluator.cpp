@@ -87,6 +87,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 
 				try {
 					list1 = getStmtList(child1);
+
 					list2 = getStmtList(child2);
 				}
 				catch (const char* msg) {
@@ -305,6 +306,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 			else if (relationship_type == QueryNodeType::usesS) {
 				std::vector<std::pair<int, std::string>> stmt_cross;
 				std::vector<std::pair<std::string, std::string>> proc_cross;
+				
 
 			}
 			else if (relationship_type == QueryNodeType::modifiesS) {
@@ -333,7 +335,8 @@ STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode child1) {
 	QueryNodeType child1_type = child1.getNodeType();
 	
 	if (child1_type == QueryNodeType::integer) {
-		return STMT_NUM_LIST(child1.getInteger());
+		STMT_NUM_LIST oneIntList = { child1.getInteger() };
+		return oneIntList;
 	}
 	else if (child1_type == QueryNodeType::synonym) {
 		QuerySynonymType child1_syn_type = child1.getSynonymType();
@@ -357,11 +360,11 @@ STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode child1) {
 			return pkb.getWhileNumList();
 		}
 		else {
-			throw "Synonym is not a statement or an integer!";
+			throw "QE: Synonym is not a statement or an integer!";
 		}
 	}
 	else {
-		throw "Synonym is not a statement or an integer!";
+		throw "QE: Synonym is not a statement or an integer!";
 	}
 
 	
