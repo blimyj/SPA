@@ -260,6 +260,29 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c3.getChildren()[0].getString().compare("v") == 0);
 		}
 
+		TEST_METHOD(preProcessClauses_Select_Valid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
+
+			DECLARATIONS d = "stmt s; read re; print pr; while w; if ifs; assign a; variable v; constant c; procedure p";
+			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
+
+			CLAUSES c1 = "Select";
+			CLAUSES c2 = "Select s1";
+			CLAUSES c3 = "select v";
+			CLAUSES c4 = "Select 1";
+
+
+			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
+			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
+			PROCESSED_CLAUSES proc_c3 = qpp.preProcessClauses(proc_s, c3);
+			PROCESSED_CLAUSES proc_c4 = qpp.preProcessClauses(proc_s, c4);
+
+			Assert::IsTrue(proc_c1.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c2.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c3.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c4.getNodeType() == QueryNodeType::unassigned);
+		}
+
 		TEST_METHOD(preProcessClauses_Follows_Valid_Success) {
 			QueryPreProcessor qpp = QueryPreProcessor();
 
@@ -299,6 +322,38 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("s") == 0);
 		}
 
+		TEST_METHOD(preProcessClauses_Follows_Invalid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
+
+			DECLARATIONS d = "stmt s;";
+			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
+
+			CLAUSES c1 = "Select s Such that Follows(1, s)";
+			CLAUSES c2 = "Select s such that follows(s, a)";
+			CLAUSES c3 = "Select s such that FollowsT("", s)";
+			CLAUSES c4 = "Select s such that Followst(_, s)";
+			CLAUSES c5 = "Select s such that FollowsT(, s)";
+			CLAUSES c6 = "Select s such that Follows(_, )";
+			CLAUSES c7 = "Select s such that Follows(1, "")";
+
+
+			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
+			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
+			PROCESSED_CLAUSES proc_c3 = qpp.preProcessClauses(proc_s, c3);
+			PROCESSED_CLAUSES proc_c4 = qpp.preProcessClauses(proc_s, c4);
+			PROCESSED_CLAUSES proc_c5 = qpp.preProcessClauses(proc_s, c5);
+			PROCESSED_CLAUSES proc_c6 = qpp.preProcessClauses(proc_s, c6);
+			PROCESSED_CLAUSES proc_c7 = qpp.preProcessClauses(proc_s, c7);
+
+			Assert::IsTrue(proc_c1.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c2.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c3.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c4.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c5.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c6.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c7.getNodeType() == QueryNodeType::unassigned);
+		}
+
 		TEST_METHOD(preProcessClauses_Parent_Valid_Success) {
 			QueryPreProcessor qpp = QueryPreProcessor();
 
@@ -336,6 +391,38 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::synonym);
 			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getSynonymType() == QuerySynonymType::stmt);
 			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("s") == 0);
+		}
+
+		TEST_METHOD(preProcessClauses_Parent_Invalid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
+
+			DECLARATIONS d = "stmt s;";
+			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
+
+			CLAUSES c1 = "Select s Such that Parent(1, s)";
+			CLAUSES c2 = "Select s such that parent(s, a)";
+			CLAUSES c3 = "Select s such that ParentT("", s)";
+			CLAUSES c4 = "Select s such that Parentt(_, s)";
+			CLAUSES c5 = "Select s such that ParentT(, s)";
+			CLAUSES c6 = "Select s such that Parent(_, )";
+			CLAUSES c7 = "Select s such that Parent(1, "")";
+
+
+			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
+			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
+			PROCESSED_CLAUSES proc_c3 = qpp.preProcessClauses(proc_s, c3);
+			PROCESSED_CLAUSES proc_c4 = qpp.preProcessClauses(proc_s, c4);
+			PROCESSED_CLAUSES proc_c5 = qpp.preProcessClauses(proc_s, c5);
+			PROCESSED_CLAUSES proc_c6 = qpp.preProcessClauses(proc_s, c6);
+			PROCESSED_CLAUSES proc_c7 = qpp.preProcessClauses(proc_s, c7);
+
+			Assert::IsTrue(proc_c1.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c2.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c3.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c4.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c5.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c6.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c7.getNodeType() == QueryNodeType::unassigned);
 		}
 
 		TEST_METHOD(preProcessClauses_Uses_Valid_Success) {
@@ -399,6 +486,47 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("hello") == 0);
 		}
 
+		TEST_METHOD(preProcessClauses_Uses_Invalid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
+
+			DECLARATIONS d = "variable v; assign a; procedure p; read re;";
+			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
+
+			CLAUSES c1 = "Select v Such that UsesS(a, v)";
+			CLAUSES c2 = "Select v such that usesS(p, v)";
+			CLAUSES c3 = "Select v such that UsesS("", v)";
+			CLAUSES c4 = "Select v such that UsesS(_, v)";
+			CLAUSES c5 = "Select v such that UsesS(a, 1)";
+			CLAUSES c6 = "Select v such that UsesS(, 1)";
+			CLAUSES c7 = "Select v such that UsesS(a, )";
+			CLAUSES c8 = "Select v such that Uses(a, v)";
+			CLAUSES c9 = "Select v such that UsesS(re, v)";
+			CLAUSES c10 = "Select v such that Usess(a, v)";
+
+
+			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
+			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
+			PROCESSED_CLAUSES proc_c3 = qpp.preProcessClauses(proc_s, c3);
+			PROCESSED_CLAUSES proc_c4 = qpp.preProcessClauses(proc_s, c4);
+			PROCESSED_CLAUSES proc_c5 = qpp.preProcessClauses(proc_s, c5);
+			PROCESSED_CLAUSES proc_c6 = qpp.preProcessClauses(proc_s, c6);
+			PROCESSED_CLAUSES proc_c7 = qpp.preProcessClauses(proc_s, c7);
+			PROCESSED_CLAUSES proc_c8 = qpp.preProcessClauses(proc_s, c8);
+			PROCESSED_CLAUSES proc_c9 = qpp.preProcessClauses(proc_s, c9);
+			PROCESSED_CLAUSES proc_c10 = qpp.preProcessClauses(proc_s, c10);
+
+			Assert::IsTrue(proc_c1.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c2.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c3.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c4.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c5.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c6.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c7.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c8.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c9.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c10.getNodeType() == QueryNodeType::unassigned);
+		}
+
 		TEST_METHOD(preProcessClauses_Modifies_Valid_Success) {
 			QueryPreProcessor qpp = QueryPreProcessor();
 
@@ -458,6 +586,46 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[0].getString().compare("a") == 0);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::ident);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("hello") == 0);
+		}
+
+		TEST_METHOD(preProcessClauses_Modifies_Invalid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
+
+			DECLARATIONS d = "variable v; assign a; procedure p; print pr;";
+			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
+
+			CLAUSES c1 = "Select v Such that ModifiesS(a, v)";
+			CLAUSES c2 = "Select v such that modifiesS(p, v)";
+			CLAUSES c3 = "Select v such that ModifiesS("", v)";
+			CLAUSES c4 = "Select v such that ModifiesS(_, v)";
+			CLAUSES c5 = "Select v such that ModifiesS(a, 1)";
+			CLAUSES c6 = "Select v such that ModifiesS(, 1)";
+			CLAUSES c7 = "Select v such that ModifiesS(a, )";
+			CLAUSES c8 = "Select v such that Modifies(a, v)";
+			CLAUSES c9 = "Select v such that ModifiesS(pr, v)";
+			CLAUSES c10 = "Select v such that Modifiess(a, v)";
+
+
+			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
+			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
+			PROCESSED_CLAUSES proc_c3 = qpp.preProcessClauses(proc_s, c3);
+			PROCESSED_CLAUSES proc_c4 = qpp.preProcessClauses(proc_s, c4);
+			PROCESSED_CLAUSES proc_c5 = qpp.preProcessClauses(proc_s, c5);
+			PROCESSED_CLAUSES proc_c6 = qpp.preProcessClauses(proc_s, c6);
+			PROCESSED_CLAUSES proc_c7 = qpp.preProcessClauses(proc_s, c7);
+			PROCESSED_CLAUSES proc_c8 = qpp.preProcessClauses(proc_s, c8);
+			PROCESSED_CLAUSES proc_c9 = qpp.preProcessClauses(proc_s, c9);
+			PROCESSED_CLAUSES proc_c10 = qpp.preProcessClauses(proc_s, c10);
+
+			Assert::IsTrue(proc_c1.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c2.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c3.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c4.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c5.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c6.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c7.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c8.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c10.getNodeType() == QueryNodeType::unassigned);
 		}
 	};
 }
