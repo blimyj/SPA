@@ -1,5 +1,10 @@
 1 - comment
-print pn; variable v;
-Select pn such that UsesS(pn, v)
-none
+stmt s; variable v;
+Select s such that UsesS(s, v)
+1, 2, 3, 4, 5
+5000
+2 - comment
+stmt s; variable v;
+Select s such that ModifiesS(s, v)
+6
 5000
