@@ -7,7 +7,7 @@ ConditionNode::ConditionNode() {
     right_node_ptr_ = nullptr;
 }
 
-BOOLEAN ConditionNode::setConditionType(CONDITION_TYPE condition_type) {
+BOOLEAN_TYPE ConditionNode::setConditionType(CONDITION_TYPE condition_type) {
     try {
         condition_type_ = condition_type;
     }
@@ -18,7 +18,7 @@ BOOLEAN ConditionNode::setConditionType(CONDITION_TYPE condition_type) {
     return true;
 }
 
-BOOLEAN ConditionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
+BOOLEAN_TYPE ConditionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     try {
         if (left_node_ptr->getNodeType() != NODE_TYPE::conditionNode &&
             left_node_ptr->getNodeType() != NODE_TYPE::relationNode) {
@@ -35,7 +35,7 @@ BOOLEAN ConditionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     return true;
 }
 
-BOOLEAN ConditionNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
+BOOLEAN_TYPE ConditionNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
     try {
         if (right_node_ptr->getNodeType() != NODE_TYPE::conditionNode &&
             right_node_ptr->getNodeType() != NODE_TYPE::relationNode) {

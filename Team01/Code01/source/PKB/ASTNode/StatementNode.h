@@ -7,7 +7,7 @@ class StatementNode;
 #include "StatementListNode.h"
 
 typedef std::shared_ptr<StatementListNode> STMT_LIST_NODE_PTR;
-typedef bool BOOLEAN;
+typedef bool BOOLEAN_TYPE;
 typedef int STMT_NUM;
 
 class StatementNode : public ASTNode {
@@ -18,12 +18,12 @@ public:
 		Description: Constructs a StatementNode with NULL value for its STMT_NUM.
 		*/
 
-	BOOLEAN setStatementNumber(STMT_NUM stmt_num);
+	BOOLEAN_TYPE setStatementNumber(STMT_NUM stmt_num);
 		/*
 		Description: Returns True if able to set a STMT_NUM of this StatementNode.
 		*/
 
-	BOOLEAN setStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);
+	BOOLEAN_TYPE setStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);
 		/*
 		Description: Returns True if able to set the STMT_LIST_NODE_PTR that contains this StatementNode.
 		*/
