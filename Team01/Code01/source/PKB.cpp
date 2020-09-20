@@ -15,7 +15,7 @@ PKB::PKB(PKB_BUILDER builder) {
     parent_table_ = builder.parent_table_;
     uses_table_ = builder.uses_table_;
     modifies_table_ = builder.modifies_table_;
-    program_node_ptr_ = builder.program_node_ptr;
+    program_node_ptr_ = builder.program_node_ptr_;
 }
 
 /*==== Design Entities (Nodes) ====*/
