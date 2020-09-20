@@ -28,6 +28,8 @@ namespace UnitTesting {
 
 		PKB_PTR pkb;
 		PKB_PTR actual_pkb;
+		
+		// Meant to initialise expected pkb and actual pkb. 
 		/*
 		TEST_METHOD_INITIALIZE(PKBInitialize) {
 			// PKB
@@ -118,7 +120,10 @@ namespace UnitTesting {
 			actual_pkb =
 				std::make_shared<PKB>(parser.parseFile("../UnitTesting/Parser/TestParser-1.txt"));
 		}
+		*/
 		
+		// Test method to check if parser creates a program node.
+		/*
 		TEST_METHOD(makeSimpleAst_makeProgram)
 		{	
 			PROGRAM_NODE_PTR expected_prog_node = pkb->getProgramNode();
@@ -127,15 +132,17 @@ namespace UnitTesting {
 			Assert::IsTrue(typeid(*expected_prog_node) == typeid(*actual_prog_node));
 		}
 		*/
+		// For testing if file path is correct
+		bool is_file_exist(const char* fileName)
+		{
+			std::ifstream infile(fileName);
+			return infile.good();
+		}
+		// Test method meant for checking if procedure list generated contains the correct procedures.
 		TEST_METHOD(makeSimpleAst_makeProcedure)
 		{
-			
-			/*
-			PROGRAM_NODE_PTR expected_prog_node = pkb->getProgramNode();
-			PROGRAM_NODE_PTR actual_prog_node = actual_pkb->getProgramNode();
-			*/
-			
-			// Make Trial ProgramNode'
+					
+			// Trial program node: Shows that error only occurs when pkb builder is used to make pkb
 			PKBBuilder builder;
 
 			PROGRAM_NODE_PTR prog10 = std::make_shared<ProgramNode>();
@@ -143,13 +150,20 @@ namespace UnitTesting {
 			PROC_NODE_PTR proc10 = std::make_shared<ProcedureNode>();
 
 			prog10->addProcedureNode(proc10);
-			builder.addProcedureNode(proc10);
-			PKB test_pkb = builder.build();
 
-			PROGRAM_NODE_PTR test_prog = test_pkb.getProgramNode();
-			PROC_NODE_PTR_LIST test_proc_list = test_prog->getProcedureNodeList();
-
-			Assert::IsTrue(true);
+			PROC_NODE_PTR_LIST test_proc_list = prog10->getProcedureNodeList();
+			
+			// Main section of test
+			Parser parser = Parser();
+			
+			// Confirmed, file path exists.
+			PKB actual_pkb =
+				parser.parseFile("../UnitTesting/Parser/TestParser-1.txt");
+			
+			// The following line causes read access violation
+			AST_NODE_PTR_LIST actual_proc_list =
+				actual_pkb.getProgramNode()->getChildrenNode();
+			
 		}
 
 	};
