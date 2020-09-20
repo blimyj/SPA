@@ -50,6 +50,8 @@ SPLIT_DECLARATIONS QueryPreProcessor::splitDeclarations(DECLARATIONS d) {
 			index = split_index + 1;
 			split_index = d.find(delimiter, index);
 		}
+
+		split_d.push_back(d.substr(index));
 	}
 
 	return split_d;
