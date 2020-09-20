@@ -1,5 +1,5 @@
 1 - comment
-variable v; stmt s;
-Select v such that FollowsT(1,s)
-a, b, c, d, e
+print pn; variable v;
+Select pn such that UsesS(pn, v)
+none
 5000
