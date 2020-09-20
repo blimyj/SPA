@@ -118,6 +118,18 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 		}
 		else if (clause_type == QueryNodeType::pattern) {
 			// magic
+			// Only 1 node on the LHS and search for only 1 node on the RHS (Iteration 1)
+			// Depends on whether the pattern is searchign for a constant or a variable (eg x = 3 or x = v )
+			
+			// idea for RHS variable:
+				//get assign nodes, get their stmt numbers, check isUses(stmtnum, RHS thing eg 3/v)
+				//if LHS is not wildcard, then check isModifies(stmtNum, v)
+			// for constants:
+				// find all the constant nodes, for each node, go up and find a stmt node (while if print read assign )
+				// if not assign:
+					//end
+				// else:
+					// for the assign node stmtNum, check isModifies(stmtNum, v)
 		}
 
 		// if the clause_bool is true => merge result_list with clause_result_list
