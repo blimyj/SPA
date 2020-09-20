@@ -27,10 +27,8 @@ namespace UnitTesting {
 		*/
 
 		PKB_PTR pkb;
-		PKB_PTR actual_pkb;
-		
-		// Meant to initialise expected pkb and actual pkb. 
 		/*
+		// Meant to initialise expected pkb and actual pkb. 
 		TEST_METHOD_INITIALIZE(PKBInitialize) {
 			// PKB
 			PKBBuilder builder;
@@ -121,50 +119,60 @@ namespace UnitTesting {
 				std::make_shared<PKB>(parser.parseFile("../UnitTesting/Parser/TestParser-1.txt"));
 		}
 		*/
-		
-		// Test method to check if parser creates a program node.
-		/*
-		TEST_METHOD(makeSimpleAst_makeProgram)
-		{	
-			PROGRAM_NODE_PTR expected_prog_node = pkb->getProgramNode();
-			PROGRAM_NODE_PTR actual_prog_node = actual_pkb->getProgramNode();
 
-			Assert::IsTrue(typeid(*expected_prog_node) == typeid(*actual_prog_node));
-		}
-		*/
 		// For testing if file path is correct
 		bool is_file_exist(const char* fileName)
 		{
 			std::ifstream infile(fileName);
 			return infile.good();
 		}
-		// Test method meant for checking if procedure list generated contains the correct procedures.
-		TEST_METHOD(makeSimpleAst_makeProcedure)
-		{
-					
-			// Trial program node: Shows that error only occurs when pkb builder is used to make pkb
-			PKBBuilder builder;
-
-			PROGRAM_NODE_PTR prog10 = std::make_shared<ProgramNode>();
-			builder.setProgramNode(prog10);
-			PROC_NODE_PTR proc10 = std::make_shared<ProcedureNode>();
-
-			prog10->addProcedureNode(proc10);
-
-			PROC_NODE_PTR_LIST test_proc_list = prog10->getProcedureNodeList();
-			
-			// Main section of test
+		
+		// Test method to check if parser creates a program node.
+		TEST_METHOD(makeSimpleAst) {
 			Parser parser = Parser();
-			
-			// Confirmed, file path exists.
-			PKB actual_pkb =
-				parser.parseFile("../UnitTesting/Parser/TestParser-1.txt");
-			
-			// The following line causes read access violation
-			AST_NODE_PTR_LIST actual_proc_list =
-				actual_pkb.getProgramNode()->getChildrenNode();
-			
+			PKB_PTR actual_pkb =
+				std::make_shared<PKB>(parser.parseFile("../UnitTesting/Parser/TestParser-1.txt"));
+
+			// Check program node is made
+			PROGRAM_NODE_PTR actual_prog_node = actual_pkb->getProgramNode();
+			PROGRAM_NODE_PTR prog_node = std::make_shared<ProgramNode>();
+			Assert::IsTrue(typeid(prog_node) == typeid(actual_prog_node));
+
+			// Check procedure list is made, with correct procedure name
+			PROC_NODE_PTR_LIST actual_proc_list = actual_prog_node->getProcedureNodeList();
+			PROC_NODE_PTR actual_proc_node = actual_proc_list.at(0);
+			Assert::IsTrue(actual_proc_node->getProcedureName() == "main");
+
+			// Check statementlist is made with 3 statements(children)
+			STMT_LIST_NODE_PTR actual_stmtlist_node = actual_proc_node->getProcedureStatementListNode();
+			STMT_NODE_PTR_LIST actual_stmt_node_list = actual_stmtlist_node->getStatementNodeList();
+			Assert::IsTrue(actual_stmt_node_list.size() == 3);
+
+			// Check assign node validity (a=1)
+			AssignNode* actual_assign_node = static_cast<AssignNode*>(actual_stmt_node_list.at(0).get());
+			VAR_NODE_PTR actual_var1_node = actual_assign_node->getVariableNode();
+			EXPR_NODE_PTR actual_expr_node = actual_assign_node->getExpressionNode();
+			AST_NODE_PTR temp_const_node = actual_expr_node->getLeftAstNode();
+			ConstantNode* actual_const_node = static_cast<ConstantNode*>(temp_const_node.get());
+			EXPR_TYPE actual_expr_type = actual_expr_node->getExpressionType();
+			Assert::IsTrue("a" == actual_var1_node->getVariableName());
+			Assert::IsTrue(EXPR_TYPE::none == actual_expr_type);
+			Assert::IsTrue("1" == actual_const_node->getValue());
+			Assert::IsTrue(1 == actual_assign_node->getStatementNumber());
+
+			// Check print node (print b)
+			PrintNode* actual_print_node = static_cast<PrintNode*>(actual_stmt_node_list.at(1).get());
+			VAR_NODE_PTR actual_var2_node = actual_print_node->getVariableNode();
+			Assert::IsTrue("b" == actual_var2_node->getVariableName());
+			Assert::IsTrue(2 == actual_print_node->getStatementNumber());
+
+			// Check read node (read c)
+			ReadNode* actual_read_node = static_cast<ReadNode*>(actual_stmt_node_list.at(2).get());
+			VAR_NODE_PTR actual_var3_node = actual_read_node->getVariableNode();
+			Assert::IsTrue("c" == actual_var3_node->getVariableName());
+			Assert::IsTrue(3 == actual_read_node->getStatementNumber());
 		}
+
 
 	};
 }
