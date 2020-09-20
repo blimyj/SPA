@@ -304,14 +304,65 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 				}
 			}
 			else if (relationship_type == QueryNodeType::usesS) {
-				std::vector<std::pair<int, std::string>> stmt_cross;
-				std::vector<std::pair<std::string, std::string>> proc_cross;
-				
+				//std::vector<std::pair<int, std::string>> stmt_cross;
+				//std::vector<std::pair<std::string, std::string>> proc_cross;
+				std::vector<int> list1 = getStmtList(child1);
+				std::vector<VAR_NAME> list2 = getVarNameList(child2);
+
+				// create all possible pairs of list1 and list2 values
+				std::vector<std::pair<int, VAR_NAME>> cross;
+				for (int s1 : list1) {
+					for (VAR_NAME s2 : list2) {
+						cross.push_back({ s1, s2 });
+					}
+				}
+
+				// filter the cross with PKB.isFollows
+				std::vector<std::pair<int, VAR_NAME>> filter;
+				for (std::pair<int, VAR_NAME> p : cross) {
+					if (pkb.isUses(p.first, p.second)) {
+						filter.push_back(p);
+					}
+				}
+
+				// after filtering:
+				// if the filtered list is empty, then we say that this clause is FALSE
+				// else, this clause is TRUE
+				clause_bool = (filter.size() > 0);
+
+				// Add the filtered to ResultList!
+				// 1. Add the synonym names to as column headers
+				if (child1_type == QueryNodeType::synonym) {
+					SYNONYM_NAME synonym_name = child1.getString();
+					clause_result_list.addColumn(synonym_name);
+				}
+				if (child2_type == QueryNodeType::synonym) {
+					SYNONYM_NAME synonym_name = child2.getString();
+					clause_result_list.addColumn(synonym_name);
+				}
+
+				// 2. Add synonym values to the Resultlist row wise
+				for (std::pair<int, VAR_NAME> p : filter) {
+					ROW row;
+					if (child1_type == QueryNodeType::synonym) {
+						SYNONYM_NAME child1_synonym_name = child1.getString();
+						SYNONYM_VALUE child1_synonym_value = std::to_string(p.first);
+						row.insert({ child1_synonym_name, child1_synonym_value });
+					}
+					if (child2_type == QueryNodeType::synonym) {
+						SYNONYM_NAME child2_synonym_name = child2.getString();
+						SYNONYM_VALUE child2_synonym_value = p.second;
+						row.insert({ child2_synonym_name, child2_synonym_value });
+					}
+					clause_result_list.addRow(row);
+				}
 
 			}
+			//else if (relationship_type == QueryNodeType::usesP) {}
 			else if (relationship_type == QueryNodeType::modifiesS) {
-
+				
 			}
+			//else if (relationship_type == QueryNodeType::modifiesP) {}
 		}
 		else if (clause_type == QueryNodeType::pattern) {
 			// magic
@@ -366,6 +417,10 @@ STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode child1) {
 	else {
 		throw "QE: Synonym is not a statement or an integer!";
 	}
+}
 
-	
+VAR_NAME_LIST QueryEvaluator::getVarNameList(QueryNode node) {
+	if (node.getSynonymType() == QuerySynonymType::variable) {
+		return pkb.getVariableNameList();
+	}
 }
