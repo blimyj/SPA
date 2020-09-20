@@ -19,7 +19,9 @@ BOOLEAN_TYPE ExpressionNode::setExpressionType(EXPR_TYPE expr_type) {
 
 BOOLEAN_TYPE ExpressionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     try {
-        if (left_node_ptr == nullptr) {
+        if (left_node_ptr->getNodeType() != NODE_TYPE::variableNode &&
+            left_node_ptr->getNodeType() != NODE_TYPE::constantNode &&
+            left_node_ptr->getNodeType() != NODE_TYPE::expressionNode) {
             return false;
         }
         addChildNode(left_node_ptr);
@@ -34,7 +36,9 @@ BOOLEAN_TYPE ExpressionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
 
 BOOLEAN_TYPE ExpressionNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
     try {
-        if (right_node_ptr == nullptr) {
+        if (right_node_ptr->getNodeType() != NODE_TYPE::variableNode &&
+            right_node_ptr->getNodeType() != NODE_TYPE::constantNode &&
+            right_node_ptr->getNodeType() != NODE_TYPE::expressionNode) {
             return false;
         }
         addChildNode(right_node_ptr);
@@ -57,7 +61,7 @@ AST_NODE_PTR ExpressionNode::getLeftAstNode() {
 
 AST_NODE_PTR ExpressionNode::getRightAstNode() {
     if (right_node_ptr_ == NULL) {
-        throw "ASTNode is of 'none' Type, there is right AST Node!";
+        throw std::exception("ASTNode is of 'none' Type, there is right AST Node!");
     }
     return right_node_ptr_;
 }

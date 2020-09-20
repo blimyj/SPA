@@ -18,14 +18,15 @@ BOOLEAN_TYPE ConditionNode::setConditionType(CONDITION_TYPE condition_type) {
     return true;
 }
 
-BOOLEAN_TYPE ConditionNode::setLeftAstNode(AST_NODE_PTR left_relation_node_ptr) {
+BOOLEAN_TYPE ConditionNode::setLeftAstNode(AST_NODE_PTR left_node_ptr) {
     try {
-        if (left_relation_node_ptr == nullptr) {
+        if (left_node_ptr->getNodeType() != NODE_TYPE::conditionNode &&
+            left_node_ptr->getNodeType() != NODE_TYPE::relationNode) {
             return false;
         }
-        addChildNode(left_relation_node_ptr);
-        left_relation_node_ptr->setParentNode(shared_from_this());
-        left_node_ptr_ = left_relation_node_ptr;
+        addChildNode(left_node_ptr);
+        left_node_ptr->setParentNode(shared_from_this());
+        left_node_ptr_ = left_node_ptr;
     }
     catch (int e) {
         (void)e;
@@ -34,14 +35,15 @@ BOOLEAN_TYPE ConditionNode::setLeftAstNode(AST_NODE_PTR left_relation_node_ptr) 
     return true;
 }
 
-BOOLEAN_TYPE ConditionNode::setRightAstNode(AST_NODE_PTR right_relation_node_ptr) {
+BOOLEAN_TYPE ConditionNode::setRightAstNode(AST_NODE_PTR right_node_ptr) {
     try {
-        if (right_relation_node_ptr == nullptr) {
+        if (right_node_ptr->getNodeType() != NODE_TYPE::conditionNode &&
+            right_node_ptr->getNodeType() != NODE_TYPE::relationNode) {
             return false;
         }
-        addChildNode(right_relation_node_ptr);
-        right_relation_node_ptr->setParentNode(shared_from_this());
-        right_node_ptr_ = right_relation_node_ptr;
+        addChildNode(right_node_ptr);
+        right_node_ptr->setParentNode(shared_from_this());
+        right_node_ptr_ = right_node_ptr;
     }
     catch (int e) {
         (void)e;
@@ -60,7 +62,7 @@ AST_NODE_PTR ConditionNode::getLeftAstNode() {
 
 AST_NODE_PTR ConditionNode::getRightAstNode() {
     if (right_node_ptr_ == NULL) {
-        throw "Relation is of 'none' Type, there is no right relation node!";
+        throw std::exception("Relation is of 'none' Type, there is no right relation node!");
     }
     return right_node_ptr_;
 }
