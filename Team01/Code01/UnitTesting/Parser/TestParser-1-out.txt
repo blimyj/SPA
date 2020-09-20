@@ -1,8 +1,3 @@
- ParentNode Size: 0
-Created procedure node: mainNew Assign Node created.
-
- Node Type: programNode
-No. of Children: 1
 
 
  Node Type: procedureNode
