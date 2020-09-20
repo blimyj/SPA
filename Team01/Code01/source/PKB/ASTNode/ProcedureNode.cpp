@@ -6,7 +6,7 @@ ProcedureNode::ProcedureNode() {
     proc_stmt_list_node_ptr_ = nullptr;
 }
 
-BOOLEAN ProcedureNode::setProcedureName(STRING proc_name) {
+BOOLEAN_TYPE ProcedureNode::setProcedureName(STRING proc_name) {
     try {
         proc_name_ = proc_name;
     } catch (int e) {
@@ -16,7 +16,7 @@ BOOLEAN ProcedureNode::setProcedureName(STRING proc_name) {
     return true;
 }
 
-BOOLEAN ProcedureNode::setProcedureStatementListNode(STMT_LIST_NODE_PTR proc_stmt_list_node_ptr) {
+BOOLEAN_TYPE ProcedureNode::setProcedureStatementListNode(STMT_LIST_NODE_PTR proc_stmt_list_node_ptr) {
     try {
         if (proc_stmt_list_node_ptr == nullptr) {
             return false;
