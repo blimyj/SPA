@@ -268,7 +268,7 @@ namespace UnitTesting
 
 			CLAUSES c1 = "Select s such that Follows(1, s)";
 			CLAUSES c2 = "Select s such that Follows(s, a)";
-			CLAUSES c3 = "Select s such that Follows(_, s)";
+			CLAUSES c3 = "Select s such that FollowsT(_, s)";
 
 			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
 			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
@@ -292,7 +292,46 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("a") == 0);
 
 			Assert::IsTrue(proc_c3.getChildren()[1].getNodeType() == QueryNodeType::such_that);
-			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::follows);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::followsT);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::wild_card);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getSynonymType() == QuerySynonymType::stmt);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("s") == 0);
+		}
+
+		TEST_METHOD(preProcessClauses_Parent_Valid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
+
+			DECLARATIONS d = "stmt s; assign a;";
+			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
+
+			CLAUSES c1 = "Select s such that Parent(1, s)";
+			CLAUSES c2 = "Select s such that Parent(s, a)";
+			CLAUSES c3 = "Select s such that ParentT(_, s)";
+
+			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
+			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
+			PROCESSED_CLAUSES proc_c3 = qpp.preProcessClauses(proc_s, c3);
+
+			Assert::IsTrue(proc_c1.getChildren()[1].getNodeType() == QueryNodeType::such_that);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::parent);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::integer);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[0].getInteger() == 1);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[1].getSynonymType() == QuerySynonymType::stmt);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("s") == 0);
+
+			Assert::IsTrue(proc_c2.getChildren()[1].getNodeType() == QueryNodeType::such_that);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::parent);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[0].getSynonymType() == QuerySynonymType::stmt);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[0].getString().compare("s") == 0);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[1].getSynonymType() == QuerySynonymType::assign);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("a") == 0);
+
+			Assert::IsTrue(proc_c3.getChildren()[1].getNodeType() == QueryNodeType::such_that);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::parentT);
 			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::wild_card);
 			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::synonym);
 			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getSynonymType() == QuerySynonymType::stmt);
@@ -353,6 +392,67 @@ namespace UnitTesting
 
 			Assert::IsTrue(proc_c5.getChildren()[1].getNodeType() == QueryNodeType::such_that);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::usesS);
+			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[0].getSynonymType() == QuerySynonymType::assign);
+			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[0].getString().compare("a") == 0);
+			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::ident);
+			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("hello") == 0);
+		}
+
+		TEST_METHOD(preProcessClauses_Modifies_Valid_Success) {
+			QueryPreProcessor qpp = QueryPreProcessor();
+
+			DECLARATIONS d = "variable v; assign a; procedure p;";
+			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
+
+			CLAUSES c1 = "Select v such that ModifiesS(a, v)";
+			CLAUSES c2 = "Select v such that ModifiesS(p, v)";
+			CLAUSES c3 = "Select v such that ModifiesS(a, _)";
+			CLAUSES c4 = "Select v such that ModifiesS(1, v)";
+			CLAUSES c5 = "Select v such that ModifiesS(a, \"hello\")";
+
+
+			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
+			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
+			PROCESSED_CLAUSES proc_c3 = qpp.preProcessClauses(proc_s, c3);
+			PROCESSED_CLAUSES proc_c4 = qpp.preProcessClauses(proc_s, c4);
+			PROCESSED_CLAUSES proc_c5 = qpp.preProcessClauses(proc_s, c5);
+
+			Assert::IsTrue(proc_c1.getChildren()[1].getNodeType() == QueryNodeType::such_that);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::modifiesS);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[0].getSynonymType() == QuerySynonymType::assign);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[0].getString().compare("a") == 0);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[1].getSynonymType() == QuerySynonymType::variable);
+			Assert::IsTrue(proc_c1.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("v") == 0);
+
+			Assert::IsTrue(proc_c2.getChildren()[1].getNodeType() == QueryNodeType::such_that);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::modifiesS);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[0].getSynonymType() == QuerySynonymType::procedure);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[0].getString().compare("p") == 0);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[1].getSynonymType() == QuerySynonymType::variable);
+			Assert::IsTrue(proc_c2.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("v") == 0);
+
+			Assert::IsTrue(proc_c3.getChildren()[1].getNodeType() == QueryNodeType::such_that);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::modifiesS);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[0].getSynonymType() == QuerySynonymType::assign);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[0].getString().compare("a") == 0);
+			Assert::IsTrue(proc_c3.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::wild_card);
+
+			Assert::IsTrue(proc_c4.getChildren()[1].getNodeType() == QueryNodeType::such_that);
+			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::modifiesS);
+			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::integer);
+			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[0].getChildren()[0].getInteger() == 1);
+			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[0].getChildren()[1].getNodeType() == QueryNodeType::synonym);
+			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[0].getChildren()[1].getSynonymType() == QuerySynonymType::variable);
+			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[0].getChildren()[1].getString().compare("v") == 0);
+
+			Assert::IsTrue(proc_c5.getChildren()[1].getNodeType() == QueryNodeType::such_that);
+			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::modifiesS);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[0].getNodeType() == QueryNodeType::synonym);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[0].getSynonymType() == QuerySynonymType::assign);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getChildren()[0].getString().compare("a") == 0);
