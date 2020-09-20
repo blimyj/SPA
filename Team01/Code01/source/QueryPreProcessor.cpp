@@ -13,6 +13,7 @@
 
 const std::regex name_format_("[a-zA-Z][a-zA-Z0-9]*");
 const std::regex integer_format_("^[+-]?[1-9]\\d*|0$");
+const std::regex identity_format_("\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\"");
 const std::regex declaration_format_("(stmt|read|print|while|if|assign|variable|constant|procedure)\\s+[a-zA-Z][a-zA-Z0-9]*\\s*(\\,\\s*[a-zA-Z][a-zA-Z0-9]*)*\\s*");
 const std::regex clause_select_format_("Select\\s+[a-zA-Z][a-zA-Z0-9]*.*");
 const std::regex clause_relation_format_("(Follows|FollowsT|Parent|ParentT|UsesS|UsesP|ModifiesS|ModifiesP)\\s*\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*\\)");
@@ -356,11 +357,17 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 		if (std::regex_match(first_arg, std::regex("_"))) {
 			return false;
 		}
-		else if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(first_arg, ent_ref_format_)) {
+		else if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(second_arg, ent_ref_format_)) {
 			return false;
 		}
 		else if (std::regex_match(first_arg, name_format_)) {
-			if (proc_s.find(second_arg)->second.getSynonymType() == QuerySynonymType::variable) {
+			if (std::regex_match(second_arg, std::regex("_"))) {
+				return true;
+			}
+			else if (std::regex_match(second_arg, identity_format_)) {
+				return true;
+			}
+			else if (proc_s.find(second_arg)->second.getSynonymType() == QuerySynonymType::variable) {
 				if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::assign) {
 					return true;
 				}
@@ -395,11 +402,17 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 		if (std::regex_match(first_arg, std::regex("_"))) {
 			return false;
 		}
-		else if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(first_arg, ent_ref_format_)) {
+		else if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(second_arg, ent_ref_format_)) {
 			return false;
 		}
 		else if (std::regex_match(first_arg, name_format_)) {
-			if (proc_s.find(second_arg)->second.getSynonymType() == QuerySynonymType::variable) {
+			if (std::regex_match(second_arg, std::regex("_"))) {
+				return true;
+			} 
+			else if (std::regex_match(second_arg, identity_format_)) {
+				return true;
+			}
+			else if (proc_s.find(second_arg)->second.getSynonymType() == QuerySynonymType::variable) {
 				if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::assign) {
 					return true;
 				}
@@ -534,15 +547,29 @@ PROCESSED_SYNONYMS QueryPreProcessor::preProcessSynonyms(DECLARATIONS d) {
 			proc_s.insert({ syn_name, new_node });
 		}
 		else {
+			bool isNotLast = true;
+
 			while (split_index != -1) {
 				QueryNode new_node = QueryNode();
-				SYNONYM_NAME syn_name = trimWhitespaces(single_d.substr(index, split_index - index));
+				SYNONYM_NAME syn_name;
+
+				if (isNotLast) {
+					syn_name = trimWhitespaces(single_d.substr(index, split_index - index));
+				}
+				else {
+					syn_name = trimWhitespaces(single_d.substr(index));
+				}
 
 				new_node.setSynonymNode(design_entity, syn_name);
 				proc_s.insert({ syn_name, new_node });
 
 				index = split_index + 1;
 				split_index = d.find(delimiter, index);
+
+				if (split_index == -1 && isNotLast) {
+					split_index = index;
+					isNotLast = false;
+				}
 			}
 		}
 	}
