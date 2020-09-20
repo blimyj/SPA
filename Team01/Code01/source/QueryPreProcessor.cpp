@@ -16,7 +16,7 @@ const std::regex integer_format_("^[+-]?[1-9]\\d*|0$");
 const std::regex identity_format_("\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\"");
 const std::regex declaration_format_("(stmt|read|print|while|if|assign|variable|constant|procedure)\\s+[a-zA-Z][a-zA-Z0-9]*\\s*(\\,\\s*[a-zA-Z][a-zA-Z0-9]*)*\\s*");
 const std::regex clause_select_format_("Select\\s+[a-zA-Z][a-zA-Z0-9]*.*");
-const std::regex clause_relation_format_("(Follows|FollowsT|Parent|ParentT|UsesS|UsesP|ModifiesS|ModifiesP)\\s*\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*\\)");
+const std::regex clause_relation_format_("(Follows|FollowsT|Parent|ParentT|UsesS|UsesP|ModifiesS|ModifiesP)\\s*\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*([a-zA-Z0-9_][a-zA-Z0-9]*|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")\\s*\\)");
 const std::regex clause_pattern_format_("pattern\\s+[a-zA-Z][a-zA-Z0-9]*\\s*\\(\\s*[a-zA-Z_][a-zA-Z0-9]*\\s*,\\s*\"\\s*[^\\s].*\\s*\"\\s*\\)");
 const std::regex stmt_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|^[+-]?[1-9]\\d*|0$)");
 const std::regex ent_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")");
@@ -51,7 +51,9 @@ SPLIT_DECLARATIONS QueryPreProcessor::splitDeclarations(DECLARATIONS d) {
 			split_index = d.find(delimiter, index);
 		}
 
-		split_d.push_back(d.substr(index));
+		if (index != d.length()) {
+			split_d.push_back(d.substr(index));
+		}
 	}
 
 	return split_d;
@@ -376,6 +378,9 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 				else if (isStatementArgument(proc_s, first_arg)) {
 					return true;
 				}
+				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::procedure) {
+					return true;
+				}
 				else {
 					return false;
 				}
@@ -407,6 +412,9 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 					return false;
 				}
 				else if (isStatementArgument(proc_s, first_arg)) {
+					return true;
+				}
+				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::procedure) {
 					return true;
 				}
 				else {
