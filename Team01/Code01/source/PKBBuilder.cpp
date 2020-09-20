@@ -65,7 +65,7 @@ void PKBBuilder::addModifies(PROC_NAME p, VAR_NAME v) {
 }
 
 void PKBBuilder::setProgramNode(PROGRAM_NODE_PTR program_node_ptr) {
-    program_node_ptr = program_node_ptr;
+    program_node_ptr_ = program_node_ptr;
 }
 
 PKB PKBBuilder::build() {
