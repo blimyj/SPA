@@ -151,7 +151,7 @@ public:
 private:
     friend class PKB;
 
-    PROGRAM_NODE_PTR program_node_ptr;
+    PROGRAM_NODE_PTR program_node_ptr_;
 
     ASSIGN_TABLE assign_table_;
     CONSTANT_TABLE constant_table_;

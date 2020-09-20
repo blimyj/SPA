@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "PKB.h"
+#include "PKBBuilder.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -298,5 +299,4 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*stmt_list) == std::addressof(*child));
 		}
 	};
-
 }
