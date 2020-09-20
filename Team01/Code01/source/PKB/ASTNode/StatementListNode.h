@@ -9,7 +9,7 @@ class StatementListNode;
 
 typedef std::shared_ptr<StatementNode> STMT_NODE_PTR;
 typedef std::vector<std::shared_ptr<StatementNode>> STMT_NODE_PTR_LIST;
-typedef bool BOOLEAN;
+typedef bool BOOLEAN_TYPE;
 
 class StatementListNode : public ASTNode, public std::enable_shared_from_this<StatementListNode> {
 
@@ -19,7 +19,7 @@ public:
 		Description: Sets NODE_TYPE of node to be statementListNode.
 		*/
 
-	BOOLEAN addStatementNode(STMT_NODE_PTR stmt_node_ptr);
+	BOOLEAN_TYPE addStatementNode(STMT_NODE_PTR stmt_node_ptr);
 		/*
 		Description: Returns True if able to add a child STMT_NODE_PTR of the statement list, false otherwise.
 		*/

@@ -6,7 +6,7 @@ AssignNode::AssignNode() {
 	expr_node_ptr_ = nullptr;
 }
 
-BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
+BOOLEAN_TYPE AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	try {
 		if (var_node_ptr == nullptr) {
 			return false;
@@ -21,7 +21,7 @@ BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	return true;
 }
 
-BOOLEAN AssignNode::setExpressionNode(EXPR_NODE_PTR expr_node_ptr) {
+BOOLEAN_TYPE AssignNode::setExpressionNode(EXPR_NODE_PTR expr_node_ptr) {
     try {
 		if (expr_node_ptr == nullptr) {
 			return false;

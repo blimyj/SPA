@@ -6,7 +6,7 @@ WhileNode::WhileNode() {
 	while_stmt_list_node_ptr_ = nullptr;
 }
 
-BOOLEAN WhileNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
+BOOLEAN_TYPE WhileNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
 	try {
 		if (condition_node_ptr == nullptr) {
 			return false;
@@ -21,7 +21,7 @@ BOOLEAN WhileNode::setConditionNode(CONDITION_NODE_PTR condition_node_ptr) {
 	return true;
 }
 
-BOOLEAN WhileNode::setWhileStatementListNode(STMT_LIST_NODE_PTR while_stmt_list_node_ptr) {
+BOOLEAN_TYPE WhileNode::setWhileStatementListNode(STMT_LIST_NODE_PTR while_stmt_list_node_ptr) {
 	try {
 		if (while_stmt_list_node_ptr == nullptr) {
 			return false;
