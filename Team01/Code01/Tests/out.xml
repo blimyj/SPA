@@ -1,8 +1,22 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>AutoTester</name><parsing_time_taken>931.000000</parsing_time_taken>
+<name>AutoTester</name><parsing_time_taken>794.000000</parsing_time_taken>
 </info>
 <queries>
 <query>
 <id ReturnTuple="1" SuchThat="1" CondNum="2" RelNum="0" comment="comment">1</id><querystr><![CDATA[stmt s; variable v; Select s such that UsesS(s, v)]]></querystr>
+<stuans>1,2,3,4,5</stuans>
+<correct>1,2,3,4,5</correct>
+<time_taken>122.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" SuchThat="1" CondNum="2" RelNum="0" comment="comment">2</id><querystr><![CDATA[stmt s; variable v; Select s such that ModifiesS(s, v)]]></querystr>
+<stuans>6</stuans>
+<correct>6</correct>
+<time_taken>141.000000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>
