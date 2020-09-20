@@ -370,22 +370,10 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 				return true;
 			}
 			else if (proc_s.find(second_arg)->second.getSynonymType() == QuerySynonymType::variable) {
-				if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::assign) {
-					return true;
+				if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::read) {
+					return false;
 				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::print) {
-					return true;
-				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::ifs) {
-					return true;
-				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::whiles) {
-					return true;
-				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::procedure) {
-					return true;
-				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::call) {
+				else if (isStatementArgument(proc_s, first_arg)) {
 					return true;
 				}
 				else {
@@ -415,22 +403,10 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 				return true;
 			}
 			else if (proc_s.find(second_arg)->second.getSynonymType() == QuerySynonymType::variable) {
-				if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::assign) {
-					return true;
+				if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::print) {
+					return false;
 				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::read) {
-					return true;
-				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::ifs) {
-					return true;
-				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::whiles) {
-					return true;
-				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::procedure) {
-					return true;
-				}
-				else if (proc_s.find(first_arg)->second.getSynonymType() == QuerySynonymType::call) {
+				else if (isStatementArgument(proc_s, first_arg)) {
 					return true;
 				}
 				else {
