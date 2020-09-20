@@ -28,11 +28,14 @@ public:
 	BOOLEAN_TYPE setLeftAstNode(AST_NODE_PTR leftAstNode);
 		/*
 		Description: Returns True if able to set AST_NODE_PTR to be the left-hand side child of this Condition, false otherwise
+					 The AST_NODE_PTR must be of type: CONDITION_NODE_PTR, RELATION_NODE_PTR
 		*/
 
 	BOOLEAN_TYPE setRightAstNode(AST_NODE_PTR rightAstNode);
 		/*
 		Description: Returns True if able to set AST_NODE_PTR to be the right-hand side child of this Condition, false otherwise.
+					 The AST_NODE_PTR must be of type: CONDITION_NODE_PTR, RELATION_NODE_PTR
+
 		*/
 
 	CONDITION_TYPE getConditionType();
