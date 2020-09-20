@@ -1,5 +1,5 @@
 1 - comment
-stmt s1;
-Select s1
-1, 2, 3, 4, 5
+assign a;
+Select a such that Follows(1,a)
+none
 5000
