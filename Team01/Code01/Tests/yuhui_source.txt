@@ -4,4 +4,5 @@ procedure main {
     print c;
     print d;
     print e;
+    read f;
 }
