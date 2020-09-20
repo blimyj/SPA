@@ -25,6 +25,7 @@ private:
 	PKB pkb = (PKBBuilder().build()); // because PKB has no default constructor
 	STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode node);
 	VAR_NAME_LIST QueryEvaluator::getVarNameList(QueryNode node);
+	PROC_NAME_LIST QueryEvaluator::getProcList(QueryNode node);
 
 public:
 	QueryEvaluator(PKB pkb);
