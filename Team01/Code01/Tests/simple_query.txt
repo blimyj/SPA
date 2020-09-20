@@ -1,5 +1,5 @@
 1 - comment
-assign a;
-Select a such that Follows(1,a)
-none
+variable v; stmt s;
+Select v such that FollowsT(1,s)
+a, b, c, d, e
 5000
