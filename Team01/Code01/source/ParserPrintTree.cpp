@@ -27,7 +27,8 @@ std::string ParserPrintTree::parserPrintTree(AST_NODE_PTR parent_node_ptr) {
 		}
 
 		// Print number of children nodes:
-		result.append("No. of Children: " + children_nodes.size() + '\n');
+		result.append("No. of Children: ");
+		result.append(std::to_string(children_nodes.size()) + '\n');
 	}
 
 	return result;

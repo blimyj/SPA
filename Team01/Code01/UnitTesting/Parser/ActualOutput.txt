@@ -2,22 +2,27 @@
 
  Node Type: procedureNode
 main
-dren: 
+No. of Children: 1
+
 
  Node Type: statementListNode
-dren: 
+No. of Children: 1
+
 
  Node Type: assignNode
-ren: 
+No. of Children: 2
+
 
  Node Type: variableNode
 a
-ldren: 
+No. of Children: 0
+
 
  Node Type: expressionNode
 VAR OR CONST
-dren: 
+No. of Children: 1
+
 
  Node Type: constantNode
 1
-ldren: 
+No. of Children: 0
