@@ -26,6 +26,14 @@ private:
 	STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode node);
 	VAR_NAME_LIST QueryEvaluator::getVarNameList(QueryNode node);
 	PROC_NAME_LIST QueryEvaluator::getProcList(QueryNode node);
+	ResultList QueryEvaluator::getFollowsResult(QueryNode child1, QueryNode child2);
+	ResultList QueryEvaluator::getFollowsTResult(QueryNode child1, QueryNode child2);
+	ResultList QueryEvaluator::getParentResult(QueryNode child1, QueryNode child2);
+	ResultList QueryEvaluator::getParentTResult(QueryNode child1, QueryNode child2);
+	ResultList QueryEvaluator::getUsesSResult(QueryNode child1, QueryNode child2);
+	ResultList QueryEvaluator::getUsesPResult(QueryNode child1, QueryNode child2);
+	ResultList QueryEvaluator::getModifiesSResult(QueryNode child1, QueryNode child2);
+	ResultList QueryEvaluator::getModifiesPResult(QueryNode child1, QueryNode child2);
 
 public:
 	QueryEvaluator(PKB pkb);
