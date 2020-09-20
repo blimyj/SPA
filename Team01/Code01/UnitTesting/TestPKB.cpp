@@ -1,5 +1,3 @@
-#include <typeinfo>
-
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "PKB.h"
@@ -8,7 +6,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTesting {
 	
-	TEST_CLASS(TestPKB) {
+	TEST_CLASS(PKBTest) {
 	public:
 		TEST_METHOD(getAssigns) {
 			PKBBuilder pkb_builder;
@@ -16,7 +14,7 @@ namespace UnitTesting {
 			pkb_builder.addAssignNode(expected);
 			PKB pkb = pkb_builder.build();
 			ASSIGN_NODE_PTR actual = pkb.getAssigns().at(0);
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 		
 		TEST_METHOD(getConstants) {
@@ -25,7 +23,7 @@ namespace UnitTesting {
 			pkb_builder.addConstantNode(expected);
 			PKB pkb = pkb_builder.build();
 			CONSTANT_NODE_PTR actual = pkb.getConstants().at(0);
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
 		TEST_METHOD(getIfs) {
@@ -34,7 +32,7 @@ namespace UnitTesting {
 			pkb_builder.addIfNode(expected);
 			PKB pkb = pkb_builder.build();
 			IF_NODE_PTR actual = pkb.getIfs().at(0);
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
 		TEST_METHOD(getPrints) {
@@ -43,7 +41,7 @@ namespace UnitTesting {
 			pkb_builder.addPrintNode(expected);
 			PKB pkb = pkb_builder.build();
 			PRINT_NODE_PTR actual = pkb.getPrints().at(0);
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
 		TEST_METHOD(getProcedures) {
@@ -52,7 +50,7 @@ namespace UnitTesting {
 			pkb_builder.addProcedureNode(expected);
 			PKB pkb = pkb_builder.build();
 			PROC_NODE_PTR actual = pkb.getProcedures().at(0);
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
 		TEST_METHOD(getReads) {
@@ -61,7 +59,7 @@ namespace UnitTesting {
 			pkb_builder.addReadNode(expected);
 			PKB pkb = pkb_builder.build();
 			READ_NODE_PTR actual = pkb.getReads().at(0);
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
 		TEST_METHOD(getStatementLists) {
@@ -70,7 +68,7 @@ namespace UnitTesting {
 			pkb_builder.addStatementListNode(expected);
 			PKB pkb = pkb_builder.build();
 			STMT_LIST_NODE_PTR actual = pkb.getStatementLists().at(0);
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
 		TEST_METHOD(getStatements) {
@@ -78,8 +76,8 @@ namespace UnitTesting {
 			ASSIGN_NODE_PTR expected = std::make_shared<AssignNode>();
 			pkb_builder.addStatementNode(expected);
 			PKB pkb = pkb_builder.build();
-			AssignNode* actual = static_cast<AssignNode*>(pkb.getStatements().at(0).get());
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			STMT_NODE_PTR actual = pkb.getStatements().at(0);
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
 		TEST_METHOD(getVariables) {
@@ -88,7 +86,7 @@ namespace UnitTesting {
 			pkb_builder.addVariableNode(expected);
 			PKB pkb = pkb_builder.build();
 			VAR_NODE_PTR actual = pkb.getVariables().at(0);
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
 		TEST_METHOD(getWhiles) {
@@ -97,7 +95,7 @@ namespace UnitTesting {
 			pkb_builder.addWhileNode(expected);
 			PKB pkb = pkb_builder.build();
 			WHILE_NODE_PTR actual = pkb.getWhiles().at(0);
-			Assert::IsTrue(typeid(*expected) == typeid(*actual));
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
 	};

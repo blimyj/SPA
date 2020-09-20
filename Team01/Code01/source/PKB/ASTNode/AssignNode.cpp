@@ -44,5 +44,3 @@ VAR_NODE_PTR AssignNode::getVariableNode() {
 EXPR_NODE_PTR AssignNode::getExpressionNode() {
 	return expr_node_ptr_;
 }
-
-
