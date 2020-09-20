@@ -75,7 +75,7 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 		results.push_back(query);
 	}
 
-	std::cout << "query=  " << query << std::endl;
-	std::cout << "query result= " << result_string << std::endl;
+	//std::cout << "query=  " << query << std::endl;
+	//std::cout << "query result= " << result_string << std::endl;
 
 }
