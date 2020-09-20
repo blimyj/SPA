@@ -63,3 +63,7 @@ ROW_LIST ResultList::getRowList() {
 	}
 	return all_rows;
 }
+
+INTEGER ResultList::getNumRows() {
+	return num_rows_;
+}
