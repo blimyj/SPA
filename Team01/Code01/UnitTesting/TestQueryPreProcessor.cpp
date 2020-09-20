@@ -260,7 +260,7 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c3.getChildren()[0].getString().compare("v") == 0);
 		}
 
-		TEST_METHOD(preProcessClauses_Select_Valid_Success) {
+		TEST_METHOD(preProcessClauses_Select_Invalid_Success) {
 			QueryPreProcessor qpp = QueryPreProcessor();
 
 			DECLARATIONS d = "stmt s; read re; print pr; while w; if ifs; assign a; variable v; constant c; procedure p";
