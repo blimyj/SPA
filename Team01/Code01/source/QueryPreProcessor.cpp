@@ -357,7 +357,7 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 		if (std::regex_match(first_arg, std::regex("_"))) {
 			return false;
 		}
-		else if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(first_arg, ent_ref_format_)) {
+		else if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(second_arg, ent_ref_format_)) {
 			return false;
 		}
 		else if (std::regex_match(first_arg, name_format_)) {
@@ -402,7 +402,7 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 		if (std::regex_match(first_arg, std::regex("_"))) {
 			return false;
 		}
-		else if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(first_arg, ent_ref_format_)) {
+		else if (!std::regex_match(first_arg, stmt_ref_format_) || !std::regex_match(second_arg, ent_ref_format_)) {
 			return false;
 		}
 		else if (std::regex_match(first_arg, name_format_)) {
