@@ -68,7 +68,22 @@ variable v;
 Select v such that Uses(68, v);
 ame, ina, calli
 1000
-15 - Statement and Exact Variable, Non-Existent Variable
+15 - Procedure and Exact Variable, Select Procedure
+procedure p;
+Select p such that Uses(p, "ina");
+vtuber
+1000
+16 - Procedure and Synonym Variable, Select Variable 
+variable v; procedure p;
+Select v such that Uses(p, v);
+ame, calli, gura, ina, kiara
+1000
+17 - Exact Procedure and Synonym Variable, Select Variable 
+variable v; procedure p;
+Select v such that Uses("vtuber", v);
+ame, calli, gura, ina, kiara
+1000
+18 - Statement and Exact Variable, Non-Existent Variable
 stmt s;
 Select s such that Uses(1, "main");
 none
