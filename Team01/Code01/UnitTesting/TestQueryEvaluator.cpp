@@ -31,6 +31,10 @@ namespace UnitTesting
 		TEST_METHOD_INITIALIZE(PKBInitialize) {
 			// PKB
 			PKBBuilder builder;
+
+			std::shared_ptr<ProcedureNode> proc = std::make_shared<ProcedureNode>();
+			proc->setProcedureName("main");
+			builder.addProcedureNode(proc);
 			
 			std::shared_ptr<VariableNode> v1 = std::make_shared<VariableNode>();
 			v1->setVariableName("a");
@@ -92,6 +96,19 @@ namespace UnitTesting
 			builder.addFollows(2, 3);
 			builder.addFollows(3, 4);
 			builder.addFollows(4, 5);
+
+			builder.addUses("main", "a");
+			builder.addUses("main", "b");
+			builder.addUses("main", "c");
+			builder.addUses("main", "d");
+			builder.addUses("main", "e");
+
+			builder.addUses(1, "a");
+			builder.addUses(2, "b");
+			builder.addUses(3, "c");
+			builder.addUses(4, "d");
+			builder.addUses(5, "e");
+
 
 			pkb = std::make_shared<PKB>(builder.build());
 		}
@@ -684,7 +701,7 @@ namespace UnitTesting
 			std::unordered_map<std::string, QueryNode> processed_synonyms = { {"s", print_node}, {"v", variable_node} };
 
 			QueryNode child1 = QueryNode();
-			child1.setSynonymNode({ QuerySynonymType::variable }, "s");
+			child1.setSynonymNode({ QuerySynonymType::stmt }, "s");
 			QueryNode child2 = QueryNode();
 			child2.setNodeType({ QueryNodeType::such_that });
 			QueryNode child_child1 = QueryNode();
@@ -756,5 +773,172 @@ namespace UnitTesting
 			Logger::WriteMessage(result_string.c_str());
 			Assert::IsTrue(result_string.compare(correct_result) == 0);
 		}
+
+		TEST_METHOD(evaluateQuery_SelectVUsesSP_v_ReturnsV)
+		{
+			// Query: "variable v; procedure p; Select v such that UsesS(p,v)"
+			// Get processed_synonyms and processed clauses
+			QueryNode variable_node = QueryNode();
+			variable_node.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode proc_node = QueryNode();
+			proc_node.setSynonymNode({ QuerySynonymType::procedure }, "p");
+			std::unordered_map<std::string, QueryNode> processed_synonyms = { {"v", variable_node}, {"p", proc_node} };
+
+			QueryNode child1 = QueryNode();
+			child1.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode child2 = QueryNode();
+			child2.setNodeType({ QueryNodeType::such_that });
+			QueryNode child_child1 = QueryNode();
+			child_child1.setNodeType({ QueryNodeType::usesS });
+			QueryNode child_child_child1 = QueryNode();
+			child_child_child1.setSynonymNode({ QuerySynonymType::procedure }, "p");
+			QueryNode child_child_child2 = QueryNode();
+			child_child_child2.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode child_child1_children[] = { child_child_child1, child_child_child2 };
+			child_child1.setChildren(child_child1_children, 2);
+			QueryNode child2_children[] = { child_child1 };
+			child2.setChildren(child2_children, 1);
+
+			QueryNode root = QueryNode();
+			root.setNodeType({ QueryNodeType::select });
+			QueryNode root_children[] = { child1, child2 };
+			root.setChildren(root_children, 2);
+
+			QueryNode processed_clauses = root; //stores root node of the tree
+
+			// Evaluate
+			QueryEvaluator qe = QueryEvaluator(*pkb);
+			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "a, b, c, d, e";
+
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
+		}
+
+		TEST_METHOD(evaluateQuery_SelectPUsesSP_v_ReturnsP)
+		{
+			// Query: "variable v; procedure p; Select v such that UsesS(p,v)"
+			// Get processed_synonyms and processed clauses
+			QueryNode variable_node = QueryNode();
+			variable_node.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode proc_node = QueryNode();
+			proc_node.setSynonymNode({ QuerySynonymType::procedure }, "p");
+			std::unordered_map<std::string, QueryNode> processed_synonyms = { {"v", variable_node}, {"p", proc_node} };
+
+			QueryNode child1 = QueryNode();
+			child1.setSynonymNode({ QuerySynonymType::procedure }, "p");
+			QueryNode child2 = QueryNode();
+			child2.setNodeType({ QueryNodeType::such_that });
+			QueryNode child_child1 = QueryNode();
+			child_child1.setNodeType({ QueryNodeType::usesS });
+			QueryNode child_child_child1 = QueryNode();
+			child_child_child1.setSynonymNode({ QuerySynonymType::procedure }, "p");
+			QueryNode child_child_child2 = QueryNode();
+			child_child_child2.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode child_child1_children[] = { child_child_child1, child_child_child2 };
+			child_child1.setChildren(child_child1_children, 2);
+			QueryNode child2_children[] = { child_child1 };
+			child2.setChildren(child2_children, 1);
+
+			QueryNode root = QueryNode();
+			root.setNodeType({ QueryNodeType::select });
+			QueryNode root_children[] = { child1, child2 };
+			root.setChildren(root_children, 2);
+
+			QueryNode processed_clauses = root; //stores root node of the tree
+
+			// Evaluate
+			QueryEvaluator qe = QueryEvaluator(*pkb);
+			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "main, main, main, main, main";
+
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
+		}
+
+		TEST_METHOD(evaluateQuery_SelectVModifies2_v_ReturnsEmpty)
+		{
+			// Query: "variable v; Select v such that ModifiesS(2,v)"
+			// Get processed_synonyms and processed clauses
+			QueryNode variable_node = QueryNode();
+			variable_node.setSynonymNode({ QuerySynonymType::variable }, "v");
+			std::unordered_map<std::string, QueryNode> processed_synonyms = { {"v", variable_node} };
+
+			QueryNode child1 = QueryNode();
+			child1.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode child2 = QueryNode();
+			child2.setNodeType({ QueryNodeType::such_that });
+			QueryNode child_child1 = QueryNode();
+			child_child1.setNodeType({ QueryNodeType::modifiesS });
+			QueryNode child_child_child1 = QueryNode();
+			child_child_child1.setIntegerNode(2);
+			QueryNode child_child_child2 = QueryNode();
+			child_child_child2.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode child_child1_children[] = { child_child_child1, child_child_child2 };
+			child_child1.setChildren(child_child1_children, 2);
+			QueryNode child2_children[] = { child_child1 };
+			child2.setChildren(child2_children, 1);
+
+			QueryNode root = QueryNode();
+			root.setNodeType({ QueryNodeType::select });
+			QueryNode root_children[] = { child1, child2 };
+			root.setChildren(root_children, 2);
+
+			QueryNode processed_clauses = root; //stores root node of the tree
+
+			// Evaluate
+			QueryEvaluator qe = QueryEvaluator(*pkb);
+			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "";
+
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
+		}
+
+		TEST_METHOD(evaluateQuery_SelectVModifiesP_v_ReturnsEmpty)
+		{
+			// Query: "variable v; procedure p; Select v such that ModifiesS(p,v)"
+			// Get processed_synonyms and processed clauses
+			QueryNode variable_node = QueryNode();
+			variable_node.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode proc_node = QueryNode();
+			proc_node.setSynonymNode({ QuerySynonymType::procedure }, "p");
+			std::unordered_map<std::string, QueryNode> processed_synonyms = { {"v", variable_node}, {"p", proc_node} };
+
+			QueryNode child1 = QueryNode();
+			child1.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode child2 = QueryNode();
+			child2.setNodeType({ QueryNodeType::such_that });
+			QueryNode child_child1 = QueryNode();
+			child_child1.setNodeType({ QueryNodeType::modifiesS });
+			QueryNode child_child_child1 = QueryNode();
+			child_child_child1.setSynonymNode({ QuerySynonymType::procedure }, "p");
+			QueryNode child_child_child2 = QueryNode();
+			child_child_child2.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode child_child1_children[] = { child_child_child1, child_child_child2 };
+			child_child1.setChildren(child_child1_children, 2);
+			QueryNode child2_children[] = { child_child1 };
+			child2.setChildren(child2_children, 1);
+
+			QueryNode root = QueryNode();
+			root.setNodeType({ QueryNodeType::select });
+			QueryNode root_children[] = { child1, child2 };
+			root.setChildren(root_children, 2);
+
+			QueryNode processed_clauses = root; //stores root node of the tree
+
+			// Evaluate
+			QueryEvaluator qe = QueryEvaluator(*pkb);
+			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "";
+
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
+		}
+
 	};
 }
