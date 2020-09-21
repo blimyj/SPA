@@ -680,10 +680,6 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[1].getString().compare("v") == 0);
 			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[2].getNodeType() == QueryNodeType::expression);
 			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[2].getAstNode()->getNodeType() == NodeTypeEnum::variableNode);
-			/*
-			std::shared_ptr<VariableNode> var_node = std::static_pointer_cast<VariableNode, ASTNode>(proc_c5.getChildren()[1].getChildren()[2].getAstNode());
-			Assert::IsTrue(var_node->getVariableNode().compare("v"));
-			*/
 
 			Assert::IsTrue(proc_c5.getChildren()[1].getNodeType() == QueryNodeType::pattern);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::synonym);
@@ -694,10 +690,6 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[1].getString().compare("v") == 0);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[2].getNodeType() == QueryNodeType::expression);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[2].getAstNode()->getNodeType() == NodeTypeEnum::constantNode);
-			/*
-			std::shared_ptr<ConstantNode> const_node = std::static_pointer_cast<ConstantNode, ASTNode>(proc_c5.getChildren()[1].getChildren()[2].getAstNode());
-			Assert::IsTrue(const_node->getValue().compare("1"));
-			*/
 		}
 
 		TEST_METHOD(preProcessClauses_Pattern_Invalid_Success) {
