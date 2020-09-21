@@ -17,7 +17,7 @@ const std::regex identity_format_("\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\"");
 const std::regex declaration_format_("(stmt|read|print|while|if|assign|variable|constant|procedure)\\s+[a-zA-Z][a-zA-Z0-9]*\\s*(\\,\\s*[a-zA-Z][a-zA-Z0-9]*)*\\s*");
 const std::regex clause_select_format_("Select\\s+[a-zA-Z][a-zA-Z0-9]*.*");
 const std::regex clause_relation_format_("(Follows|FollowsT|Parent|ParentT|UsesS|UsesP|ModifiesS|ModifiesP)\\s*\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*([a-zA-Z0-9_][a-zA-Z0-9]*|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")\\s*\\)");
-const std::regex clause_pattern_format_("pattern\\s+[a-zA-Z][a-zA-Z0-9]*\\s*\\(\\s*[a-zA-Z_][a-zA-Z0-9]*\\s*,\\s*\"\\s*[^\\s].*\\s*\"\\s*\\)");
+const std::regex clause_pattern_format_("pattern\\s+[a-zA-Z][a-zA-Z0-9]*\\s*\\(\\s*[a-zA-Z_][a-zA-Z0-9]*\\s*,\\s*(_\\s*\"\\s*[^\\s].*\\s*\"\\s*_|_)\\s*\\)");
 const std::regex stmt_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|^[+-]?[1-9]\\d*|0$)");
 const std::regex ent_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")");
 const std::regex expression_spec_format_("(_\\s*\"\\s*([a-zA-Z][a-zA-Z0-9]*|^[+-]?[1-9]\\d*|0$)\\s*\"\\s*_|_)");
