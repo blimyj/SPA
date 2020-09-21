@@ -445,6 +445,9 @@ ResultList QueryEvaluator::getUsesPResult(QueryNode child1, QueryNode child2) {
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
+	// Iteration 1: procedure list only have 1 procedure
+	// Approach: get all the stmts of that procedure, ignore all other procedures
+	// Check isUses(stmt, v) as per normal
 	std::vector<PROC_NAME> list1 = getProcList(child1);
 	std::vector<VAR_NAME> list2 = getVarNameList(child2);
 
@@ -608,6 +611,7 @@ STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode child1) {
 	if (child1_type == QueryNodeType::integer) {
 		STMT_NUM_LIST oneIntList = { child1.getInteger() };
 		return oneIntList;
+		//return STMT_NUM_LIST(chilld1.getInteger())
 	}
 	else if (child1_type == QueryNodeType::synonym) {
 		QuerySynonymType child1_syn_type = child1.getSynonymType();
