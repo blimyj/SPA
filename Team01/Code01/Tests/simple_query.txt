@@ -1,5 +1,5 @@
 1 - comment
 procedure p; variable v;
-Select v such that UsesP(p, v)
+Select v such that UsesS(p, v)
 a, b, c, d, e
 5000
