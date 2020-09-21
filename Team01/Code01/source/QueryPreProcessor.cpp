@@ -12,15 +12,15 @@
 
 
 const std::regex name_format_("[a-zA-Z][a-zA-Z0-9]*");
-const std::regex integer_format_("^[+-]?[1-9]\\d*|0$");
+const std::regex integer_format_("[+-]?[1-9]\\d*|0$");
 const std::regex identity_format_("\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\"");
 const std::regex declaration_format_("(stmt|read|print|while|if|assign|variable|constant|procedure)\\s+[a-zA-Z][a-zA-Z0-9]*\\s*(\\,\\s*[a-zA-Z][a-zA-Z0-9]*)*\\s*");
 const std::regex clause_select_format_("Select\\s+[a-zA-Z][a-zA-Z0-9]*.*");
-const std::regex clause_relation_format_("(Follows|FollowsT|Parent|ParentT|UsesS|UsesP|ModifiesS|ModifiesP)\\s*\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*([a-zA-Z0-9_][a-zA-Z0-9]*|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")\\s*\\)");
-const std::regex clause_pattern_format_("pattern\\s+[a-zA-Z][a-zA-Z0-9]*\\s*\\(\\s*[a-zA-Z_][a-zA-Z0-9]*\\s*,\\s*\"\\s*[^\\s].*\\s*\"\\s*\\)");
+const std::regex clause_relation_format_("(Follows|FollowsT|Parent|ParentT|UsesS|UsesP|ModifiesS|ModifiesP)\\s*\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*\"?\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*\"?\\s*\\)");
+const std::regex clause_pattern_format_("pattern\\s+[a-zA-Z][a-zA-Z0-9]*\\s*\\(\\s*(_|\"?\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\"?)\\s*,\\s*(_\\s*\"\\s*[^\\s].*\\s*\"\\s*_|_)\\s*\\)");
 const std::regex stmt_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|^[+-]?[1-9]\\d*|0$)");
 const std::regex ent_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")");
-const std::regex expression_spec_format_("(_\\s*\"\\s*([a-zA-Z][a-zA-Z0-9]*|^[+-]?[1-9]\\d*|0$)\\s*\"\\s*_|_)");
+const std::regex expression_spec_format_("(_\\s*\"\\s*([a-zA-Z][a-zA-Z0-9]*|[+-]?[1-9]\\d*|0$)\\s*\"\\s*_|_)");
 
 STRING QueryPreProcessor::trimWhitespaces(STRING s) {
 	int start = s.find_first_not_of(" \n\r\t\f\v");
@@ -166,6 +166,7 @@ QueryNode QueryPreProcessor::createPatternNode(PROCESSED_SYNONYMS proc_s, SYNONY
 	QueryNode second_arg_node = createExpressionNode(second_arg);
 
 	QueryNode pattern_node_children[3] = { syn_node, first_arg_node, second_arg_node };
+	pattern_node.setChildren(pattern_node_children, 3);
 
 	return pattern_node;
 
@@ -660,7 +661,7 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 					child_index++;
 				}
 				else {
-					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index + 8, such_that_index - next_index));
+					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index, such_that_index - next_index));
 
 					if (!isValidPatternFormat(current_c)) {
 						is_valid = false;
@@ -676,7 +677,9 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 						closed_brac_index - comma_index - 1));
 
 					// get synonym
-					SYNONYM_NAME pattern_syn = trimWhitespaces(current_c.substr(0, open_brac_index));
+					int syn_start_index = current_c.find(" ");
+					SYNONYM_NAME pattern_syn = trimWhitespaces(current_c.substr(syn_start_index,
+						open_brac_index - syn_start_index));
 
 					if (!isValidPatternArguments(proc_s, pattern_syn, first_arg, second_arg)) {
 						is_valid = false;
