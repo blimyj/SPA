@@ -45,6 +45,17 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
   // ...rest of your code...
+	std::cout << "parsed " << filename;
+	Parser parser = Parser();
+
+	try {
+
+		this->pkb = parser.parseFile(filename);
+		
+	}
+	catch (const char* msg) {
+		std::cout << msg << "\n";
+	}
 }
 
 // method to evaluating a query
