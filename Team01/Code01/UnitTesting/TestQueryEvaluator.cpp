@@ -26,10 +26,24 @@ namespace UnitTesting
 			print e;
 		}
 		*/
-		std::shared_ptr<PKB> pkb;
+		std::shared_ptr<PKB> pkb; // ohh you can right click and rename it to pkb1 ohh i see!
+
+		/*
+		procedure main {
+			a = meow;
+			b = ;
+			 c = a + b + c;
+			} else {
+			    c = 2 / (b + 3); 
+			}// does AutoTester run the whole program already? ohh Parser->PKB->PQL ohh YAY ok :)) is it in master omg ohhhh
+			what do you mean by program ohh yep! AHAHAHA YEAH it passed a few i show yoU! erm not yet? but i think i PRed this morn
+			// maybe we can test these in system tests? yeah! yeah!! ohh so we start simple? ohh okay! like try out different patterns! okk!
+		}
+		*/
+		std::shared_ptr<PKB> pkb2;
 
 		TEST_METHOD_INITIALIZE(PKBInitialize) {
-			// PKB
+			// PKB 1
 			PKBBuilder builder;
 
 			std::shared_ptr<ProcedureNode> proc = std::make_shared<ProcedureNode>();
@@ -37,16 +51,15 @@ namespace UnitTesting
 			builder.addProcedureNode(proc);
 			
 			std::shared_ptr<VariableNode> v1 = std::make_shared<VariableNode>();
-			v1->setVariableName("a");
 			std::shared_ptr<VariableNode> v2 = std::make_shared<VariableNode>();
-			v2->setVariableName("b");
 			std::shared_ptr<VariableNode> v3 = std::make_shared<VariableNode>();
-			v3->setVariableName("c");
 			std::shared_ptr<VariableNode> v4 = std::make_shared<VariableNode>();
-			v4->setVariableName("d");
 			std::shared_ptr<VariableNode> v5 = std::make_shared<VariableNode>();
+			v1->setVariableName("a");
+			v2->setVariableName("b");
+			v3->setVariableName("c");
+			v4->setVariableName("d");
 			v5->setVariableName("e");
-
 			builder.addVariableNode(v1);
 			builder.addVariableNode(v2);
 			builder.addVariableNode(v3);
@@ -54,43 +67,41 @@ namespace UnitTesting
 			builder.addVariableNode(v5);
 
 			std::shared_ptr<PrintNode> p1 = std::make_shared<PrintNode>();
+			std::shared_ptr<PrintNode> p2 = std::make_shared<PrintNode>();
+			std::shared_ptr<PrintNode> p3 = std::make_shared<PrintNode>();
+			std::shared_ptr<PrintNode> p4 = std::make_shared<PrintNode>();
+			std::shared_ptr<PrintNode> p5 = std::make_shared<PrintNode>();
 			p1->setStatementNumber(1);
 			p1->setVariableNode(v1);
-			std::shared_ptr<PrintNode> p2 = std::make_shared<PrintNode>();
 			p2->setStatementNumber(2);
 			p2->setVariableNode(v2);
-			std::shared_ptr<PrintNode> p3 = std::make_shared<PrintNode>();
 			p3->setStatementNumber(3);
 			p3->setVariableNode(v3);
-			std::shared_ptr<PrintNode> p4 = std::make_shared<PrintNode>();
 			p4->setStatementNumber(4);
 			p4->setVariableNode(v4);
-			std::shared_ptr<PrintNode> p5 = std::make_shared<PrintNode>();
 			p5->setStatementNumber(5);
 			p5->setVariableNode(v5);
-
-
 			builder.addPrintNode(p1);
 			builder.addPrintNode(p2);
 			builder.addPrintNode(p3);
 			builder.addPrintNode(p4);
 			builder.addPrintNode(p5);
 
-			StatementNode s1;
-			s1.setStatementNumber(1);
-			StatementNode s2;
-			s2.setStatementNumber(2);
-			StatementNode s3;
-			s3.setStatementNumber(3);
-			StatementNode s4;
-			s4.setStatementNumber(4);
-			StatementNode s5;
-			s5.setStatementNumber(5);
-			builder.addStatementNode(std::make_shared<StatementNode>(s1));
-			builder.addStatementNode(std::make_shared<StatementNode>(s2));
-			builder.addStatementNode(std::make_shared<StatementNode>(s3));
-			builder.addStatementNode(std::make_shared<StatementNode>(s4));
-			builder.addStatementNode(std::make_shared<StatementNode>(s5));
+			std::shared_ptr<StatementNode> s1 = std::make_shared<StatementNode>();
+			std::shared_ptr<StatementNode> s2 = std::make_shared<StatementNode>();
+			std::shared_ptr<StatementNode> s3 = std::make_shared<StatementNode>();
+			std::shared_ptr<StatementNode> s4 = std::make_shared<StatementNode>();
+			std::shared_ptr<StatementNode> s5 = std::make_shared<StatementNode>();
+			s1->setStatementNumber(1);
+			s2->setStatementNumber(2);
+			s3->setStatementNumber(3);
+			s4->setStatementNumber(4);
+			s5->setStatementNumber(5);
+			builder.addStatementNode(s1);
+			builder.addStatementNode(s2);
+			builder.addStatementNode(s3);
+			builder.addStatementNode(s4);
+			builder.addStatementNode(s5);
 
 			builder.addFollows(1, 2);
 			builder.addFollows(2, 3);
@@ -109,8 +120,13 @@ namespace UnitTesting
 			builder.addUses(4, "d");
 			builder.addUses(5, "e");
 
-
 			pkb = std::make_shared<PKB>(builder.build());
+
+
+			// PKB 2
+			PKBBuilder builder2;
+			
+			pkb2 = std::make_shared<PKB>(builder2.build());
 		}
 
 		TEST_METHOD(evaluateQuery_Select_Success)

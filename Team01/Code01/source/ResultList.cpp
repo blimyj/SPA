@@ -18,7 +18,14 @@ void ResultList::addColumn(SYNONYM_NAME columnName, SYNONYM_INT_VALUES_LIST colu
 }
 
 void ResultList::addRow(ROW row) {
+	// There are no columns in results
+	if (results.size() == 0) {
+		return;
+	}
+
 	// Iterate each column of this resultlist
+	// Throw error if ROW is missing a column
+	// Discard extra columns in ROW
 	for (auto &r : results) {
 		// Check if row contains that column
 		auto it = row.find(r.first);
@@ -27,6 +34,7 @@ void ResultList::addRow(ROW row) {
 		}
 		r.second.push_back(it->second);
 	}
+
 	num_rows_++;
 }
 
