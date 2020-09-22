@@ -11,8 +11,6 @@
 #include "PKB.h"
 #include "Parser.h"
 #include "PKB/ASTNode/NodeTypeEnum.h"
-
-//TODO: Ensure RelationNode.h is included in PKB
 #include "PKB/ASTNode/RelationNode.h"
 
 	int Parser::Parse() {
@@ -1185,7 +1183,7 @@
 				else if (temp_token == "==") {
 					op = RelOperatorTypeEnum::ropEq;
 				}
-				else if (temp_token == "!+") {
+				else if (temp_token == "!=") {
 					op = RelOperatorTypeEnum::ropNeq;
 				}
 				else if (temp_token == ">") {
