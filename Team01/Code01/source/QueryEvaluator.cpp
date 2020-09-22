@@ -120,6 +120,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 			// magic
 			// Only 1 node on the LHS and search for only 1 node on the RHS (Iteration 1)
 			// Depends on whether the pattern is searchign for a constant or a variable (eg x = 3 or x = v )
+			// Example pattern a(_, _"x"_) a(_, "4") a("w", _"x"_) a("i", _"x"_) a("mango", _"x"_ ) a("mango", _"4"_)
 			
 			// idea for RHS variable:
 				//get assign nodes, get their stmt numbers, check isUses(stmtnum, RHS thing eg 3/v)
@@ -130,6 +131,61 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 					//end
 				// else:
 					// for the assign node stmtNum, check isModifies(stmtNum, v)
+			
+			// Eg pattern a1("woof", _"x"_)
+			clause_bool = false;
+			ResultList clause_result_list;
+			ResultList initial_assign_list;
+			std::vector<ASSIGN_NODE_PTR> all_assigns = pkb.getAssigns();
+
+			// QueryNodeContent -> a1
+			QueryNode pattern_assign_synonym = clause.getChildren()[0];
+			// add column head a1
+			SYNONYM_NAME synonym_name = pattern_assign_synonym.getString();
+			clause_result_list.addColumn(synonym_name);
+			initial_assign_list.addColumn(synonym_name, pkb.getAssignNumList());
+
+			// QueryNodeContent -> "woof"
+			QueryNode lhs_node = clause.getChildren()[1];
+			STRING lhs = lhs_node.getString();
+			auto lhs_node_type = lhs_node.getNodeType();
+			
+			// ASTNode -> "x"
+			QueryNode rhs_node = clause.getChildren()[2];
+			std::shared_ptr<ASTNode> rhs = (rhs_node.getAstNode());
+			NODE_TYPE rhs_node_type = rhs.get()->getNodeType();
+			
+
+			/* Ways to cast ASTNode to more specific nodes (use for VariableNode and ConstantNode)
+			AssignNode* assign = static_cast<AssignNode*>(rhs_node_content.get());
+			auto a = assign->getExpressionNode();
+
+			VariableNode* assign = static_cast<VariableNode*>(rhs_node_content.get());
+			*/
+			
+			
+			if (rhs_node_type == NodeTypeEnum::variableNode) {
+				if (lhs_node_type != QueryNodeType::wild_card) { //ie lhs == QueryNodeType::ident || lhs == QueryNodeType::synonym
+					// pattern a(synonym/'IDENT', v)
+					// check isModifies(synonym/'IDENT', v) && isUses(synonym/'IDENT', v)
+					// if true:
+						// somehow find the stmtNum, add to clause_result_list
+				}
+				else {
+					// pattern a(_, _"v"_ )
+					// for all stmt in stmts:
+						// check isUses(stmt, v)
+
+				}
+			}
+			else if (rhs_node_type == NodeTypeEnum::constantNode) {
+
+			}
+			else {
+				throw "QE Pattern rhs argument is not variable or constant --  FAILURE";
+			}
+			
+
 		}
 
 		// if the clause_bool is true => merge result_list with clause_result_list
