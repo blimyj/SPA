@@ -1072,6 +1072,7 @@
 		//Need to add new_stmt_list_node & new_while_node to PKB tables
 		this->pkb_builder_.addWhileNode(new_while_node);
 		this->pkb_builder_.addStatementNode(new_while_node);
+		this->pkb_builder_.addStatementListNode(new_stmt_list_node);
 
 
 		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
@@ -1835,6 +1836,8 @@
 		//Need to add new_stmt_list_node & new_if_node to PKB tables
 		this->pkb_builder_.addIfNode(new_if_node);
 		this->pkb_builder_.addStatementNode(new_if_node);
+		this->pkb_builder_.addStatementListNode(if_stmt_list_node);
+		this->pkb_builder_.addStatementListNode(else_stmt_list_node);
 
 
 		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
@@ -2523,6 +2526,7 @@
 		
 		//Need to add new_stmt_list_node & new_procedure_node to PKB tables
 		this->pkb_builder_.addProcedureNode(new_procedure_node);
+		this->pkb_builder_.addStatementListNode(new_stmt_list_node);
 		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
 
 		//Debugging statement
