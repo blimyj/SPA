@@ -193,6 +193,54 @@ namespace UnitTesting {
 		*/
 		// To ensure parser can correctly form multiple procedure nodes
 		TEST_METHOD(multipleProcedure_1) {
+			Parser parser = Parser();
+			PKB_PTR actual_pkb =
+				std::make_shared<PKB>(parser.parseFile("../UnitTesting/Parser/TestParser-4.txt"));
+			PROC_NODE_PTR_LIST actual_proc_ptr_list = actual_pkb->getProcedures();
+
+			Assert::IsTrue(actual_proc_ptr_list.size() == 3);
+			Assert::IsTrue("proc1" == actual_proc_ptr_list.at(0)->getProcedureName());
+			Assert::IsTrue("proc2" == actual_proc_ptr_list.at(1)->getProcedureName());
+			Assert::IsTrue("proc3" == actual_proc_ptr_list.at(2)->getProcedureName());
+		}
+
+		/*
+		procedure hasWhile {
+			print a;
+			while (a != 3) {
+				a = a - 1;
+			}
+		}
+		*/
+		// To ensure parser can correctly form while loops
+		// neq condition used here
+		TEST_METHOD(parsewhile_1) {
+			Parser parser = Parser();
+			PKB_PTR actual_pkb =
+				std::make_shared<PKB>(parser.parseFile("../UnitTesting/Parser/TestParser-5.txt"));
+
+			// Check program node is made
+			PROGRAM_NODE_PTR actual_prog = actual_pkb->getProgramNode();
+			PROGRAM_NODE_PTR prog = std::make_shared<ProgramNode>();
+			Assert::IsTrue(typeid(prog) == typeid(actual_prog));
+
+			// Check procedure list is made, with correct procedure name
+			PROC_NODE_PTR_LIST actual_proc_list = actual_prog->getProcedureNodeList();
+			PROC_NODE_PTR actual_proc = actual_proc_list.at(0);
+			Assert::IsTrue(actual_proc->getProcedureName() == "hasWhile");
+
+			// Check statementlist is made with 2 statement(children)
+			STMT_LIST_NODE_PTR actual_stmtlist = actual_proc->getProcedureStatementListNode();
+			STMT_NODE_PTR_LIST actual_stmt_list = actual_stmtlist->getStatementNodeList();
+			Assert::IsTrue(actual_stmt_list.size() == 2);
+
+			// Check print node validity (print a)
+			PrintNode* actual_print = static_cast<PrintNode*>(actual_stmt_list.at(0).get());
+			VAR_NODE_PTR actual_var1 = actual_print->getVariableNode();
+			Assert::IsTrue("a" == actual_var1->getVariableName());
+			Assert::IsTrue(1 == actual_print->getStatementNumber());
+
+			// 
 
 		}
 

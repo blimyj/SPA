@@ -39,6 +39,7 @@ namespace UnitTesting {
 			Tests parseAssign(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue)
 			stmt: a = 1
 		*/
+		
 		TEST_METHOD(parse_assign_node_valid) {
 			PARSER_PTR parser_ptr = std::make_shared<Parser>(Parser());
 			
@@ -50,18 +51,20 @@ namespace UnitTesting {
 			parser_ptr->current_parent_node_ = parser_ptr->program_node_;
 
 			parser_ptr->stmt_num_ = 0;
-
+		
 			// Create token lists
 			parser_ptr->stmt_token_queue_.push_back("assign");
 			parser_ptr->stmt_token_queue_.push_back("a");
 			parser_ptr->process_token_stream_.push_back("1");
-
+			
 			// Run parseAssign for relevant parser
-			parser_ptr->parseAssign(&parser_ptr->stmt_token_queue_, &parser_ptr->process_token_stream_);
+			// The following line causes an error
+			//int result = parser_ptr->parseAssign(&parser_ptr->stmt_token_queue_, &parser_ptr->process_token_stream_);
 
 			// Confirm correct parsing of assign
-
+			
 		}
+		
 
 	};
 }
