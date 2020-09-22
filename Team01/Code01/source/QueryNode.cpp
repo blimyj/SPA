@@ -6,6 +6,7 @@
 
 QueryNode::QueryNode() {
 	this->node_type = QueryNodeType::unassigned;
+	this->synonym_type = QuerySynonymType::unassigned;
 }
 
 void QueryNode::setNodeType(QUERY_NODE_TYPE node_type) {

@@ -51,7 +51,7 @@ void TestWrapper::parse(std::string filename) {
 	try {
 
 		this->pkb = parser.parseFile(filename);
-
+		
 	}
 	catch (const char* msg) {
 		std::cout << msg << "\n";

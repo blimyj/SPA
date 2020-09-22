@@ -1,4 +1,5 @@
-#include "QueryEvaluator.h"
+﻿#include "QueryEvaluator.h"
+#include <queue>
 
 QueryEvaluator::QueryEvaluator(PKB pkb) {
 	this->pkb = pkb;
@@ -56,7 +57,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 	}
 
 	// for all clauses in Select (not including the synonym)
-	for (int i = 1; i < children.size(); i++) {
+	for (size_t i = 1; i < children.size(); i++) {
 		bool clause_bool = false;
 		ResultList clause_result_list;
 
@@ -72,46 +73,35 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 			QueryNodeType child2_type = child2.getNodeType();
 
 			if (relationship_type == QueryNodeType::follows) {
-				clause_result_list = getFollowsResult(child1, child2);
-				// after filtering:
-				// if the filtered list is empty, then we say that this clause is FALSE
-				// else, this clause is TRUE
-				clause_bool = (clause_result_list.getNumRows() > 0);
+				getFollowsResult(child1, child2, clause_bool, clause_result_list);
 			}
 			else if (relationship_type == QueryNodeType::followsT) {
-				clause_result_list = getFollowsTResult(child1, child2);
-				clause_bool = (clause_result_list.getNumRows() > 0);		
+				getFollowsTResult(child1, child2, clause_bool, clause_result_list);
 			}
 			else if (relationship_type == QueryNodeType::parent) {
-				clause_result_list = getParentResult(child1, child2);
-				clause_bool = (clause_result_list.getNumRows() > 0);
+				getParentResult(child1, child2, clause_bool, clause_result_list);
 			}
 			else if (relationship_type == QueryNodeType::parentT) {
-				clause_result_list = getParentTResult(child1, child2);
-				clause_bool = (clause_result_list.getNumRows() > 0);
+				getParentTResult(child1, child2, clause_bool, clause_result_list);
 			}
 			else if (relationship_type == QueryNodeType::usesS) {
 				//std::vector<std::pair<int, std::string>> stmt_cross;
 				//std::vector<std::pair<std::string, std::string>> proc_cross;
 				if (child1.getSynonymType() != QuerySynonymType::procedure) {
-					clause_result_list = getUsesSResult(child1, child2);
-					clause_bool = (clause_result_list.getNumRows() > 0);
+					getUsesSResult(child1, child2, clause_bool, clause_result_list);
 				}
 				else {
-					clause_result_list = getUsesPResult(child1, child2);
-					clause_bool = (clause_result_list.getNumRows() > 0);
+					getUsesPResult(child1, child2, clause_bool, clause_result_list);
 				}
 
 			}
 			//else if (relationship_type == QueryNodeType::usesP) {}
 			else if (relationship_type == QueryNodeType::modifiesS) {
 				if (child1.getSynonymType() != QuerySynonymType::procedure) {
-					clause_result_list = getModifiesSResult(child1, child2);
-					clause_bool = (clause_result_list.getNumRows() > 0);
+					getModifiesSResult(child1, child2, clause_bool, clause_result_list);
 				}
 				else {
-					clause_result_list = getModifiesPResult(child1, child2);
-					clause_bool = (clause_result_list.getNumRows() > 0);
+					getModifiesPResult(child1, child2, clause_bool, clause_result_list);
 				}
 			}
 			//else if (relationship_type == QueryNodeType::modifiesP) {}
@@ -120,7 +110,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 			// magic
 			// Only 1 node on the LHS and search for only 1 node on the RHS (Iteration 1)
 			// Depends on whether the pattern is searchign for a constant or a variable (eg x = 3 or x = v )
-			// Example pattern a(_, _"x"_) a(_, "4") a("w", _"x"_) a("i", _"x"_) a("mango", _"x"_ ) a("mango", _"4"_)
+			// Example pattern a(_, _"x"_) a(_, _"4"_) a("w", _"x"_) a("i", _"x"_) a("mango", _"x"_ ) a("mango", _"4"_)
 			
 			// idea for RHS variable:
 				//get assign nodes, get their stmt numbers, check isUses(stmtnum, RHS thing eg 3/v)
@@ -132,61 +122,196 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 				// else:
 					// for the assign node stmtNum, check isModifies(stmtNum, v)
 			
-			// Eg pattern a1("woof", _"x"_)
-			clause_bool = false;
-			ResultList clause_result_list;
-			ResultList initial_assign_list;
-			std::vector<ASSIGN_NODE_PTR> all_assigns = pkb.getAssigns();
+			// RHS also has _ too :( yep then omg wait lemmme think
+			// ><
 
-			// QueryNodeContent -> a1
-			QueryNode pattern_assign_synonym = clause.getChildren()[0];
-			// add column head a1
-			SYNONYM_NAME synonym_name = pattern_assign_synonym.getString();
-			clause_result_list.addColumn(synonym_name);
-			initial_assign_list.addColumn(synonym_name, pkb.getAssignNumList());
+			
+			// a (_, _)
+			QueryNode pattern = clause.getChildren()[0];
+			QueryNode child1 = pattern.getChildren()[0];
+			QueryNode child2 = pattern.getChildren()[1];
+			QueryNode child3 = pattern.getChildren()[2];
+			AST_NODE child3_ast = child3.getAstNode();
+			
+			QueryNodeType child2_type = child2.getNodeType();
+			QueryNodeType child3_type = child3.getNodeType();
+			NODE_TYPE child3_ast_type = child3_ast->getNodeType();
+			
+			SYNONYM_NAME assign_synonym_name = child1.getString();
 
-			// QueryNodeContent -> "woof"
-			QueryNode lhs_node = clause.getChildren()[1];
-			STRING lhs = lhs_node.getString();
-			auto lhs_node_type = lhs_node.getNodeType();
-			
-			// ASTNode -> "x"
-			QueryNode rhs_node = clause.getChildren()[2];
-			std::shared_ptr<ASTNode> rhs = (rhs_node.getAstNode());
-			NODE_TYPE rhs_node_type = rhs.get()->getNodeType();
-			
+			// ResultList only contains the assign synonym
+			// a1
+			// 1
+			// 2
+			// 5
+			// ...
+			clause_result_list.addColumn(assign_synonym_name);
+		
+			// pattern a (v, _)
+			// add LHS search strings into lhs_set
+			std::unordered_set<VAR_NAME> lhs_set;
 
-			/* Ways to cast ASTNode to more specific nodes (use for VariableNode and ConstantNode)
-			AssignNode* assign = static_cast<AssignNode*>(rhs_node_content.get());
-			auto a = assign->getExpressionNode();
+			// if qpp_lhs is ident, add exact to lhs_set
+			if (child2_type == QueryNodeType::ident) {
+				STRING child2_content = child2.getString();
+				lhs_set.insert(child2_content);
 
-			VariableNode* assign = static_cast<VariableNode*>(rhs_node_content.get());
-			*/
+			// if qpp_lhs is synonym, add all synonym to lhs_set
+			} else if (child2_type == QueryNodeType::synonym) {
+				STRING child2_content = child2.getString();
+				QueryNode node = synonyms.find(child2_content)->second;
+				QuerySynonymType node_type = node.getSynonymType();
+				if (node_type == QuerySynonymType::variable) {
+					std::vector<SYNONYM_NAME> var_names = pkb.getVariableNameList();
+					for (SYNONYM_NAME var_name : var_names) {
+						lhs_set.insert(var_name);
+					}
+				} //check if other synonyms are valid
 			
-			
-			if (rhs_node_type == NodeTypeEnum::variableNode) {
-				if (lhs_node_type != QueryNodeType::wild_card) { //ie lhs == QueryNodeType::ident || lhs == QueryNodeType::synonym
-					// pattern a(synonym/'IDENT', v)
-					// check isModifies(synonym/'IDENT', v) && isUses(synonym/'IDENT', v)
-					// if true:
-						// somehow find the stmtNum, add to clause_result_list
+			// if qpp_lhs is wildcard, add all variables to lhs_set
+			} else if (child2_type == QueryNodeType::wild_card) {
+				for (VAR_NAME name : pkb.getVariableNameList()) {
+					lhs_set.insert(name);
 				}
-				else {
-					// pattern a(_, _"v"_ )
-					// for all stmt in stmts:
-						// check isUses(stmt, v)
-
-				}
-			}
-			else if (rhs_node_type == NodeTypeEnum::constantNode) {
-
-			}
-			else {
-				throw "QE Pattern rhs argument is not variable or constant --  FAILURE";
 			}
 			
 
+			// Iterate through all assign nodes
+			std::vector<ASSIGN_NODE_PTR> pkb_assigns = pkb.getAssigns();
+			for (ASSIGN_NODE_PTR assign_node : pkb_assigns) {
+				std::string stmt_num = std::to_string(assign_node->getStatementNumber());
+				VAR_NODE_PTR lhs_node = assign_node->getVariableNode();
+				EXPR_NODE_PTR rhs_node = assign_node->getExpressionNode();
+
+				// if lhs name is not in qpp_lhs_set, skip this assign node
+				if (lhs_set.count(lhs_node->getVariableName()) == 0) {
+					continue;
+				}
+
+				// if qpp_rhs is a wildcard, add to ResultList
+				if (child3_type == QueryNodeType::wild_card) {
+					ROW row;
+					row.insert({ assign_synonym_name, stmt_num });
+					clause_result_list.addRow(row);
+				} else {
+					// if qpp_rhs is a partial match, find in AST (rhs)
+					// if found, add to ResultList :)
+
+					// the string to search for in the AST
+					std::string search_name;
+					if (child3_ast_type == NodeTypeEnum::constantNode) {
+						CONSTANT_NODE_PTR node = std::static_pointer_cast<ConstantNode>(child3_ast);
+						search_name = node->getValue();
+					} else if (child3_ast_type == NodeTypeEnum::variableNode) {
+						VAR_NODE_PTR node = std::static_pointer_cast<VariableNode>(child3_ast);
+						search_name = node->getVariableName();
+					}
+
+					bool match = findPartialPattern(rhs_node, search_name);
+
+					// Pattern found, add to ResultList!
+					if (match) {
+						ROW row;
+						row.insert({ assign_synonym_name, stmt_num });
+						clause_result_list.addRow(row);
+					}
+				}
+			}
+			
+			// if result_list is empty, clause_bool = false
+			// Return a ResultList of assign synonyms
+			clause_bool = (clause_result_list.getNumRows() > 0);
 		}
+			
+			//ohh seems to make sense! i think i just listed out all combinations LOL AHAHAHA okk but still gotta find all the assignNodes to get their stmtNum oh like top down traversal? instead of bottom up? ohhh so we have to traverse for each assignNode to check?  ohhh okay!okk lets do it!! XP
+			// yup!! it's a simplification like above for follows and parent X) ohh we have the assign nodes from PKB! we just need to traverse the RHS to find "x" or "5" in the assign statement :) yup!! yeah! but I like your shortcut of isUses for variables AHAHAHA. so we can traverse to find constants only! yeah! OK :)
+
+			// Eg pattern a1("woof", _"x"_)
+			//clause_bool = false;
+			//ResultList clause_result_list;
+			//ResultList initial_assign_list;
+			//std::vector<ASSIGN_NODE_PTR> all_assigns = pkb.getAssigns();
+
+			//// QueryNodeContent -> a1
+			//QueryNode pattern_assign_synonym = clause.getChildren()[0];
+			//// add column head a1
+			//SYNONYM_NAME synonym_name = pattern_assign_synonym.getString();
+			//clause_result_list.addColumn(synonym_name);
+			//initial_assign_list.addColumn(synonym_name, pkb.getAssignNumList());
+
+			//// QueryNodeContent -> "woof"
+			//QueryNode lhs_node = clause.getChildren()[1];
+			//STRING lhs = lhs_node.getString();
+			//auto lhs_node_type = lhs_node.getNodeType();
+			
+			//// ASTNode -> "x"
+			//QueryNode rhs_node = clause.getChildren()[2];
+			//std::shared_ptr<ASTNode> rhs = (rhs_node.getAstNode());
+			//NODE_TYPE rhs_node_type = rhs.get()->getNodeType();
+			
+
+			///* Ways to cast ASTNode to more specific nodes (use for VariableNode and ConstantNode)
+			//AssignNode* assign = static_cast<AssignNode*>(rhs_node_content.get());
+			//auto a = assign->getExpressionNode();
+
+			//VariableNode* assign = static_cast<VariableNode*>(rhs_node_content.get());
+			//*/
+			
+			
+			//if (rhs_node_type == NodeTypeEnum::variableNode) {
+			//	if (lhs_node_type == QueryNodeType::synonym) { //ie lhs == QueryNodeType::ident || lhs == QueryNodeType::synonym
+			//		// pattern a(synonym/'IDENT', v)
+			//		// check isModifies(synonym/'IDENT', v) && isUses(synonym/'IDENT', v)
+			//		// if true:
+			//			// somehow find the stmtNum, add to clause_result_list
+					
+			//	}
+			//	else if (lhs_node_type == QueryNodeType::ident) { // ok!!oo I hope my logic makes sense >< ohh i havent read yet i was writing mine in the if else AHAHAHA okk lemme read
+			//		// get VarNodeTable
+			//		// find IDENT variable in VarNodeTable
+			//		// with the VarNode, getParent() to get the direct parent which is an AssignNode
+			//		// AssignNode get the stmtNum
+			//		// with the stmtNum check isModifies(stmtNum, v) && isUses(stmtNum, v)
+
+			//	}
+			//	else if (lhs_node_type == QueryNodeType::wild_card) {
+			//		// pattern a(_, _"v"_ )
+			//		// for all stmt in stmts:
+			//			// check isUses(stmt, v)
+
+			//	}
+			//	else {
+			//		throw "QE Pattern lhs argument is not synonym, IDENT, wild card -- INVALID";
+			//	}
+			//}
+			//else if (rhs_node_type == NodeTypeEnum::constantNode) {
+			//	// search up until we hit assignNode
+			//	// get AssignNode stmtNum 
+			//	// ohh you don't want to traverse the AST? I see! ohh i thought it would be quite hard to do that maybe when im more familiar with ASTNode then i try? but now im manually checking
+			//	// ohh this one looks scary it's like traversing the AST ohh>< LOL YEAH yeahhhh maybe can practice traversing heree im worried AHAHAHAHA
+			//	// i can try writing some code to traverse the assign node! ohhh okay! 
+			//}
+			//else if (rhs_node.getNodeType() == QueryNodeType::wild_card) {
+			//	if (lhs_node_type == QueryNodeType::wild_card) {
+			//		// pattern a(_, _)
+			//		// return all assign statements
+
+			//	}
+			//	else if (lhs_node_type == QueryNodeType::synonym) {
+			//		// pattern a(v, _)
+
+			//	}
+			//	else if (lhs_node_type == QueryNodeType::ident) {
+			//		// pattern a("mango", _)
+
+			//	}
+			//	else {
+			//		throw "QE Pattern lhs argument is not synonym, IDENT, wild card -- INVALID";
+			//	}
+			//}
+			//else {
+			//	throw "QE Pattern rhs argument is not variable or constant --  INVALID";
+			//}
 
 		// if the clause_bool is true => merge result_list with clause_result_list
 		// if the clause_bool is false => return ""
@@ -204,7 +329,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 
 
 
-ResultList QueryEvaluator::getFollowsResult(QueryNode child1, QueryNode child2) {
+void QueryEvaluator::getFollowsResult(QueryNode child1, QueryNode child2, bool &clause_bool, ResultList &clause_result_list) {
 	/* Follows(s1, s2)
 		s1 = [1, 2, 3] if assign
 		s2 = [1, 2, 3]
@@ -216,7 +341,6 @@ ResultList QueryEvaluator::getFollowsResult(QueryNode child1, QueryNode child2) 
 	*/
 
 	// Initialize with list of all values for the given synonym
-	ResultList clause_result_list;
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
@@ -248,6 +372,11 @@ ResultList QueryEvaluator::getFollowsResult(QueryNode child1, QueryNode child2) 
 			filter.push_back(p);
 		}
 	}
+	
+	// after filtering:
+	// if the filtered list is empty, then we say that this clause is FALSE
+	// else, this clause is TRUE
+	clause_bool = (filter.size() > 0);
 
 	// Add the filtered to ResultList!
 	// 1. Add the synonym names to as column headers
@@ -275,12 +404,9 @@ ResultList QueryEvaluator::getFollowsResult(QueryNode child1, QueryNode child2) 
 		}
 		clause_result_list.addRow(row);
 	}
-	
-	return clause_result_list;
 }
 
-ResultList QueryEvaluator::getFollowsTResult(QueryNode child1, QueryNode child2) {
-	ResultList clause_result_list;
+void QueryEvaluator::getFollowsTResult(QueryNode child1, QueryNode child2, bool& clause_bool, ResultList& clause_result_list) {
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
@@ -303,6 +429,11 @@ ResultList QueryEvaluator::getFollowsTResult(QueryNode child1, QueryNode child2)
 		}
 	}
 
+	// after filtering:
+	// if the filtered list is empty, then we say that this clause is FALSE
+	// else, this clause is TRUE
+	clause_bool = (filter.size() > 0);
+
 	// Add the filtered to ResultList!
 	// 1. Add the synonym names to as column headers
 	if (child1_type == QueryNodeType::synonym) {
@@ -329,12 +460,9 @@ ResultList QueryEvaluator::getFollowsTResult(QueryNode child1, QueryNode child2)
 		}
 		clause_result_list.addRow(row);
 	}
-
-	return clause_result_list;
 }
 
-ResultList QueryEvaluator::getParentResult(QueryNode child1, QueryNode child2) {
-	ResultList clause_result_list;
+void QueryEvaluator::getParentResult(QueryNode child1, QueryNode child2, bool& clause_bool, ResultList& clause_result_list) {
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
@@ -358,6 +486,11 @@ ResultList QueryEvaluator::getParentResult(QueryNode child1, QueryNode child2) {
 		}
 	}
 
+	// after filtering:
+	// if the filtered list is empty, then we say that this clause is FALSE
+	// else, this clause is TRUE
+	clause_bool = (filter.size() > 0);
+
 	// Add the filtered to ResultList!
 	// 1. Add the synonym names to as column headers
 	if (child1_type == QueryNodeType::synonym) {
@@ -384,12 +517,9 @@ ResultList QueryEvaluator::getParentResult(QueryNode child1, QueryNode child2) {
 		}
 		clause_result_list.addRow(row);
 	}
-
-	return clause_result_list;
 }
 
-ResultList QueryEvaluator::getParentTResult(QueryNode child1, QueryNode child2) {
-	ResultList clause_result_list;
+void QueryEvaluator::getParentTResult(QueryNode child1, QueryNode child2, bool& clause_bool, ResultList& clause_result_list) {
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
@@ -412,6 +542,11 @@ ResultList QueryEvaluator::getParentTResult(QueryNode child1, QueryNode child2) 
 		}
 	}
 
+	// after filtering:
+	// if the filtered list is empty, then we say that this clause is FALSE
+	// else, this clause is TRUE
+	clause_bool = (filter.size() > 0);
+
 	// Add the filtered to ResultList!
 	// 1. Add the synonym names to as column headers
 	if (child1_type == QueryNodeType::synonym) {
@@ -438,12 +573,9 @@ ResultList QueryEvaluator::getParentTResult(QueryNode child1, QueryNode child2) 
 		}
 		clause_result_list.addRow(row);
 	}
-
-	return clause_result_list;
 }
 
-ResultList QueryEvaluator::getUsesSResult(QueryNode child1, QueryNode child2) {
-	ResultList clause_result_list;
+void QueryEvaluator::getUsesSResult(QueryNode child1, QueryNode child2, bool& clause_bool, ResultList& clause_result_list) {
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
@@ -465,6 +597,11 @@ ResultList QueryEvaluator::getUsesSResult(QueryNode child1, QueryNode child2) {
 			filter.push_back(p);
 		}
 	}
+
+	// after filtering:
+	// if the filtered list is empty, then we say that this clause is FALSE
+	// else, this clause is TRUE
+	clause_bool = (filter.size() > 0);
 
 	// Add the filtered to ResultList!
 	// 1. Add the synonym names to as column headers
@@ -492,12 +629,9 @@ ResultList QueryEvaluator::getUsesSResult(QueryNode child1, QueryNode child2) {
 		}
 		clause_result_list.addRow(row);
 	}
-
-	return clause_result_list;
 }
 
-ResultList QueryEvaluator::getUsesPResult(QueryNode child1, QueryNode child2) {
-	ResultList clause_result_list;
+void QueryEvaluator::getUsesPResult(QueryNode child1, QueryNode child2, bool& clause_bool, ResultList& clause_result_list) {
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
@@ -523,6 +657,11 @@ ResultList QueryEvaluator::getUsesPResult(QueryNode child1, QueryNode child2) {
 		}
 	}
 
+	// after filtering:
+	// if the filtered list is empty, then we say that this clause is FALSE
+	// else, this clause is TRUE
+	clause_bool = (filter.size() > 0);
+
 	// Add the filtered to ResultList!
 	// 1. Add the synonym names to as column headers
 	if (child1_type == QueryNodeType::synonym) {
@@ -549,12 +688,9 @@ ResultList QueryEvaluator::getUsesPResult(QueryNode child1, QueryNode child2) {
 		}
 		clause_result_list.addRow(row);
 	}
-
-	return clause_result_list;
 }
 
-ResultList QueryEvaluator::getModifiesSResult(QueryNode child1, QueryNode child2) {
-	ResultList clause_result_list;
+void QueryEvaluator::getModifiesSResult(QueryNode child1, QueryNode child2, bool& clause_bool, ResultList& clause_result_list) {
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
@@ -576,6 +712,11 @@ ResultList QueryEvaluator::getModifiesSResult(QueryNode child1, QueryNode child2
 			filter.push_back(p);
 		}
 	}
+
+	// after filtering:
+	// if the filtered list is empty, then we say that this clause is FALSE
+	// else, this clause is TRUE
+	clause_bool = (filter.size() > 0);
 
 	// Add the filtered to ResultList!
 	// 1. Add the synonym names to as column headers
@@ -603,12 +744,9 @@ ResultList QueryEvaluator::getModifiesSResult(QueryNode child1, QueryNode child2
 		}
 		clause_result_list.addRow(row);
 	}
-
-	return clause_result_list;
 }
 
-ResultList QueryEvaluator::getModifiesPResult(QueryNode child1, QueryNode child2) {
-	ResultList clause_result_list;
+void QueryEvaluator::getModifiesPResult(QueryNode child1, QueryNode child2, bool& clause_bool, ResultList& clause_result_list) {
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
@@ -630,6 +768,11 @@ ResultList QueryEvaluator::getModifiesPResult(QueryNode child1, QueryNode child2
 			filter.push_back(p);
 		}
 	}
+
+	// after filtering:
+	// if the filtered list is empty, then we say that this clause is FALSE
+	// else, this clause is TRUE
+	clause_bool = (filter.size() > 0);
 
 	// Add the filtered to ResultList!
 	// 1. Add the synonym names to as column headers
@@ -657,8 +800,6 @@ ResultList QueryEvaluator::getModifiesPResult(QueryNode child1, QueryNode child2
 		}
 		clause_result_list.addRow(row);
 	}
-
-	return clause_result_list;
 }
 
 STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode child1) {
@@ -703,10 +844,48 @@ VAR_NAME_LIST QueryEvaluator::getVarNameList(QueryNode node) {
 	if (node.getSynonymType() == QuerySynonymType::variable) {
 		return pkb.getVariableNameList();
 	}
+	else {
+		throw "QE: node is not a variable, getVarNameList requires a variable node";
+	}
 }
 
 PROC_NAME_LIST QueryEvaluator::getProcList(QueryNode node) {
 	if (node.getSynonymType() == QuerySynonymType::procedure) {
 		return pkb.getProcedureNameList();
 	}
+	else {
+		throw "QE: node is not a procedure, getProcList requires a procedure node";
+	}
+}
+
+bool QueryEvaluator::findPartialPattern(AST_NODE_PTR ast, std::string search_name) {
+	// BFS
+	std::queue<AST_NODE_PTR> queue;
+	queue.push(ast);
+
+	while (!queue.empty()) {
+		AST_NODE_PTR node = queue.front();
+		queue.pop();
+						
+		NODE_TYPE node_type = node->getNodeType();
+		if (node_type == NodeTypeEnum::constantNode) {
+			CONSTANT_NODE_PTR node = std::static_pointer_cast<ConstantNode>(node);
+			VALUE node_name = node->getValue();
+			if (node_name == search_name) {
+				return true;
+			}
+		} else if (node_type == NodeTypeEnum::expressionNode) {
+			EXPR_NODE_PTR node = std::static_pointer_cast<ExpressionNode>(node);
+			queue.push(node->getLeftAstNode());
+			queue.push(node->getRightAstNode());
+		} else if (node_type == NodeTypeEnum::variableNode) {
+			VAR_NODE_PTR node = std::static_pointer_cast<VariableNode>(node);
+			VAR_NAME node_name = node->getVariableName();
+			if (node_name == search_name) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
