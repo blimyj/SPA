@@ -2,6 +2,7 @@
 
 #include "QueryNode.h"
 #include "QueryNodeType.h"
+#include <iterator>
 
 QueryNode::QueryNode() {
 	this->node_type = QueryNodeType::unassigned;
@@ -60,8 +61,10 @@ INTEGER QueryNode::getInteger() {
 }
 
 
+
 void QueryNode::setASTNode(AST_NODE astnode) {
 	this->node_type = { QueryNodeType::expression };
+
 	QueryNodeContent content = QueryNodeContent(astnode);
 	this->node_content = content;
 }
@@ -126,16 +129,15 @@ STRING QueryNode::getString() {
 	return node_content.getString();
 }
 
-
-void QueryNode::setChildren(QUERY_NODE_POINTERS children) {
-	this->children = children;
+void QueryNode::setChildren(QUERY_NODE_POINTERS children, int size) {
+	for (int i = 0; i < size; i++) {
+		this->children.push_back(children[i]);
+	}
 }
 
-QUERY_NODE_POINTERS QueryNode::getChildren() {
-	return children;
+QUERY_NODE_LIST QueryNode::getChildren() {
+	return QUERY_NODE_LIST(children);
 }
-
-
 
 QUERY_NODE_CONTENT QueryNode::getQueryNodeContent() {
 	return node_content;

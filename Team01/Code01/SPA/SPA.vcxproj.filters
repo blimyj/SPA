@@ -127,6 +127,33 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\QueryEvaluator.h">
+<<<<<<< HEAD
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryNodeContent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryNodeType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QuerySynonymType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ResultList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ResultListManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\ASTNode\NodeTypeEnum.h">
+=======
+>>>>>>> master
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\QueryNode.h">
@@ -251,12 +278,44 @@
     <ClCompile Include="..\source\PKB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
+<<<<<<< HEAD
+    <ClCompile Include="..\source\QueryEvaluator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryNodeContent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKBStub.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ResultList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+=======
+    <ClCompile Include="..\source\PKB\ASTNode\ProgramNode.cpp">
+=======
 	<ClCompile Include="..\source\PKB\ASTNode\ProgramNode.cpp">
+>>>>>>> master
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\PKB\DesignEntities\StatementListTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\PKB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+>>>>>>> master
+=======
     <ClCompile Include="..\source\QueryEvaluator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -275,5 +334,6 @@
     <ClCompile Include="..\source\ResultList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+>>>>>>> master
   </ItemGroup>
 </Project>
