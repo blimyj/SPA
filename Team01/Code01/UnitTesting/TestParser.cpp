@@ -8,8 +8,7 @@
 #include <string>
 #include <cstdlib>
 
-#include "Parser.h"
-#include "PKB.h"
+#include "..\source\Parser.h"
 
 typedef std::shared_ptr<PKB> PKB_PTR;
 
@@ -178,8 +177,23 @@ namespace UnitTesting {
 			Assert::IsTrue(EXPR_TYPE::min == actual_expr1_type);
 			Assert::IsTrue(EXPR_TYPE::div == actual_expr2_type);
 
-//			Assert::IsTrue("10" == actual_const->getValue());
+			Assert::IsTrue("10" == actual_const->getValue());
 			Assert::IsTrue(2 == actual_assign->getStatementNumber());
+		}
+		/*
+		procedure proc1 {
+			read a;
+		}
+		procedure proc2 {
+			read b;
+		}
+		procedure proc3 {
+			read b;
+		}
+		*/
+		// To ensure parser can correctly form multiple procedure nodes
+		TEST_METHOD(multipleProcedure_1) {
+
 		}
 
 	};
