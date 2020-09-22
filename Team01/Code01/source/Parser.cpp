@@ -20,7 +20,6 @@
 
 	PKB Parser::parseFile(STRING filename) {
 		//Construct program root node
-		//Will this be deleted after function exits?
 		this->program_node_ = (std::make_shared<ProgramNode>)();
 		this->pkb_builder_ = PKBBuilder();
 		this->pkb_builder_.setProgramNode(this->program_node_);
@@ -344,62 +343,6 @@
 		// Not considered for now.
 		return 0;
 	}
-
-	/*Note: For 'read' / 'print' / 'procedure' / 'call' we are unsure if keyword<NAME> is valid.
-	However we assume they are not for now. (This has been confirmed)
-	For example
-	"readx"
-	"procedureabv"
-	"callmain"
-	*/
-
-	/*Note: We assume that the first 4 terminals of the while stmt must be on the same line
-	�while� �(� cond_expr �)� �{� stmtLst <----- Terminals must be on the same line, stmtLst could be on same or diff.
-
-	stmtLst �}� <---- Can be on a different line, we make no assumption if stmtLst & �}� must be on the same line
-	*/
-
-	/*Note: We assume that the first 4 terminals of the if stmt must be on the same line
-	�if� �(� cond_expr �)� �then� �{� stmtLst <----- Terminals must be on the same line, stmtLst could be on same or diff.
-
-	stmtLst �}� �else� �{� stmtLst �}� <- Can be on a different line,
-											we make no assumption if any of these terminals & non-terminals must be on the same line
-	*/
-
-	/*Note: We do not assume that a newline must follow '}' */
-
-	/*Note: (WRONG ASSUMPTION) We are assuming each statement cannot be spread out across multiple lines
-	For example, the following is invalid
-	a
-	=
-	3;
-	*/
-
-	/*Note: (WRONG ASSUMPTION) We are assuming each statement must end with a ; on the same line.
-	For example, the following is invalid
-	a=3;
-	*/
-
-
-	/*
-	For read, print, assign, call statements, the terminal ';' to indicate the end of the statement.
-
-	For procedure, while, if-then, else statement, the terminal '{' indicates the end of the opening segment of the container statement.
-
-	For statement lists, the terminal  '}' to indicate the end of the statement list.
-
-	Please note that for the above statements that the end of the statement, statement list, or opening segment
-	DOES NOT indicate the end of the line. There can be combinations of the aforementioned in a single line. (A 50 line program could be compressed to 1 line)
-	*/
-
-	/*
-	Due to the possibility of 'read', 'print', 'if', 'else', 'then', 'while', 'procedure', 'call' being variable names,
-	we must look ahead at least 1 token to see if it is an assign statement.
-	*/
-
-	/*
-	Note that for cond_expr, if a boolean operator is applied to it, the operand(s) cond_expr will each be encapsulated by the terminals '(', ')'
-	*/
 
 	int Parser::parseWhile(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
 
@@ -980,17 +923,6 @@
 		else {
 			throw "Error: ConditionNode/RelationNode expected, unknown node type found.";
 		}
-
-		/* This is now covered earlier
-		//Check for '{'
-
-		if (this->process_token_stream_.front() != "{") {
-			std::string msg = "Error: Expected '{' but found '" + this->process_token_stream_.front() + "'";
-			throw msg;
-		}
-		this->process_token_stream_.pop_front(); // Pops out '{'
-		*/
-
 
 		//Construct new_stmt_list_node & new_procedure_node
 		std::shared_ptr<StatementListNode> new_stmt_list_node = std::make_shared<StatementListNode>();
@@ -1657,98 +1589,6 @@
 			throw "Error: ConditionNode/RelationNode expected, unknown node type found.";
 		}
 
-		/*OLD
-		this->process_token_stream_.pop_front(); // Remove "(" type token
-
-
-
-		//Read in simple comparison (only 1 var/const on each side)	
-
-		//To read for simple comparison
-		STRING lhs_rel_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
-		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
-		std::shared_ptr<ASTNode> lhs_node;
-		//Create node & add to table
-		if (isalpha(lhs_rel_token.at(0))) {
-			lhs_node = std::make_shared<VariableNode>();
-			std::static_pointer_cast<VariableNode>(lhs_node)->setVariableName(lhs_rel_token);
-			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(lhs_node));
-		}
-		else if (isdigit(lhs_rel_token.at(0))) {
-			lhs_node = std::make_shared<ConstantNode>();
-			std::static_pointer_cast<ConstantNode>(lhs_node)->setValue(lhs_rel_token);
-			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(lhs_node));
-		}
-		else {
-			return -1;
-		}
-
-		RelationTypeEnum rel_comp;
-		STRING rel_comp_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
-		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
-		if (rel_comp_token == "!=") {
-			rel_comp = RelationTypeEnum::neq;
-		}
-		else if (rel_comp_token == "==") {
-			rel_comp = RelationTypeEnum::eq;
-		}
-		else if (rel_comp_token == ">") {
-			rel_comp = RelationTypeEnum::gt;
-		}
-		else if (rel_comp_token == ">=") {
-			rel_comp = RelationTypeEnum::gte;
-		}
-		else if (rel_comp_token == "<=") {
-			rel_comp = RelationTypeEnum::lte;
-		}
-		else if (rel_comp_token == "<") {
-			rel_comp = RelationTypeEnum::lt;
-		}
-		else {
-			return -1;
-		}
-
-		STRING rhs_rel_token = this->process_token_stream_.front(); //Retrieves potential NAME/CONST token
-		this->process_token_stream_.pop_front(); // Pops out NAME/CONST token
-		std::shared_ptr<ASTNode> rhs_node;
-		//Create node & add to table
-		if (isalpha(rhs_rel_token.at(0))) {
-			rhs_node = std::make_shared<VariableNode>();
-			std::static_pointer_cast<VariableNode>(rhs_node)->setVariableName(rhs_rel_token);
-			this->pkb_builder_.addVariableNode(std::static_pointer_cast<VariableNode>(rhs_node));
-		}
-		else if (isdigit(rhs_rel_token.at(0))) {
-			rhs_node = std::make_shared<ConstantNode>();
-			std::static_pointer_cast<ConstantNode>(rhs_node)->setValue(rhs_rel_token);
-			this->pkb_builder_.addConstantNode(std::static_pointer_cast<ConstantNode>(rhs_node));
-		}
-		else {
-			return -1;
-		}
-
-		std::shared_ptr<RelationNode> relation_node = std::make_shared<RelationNode>();
-		relation_node->setRelationType(rel_comp);
-		relation_node->setLeftAstNode(lhs_node);
-		relation_node->setRightAstNode(rhs_node);
-
-		std::shared_ptr<ConditionNode> condition_node = std::make_shared<ConditionNode>();
-		condition_node->setConditionType(ConditionTypeEnum::none);
-		condition_node->setLeftAstNode(relation_node);
-
-		//Check for ')' , "then" , '{'
-		if (this->process_token_stream_.front() != ")") {
-			return -1;
-		}
-		this->process_token_stream_.pop_front(); // Pops out '{'
-		*/
-
-		/*No longer required as it has already been popped earlier
-		if (this->process_token_stream_.front() != "then") {
-			return -1;
-		}
-		this->process_token_stream_.pop_front(); // Pops out '{'
-		*/
-
 		if (this->process_token_stream_.front() != "{") {
 			return -1;
 		}
@@ -1827,8 +1667,6 @@
 					, var_name);
 			}
 		}
-
-
 
 		//change parent tracker to stmtlistnode_ptr
 		this->current_parent_node_ = if_stmt_list_node;
@@ -2102,7 +1940,6 @@
 		//We maintain an operator stack as well with type OperatorEnum {Plus, Minus, Times, Divide, LParen, RParen}
 		//We need a precedence checker
 
-
 		//Converting tokens to nodes the moment we dequeue them from this->stmt_token_queue_
 		//We use shunting yard algo with modifications
 		//When we want to place an operator into the output stack,we instead create a new ExpressionNode (top Node of Stack is rhs, 2nd top is lhs)
@@ -2253,11 +2090,6 @@
 			}
 		}
 
-		std::cout << "New Assign Node created.";
-		//TODO: Remove Debugging statements.
-		//USE BFS HERE
-		//printTree(new_assign_node);
-
 		//TODO: Test for invalid assignment statement case. (Mismatch parentheses, missing operand, missing operator, no ';')
 		//REPLACEMENT END
 		return 0;
@@ -2291,14 +2123,6 @@
 		this->stmt_num_++;
 		new_read_node->setStatementNumber(this->stmt_num_);
 
-		/*
-		//Set child & parent pointers
-		new_read_node->setParentNode(this->current_parent_node_);
-		this->current_parent_node_->addChildNode(new_read_node);
-		
-		new_var_node->setParentNode(new_read_node);
-		new_read_node->addChildNode(new_var_node);
-		*/
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_read_node);
 		new_read_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
 
@@ -2400,14 +2224,6 @@
 		this->stmt_num_++;
 		new_print_node->setStatementNumber(this->stmt_num_);
 
-		/*
-		//Set child & parent pointers
-		new_print_node->setParentNode(this->current_parent_node_);
-		this->current_parent_node_->addChildNode(new_print_node);
-
-		new_var_node->setParentNode(new_print_node);
-		new_print_node->addChildNode(new_var_node);
-		*/
 		std::static_pointer_cast<StatementListNode>(this->current_parent_node_)->addStatementNode(new_print_node);
 		new_print_node->setStatementListNode(std::static_pointer_cast<StatementListNode>(this->current_parent_node_));
 
@@ -2504,21 +2320,11 @@
 		new_procedure_node->setProcedureName(name_token);
 		new_procedure_node->setProcedureStatementListNode(new_stmt_list_node);
 
-		/*
-		//Set child & parent pointers
-		new_stmt_list_node->setParentNode(new_procedure_node);
-		new_procedure_node->addChildNode(new_stmt_list_node);
-		new_procedure_node->setParentNode(this->current_parent_node_);
-		*/
-
 		//Check that we are actually adding this new procedure to programNode
 		if (this->current_parent_node_->getNodeType() != NodeTypeEnum::programNode) {
 			return -1;
 		}
-		
-		/*
-		this->current_parent_node_->addChildNode(new_procedure_node);
-		*/
+
 		std::static_pointer_cast<ProgramNode>(this->current_parent_node_)->addProcedureNode(new_procedure_node);
 
 		//change parent tracker to stmtlistnode_ptr
@@ -2540,26 +2346,7 @@
 		return 0;
 	}
 
-	int Parser::parseStmtListClose() {
-		//Method 1: Accounts for procedure statement list only.
-		/*
-		//Checks if stmtlist size < 1, returns non-zero int as a signal that there is a problem
-		if (this->current_parent_node_->getChildrenNode().size() < 1) {
-			return -1;
-		}
-		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
-		//Set current_parent_node_ as parent of parent of curr_parent_node_
-		//current_parent_node_ should be stmt_list_node
-		this->current_parent_node_ = this->current_parent_node_->getParentNode();
-		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
-		this->current_parent_node_ = this->current_parent_node_->getParentNode();
-		std::cout << "\n ParentNode Size: " << this->current_parent_node_->getChildrenNode().size();
-
-		//Debugging stmt
-		std::shared_ptr<ProcedureNode> proc_node = std::static_pointer_cast<ProcedureNode>(this->current_parent_node_->getChildrenNode().at(0));
-		std::cout << "\nExited out of procedure node: " << proc_node->getProcedureName();
-		*/
-		
+	int Parser::parseStmtListClose() {	
 		//Method 2: accounts for container statements
 		
 		//Part 1: When closing a stmtList Node, 
@@ -2571,7 +2358,6 @@
 
 		//Part 2:
 		//Assuming we maintain curr_parent_node_
-
 
 		//There are 2 different ways to change the curr_parent_node_ (Refer to StmtListCloseChangeParentNode image)
 		if (this->current_parent_node_->getParentNode()->getNodeType() == NodeTypeEnum::ifNode){
