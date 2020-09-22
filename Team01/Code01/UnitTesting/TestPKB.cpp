@@ -6,9 +6,10 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTesting {
 	
+	// Tests PKBBuilder as well.
 	TEST_CLASS(PKBTest) {
 	public:
-		TEST_METHOD(getAssigns) {
+		TEST_METHOD(addAssign_getAssigns_True) {
 			PKBBuilder pkb_builder;
 			ASSIGN_NODE_PTR expected = std::make_shared<AssignNode>();
 			pkb_builder.addAssignNode(expected);
@@ -17,7 +18,7 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 		
-		TEST_METHOD(getConstants) {
+		TEST_METHOD(addConstant_getConstants_True) {
 			PKBBuilder pkb_builder;
 			CONSTANT_NODE_PTR expected = std::make_shared<ConstantNode>();
 			pkb_builder.addConstantNode(expected);
@@ -26,7 +27,7 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
-		TEST_METHOD(getIfs) {
+		TEST_METHOD(addIf_getIfs_True) {
 			PKBBuilder pkb_builder;
 			IF_NODE_PTR expected = std::make_shared<IfNode>();
 			pkb_builder.addIfNode(expected);
@@ -35,7 +36,7 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
-		TEST_METHOD(getPrints) {
+		TEST_METHOD(addPrint_getPrints_True) {
 			PKBBuilder pkb_builder;
 			PRINT_NODE_PTR expected = std::make_shared<PrintNode>();
 			pkb_builder.addPrintNode(expected);
@@ -44,7 +45,7 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
-		TEST_METHOD(getProcedures) {
+		TEST_METHOD(addProcedure_getProcedures_True) {
 			PKBBuilder pkb_builder;
 			PROC_NODE_PTR expected = std::make_shared<ProcedureNode>();
 			pkb_builder.addProcedureNode(expected);
@@ -53,7 +54,7 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
-		TEST_METHOD(getReads) {
+		TEST_METHOD(addRead_getReads_True) {
 			PKBBuilder pkb_builder;
 			READ_NODE_PTR expected = std::make_shared<ReadNode>();
 			pkb_builder.addReadNode(expected);
@@ -62,7 +63,7 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
-		TEST_METHOD(getStatementLists) {
+		TEST_METHOD(addStatementList_getStatementLists_True) {
 			PKBBuilder pkb_builder;
 			STMT_LIST_NODE_PTR expected = std::make_shared<StatementListNode>();
 			pkb_builder.addStatementListNode(expected);
@@ -71,7 +72,7 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
-		TEST_METHOD(getStatements) {
+		TEST_METHOD(addStatement_getStatements_True) {
 			PKBBuilder pkb_builder;
 			ASSIGN_NODE_PTR expected = std::make_shared<AssignNode>();
 			pkb_builder.addStatementNode(expected);
@@ -80,7 +81,7 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
-		TEST_METHOD(getVariables) {
+		TEST_METHOD(addVariable_getVariables_True) {
 			PKBBuilder pkb_builder;
 			VAR_NODE_PTR expected = std::make_shared<VariableNode>();
 			pkb_builder.addVariableNode(expected);
@@ -89,7 +90,7 @@ namespace UnitTesting {
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
 
-		TEST_METHOD(getWhiles) {
+		TEST_METHOD(addWhile_getWhiles_True) {
 			PKBBuilder pkb_builder;
 			WHILE_NODE_PTR expected = std::make_shared<WhileNode>();
 			pkb_builder.addWhileNode(expected);
@@ -97,6 +98,16 @@ namespace UnitTesting {
 			WHILE_NODE_PTR actual = pkb.getWhiles().at(0);
 			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
 		}
+
+		TEST_METHOD(setProgramNode_getProgramNode_True) {
+			PKBBuilder pkb_builder;
+			PROGRAM_NODE_PTR expected = std::make_shared<ProgramNode>();
+			pkb_builder.setProgramNode(expected);
+			PKB pkb = pkb_builder.build();
+			PROGRAM_NODE_PTR actual = pkb.getProgramNode();
+			Assert::IsTrue(std::addressof(*expected) == std::addressof(*actual));
+		}
+
 
 	};
 
