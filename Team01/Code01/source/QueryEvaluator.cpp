@@ -196,15 +196,17 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 					// if qpp_rhs is a partial match, find in AST (rhs)
 					// if found, add to ResultList 
 					AST_NODE_PTR child3_ast = child3.getAstNode();
-					NODE_TYPE child3_ast_type = child3_ast->getNodeType();
-
-					// the string to search for in the AST
+					EXPR_NODE_PTR expr_node = std::static_pointer_cast<ExpressionNode>(child3_ast);
+					
+					// Get constant/variable name of expr_node
 					std::string search_name;
-					if (child3_ast_type == NodeTypeEnum::constantNode) {
-						CONSTANT_NODE_PTR node = std::static_pointer_cast<ConstantNode>(child3_ast);
+					AST_NODE_PTR expr_node_lhs = expr_node->getLeftAstNode();
+					NODE_TYPE expr_node_lhs_type = expr_node_lhs->getNodeType();
+					if (expr_node_lhs_type == NodeTypeEnum::constantNode) {
+						CONSTANT_NODE_PTR node = std::static_pointer_cast<ConstantNode>(expr_node_lhs);
 						search_name = node->getValue();
-					} else if (child3_ast_type == NodeTypeEnum::variableNode) {
-						VAR_NODE_PTR node = std::static_pointer_cast<VariableNode>(child3_ast);
+					} else if (expr_node_lhs_type == NodeTypeEnum::variableNode) {
+						VAR_NODE_PTR node = std::static_pointer_cast<VariableNode>(expr_node_lhs);
 						search_name = node->getVariableName();
 					}
 
@@ -867,19 +869,19 @@ bool QueryEvaluator::findPartialPattern(AST_NODE_PTR ast, std::string search_nam
 						
 		NODE_TYPE node_type = node->getNodeType();
 		if (node_type == NodeTypeEnum::constantNode) {
-			CONSTANT_NODE_PTR node = std::static_pointer_cast<ConstantNode>(node);
-			VALUE node_name = node->getValue();
+			CONSTANT_NODE_PTR n = std::static_pointer_cast<ConstantNode>(node);
+			VALUE node_name = n->getValue();
 			if (node_name == search_name) {
 				return true;
 			}
 		} else if (node_type == NodeTypeEnum::expressionNode) {
-			EXPR_NODE_PTR node = std::static_pointer_cast<ExpressionNode>(node);
-			for (AST_NODE_PTR child : node->getChildrenNode()) {
+			EXPR_NODE_PTR n = std::static_pointer_cast<ExpressionNode>(node);
+			for (AST_NODE_PTR child : n->getChildrenNode()) {
 				queue.push(child);
 			}
 		} else if (node_type == NodeTypeEnum::variableNode) {
-			VAR_NODE_PTR node = std::static_pointer_cast<VariableNode>(node);
-			VAR_NAME node_name = node->getVariableName();
+			VAR_NODE_PTR n = std::static_pointer_cast<VariableNode>(node);
+			VAR_NAME node_name = n->getVariableName();
 			if (node_name == search_name) {
 				return true;
 			}
