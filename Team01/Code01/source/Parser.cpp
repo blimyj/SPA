@@ -117,8 +117,7 @@
 			}
 
 			//Handler for all other tokens, prints them out
-			std::string err_msg = "Unexpected Token: " + stmt_token;
-			throw err_msg;
+			throw "Unexpected Token Encountered.";
 		}
 
 		PKB pkb = this->pkb_builder_.build();
