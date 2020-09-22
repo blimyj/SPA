@@ -300,14 +300,14 @@
 		//TODO: HANDLERS FOR EMPTY STACKS / UNEXCPECTED TOKENS
 		//Need to handle gracefully
 
-		while (!process_token_stream_.empty() && rhs_token != "{") {
+		while (!this->process_token_stream_.empty() && rhs_token != "{") {
 			//These tokens will populate this->stmt_token_queue_
 			this->stmt_token_queue_.push_back(rhs_token);
 			rhs_token = this->process_token_stream_.front();
 			this->process_token_stream_.pop_front(); // Remove var/const/operator/parentheses token for the next token
 		}
 
-		if (process_token_stream_.empty()) {
+		if (this->process_token_stream_.empty()) {
 			throw "Error: Expected '{' terminal but was not found.";
 		}
 
@@ -823,11 +823,11 @@
 		if (last_node->getNodeType() == NodeTypeEnum::variableNode
 			|| last_node->getNodeType() == NodeTypeEnum::constantNode) {
 
-			//TODO: Check if such node types are valid as condition.
+			//Check if such node types are valid as condition.
 			throw "Error: ConditionNode/RelationNode expected but VariableNode/ConstantNode found.";
 		}
 		else if (last_node->getNodeType() == NodeTypeEnum::expressionNode) {
-			//TODO: Check if such node types are valid as condition.
+			//Check if such node types are valid as condition.
 			throw "Error: ConditionNode/RelationNode expected but ExpressionNode found.";
 		}
 		else if (last_node->getNodeType() == NodeTypeEnum::relationNode) {
@@ -956,14 +956,14 @@
 		//TODO: HANDLERS FOR EMPTY STACKS / UNEXCPECTED TOKENS
 		//Need to handle gracefully
 
-		while (!process_token_stream_.empty() && rhs_token != "then") {
+		while (!this->process_token_stream_.empty() && rhs_token != "then") {
 			//These tokens will populate this->stmt_token_queue_
 			this->stmt_token_queue_.push_back(rhs_token);
 			rhs_token = this->process_token_stream_.front();
 			this->process_token_stream_.pop_front(); // Remove var/const/operator/parentheses token for the next token
 		}
 
-		if (process_token_stream_.empty()) {
+		if (this->process_token_stream_.empty()) {
 			throw "Error: Expected 'then' terminal but was not found.";
 		}
 
@@ -1479,11 +1479,11 @@
 		if (last_node->getNodeType() == NodeTypeEnum::variableNode
 			|| last_node->getNodeType() == NodeTypeEnum::constantNode) {
 
-			//TODO: Check if such node types are valid as condition.
+			//Check if such node types are valid as condition.
 			throw "Error: ConditionNode/RelationNode expected but VariableNode/ConstantNode found.";
 		}
 		else if (last_node->getNodeType() == NodeTypeEnum::expressionNode) {
-			//TODO: Check if such node types are valid as condition.
+			//Check if such node types are valid as condition.
 			throw "Error: ConditionNode/RelationNode expected but ExpressionNode found.";
 		}
 		else if (last_node->getNodeType() == NodeTypeEnum::relationNode) {
@@ -1643,11 +1643,15 @@
 		//TODO: HANDLERS FOR EMPTY STACKS / UNEXCPECTED TOKENS
 		//Need to handle gracefully
 
-		while (rhs_token != ";") {
+		while (!this->process_token_stream_.empty() && rhs_token != ";") {
 			//These tokens will populate this->stmt_token_queue_
 			this->stmt_token_queue_.push_back(rhs_token);
 			rhs_token = this->process_token_stream_.front();
 			this->process_token_stream_.pop_front(); // Remove rhs var/const/operator/parentheses token for the next token
+		}
+
+		if (this->process_token_stream_.empty()) {
+			throw "Error: Expected ';' terminal but not found.";
 		}
 
 		//They will form the expr that is assigned to new_expr_node
@@ -1992,8 +1996,6 @@
 			}
 		}
 
-		//TODO: Test for invalid assignment statement case. (Mismatch parentheses, missing operand, missing operator, no ';')
-		//REPLACEMENT END
 		return 0;
 	}
 
@@ -2049,7 +2051,6 @@
 				, new_read_node->getStatementNumber());
 		}
 
-		//TODO: Set Modifies Relationship this is actually relative to constNode/varNode creation & operation on it
 		//Set Modifies Relationship for this statement
 		VAR_NAME var_name = new_var_node->getVariableName();
 		this->pkb_builder_.addModifies(new_read_node->getStatementNumber()
@@ -2147,7 +2148,6 @@
 				, new_print_node->getStatementNumber());
 		}
 
-		//TODO: Set Uses Relationship this is actually relative to constNode/varNode creation & operation on it
 		//Set Uses Relationship for this statement
 		VAR_NAME var_name = new_var_node->getVariableName();
 		this->pkb_builder_.addUses(new_print_node->getStatementNumber()
