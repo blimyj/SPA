@@ -53,9 +53,9 @@ namespace UnitTesting {
 
 			// Check assign node validity (a=1)
 			AssignNode* actual_assign = static_cast<AssignNode*>(actual_stmt_node_list.at(0).get());
-			VAR_NODE_PTR actual_var1 = actual_assign->getVariableNode();
-			EXPR_NODE_PTR actual_expr = actual_assign->getExpressionNode();
-			AST_NODE_PTR temp_const = actual_expr->getLeftAstNode();
+			VAR_NODE_PTR actual_var1 = actual_assign->getVariableNode();		// a
+			EXPR_NODE_PTR actual_expr = actual_assign->getExpressionNode();		// 1
+			AST_NODE_PTR temp_const = actual_expr->getLeftAstNode();			
 			ConstantNode* actual_const = static_cast<ConstantNode*>(temp_const.get());
 			EXPR_TYPE actual_expr_type = actual_expr->getExpressionType();
 			Assert::IsTrue("a" == actual_var1->getVariableName());
@@ -164,7 +164,6 @@ namespace UnitTesting {
 			ExpressionNode* actual_expr2 = static_cast<ExpressionNode*>(temp_expr2.get());
 			EXPR_TYPE actual_expr2_type = actual_expr2->getExpressionType();
 
-
 			AST_NODE_PTR temp_const = actual_expr2->getLeftAstNode();			// 10
 			ConstantNode* actual_const = static_cast<ConstantNode*>(temp_const.get());
 			AST_NODE_PTR temp_var4 = actual_expr2->getRightAstNode();			// b
@@ -240,7 +239,26 @@ namespace UnitTesting {
 			Assert::IsTrue("a" == actual_var1->getVariableName());
 			Assert::IsTrue(1 == actual_print->getStatementNumber());
 
-			// 
+			// Check while node validity 
+			// While node, condition node (b != 3), stmtlist
+			WhileNode* actual_while = static_cast<WhileNode*>(actual_stmt_list.at(1).get());
+			CONDITION_NODE_PTR actual_cond = actual_while->getConditionNode();
+			CONDITION_TYPE cond_type = actual_cond->getConditionType();			//neq
+
+
+
+
+			AST_NODE_PTR temp_var2 = actual_cond->getLeftAstNode();				// b
+			VariableNode* actual_var2 = static_cast<VariableNode*>(temp_var2.get());
+			AST_NODE_PTR temp_expr1 = actual_cond->getRightAstNode();			// 3
+			ExpressionNode* actual_expr1 = static_cast<ExpressionNode*>(temp_expr1.get());
+			EXPR_TYPE actual_expr1_type = actual_expr1->getExpressionType();
+			AST_NODE_PTR temp_const1 = actual_expr1->getLeftAstNode();
+			ConstantNode* actual_const1 = static_cast<ConstantNode*>(temp_const1.get());
+			Assert::IsTrue("b" == actual_var2->getVariableName());
+			Assert::IsTrue(2 == actual_print->getStatementNumber());
+			Assert::IsTrue(ENUM)
+			
 
 		}
 
