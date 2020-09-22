@@ -1318,7 +1318,7 @@ namespace UnitTesting
 			Logger::WriteMessage(result_string.c_str());
 			Assert::IsTrue(result_string.compare(correct_result) == 0);
 		}
-
+		
 		TEST_METHOD(evaluateQuery_SelectA_PatternAIdentWildCard_Returns1)
 		{
 			// Query: "assign a; Select a pattern a("a", _)"
