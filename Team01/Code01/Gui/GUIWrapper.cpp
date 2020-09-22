@@ -31,6 +31,7 @@
 GUIWrapper::GUIWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
+	this->pkb = PKBBuilder().build();
 }
 
 // method for parsing the SIMPLE source
@@ -40,7 +41,9 @@ void GUIWrapper::parse(std::string filename) {
 	Parser parser = Parser();
 	
 	try {
-		parser.parseFile(filename);
+		
+		this->pkb = parser.parseFile(filename);
+
 	}
 	catch (const char* msg) {
 		std::cout << msg << "\n";
@@ -53,20 +56,26 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 // call your evaluator to evaluate the query here
   // ...code to evaluate query...
 
-	// Create PKBStub -- to be deleted
-	PKBStub pkb_init = PKBStub();
-	PKB pkbstub = pkb_init.addVariables();
 
+	QueryProcessor qp = QueryProcessor(this->pkb);
+	QUERY_RESULT query_result;
+	STRING_RESULT result_string;
 
-	QueryProcessor qp = QueryProcessor(pkbstub);
-	QueryNode qn = QueryNode();
-	QUERY_RESULT query_result = qp.processQuery(query);
+	try {
+		query_result = qp.processQuery(query);
+		result_string = ResultListManager::getStringValues(query_result);
+	}
+	catch (const char* msg) {
+		std::cout << msg << "\n";
+	}
 
+	// store the answers to the query in the results list (it is initially empty)
+	// each result must be a string.
+	for (auto query : query_result) {
+		results.push_back(query);
+	}
 
 	std::cout << "query=  " << query << std::endl;
-	std::cout << "query result= " << query_result << std::endl;
-	results.push_back(query + "\nQuery result: ");
-  // store the answers to the query in the results list (it is initially empty)
-  // each result must be a string.
-	results.push_back(query_result);
+	std::cout << "query result= " << result_string << std::endl;
+
 }

@@ -7,7 +7,7 @@
 
 class QueryProcessor;
 
-typedef std::string QUERY_RESULT;
+typedef std::vector<std::string> QUERY_RESULT;
 typedef std::string QUERY;
 
 class QueryProcessor {
