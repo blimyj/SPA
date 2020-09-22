@@ -815,7 +815,7 @@
 
 		//Once ';' is reached or stmt_token_queue_ is empty we should have only 1 expression node or VarNode/ConstNode in the output stack.
 		if (output_node_stack.size() != 1) {
-			throw "Error: Expected 1 node left in output_node_stack after parsing all tokens."
+			throw "Error: Expected 1 node left in output_node_stack after parsing all tokens.";
 		}
 		//Note that we must check if we need to encapsulate RelationNode to return a proper ConditionNode
 		std::shared_ptr<ASTNode> last_node = output_node_stack.back();
@@ -931,13 +931,13 @@
 		//We assume that this opening segment will either terminate with '{' or ';' with the exception of whitespaces and newline?
 
 		if (this->stmt_token_queue_.front() != "if") {
-			throw "Error: Expected \"if\" terminal but not found."
+			throw "Error: Expected \"if\" terminal but not found.";
 		}
 		this->stmt_token_queue_.pop_front(); // Remove stmt type token
 
 		//Check for '('
 		if (this->process_token_stream_.front() != "(") {
-			throw "Error: Expected \"(\" terminal but not found."
+			throw "Error: Expected \"(\" terminal but not found.";
 		}
 		//We no longer need to remove "(" terminal required because we parse this along with ')'
 		//this->process_token_stream_.pop_front(); // Remove stmt type token
@@ -1471,7 +1471,7 @@
 
 		//Once ';' is reached or stmt_token_queue_ is empty we should have only 1 expression node or VarNode/ConstNode in the output stack.
 		if (output_node_stack.size() != 1) {
-			throw "Error: Expected 1 node left in output_node_stack after parsing all tokens."
+			throw "Error: Expected 1 node left in output_node_stack after parsing all tokens.";
 		}
 		//Note that we must check if we need to encapsulate RelationNode to return a proper ConditionNode
 		std::shared_ptr<ASTNode> last_node = output_node_stack.back();
@@ -1851,7 +1851,7 @@
 
 		//Once ';' is reached or stmt_token_queue_ is empty we should have only 1 expression node or VarNode/ConstNode in the output stack.
 		if (output_node_stack.size() != 1) {
-			throw "Error: Expected 1 node left in output_node_stack after parsing all tokens."
+			throw "Error: Expected 1 node left in output_node_stack after parsing all tokens.";
 		}
 		//Note that we must check if we need to encapsulate VarNode/ConstNode to return a proper ExpressionNode
 		//We then create the AssignNode similar to the code below.
