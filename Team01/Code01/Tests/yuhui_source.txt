@@ -5,4 +5,5 @@ procedure main {
     print d;
     print e;
     read f;
+    c = b;
 }
