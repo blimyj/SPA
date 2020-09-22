@@ -127,7 +127,7 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 
 			
 			// a (_, _)
-			QueryNode pattern = clause.getChildren()[0];
+			QueryNode pattern = clause;
 			QueryNode child1 = pattern.getChildren()[0];
 			QueryNode child2 = pattern.getChildren()[1];
 			QueryNode child3 = pattern.getChildren()[2];
@@ -135,7 +135,6 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 			
 			QueryNodeType child2_type = child2.getNodeType();
 			QueryNodeType child3_type = child3.getNodeType();
-			NODE_TYPE child3_ast_type = child3_ast->getNodeType();
 			
 			SYNONYM_NAME assign_synonym_name = child1.getString();
 
@@ -175,7 +174,6 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 				}
 			}
 			
-
 			// Iterate through all assign nodes
 			std::vector<ASSIGN_NODE_PTR> pkb_assigns = pkb.getAssigns();
 			for (ASSIGN_NODE_PTR assign_node : pkb_assigns) {
@@ -193,9 +191,12 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 					ROW row;
 					row.insert({ assign_synonym_name, stmt_num });
 					clause_result_list.addRow(row);
-				} else {
+				}
+				else if (child3_type == QueryNodeType::expression) {
 					// if qpp_rhs is a partial match, find in AST (rhs)
-					// if found, add to ResultList :)
+					// if found, add to ResultList 
+					AST_NODE_PTR child3_ast = child3.getAstNode();
+					NODE_TYPE child3_ast_type = child3_ast->getNodeType();
 
 					// the string to search for in the AST
 					std::string search_name;
@@ -223,9 +224,6 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 			clause_bool = (clause_result_list.getNumRows() > 0);
 		}
 			
-			//ohh seems to make sense! i think i just listed out all combinations LOL AHAHAHA okk but still gotta find all the assignNodes to get their stmtNum oh like top down traversal? instead of bottom up? ohhh so we have to traverse for each assignNode to check?  ohhh okay!okk lets do it!! XP
-			// yup!! it's a simplification like above for follows and parent X) ohh we have the assign nodes from PKB! we just need to traverse the RHS to find "x" or "5" in the assign statement :) yup!! yeah! but I like your shortcut of isUses for variables AHAHAHA. so we can traverse to find constants only! yeah! OK :)
-
 			// Eg pattern a1("woof", _"x"_)
 			//clause_bool = false;
 			//ResultList clause_result_list;
@@ -876,8 +874,9 @@ bool QueryEvaluator::findPartialPattern(AST_NODE_PTR ast, std::string search_nam
 			}
 		} else if (node_type == NodeTypeEnum::expressionNode) {
 			EXPR_NODE_PTR node = std::static_pointer_cast<ExpressionNode>(node);
-			queue.push(node->getLeftAstNode());
-			queue.push(node->getRightAstNode());
+			for (AST_NODE_PTR child : node->getChildrenNode()) {
+				queue.push(child);
+			}
 		} else if (node_type == NodeTypeEnum::variableNode) {
 			VAR_NODE_PTR node = std::static_pointer_cast<VariableNode>(node);
 			VAR_NAME node_name = node->getVariableName();
