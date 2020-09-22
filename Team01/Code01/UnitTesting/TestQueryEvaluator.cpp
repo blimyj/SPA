@@ -26,107 +26,262 @@ namespace UnitTesting
 			print e;
 		}
 		*/
-		std::shared_ptr<PKB> pkb; // ohh you can right click and rename it to pkb1 ohh i see!
+		std::shared_ptr<PKB> pkb; // ohh you can right click and rename it to pkb1! ohh i see!
 
 		/*
-		procedure main {
-			a = meow;
-			b = ;
-			 c = a + b + c;
-			} else {
-			    c = 2 / (b + 3); 
-			}// does AutoTester run the whole program already? ohh Parser->PKB->PQL ohh YAY ok :)) is it in master omg ohhhh
-			what do you mean by program ohh yep! AHAHAHA YEAH it passed a few i show yoU! erm not yet? but i think i PRed this morn
-			// maybe we can test these in system tests? yeah! yeah!! ohh so we start simple? ohh okay! like try out different patterns! okk!
+		procedure meow {
+			a = woof;
+			b = a + b + c;
+			c = 2 / (b + 3) % d + o * g;
 		}
 		*/
 		std::shared_ptr<PKB> pkb2;
 
+		// MULTIPLE CURSOR INSTRUCTIONS :)
+		// 1. hold ALT
+		// 2. click and drag mouse
+		// 3. release mousey and then release ALT
+		// 4. then there should be multiple cursors!
+
 		TEST_METHOD_INITIALIZE(PKBInitialize) {
-			// PKB 1
-			PKBBuilder builder;
+			{
+				// PKB 1
+				PKBBuilder builder;
 
-			std::shared_ptr<ProcedureNode> proc = std::make_shared<ProcedureNode>();
-			proc->setProcedureName("main");
-			builder.addProcedureNode(proc);
+				std::shared_ptr<ProcedureNode> proc = std::make_shared<ProcedureNode>();
+				proc->setProcedureName("main");
+				builder.addProcedureNode(proc);
+
+				std::shared_ptr<VariableNode> v1 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v2 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v3 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v4 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v5 = std::make_shared<VariableNode>();
+				v1->setVariableName("a");
+				v2->setVariableName("b");
+				v3->setVariableName("c");
+				v4->setVariableName("d");
+				v5->setVariableName("e");
+				builder.addVariableNode(v1);
+				builder.addVariableNode(v2);
+				builder.addVariableNode(v3);
+				builder.addVariableNode(v4);
+				builder.addVariableNode(v5);
+
+				std::shared_ptr<PrintNode> p1 = std::make_shared<PrintNode>();
+				std::shared_ptr<PrintNode> p2 = std::make_shared<PrintNode>();
+				std::shared_ptr<PrintNode> p3 = std::make_shared<PrintNode>();
+				std::shared_ptr<PrintNode> p4 = std::make_shared<PrintNode>();
+				std::shared_ptr<PrintNode> p5 = std::make_shared<PrintNode>();
+				p1->setStatementNumber(1);
+				p1->setVariableNode(v1);
+				p2->setStatementNumber(2);
+				p2->setVariableNode(v2);
+				p3->setStatementNumber(3);
+				p3->setVariableNode(v3);
+				p4->setStatementNumber(4);
+				p4->setVariableNode(v4);
+				p5->setStatementNumber(5);
+				p5->setVariableNode(v5);
+				builder.addPrintNode(p1);
+				builder.addPrintNode(p2);
+				builder.addPrintNode(p3);
+				builder.addPrintNode(p4);
+				builder.addPrintNode(p5);
+
+				std::shared_ptr<StatementNode> s1 = std::make_shared<StatementNode>();
+				std::shared_ptr<StatementNode> s2 = std::make_shared<StatementNode>();
+				std::shared_ptr<StatementNode> s3 = std::make_shared<StatementNode>();
+				std::shared_ptr<StatementNode> s4 = std::make_shared<StatementNode>();
+				std::shared_ptr<StatementNode> s5 = std::make_shared<StatementNode>();
+				s1->setStatementNumber(1);
+				s2->setStatementNumber(2);
+				s3->setStatementNumber(3);
+				s4->setStatementNumber(4);
+				s5->setStatementNumber(5);
+				builder.addStatementNode(s1);
+				builder.addStatementNode(s2);
+				builder.addStatementNode(s3);
+				builder.addStatementNode(s4);
+				builder.addStatementNode(s5);
+
+				builder.addFollows(1, 2);
+				builder.addFollows(2, 3);
+				builder.addFollows(3, 4);
+				builder.addFollows(4, 5);
+
+				builder.addUses("main", "a");
+				builder.addUses("main", "b");
+				builder.addUses("main", "c");
+				builder.addUses("main", "d");
+				builder.addUses("main", "e");
+
+				builder.addUses(1, "a");
+				builder.addUses(2, "b");
+				builder.addUses(3, "c");
+				builder.addUses(4, "d");
+				builder.addUses(5, "e");
+
+				pkb = std::make_shared<PKB>(builder.build());
+			}
+
 			
-			std::shared_ptr<VariableNode> v1 = std::make_shared<VariableNode>();
-			std::shared_ptr<VariableNode> v2 = std::make_shared<VariableNode>();
-			std::shared_ptr<VariableNode> v3 = std::make_shared<VariableNode>();
-			std::shared_ptr<VariableNode> v4 = std::make_shared<VariableNode>();
-			std::shared_ptr<VariableNode> v5 = std::make_shared<VariableNode>();
-			v1->setVariableName("a");
-			v2->setVariableName("b");
-			v3->setVariableName("c");
-			v4->setVariableName("d");
-			v5->setVariableName("e");
-			builder.addVariableNode(v1);
-			builder.addVariableNode(v2);
-			builder.addVariableNode(v3);
-			builder.addVariableNode(v4);
-			builder.addVariableNode(v5);
+			{
+				// PKB 2
+				PKBBuilder builder;
 
-			std::shared_ptr<PrintNode> p1 = std::make_shared<PrintNode>();
-			std::shared_ptr<PrintNode> p2 = std::make_shared<PrintNode>();
-			std::shared_ptr<PrintNode> p3 = std::make_shared<PrintNode>();
-			std::shared_ptr<PrintNode> p4 = std::make_shared<PrintNode>();
-			std::shared_ptr<PrintNode> p5 = std::make_shared<PrintNode>();
-			p1->setStatementNumber(1);
-			p1->setVariableNode(v1);
-			p2->setStatementNumber(2);
-			p2->setVariableNode(v2);
-			p3->setStatementNumber(3);
-			p3->setVariableNode(v3);
-			p4->setStatementNumber(4);
-			p4->setVariableNode(v4);
-			p5->setStatementNumber(5);
-			p5->setVariableNode(v5);
-			builder.addPrintNode(p1);
-			builder.addPrintNode(p2);
-			builder.addPrintNode(p3);
-			builder.addPrintNode(p4);
-			builder.addPrintNode(p5);
+				std::shared_ptr<ProcedureNode> proc = std::make_shared<ProcedureNode>();
+				proc->setProcedureName("meow");
+				builder.addProcedureNode(proc);
 
-			std::shared_ptr<StatementNode> s1 = std::make_shared<StatementNode>();
-			std::shared_ptr<StatementNode> s2 = std::make_shared<StatementNode>();
-			std::shared_ptr<StatementNode> s3 = std::make_shared<StatementNode>();
-			std::shared_ptr<StatementNode> s4 = std::make_shared<StatementNode>();
-			std::shared_ptr<StatementNode> s5 = std::make_shared<StatementNode>();
-			s1->setStatementNumber(1);
-			s2->setStatementNumber(2);
-			s3->setStatementNumber(3);
-			s4->setStatementNumber(4);
-			s5->setStatementNumber(5);
-			builder.addStatementNode(s1);
-			builder.addStatementNode(s2);
-			builder.addStatementNode(s3);
-			builder.addStatementNode(s4);
-			builder.addStatementNode(s5);
+				std::shared_ptr<VariableNode> v1 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v2 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v3 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v4 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v5 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v6 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v7 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v8 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v9 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v10 = std::make_shared<VariableNode>();
+				std::shared_ptr<VariableNode> v11 = std::make_shared<VariableNode>();
+				// a = woof
+				v1->setVariableName("a");
+				v2->setVariableName("woof");
+				// b = a + b + c
+				v3->setVariableName("b");
+				v4->setVariableName("a");
+				v5->setVariableName("b");
+				v6->setVariableName("c");
+				// c = 2 / (b + 3) % d + o * g;
+				v7->setVariableName("c");
+				v8->setVariableName("b");
+				v9->setVariableName("d");
+				v10->setVariableName("o");
+				v11->setVariableName("g");
+				builder.addVariableNode(v1);
+				builder.addVariableNode(v2);
+				builder.addVariableNode(v3);
+				builder.addVariableNode(v4);
+				builder.addVariableNode(v5);
+				builder.addVariableNode(v6);
+				builder.addVariableNode(v7);
+				builder.addVariableNode(v8);
+				builder.addVariableNode(v9);
+				builder.addVariableNode(v10);
+				builder.addVariableNode(v11);
+				
+				std::shared_ptr<ConstantNode> c1 = std::make_shared<ConstantNode>();
+				std::shared_ptr<ConstantNode> c2 = std::make_shared<ConstantNode>();
+				c1->setValue("2");
+				c2->setValue("3");
+				builder.addConstantNode(c1);
+				builder.addConstantNode(c2);
 
-			builder.addFollows(1, 2);
-			builder.addFollows(2, 3);
-			builder.addFollows(3, 4);
-			builder.addFollows(4, 5);
+				std::shared_ptr<ExpressionNode> e1 = std::make_shared<ExpressionNode>();
+				std::shared_ptr<ExpressionNode> e2 = std::make_shared<ExpressionNode>();
+				std::shared_ptr<ExpressionNode> e3 = std::make_shared<ExpressionNode>();
+				std::shared_ptr<ExpressionNode> e4 = std::make_shared<ExpressionNode>();
+				std::shared_ptr<ExpressionNode> e5 = std::make_shared<ExpressionNode>();
+				std::shared_ptr<ExpressionNode> e6 = std::make_shared<ExpressionNode>();
+				std::shared_ptr<ExpressionNode> e7 = std::make_shared<ExpressionNode>();
+				std::shared_ptr<ExpressionNode> e8 = std::make_shared<ExpressionNode>();
+				
+				//Expression node of no expression, only 1 child (left child) ASTNode woof
+				e1->setExpressionType(ExpressionTypeEnum::none);
+				e1->setLeftAstNode(v2);
 
-			builder.addUses("main", "a");
-			builder.addUses("main", "b");
-			builder.addUses("main", "c");
-			builder.addUses("main", "d");
-			builder.addUses("main", "e");
+				// a + b
+				e2->setExpressionType(ExpressionTypeEnum::plus);
+				e2->setLeftAstNode(v4);
+				e2->setRightAstNode(v5);
 
-			builder.addUses(1, "a");
-			builder.addUses(2, "b");
-			builder.addUses(3, "c");
-			builder.addUses(4, "d");
-			builder.addUses(5, "e");
+				// e2 + c
+				e3->setExpressionType(ExpressionTypeEnum::plus);
+				e3->setLeftAstNode(e2);
+				e3->setRightAstNode(v6);
 
-			pkb = std::make_shared<PKB>(builder.build());
+				// o * g
+				e4->setExpressionType(ExpressionTypeEnum::times);
+				e4->setLeftAstNode(v10);
+				e4->setRightAstNode(v11);
 
+				// b + 3
+				e5->setExpressionType(ExpressionTypeEnum::plus);
+				e5->setLeftAstNode(v8);
+				e5->setRightAstNode(c2);
 
-			// PKB 2
-			PKBBuilder builder2;
-			
-			pkb2 = std::make_shared<PKB>(builder2.build());
+				// 2 / e5
+				e6->setExpressionType(ExpressionTypeEnum::div);
+				e6->setLeftAstNode(c1);
+				e6->setRightAstNode(e5);
+
+				// e6 % d
+				e7->setExpressionType(ExpressionTypeEnum::mod);
+				e7->setLeftAstNode(e6);
+				e7->setRightAstNode(v9);
+
+				// e7 + e4
+				e8->setExpressionType(ExpressionTypeEnum::plus);
+				e8->setLeftAstNode(e7);
+				e8->setRightAstNode(e4);
+
+				std::shared_ptr<AssignNode> a1 = std::make_shared<AssignNode>();
+				std::shared_ptr<AssignNode> a2 = std::make_shared<AssignNode>();
+				std::shared_ptr<AssignNode> a3 = std::make_shared<AssignNode>();
+				a1->setVariableNode(v1);
+				a1->setExpressionNode(e1);
+				a1->setStatementNumber(1);
+				a2->setVariableNode(v3);
+				a2->setExpressionNode(e3);
+				a2->setStatementNumber(2);
+				a3->setVariableNode(v7);
+				a3->setExpressionNode(e8);
+				a3->setStatementNumber(3);
+				builder.addAssignNode(a1);
+				builder.addAssignNode(a2);
+				builder.addAssignNode(a3);
+
+				std::shared_ptr<StatementNode> s1 = std::make_shared<StatementNode>();
+				std::shared_ptr<StatementNode> s2 = std::make_shared<StatementNode>();
+				std::shared_ptr<StatementNode> s3 = std::make_shared<StatementNode>();
+				s1->setStatementNumber(1);
+				s2->setStatementNumber(2);
+				s3->setStatementNumber(3);
+				builder.addStatementNode(s1);
+				builder.addStatementNode(s2);
+				builder.addStatementNode(s3);
+				
+				builder.addFollows(1, 2);
+				builder.addFollows(2, 3);
+				
+				builder.addUses(1, "woof");
+				builder.addUses(2, "a");
+				builder.addUses(2, "b");
+				builder.addUses(2, "c");
+				builder.addUses(3, "b");
+				builder.addUses(3, "d");
+				builder.addUses(3, "o");
+				builder.addUses(3, "g");
+
+				builder.addUses("meow", "woof");
+				builder.addUses("meow", "a");
+				builder.addUses("meow", "b");
+				builder.addUses("meow", "c");
+				builder.addUses("meow", "d");
+				builder.addUses("meow", "o");
+				builder.addUses("meow", "g");
+
+				builder.addModifies(1, "a");
+				builder.addModifies(2, "b");
+				builder.addModifies(3, "c");
+
+				builder.addModifies("meow", "a");
+				builder.addModifies("meow", "b");
+				builder.addModifies("meow", "c");
+
+				pkb2 = std::make_shared<PKB>(builder.build());
+			}
 		}
 
 		TEST_METHOD(evaluateQuery_Select_Success)
@@ -955,6 +1110,120 @@ namespace UnitTesting
 			Logger::WriteMessage(result_string.c_str());
 			Assert::IsTrue(result_string.compare(correct_result) == 0);
 		}
+		
+		// PATTERN TEST CASES
 
+		// 1. (_, _)
+		// 2. (_, _"x"_)
+		// 3. (v, _)
+		// 4. (v, _"2"_)
+		// 5. ("x", _)
+		// 6. ("x", _"x"_)
+
+		// 1. assign a; variable v; Select a pattern a(_, _) //Return1_2_3
+		// 2. assign a; variable v; Select a pattern a(_, _"woof"_) //Return1
+		// 3. assign a; variable v; Select a pattern a(v, _) //return1_2_3
+		// 4. assign a; variable v; Select a pattern a(v, _"b"_) //return2_3
+		// 5. assign a; variable v; Select a pattern a("a", _)  // Return1
+		// 6. assign a; variable v; Select a pattern a("c", _"2"_) //Return3
+		
+		// assign a; variable v; Select a pattern a(v, _"a"_) //return2								  
+		// assign a; variable v; Select a pattern a(v, _"b"_) //return2_3								  
+		// assign a; variable v; Select a pattern a(_, _"b"_) //Return2_3
+		// assign a; variable v; Select a pattern a(_, _"2"_) //Return3
+		// assign a; variable v; Select a pattern a("a", _)  // ReturnEmpty
+		// assign a; variable v; Select a pattern a("a", _"woof"_) //Return1
+		// assign a; variable v; Select a pattern a("c", _"d"_)
+		// assign a; variable v; Select a pattern a(v, 3)
+
+		TEST_METHOD(evaluateQuery_SelectA_PatternWildCardWildCard_Returns123)
+		{
+			// Query: "assign a; variable v; Select a pattern a(_, _)"
+			// Get processed_synonyms and processed clauses
+			QueryNode variable_node = QueryNode();
+			variable_node.setSynonymNode({ QuerySynonymType::variable }, "v");
+			QueryNode assign_node = QueryNode();
+			assign_node.setSynonymNode({ QuerySynonymType::assign }, "a");
+			std::unordered_map<std::string, QueryNode> processed_synonyms = { {"v", variable_node}, {"a", assign_node} };
+
+			QueryNode child1 = QueryNode();
+			child1.setSynonymNode({ QuerySynonymType::assign }, "a");
+			QueryNode child2 = QueryNode();
+			child2.setNodeType({ QueryNodeType::pattern });
+			QueryNode child_child_child0 = QueryNode();
+			child_child_child0.setSynonymNode({ QuerySynonymType::assign }, "a");
+			QueryNode child_child_child1 = QueryNode();
+			child_child_child1.setNodeType({ QueryNodeType::wild_card });
+			QueryNode child_child_child2 = QueryNode();
+			child_child_child2.setNodeType({ QueryNodeType::wild_card });
+			QueryNode child2_children[] = { child_child_child0, child_child_child1, child_child_child2 };
+			child2.setChildren(child2_children, 3);
+
+			QueryNode root = QueryNode();
+			root.setNodeType({ QueryNodeType::select });
+			QueryNode root_children[] = { child1, child2 };
+			root.setChildren(root_children, 2);
+
+			QueryNode processed_clauses = root; //stores root node of the tree
+
+			// Evaluate
+			QueryEvaluator qe = QueryEvaluator(*pkb2);
+			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "1, 2, 3";
+			
+			Logger::WriteMessage("Result: ");
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
+		}
+		
+		TEST_METHOD(evaluateQuery_SelectA_PatternAWildCardPartial_Returns1)
+		{
+			// Query: "assign a; variable v; Select a pattern a(_, _"woof"_)"
+			// Get processed_synonyms and processed clauses
+		
+			QueryNode assign_node = QueryNode();
+			assign_node.setSynonymNode({ QuerySynonymType::assign }, "a");
+			std::unordered_map<std::string, QueryNode> processed_synonyms = { {"a", assign_node} };
+
+			QueryNode child1 = QueryNode();
+			child1.setSynonymNode({ QuerySynonymType::assign }, "a");
+			QueryNode child2 = QueryNode();
+			child2.setNodeType({ QueryNodeType::pattern });
+			QueryNode child_child_child0 = QueryNode();
+			child_child_child0.setSynonymNode({ QuerySynonymType::assign }, "a");
+			QueryNode child_child_child1 = QueryNode();
+			child_child_child1.setNodeType({ QueryNodeType::wild_card });
+			QueryNode child_child_child2 = QueryNode();
+				
+			std::shared_ptr<VariableNode> woof = std::make_shared<VariableNode>();
+			woof->setVariableName("woof");
+			std::shared_ptr<ExpressionNode> ewoof = std::make_shared<ExpressionNode>();
+			ewoof->setExpressionType({ ExpressionTypeEnum::none });
+			ewoof->setLeftAstNode(woof);
+
+			child_child_child2.setNodeType({ QueryNodeType::expression });
+			child_child_child2.setASTNode(ewoof);
+
+			QueryNode child2_children[] = { child_child_child0, child_child_child1, child_child_child2 };
+			child2.setChildren(child2_children, 3);
+
+			QueryNode root = QueryNode();
+			root.setNodeType({ QueryNodeType::select });
+			QueryNode root_children[] = { child1, child2 };
+			root.setChildren(root_children, 2);
+
+			QueryNode processed_clauses = root; //stores root node of the tree
+
+			// Evaluate
+			QueryEvaluator qe = QueryEvaluator(*pkb2);
+			QUERY_RESULT result = qe.evaluateQuery(processed_synonyms, processed_clauses);
+			STRING_RESULT result_string = ResultListManager::getStringValues(result);
+			STRING_RESULT correct_result = "1";
+			
+			Logger::WriteMessage("Result: ");
+			Logger::WriteMessage(result_string.c_str());
+			Assert::IsTrue(result_string.compare(correct_result) == 0);
+		}
 	};
 }
