@@ -81,9 +81,6 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 		for (auto query : query_result) {
 			results.push_back(query);
 		}
-
-		std::cout << "query=  " << query << std::endl;
-		std::cout << "query result= " << result_string << std::endl;
 	}
 	else {
 		results.push_back("Invalid SIMPLE source code encountered during parsing. Query Evaluation not allowed.");
