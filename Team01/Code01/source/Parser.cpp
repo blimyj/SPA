@@ -13,10 +13,6 @@
 #include "PKB/ASTNode/NodeTypeEnum.h"
 #include "PKB/ASTNode/RelationNode.h"
 
-	int Parser::Parse() {
-
-		return 0;
-	}
 
 	PKB Parser::parseFile(STRING filename) {
 		//Construct program root node
@@ -125,7 +121,7 @@
 		return pkb;
 	}
 
-	STRING Parser::getNextToken(std::istreambuf_iterator<char>* iter, std::istreambuf_iterator<char> eos) {
+	STRING Parser::getNextToken(FILE_ITER_PTR iter, FILE_ITER eos) {
 		std::string curr_token;
 
 		//Skip past all whitespaces
@@ -265,13 +261,7 @@
 		return curr_token;
 	}
 
-	int Parser::parseText(LIST_OF_STRINGS str_list) {
-
-		// Not considered for now.
-		return 0;
-	}
-
-	int Parser::parseWhile() {
+	void Parser::parseWhile() {
 
 		if (this->stmt_token_queue_.front() != "while") {
 			throw "Error: Expected 'while' terminal but was not found.";
@@ -922,11 +912,9 @@
 		this->pkb_builder_.addWhileNode(new_while_node);
 		this->pkb_builder_.addStatementNode(new_while_node);
 		this->pkb_builder_.addStatementListNode(new_stmt_list_node);
-
-		return 0;
 	}
 
-	int Parser::parseIfThen() {
+	void Parser::parseIfThen() {
 		//We assume that this opening segment will either terminate with '{' or ';' with the exception of whitespaces and newline?
 
 		if (this->stmt_token_queue_.front() != "if") {
@@ -1585,11 +1573,9 @@
 		this->pkb_builder_.addStatementNode(new_if_node);
 		this->pkb_builder_.addStatementListNode(if_stmt_list_node);
 		this->pkb_builder_.addStatementListNode(else_stmt_list_node);
-
-		return 0;
 	}
 
-	int Parser::parseElse() {
+	void Parser::parseElse() {
 		//We assume that '{' will follow 'else'
 
 		if (this->stmt_token_queue_.front() != "else") {
@@ -1605,11 +1591,9 @@
 
 		//Due to parseStmtListClose changing current_parent_node_ there is no need change parent tracker to stmtlistnode_ptr
 		//This function exists just to remove the "else" & "{" tokens
-
-		return 0;
 	}
 
-	int Parser::parseAssign() {
+	void Parser::parseAssign() {
 		//We assume that this statement will terminate with ';'
 		// First token is assign
 		if (this->stmt_token_queue_.front() != "assign") {
@@ -1993,11 +1977,9 @@
 					, var_name);
 			}
 		}
-
-		return 0;
 	}
 
-	int Parser::parseRead() {
+	void Parser::parseRead() {
 		//We take in two tokens, expecting a NAME and a ';'
 		if (this->stmt_token_queue_.front() != "read") {
 			throw "Error: Expected 'read' terminal but was not found.";
@@ -2090,11 +2072,9 @@
 			this->pkb_builder_.addModifies(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
 				, var_name);
 		}
-
-		return 0;
 	}
 
-	int Parser::parsePrint() {
+	void Parser::parsePrint() {
 		//We take in two tokens, expecting a NAME and a ';'
 		if (this->stmt_token_queue_.front() != "print") {
 			throw "Error: Expected 'print' terminal but was not found.";
@@ -2186,11 +2166,9 @@
 			this->pkb_builder_.addUses(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
 				, var_name);
 		}
-
-		return 0;
 	}
 
-	int Parser::parseProcedure() {
+	void Parser::parseProcedure() {
 		//We assume that this opening segment will either terminate with '{'
 		if (this->stmt_token_queue_.front() != "procedure") {
 			throw "Error: Expected 'procedure' terminal but was not found.";
@@ -2227,18 +2205,15 @@
 		//Need to add new_stmt_list_node & new_procedure_node to PKB tables
 		this->pkb_builder_.addProcedureNode(new_procedure_node);
 		this->pkb_builder_.addStatementListNode(new_stmt_list_node);
-
-		return 0;
 	}
 
 	/*
-	int Parser::parseCall(STRING str) {
+	void Parser::parseCall(STRING str) {
 		//We assume that this statement will terminate with ';'
-		return 0;
 	}
 	*/
 
-	int Parser::parseStmtListClose() {	
+	void Parser::parseStmtListClose() {	
 		//Method 2: accounts for container statements
 		
 		//Part 1: When closing a stmtList Node, 
@@ -2273,12 +2248,10 @@
 			this->current_parent_node_ = this->current_parent_node_->getParentNode()->getParentNode();
 
 		}
-
-		return 0;
 	}
 
 	//===== START OF HELPER FUNCTIONS =====
-	int Parser::takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op) {
+	PRECEDENCE Parser::takesPrecedent(OP_TYPE_ENUM l_op, OP_TYPE_ENUM r_op) {
 		//Returns 1 if left operator takes precendence
 		if (l_op == OperatorTypeEnum::opMult || l_op == OperatorTypeEnum::opDiv || l_op == OperatorTypeEnum::opMod) {
 			if (r_op == OperatorTypeEnum::opPlus || l_op == OperatorTypeEnum::opMin) {
@@ -2299,7 +2272,7 @@
 		}
 	}
 
-	ExpressionTypeEnum Parser::getExpressionType(OperatorTypeEnum op) {
+	EXPR_TYPE_ENUM Parser::getExpressionType(OP_TYPE_ENUM op) {
 		if (op == OperatorTypeEnum::opPlus) {
 			return ExpressionTypeEnum::plus;
 		}
@@ -2323,7 +2296,7 @@
 	//===== END OF HELPER FUNCTIONS =====
 
 	//===== START OF HELPER FUNCTIONS FOR RELATION NODE =====
-	int Parser::takesPrecedent(RelOperatorTypeEnum l_op, RelOperatorTypeEnum r_op) {
+	PRECEDENCE Parser::takesPrecedent(REL_OP_TYPE_ENUM l_op, REL_OP_TYPE_ENUM r_op) {
 		//Returns 1 if left operator takes precendence
 		if (l_op == RelOperatorTypeEnum::ropMult || l_op == RelOperatorTypeEnum::ropDiv || l_op == RelOperatorTypeEnum::ropMod) {
 			if (r_op == RelOperatorTypeEnum::ropMult || r_op == RelOperatorTypeEnum::ropDiv || r_op == RelOperatorTypeEnum::ropMod) {
@@ -2379,7 +2352,7 @@
 		}
 	}
 
-	ExpressionTypeEnum Parser::getExpressionType(RelOperatorTypeEnum op) {
+	EXPR_TYPE_ENUM Parser::getExpressionType(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropPlus) {
 			return ExpressionTypeEnum::plus;
 		}
@@ -2400,7 +2373,7 @@
 		}
 	}
 
-	RelationTypeEnum Parser::getArithmeticRelationType(RelOperatorTypeEnum op) {
+	REL_TYPE_ENUM Parser::getArithmeticRelationType(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropEq) {
 			return RelationTypeEnum::eq;
 		}
@@ -2424,7 +2397,7 @@
 		}
 	}
 
-	ConditionTypeEnum Parser::getBooleanRelationType(RelOperatorTypeEnum op) {
+	COND_TYPE_ENUM Parser::getBooleanRelationType(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropNot) {
 			return ConditionTypeEnum::not;
 		}
@@ -2439,7 +2412,7 @@
 		}
 	}
 
-	bool Parser::isArithmeticOp(RelOperatorTypeEnum op) {
+	BOOLEAN_TYPE Parser::isArithmeticOp(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropPlus || op == RelOperatorTypeEnum::ropMin
 			|| op == RelOperatorTypeEnum::ropMult || op == RelOperatorTypeEnum::ropDiv
 			|| op == RelOperatorTypeEnum::ropMod) {
@@ -2450,7 +2423,7 @@
 		}
 	}
 
-	bool Parser::isRelationOp(RelOperatorTypeEnum op) {
+	BOOLEAN_TYPE Parser::isRelationOp(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropEq || op == RelOperatorTypeEnum::ropNeq
 			|| op == RelOperatorTypeEnum::ropGt || op == RelOperatorTypeEnum::ropGte
 			|| op == RelOperatorTypeEnum::ropLt || op == RelOperatorTypeEnum::ropLte) {
@@ -2461,7 +2434,7 @@
 		}
 	}
 
-	bool Parser::isBooleanOp(RelOperatorTypeEnum op) {
+	BOOLEAN_TYPE Parser::isBooleanOp(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropBoolNone || op == RelOperatorTypeEnum::ropNot
 			|| op == RelOperatorTypeEnum::ropAnd || op == RelOperatorTypeEnum::ropOr) {
 			return true;
