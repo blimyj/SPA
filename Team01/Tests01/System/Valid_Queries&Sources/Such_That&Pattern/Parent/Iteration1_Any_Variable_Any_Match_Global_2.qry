@@ -11,7 +11,7 @@ Select a such that Parent (s, a) pattern a (_, _)
 3 - If and Assign , Select Assign
 assign a; if i;
 Select a such that Parent (i, a) pattern a (_, _)
-8, 10, 12, 14, 17, 19, 21, 23, 26, 27, 28, 30, 32, 33, 35, 41, 42, 46, 48, 50, 52, 59, 62, 64, 71, 72, 73, 74, 76, 79, 80, 87, 88, 89, 90, 91, 92, 
+8, 10, 12, 14, 17, 19, 21, 23, 26, 27, 28, 30, 32, 33, 35, 41, 42, 46, 48, 50, 52, 59, 62, 64, 71, 72, 73, 74, 76, 79, 80, 87, 88, 89, 90, 91, 92
 5000
 4 - While and Assign, Select Assign
 assign a; while w;
