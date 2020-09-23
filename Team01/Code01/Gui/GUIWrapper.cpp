@@ -32,21 +32,23 @@ GUIWrapper::GUIWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
 	this->pkb = PKBBuilder().build();
+	this->allow_query_eval_ = false;
 }
 
 // method for parsing the SIMPLE source
 void GUIWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
-	std::cout << "parsed " << filename;
 	Parser parser = Parser();
 	
 	try {
 		
 		this->pkb = parser.parseFile(filename);
+		this->allow_query_eval_ = true;
 
 	}
 	catch (const char* msg) {
 		std::cout << msg << "\n";
+		this->allow_query_eval_ = false;
 	}
 	// ...rest of your code...
 }
@@ -60,22 +62,22 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 	QueryProcessor qp = QueryProcessor(this->pkb);
 	QUERY_RESULT query_result;
 	STRING_RESULT result_string;
+	if (this->allow_query_eval_) {
+		try {
+			query_result = qp.processQuery(query);
+			result_string = ResultListManager::getStringValues(query_result);
+		}
+		catch (const char* msg) {
+			std::cout << msg << "\n";
+		}
 
-	try {
-		query_result = qp.processQuery(query);
-		result_string = ResultListManager::getStringValues(query_result);
+		// store the answers to the query in the results list (it is initially empty)
+		// each result must be a string.
+		for (std::string query : query_result) {
+			results.push_back(query);
+		}
 	}
-	catch (const char* msg) {
-		std::cout << msg << "\n";
+	else {
+		results.push_back("Invalid SIMPLE source code encountered during parsing. Query Evaluation not allowed.");
 	}
-
-	// store the answers to the query in the results list (it is initially empty)
-	// each result must be a string.
-	for (std::string query : query_result) {
-		results.push_back(query);
-	}
-
-	//std::cout << "query=  " << query << std::endl;
-	//std::cout << "query result= " << result_string << std::endl;
-
 }

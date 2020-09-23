@@ -1,5 +1,5 @@
 1 - comment
-procedure p; variable v; assign a;
-Select v pattern a("c", _"b"_)
+assign a;
+Select a pattern a(_, _"a"_)
 a, b, c, d, e
 5000

@@ -29,19 +29,19 @@ void QueryNode::setNodeType(NODE_TYPE_STRING node_type_string) {
 	else if (std::regex_match(node_type_string, std::regex("Follows"))) {
 		this->node_type = QueryNodeType::follows;
 	}
-	else if (std::regex_match(node_type_string, std::regex("FollowsT"))) {
+	else if (std::regex_match(node_type_string, std::regex("Follows\\*"))) {
 		this->node_type = QueryNodeType::followsT;
 	}
 	else if (std::regex_match(node_type_string, std::regex("Parent"))) {
 		this->node_type = QueryNodeType::parent;
 	}
-	else if (std::regex_match(node_type_string, std::regex("ParentT"))) {
+	else if (std::regex_match(node_type_string, std::regex("Parent\\*"))) {
 		this->node_type = QueryNodeType::parentT;
 	}
-	else if (std::regex_match(node_type_string, std::regex("UsesS"))) {
+	else if (std::regex_match(node_type_string, std::regex("Uses"))) {
 		this->node_type = QueryNodeType::usesS;
 	}
-	else if (std::regex_match(node_type_string, std::regex("ModifiesS"))) {
+	else if (std::regex_match(node_type_string, std::regex("Modifies"))) {
 		this->node_type = QueryNodeType::modifiesS;
 	}
 }
@@ -60,7 +60,6 @@ void QueryNode::setIntegerNode(INTEGER integer) {
 INTEGER QueryNode::getInteger() {
 	return node_content.getInt();
 }
-
 
 
 void QueryNode::setASTNode(AST_NODE astnode) {
