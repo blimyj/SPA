@@ -475,8 +475,20 @@ void QueryEvaluator::getUsesSResult(QueryNode child1, QueryNode child2, bool& cl
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
+	// Populate list1 with child1 values
 	std::vector<int> list1 = getStmtList(child1);
-	std::vector<VAR_NAME> list2 = getVarNameList(child2);
+
+	// Populate list2 with child2 values
+	std::vector<VAR_NAME> list2;
+	if (child2_type == QueryNodeType::ident) {
+		list2.push_back(child2.getString());
+	}
+	else if (child2_type == QueryNodeType::synonym) {
+		list2 = getVarNameList(child2);
+	}
+	else {
+		throw "QE: Second argument of Uses should be SYNONYM or IDENT";
+	}
 
 	// create all possible pairs of list1 and list2 values
 	std::vector<std::pair<int, VAR_NAME>> cross;
@@ -534,8 +546,21 @@ void QueryEvaluator::getUsesPResult(QueryNode child1, QueryNode child2, bool& cl
 	// Iteration 1: procedure list only have 1 procedure
 	// Approach: get all the stmts of that procedure, ignore all other procedures
 	// Check isUses(stmt, v) as per normal
+
+	// Populate list1 with child1 values
 	std::vector<PROC_NAME> list1 = getProcList(child1);
-	std::vector<VAR_NAME> list2 = getVarNameList(child2);
+	
+	// Populate list2 with child2 values
+	std::vector<VAR_NAME> list2;
+	if (child2_type == QueryNodeType::ident) {
+		list2.push_back(child2.getString());
+	}
+	else if (child2_type == QueryNodeType::synonym) {
+		list2 = getVarNameList(child2);
+	}
+	else {
+		throw "QE: Second argument of Uses should be SYNONYM or IDENT";
+	}
 
 	// create all possible pairs of list1 and list2 values
 	std::vector<std::pair<PROC_NAME, VAR_NAME>> cross;
@@ -590,8 +615,20 @@ void QueryEvaluator::getModifiesSResult(QueryNode child1, QueryNode child2, bool
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
+	// Populate list1 with child1 values
 	std::vector<int> list1 = getStmtList(child1);
-	std::vector<VAR_NAME> list2 = getVarNameList(child2);
+	
+	// Populate list2 with child2 values
+	std::vector<VAR_NAME> list2;
+	if (child2_type == QueryNodeType::ident) {
+		list2.push_back(child2.getString());
+	}
+	else if (child2_type == QueryNodeType::synonym) {
+		list2 = getVarNameList(child2);
+	}
+	else {
+		throw "QE: Second argument of Uses should be SYNONYM or IDENT";
+	}
 
 	// create all possible pairs of list1 and list2 values
 	std::vector<std::pair<int, VAR_NAME>> cross;
@@ -646,8 +683,20 @@ void QueryEvaluator::getModifiesPResult(QueryNode child1, QueryNode child2, bool
 	QueryNodeType child1_type = child1.getNodeType();
 	QueryNodeType child2_type = child2.getNodeType();
 
+	// Populate list1 with child1 values
 	std::vector<PROC_NAME> list1 = getProcList(child1);
-	std::vector<VAR_NAME> list2 = getVarNameList(child2);
+	
+	// Populate list2 with child2 values
+	std::vector<VAR_NAME> list2;
+	if (child2_type == QueryNodeType::ident) {
+		list2.push_back(child2.getString());
+	}
+	else if (child2_type == QueryNodeType::synonym) {
+		list2 = getVarNameList(child2);
+	}
+	else {
+		throw "QE: Second argument of Uses should be SYNONYM or IDENT";
+	}
 
 	// create all possible pairs of list1 and list2 values
 	std::vector<std::pair<PROC_NAME, VAR_NAME>> cross;
