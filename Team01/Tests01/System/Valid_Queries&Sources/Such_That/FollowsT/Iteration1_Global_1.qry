@@ -36,12 +36,12 @@ Select a1 such that Follows* (a1, a2)
 8 - Print and Print, Select Print One
 print p1, p2;
 Select p1 such that Follows* (p1, p2)
-43, 44, 45, 56, 57, 58, 84, 107, 108
+2, 43, 44, 45, 56, 57, 58, 84, 107, 108
 1000
 9 - Read and Read, Select Read One
 read r1, r2;
 Select r1 such that Follows* (r1, r2)
-4, 5, 6, 9, 10, 65, 66, 67, 69, 70, 71, 91
+4, 5, 6, 9, 10, 65, 66, 67, 69, 70, 71, 72, 91
 1000
 10 - If and If, Select If One
 if i1, i2;
@@ -61,5 +61,5 @@ none
 13 - If and While, Select If
 if i; while w;
 Select i such that Follows* (i, w)
-93
+3, 93
 1000
