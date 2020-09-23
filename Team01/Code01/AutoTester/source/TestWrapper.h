@@ -25,6 +25,7 @@ class TestWrapper : public AbstractWrapper {
 
 private:
 	PKB pkb = PKBBuilder().build();
+	bool allow_query_eval_ ;
 };
 
 #endif
