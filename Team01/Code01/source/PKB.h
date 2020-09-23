@@ -184,51 +184,51 @@ public:
         */
 
     /*==== Relationships ====*/
-    BOOLEAN isFollows(STMT_NUM s1, STMT_NUM s2);
+    BOOLEAN_TYPE isFollows(STMT_NUM s1, STMT_NUM s2);
         /*
-        Description: Returns a BOOLEAN indicating whether or not
+        Description: Returns a BOOLEAN_TYPE indicating whether or not
                      Follows(STMT_NUM, STMT_NUM) holds
         */
 
-    BOOLEAN isFollowsTransitive(STMT_NUM s1, STMT_NUM s2);
+    BOOLEAN_TYPE isFollowsTransitive(STMT_NUM s1, STMT_NUM s2);
         /*
-        Description: Returns a BOOLEAN indicating whether or not
+        Description: Returns a BOOLEAN_TYPE indicating whether or not
                      Follows*(STMT_NUM, STMT_NUM) holds
         */
 
-    BOOLEAN isParent(STMT_NUM s1, STMT_NUM s2);
+    BOOLEAN_TYPE isParent(STMT_NUM s1, STMT_NUM s2);
         /*
-        Description: Returns a BOOLEAN indicating whether or not
+        Description: Returns a BOOLEAN_TYPE indicating whether or not
                      Parent(STMT_NUM, STMT_NUM) holds
         */
 
-    BOOLEAN isParentTransitive(STMT_NUM s1, STMT_NUM s2);
+    BOOLEAN_TYPE isParentTransitive(STMT_NUM s1, STMT_NUM s2);
         /*
-        Description: Returns a BOOLEAN indicating whether or not
+        Description: Returns a BOOLEAN_TYPE indicating whether or not
                      Parent*(STMT_NUM, STMT_NUM) holds
         */
 
-    BOOLEAN isUses(STMT_NUM s, VAR_NAME v);
+    BOOLEAN_TYPE isUses(STMT_NUM s, VAR_NAME v);
         /*
-        Description: Returns a BOOLEAN indicating whether or not
+        Description: Returns a BOOLEAN_TYPE indicating whether or not
                      Uses(STMT_NUM, VAR_NAME) holds
         */
 
-    BOOLEAN isUses(PROC_NAME p, VAR_NAME v);
+    BOOLEAN_TYPE isUses(PROC_NAME p, VAR_NAME v);
         /*
-        Description: Returns a BOOLEAN indicating whether or not
+        Description: Returns a BOOLEAN_TYPE indicating whether or not
                      Uses(PROC_NAME, VAR_NAME) holds
         */
 
-    BOOLEAN isModifies(STMT_NUM s, VAR_NAME v);
+    BOOLEAN_TYPE isModifies(STMT_NUM s, VAR_NAME v);
         /*
-        Description: Returns a BOOLEAN indicating whether or not
+        Description: Returns a BOOLEAN_TYPE indicating whether or not
                      Modifies(STMT_NUM, VAR_NAME) holds
         */
 
-    BOOLEAN isModifies(PROC_NAME p, VAR_NAME v);
+    BOOLEAN_TYPE isModifies(PROC_NAME p, VAR_NAME v);
         /*
-        Description: Returns a BOOLEAN indicating whether or not
+        Description: Returns a BOOLEAN_TYPE indicating whether or not
                      Modifies(PROC_NAME, VAR_NAME) holds
         */
 

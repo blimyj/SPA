@@ -5,17 +5,17 @@
 #include "ASTNode.h"
 
 typedef std::string VALUE;
-typedef bool BOOLEAN;
+typedef bool BOOLEAN_TYPE;
 
 class ConstantNode : public ASTNode {
 
 public:
-	ConstantNode(VALUE value);
+	ConstantNode();
 		/*
-		Description: Constructs a ConstantNode with the VALUE of the Constant.
+		Description: Sets NODE_TYPE of node to be constantNode.
 		*/
 
-	BOOLEAN setValue(VALUE value);
+	BOOLEAN_TYPE setValue(VALUE value);
 		/*
 		Description: Returns True if able to set the VALUE of the Constant in this ConstantNode
 		*/
