@@ -28,13 +28,13 @@ void QueryNode::setNodeType(NODE_TYPE_STRING node_type_string) {
 	else if (std::regex_match(node_type_string, std::regex("Follows"))) {
 		this->node_type = QueryNodeType::follows;
 	}
-	else if (std::regex_match(node_type_string, std::regex("Follows*"))) {
+	else if (std::regex_match(node_type_string, std::regex("Follows\\*"))) {
 		this->node_type = QueryNodeType::followsT;
 	}
 	else if (std::regex_match(node_type_string, std::regex("Parent"))) {
 		this->node_type = QueryNodeType::parent;
 	}
-	else if (std::regex_match(node_type_string, std::regex("Parent*"))) {
+	else if (std::regex_match(node_type_string, std::regex("Parent\\*"))) {
 		this->node_type = QueryNodeType::parentT;
 	}
 	else if (std::regex_match(node_type_string, std::regex("Uses"))) {
