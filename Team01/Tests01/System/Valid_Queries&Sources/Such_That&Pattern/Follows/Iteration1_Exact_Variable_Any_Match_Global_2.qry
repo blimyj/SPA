@@ -26,7 +26,7 @@ none
 6 - Assign and Read, Select Assign
 assign a; read r; variable v;
 Select a such that Follows (r, a) pattern a ("happiness", _)
-71
+71, 83
 5000
 7 - Assign and If, Select Assign
 assign a; if i; variable v;

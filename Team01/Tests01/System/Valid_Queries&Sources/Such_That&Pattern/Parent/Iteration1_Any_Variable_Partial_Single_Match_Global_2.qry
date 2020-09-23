@@ -1,6 +1,6 @@
 1 - Constant and Assign, Select Assign
 assign a;
-Select a such that Parent (37, a) pattern a (_, _"sadness")
+Select a such that Parent (37, a) pattern a (_, _"sadness"_)
 38
 5000
 2 - Statement and Assign , Select Assign
@@ -11,7 +11,7 @@ Select a such that Parent (s, a) pattern a (_, _"5"_)
 3 - If and Assign , Select Assign
 assign a; if i;
 Select a such that Parent (i, a) pattern a (_, _"messages"_)
-52, 85
+52
 5000
 4 - While and Assign, Select Assign
 assign a; while w;
