@@ -93,8 +93,3 @@ assign a;
 Select a such that Uses ("main", "cat") pattern a (_, _)
 none
 5000
-20 - Out of Scope, Select Procedure
-assign a; procedure p
-Select p such that Uses (p, "cat") pattern a (_, _)
-3, 8, 12, 16, 19, 25, 29, 30, 41, 42, 43, 47, 48, 49, 50, 51, 52, 73, 74, 
-5000
