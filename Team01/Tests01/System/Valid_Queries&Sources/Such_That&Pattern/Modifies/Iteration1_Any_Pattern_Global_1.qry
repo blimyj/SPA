@@ -61,12 +61,12 @@ Select a such that Modifies (a, v) pattern a (v, _"dog"_)
 13 - Select Variable, Any Variable, Any Match
 assign a; variable v;
 Select v such that Modifies (a, v) pattern a (_, _)
-a, b, c, d, e, dog, woof, cat, meow, name
+a, b, c, d, e, dog, woof, cat, meow, name, x, y, z
 5000
 14 - Select Variable, Any Variable, Partial Single Match
 assign a; variable v;
 Select v such that Modifies (a, v) pattern a (_, _"1"_)
-a, b, c, d, x, cat
+a, b, x, cat
 5000
 15 - Select Variable, Exact Variable, Any Match
 assign a; variable v;

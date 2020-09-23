@@ -11,7 +11,7 @@ none
 3 - Assign and Statement, Select Assign
 assign a; stmt s;
 Select a such that Follows (a, s) pattern a (_, _)
-2, 3, 4, 5, 6, 8, 12, 17, 21, 26, 27, 28, 32, 33, 38, 39, 41, 46, 52, 54, 55, 56, 57, 71, 72, 73, 79, 83, 84, 87, 88, 89, 90, 91
+2, 3, 4, 5, 6, 8, 12, 17, 21, 26, 27, 28, 32, 33, 38, 39, 41, 46, 52, 54, 55, 56, 57, 62, 71, 72, 73, 79, 83, 84, 87, 88, 89, 90, 91
 5000
 4 - Assign and Assign, Select Assign
 assign a1, a2;
@@ -26,7 +26,7 @@ none
 6 - Assign and Read, Select Assign
 assign a; read r;
 Select a such that Follows (r, a) pattern a (_, _)
-71
+71, 83
 5000
 7 - Assign and If, Select Assign
 assign a; if i;

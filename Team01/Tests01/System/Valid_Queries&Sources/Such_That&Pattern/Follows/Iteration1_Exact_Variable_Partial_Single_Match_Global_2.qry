@@ -56,7 +56,7 @@ Select s such that Follows (a, s) pattern a ("boredom", _"boredom"_)
 12 - Assign and Assign, Select Assign 2
 assign a1, a2; variable v;
 Select a2 such that Follows (a1, a2) pattern a2 ("tired", _"tired"_)
-57, 92
+56, 91
 5000
 13 - Assign and Print, Select Print
 assign a; print p; variable v;
@@ -136,7 +136,7 @@ Select s such that Follows (a, s) pattern a ("age", _"60"_)
 28 - Assign and Assign, Select Assign 2
 assign a1, a2; variable v;
 Select a2 such that Follows (a1, a2) pattern a2 ("time", _"10"_)
-56
+39, 57, 84
 5000
 29 - Assign and Print, Select Print
 assign a; print p; variable v;
