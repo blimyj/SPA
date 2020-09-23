@@ -6,5 +6,6 @@ enum class RelationTypeEnum {
     gt,
     gte,
     lt,
-    lte
+    lte,
+    undefined
 };

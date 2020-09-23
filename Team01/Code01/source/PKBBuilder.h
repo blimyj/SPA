@@ -103,41 +103,41 @@ public:
         */
 
     /*==== Relationships ====*/
-    VOID addFollows(STMT_NUM s1, STMT_NUM s2);
+    void addFollows(STMT_NUM s1, STMT_NUM s2);
         /*
         Description: Stores a Follows(STMT_NUM, STMT_NUM) relationship to
                      the FOLLOWS_TABLE when building the PKB.
         */
-    VOID addParent(STMT_NUM s1, STMT_NUM s2);
+    void addParent(STMT_NUM s1, STMT_NUM s2);
         /*
         Description: Stores a Parent(STMT_NUM, STMT_NUM) relationship to
                      the PARENT_TABLE when building the PKB.
         */
-    VOID addUses(STMT_NUM s, VAR_NAME v);
+    void addUses(STMT_NUM s, VAR_NAME v);
         /*
         Description: Stores a Uses(STATEMENT_NAME, VAR_NAME) relationship to
                      the USES_TABLE when building the PKB.
         */
 
-    VOID addUses(PROC_NAME p, VAR_NAME v);
+    void addUses(PROC_NAME p, VAR_NAME v);
         /*
         Description: Stores a Uses(PROC_NAME, VAR_NAME) relationship to
                      the USES_TABLE when building the PKB.
         */
 
-    VOID addModifies(STMT_NUM s, VAR_NAME v);
+    void addModifies(STMT_NUM s, VAR_NAME v);
         /*
         Description: Stores a Modifies(STMT_NUM, VAR_NAME) relationship to
                      the MODIFIES_TABLE when building the PKB.
         */
 
-    VOID addModifies(PROC_NAME p, VAR_NAME v);
+    void addModifies(PROC_NAME p, VAR_NAME v);
         /*
         Description: Stores a Modifies(PROC_NAME, VAR_NAME) relationship to
                      the MODIFIES_TABLE when building the PKB.
         */
 
-    VOID setProgramNode(PROGRAM_NODE_PTR program_node_ptr);
+    void setProgramNode(PROGRAM_NODE_PTR program_node_ptr);
         /*
         Description: Stores the root/program node pointer into the PKB.
         */
@@ -151,7 +151,7 @@ public:
 private:
     friend class PKB;
 
-    PROGRAM_NODE_PTR program_node_ptr;
+    PROGRAM_NODE_PTR program_node_ptr_;
 
     ASSIGN_TABLE assign_table_;
     CONSTANT_TABLE constant_table_;

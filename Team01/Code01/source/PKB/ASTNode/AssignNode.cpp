@@ -1,13 +1,18 @@
 #include "AssignNode.h"
 
-AssignNode::AssignNode(VAR_NODE_PTR var_node_ptr, EXPR_NODE_PTR expr_node_ptr) {
-	setVariableNode(var_node_ptr);
-	setExpressionNode(expr_node_ptr);
-	node_type_ = { NODE_TYPE::assignNode};
+AssignNode::AssignNode() {
+	node_type_ = { NODE_TYPE::assignNode };
+	var_node_ptr_ = nullptr;
+	expr_node_ptr_ = nullptr;
 }
 
-BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
+BOOLEAN_TYPE AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	try {
+		if (var_node_ptr == nullptr) {
+			return false;
+		}
+		addChildNode(var_node_ptr);
+		var_node_ptr->setParentNode(shared_from_this());
 		var_node_ptr_ = var_node_ptr;
 	} catch (int e) {
 		(void)e;
@@ -16,9 +21,14 @@ BOOLEAN AssignNode::setVariableNode(VAR_NODE_PTR var_node_ptr) {
 	return true;
 }
 
-BOOLEAN AssignNode::setExpressionNode(EXPR_NODE_PTR expr_node_ptr) {
+BOOLEAN_TYPE AssignNode::setExpressionNode(EXPR_NODE_PTR expr_node_ptr) {
     try {
+		if (expr_node_ptr == nullptr) {
+			return false;
+		}
 		expr_node_ptr_ = expr_node_ptr;
+		addChildNode(expr_node_ptr_);
+		expr_node_ptr_->setParentNode(shared_from_this());
 	} catch (int e) {
 		(void)e;
 		return false;
@@ -34,5 +44,3 @@ VAR_NODE_PTR AssignNode::getVariableNode() {
 EXPR_NODE_PTR AssignNode::getExpressionNode() {
 	return expr_node_ptr_;
 }
-
-

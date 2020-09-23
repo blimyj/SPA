@@ -1,11 +1,11 @@
 #include "ConstantNode.h"
 
-ConstantNode::ConstantNode(VALUE value) {
-    setValue(value);
+ConstantNode::ConstantNode() {
     node_type_ = { NODE_TYPE::constantNode };
+    value_ = "";
 }
 
-BOOLEAN ConstantNode::setValue(VALUE value) {
+BOOLEAN_TYPE ConstantNode::setValue(VALUE value) {
     try {
         value_ = value;
     }

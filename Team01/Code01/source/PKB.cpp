@@ -15,7 +15,7 @@ PKB::PKB(PKB_BUILDER builder) {
     parent_table_ = builder.parent_table_;
     uses_table_ = builder.uses_table_;
     modifies_table_ = builder.modifies_table_;
-    program_node_ptr_ = builder.program_node_ptr;
+    program_node_ptr_ = builder.program_node_ptr_;
 }
 
 /*==== Design Entities (Nodes) ====*/
@@ -97,35 +97,35 @@ PROC_NAME_LIST PKB::getProcedureNameList() {
 }
 
 /*==== Relationships ====*/
-BOOLEAN PKB::isFollows(STMT_NUM s1, STMT_NUM s2) {
+BOOLEAN_TYPE PKB::isFollows(STMT_NUM s1, STMT_NUM s2) {
     return follows_table_.isFollows(s1, s2);
 }
 
-BOOLEAN PKB::isFollowsTransitive(STMT_NUM s1, STMT_NUM s2) {
+BOOLEAN_TYPE PKB::isFollowsTransitive(STMT_NUM s1, STMT_NUM s2) {
     return follows_table_.isFollowsTransitive(s1, s2);
 }
 
-BOOLEAN PKB::isParent(STMT_NUM s1, STMT_NUM s2) {
+BOOLEAN_TYPE PKB::isParent(STMT_NUM s1, STMT_NUM s2) {
     return parent_table_.isParent(s1, s2);
 }
 
-BOOLEAN PKB::isParentTransitive(STMT_NUM s1, STMT_NUM s2) {
+BOOLEAN_TYPE PKB::isParentTransitive(STMT_NUM s1, STMT_NUM s2) {
     return parent_table_.isParentTransitive(s1, s2);
 }
 
-BOOLEAN PKB::isUses(STMT_NUM s, VAR_NAME v) {
+BOOLEAN_TYPE PKB::isUses(STMT_NUM s, VAR_NAME v) {
     return uses_table_.isUses(s, v);
 }
 
-BOOLEAN PKB::isUses(PROC_NAME p, VAR_NAME v) {
+BOOLEAN_TYPE PKB::isUses(PROC_NAME p, VAR_NAME v) {
     return uses_table_.isUses(p, v);
 }
 
-BOOLEAN PKB::isModifies(STMT_NUM s, VAR_NAME v) {
+BOOLEAN_TYPE PKB::isModifies(STMT_NUM s, VAR_NAME v) {
     return modifies_table_.isModifies(s, v);
 }
 
-BOOLEAN PKB::isModifies(PROC_NAME p, VAR_NAME v) {
+BOOLEAN_TYPE PKB::isModifies(PROC_NAME p, VAR_NAME v) {
     return modifies_table_.isModifies(p, v);
 }
 
