@@ -269,15 +269,5 @@ namespace UnitTesting {
 			STMT_NODE_PTR_LIST actual_stmt_list2 = actual_stmtlist2->getStatementNodeList();
 			Assert::IsTrue(1 == actual_stmt_list2.size());
 		}
-
-		/*
-		procedure complexCond {
-			while ((a<b) && (!(b==c))) || (d>e) {
-				read x;
-			}
-		}
-		*/
-		// To ensure parser can correctly parse more complex conditions
-		
 	};
 }
