@@ -70,44 +70,44 @@
 				this->process_token_stream_.pop_front();
 				this->stmt_token_queue_.push_back("assign"); //Note that this was enqueued instead of '='
 				this->stmt_token_queue_.push_back(stmt_token); //This would be the variable name
-				parseAssign(&this->stmt_token_queue_, &this->process_token_stream_);
+				parseAssign();
 				continue;
 			}
 
 			//After checking first two tokens, call appropriate parse function
 			if (stmt_token == "procedure") {
 				this->stmt_token_queue_.push_back(stmt_token); //This is "procedure" token
-				parseProcedure(&this->stmt_token_queue_, &this->process_token_stream_);
+				parseProcedure();
 				continue;
 			}
 
 			if (stmt_token == "read") {
 				this->stmt_token_queue_.push_back(stmt_token); //This is "read" token
-				parseRead(&this->stmt_token_queue_, &this->process_token_stream_);
+				parseRead();
 				continue;
 			}
 
 			if (stmt_token == "print") {
 				this->stmt_token_queue_.push_back(stmt_token); //This is "print" token
-				parsePrint(&this->stmt_token_queue_, &this->process_token_stream_);
+				parsePrint();
 				continue;
 			}
 
 			if (stmt_token == "while") {
 				this->stmt_token_queue_.push_back(stmt_token); //This is "while" token
-				parseWhile(&this->stmt_token_queue_, &this->process_token_stream_);
+				parseWhile();
 				continue;
 			}
 
 			if (stmt_token == "if") {
 				this->stmt_token_queue_.push_back(stmt_token); //This is "if" token
-				parseIfThen(&this->stmt_token_queue_, &this->process_token_stream_);
+				parseIfThen();
 				continue;
 			}
 
 			if (stmt_token == "else") {
 				this->stmt_token_queue_.push_back(stmt_token); //This is "else" token
-				parseElse(&this->stmt_token_queue_, &this->process_token_stream_);
+				parseElse();
 				continue;
 			}
 
@@ -271,7 +271,7 @@
 		return 0;
 	}
 
-	int Parser::parseWhile(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+	int Parser::parseWhile() {
 
 		if (this->stmt_token_queue_.front() != "while") {
 			throw "Error: Expected 'while' terminal but was not found.";
@@ -926,7 +926,7 @@
 		return 0;
 	}
 
-	int Parser::parseIfThen(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+	int Parser::parseIfThen() {
 		//We assume that this opening segment will either terminate with '{' or ';' with the exception of whitespaces and newline?
 
 		if (this->stmt_token_queue_.front() != "if") {
@@ -1589,7 +1589,7 @@
 		return 0;
 	}
 
-	int Parser::parseElse(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+	int Parser::parseElse() {
 		//We assume that '{' will follow 'else'
 
 		if (this->stmt_token_queue_.front() != "else") {
@@ -1611,7 +1611,7 @@
 		return 0;
 	}
 
-	int Parser::parseAssign(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+	int Parser::parseAssign() {
 		//We assume that this statement will terminate with ';'
 		// First token is assign
 		if (this->stmt_token_queue_.front() != "assign") {
@@ -1999,7 +1999,7 @@
 		return 0;
 	}
 
-	int Parser::parseRead(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+	int Parser::parseRead() {
 		//We take in two tokens, expecting a NAME and a ';'
 		if (this->stmt_token_queue_.front() != "read") {
 			throw "Error: Expected 'read' terminal but was not found.";
@@ -2096,7 +2096,7 @@
 		return 0;
 	}
 
-	int Parser::parsePrint(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+	int Parser::parsePrint() {
 		//We take in two tokens, expecting a NAME and a ';'
 		if (this->stmt_token_queue_.front() != "print") {
 			throw "Error: Expected 'print' terminal but was not found.";
@@ -2195,7 +2195,7 @@
 		return 0;
 	}
 
-	int Parser::parseProcedure(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue) {
+	int Parser::parseProcedure() {
 		//We assume that this opening segment will either terminate with '{'
 		if (this->stmt_token_queue_.front() != "procedure") {
 			throw "Error: Expected 'procedure' terminal but was not found.";
@@ -2236,10 +2236,12 @@
 		return 0;
 	}
 
+	/*
 	int Parser::parseCall(STRING str) {
 		//We assume that this statement will terminate with ';'
 		return 0;
 	}
+	*/
 
 	int Parser::parseStmtListClose() {	
 		//Method 2: accounts for container statements
