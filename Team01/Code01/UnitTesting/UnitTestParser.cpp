@@ -58,8 +58,7 @@ namespace UnitTesting {
 			parser_ptr->process_token_stream_.push_back("1");
 			
 			// Run parseAssign for relevant parser
-			// The following line causes an error
-			//int result = parser_ptr->parseAssign(&parser_ptr->stmt_token_queue_, &parser_ptr->process_token_stream_);
+			// int result = parser_ptr->parseAssign(&parser_ptr->stmt_token_queue_, &parser_ptr->process_token_stream_);
 
 			// Confirm correct parsing of assign
 			
