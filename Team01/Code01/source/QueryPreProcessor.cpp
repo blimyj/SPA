@@ -629,7 +629,7 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 				// create clause node
 				// add to children array
 				if (next_index == such_that_index) {
-					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index + 9, pattern_index - next_index));
+					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index + 9, pattern_index - (next_index + 9)));
 
 					if (!isValidRelationFormat(current_c)) {
 						is_valid = false;
