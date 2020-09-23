@@ -206,8 +206,8 @@ namespace UnitTesting {
 		/*
 		procedure hasWhile {
 			print a;
-			while (a != 3) {
-				a = a - 1;
+			while (b != 3) {
+				c = d - 1;
 			}
 		}
 		*/
@@ -229,8 +229,8 @@ namespace UnitTesting {
 			Assert::IsTrue(actual_proc->getProcedureName() == "hasWhile");
 
 			// Check statementlist is made with 2 statement(children)
-			STMT_LIST_NODE_PTR actual_stmtlist = actual_proc->getProcedureStatementListNode();
-			STMT_NODE_PTR_LIST actual_stmt_list = actual_stmtlist->getStatementNodeList();
+			STMT_LIST_NODE_PTR actual_stmtlist1 = actual_proc->getProcedureStatementListNode();
+			STMT_NODE_PTR_LIST actual_stmt_list = actual_stmtlist1->getStatementNodeList();
 			Assert::IsTrue(actual_stmt_list.size() == 2);
 
 			// Check print node validity (print a)
@@ -240,27 +240,44 @@ namespace UnitTesting {
 			Assert::IsTrue(1 == actual_print->getStatementNumber());
 
 			// Check while node validity 
-			// While node, condition node (b != 3), stmtlist
+			/*
+				While node, condition node (b != 3), stmtlist
+				While -> condition(none) + stmtlist
+				condition(none) -> rel(neq) on left
+				rel(neq) -> var + const
+			*/
 			WhileNode* actual_while = static_cast<WhileNode*>(actual_stmt_list.at(1).get());
 			CONDITION_NODE_PTR actual_cond = actual_while->getConditionNode();
-			CONDITION_TYPE cond_type = actual_cond->getConditionType();			//neq
+			CONDITION_TYPE cond_type = actual_cond->getConditionType();			// none
 
+			AST_NODE_PTR temp_rel = actual_cond->getLeftAstNode();				// neq
+			RelationNode* actual_rel = static_cast<RelationNode*>(temp_rel.get());
+			RELATION_TYPE rel_type = actual_rel->getRelationType();
 
-
-
-			AST_NODE_PTR temp_var2 = actual_cond->getLeftAstNode();				// b
+			AST_NODE_PTR temp_var2 = actual_rel->getLeftAstNode();				// b
 			VariableNode* actual_var2 = static_cast<VariableNode*>(temp_var2.get());
-			AST_NODE_PTR temp_expr1 = actual_cond->getRightAstNode();			// 3
-			ExpressionNode* actual_expr1 = static_cast<ExpressionNode*>(temp_expr1.get());
-			EXPR_TYPE actual_expr1_type = actual_expr1->getExpressionType();
-			AST_NODE_PTR temp_const1 = actual_expr1->getLeftAstNode();
+			AST_NODE_PTR temp_const1 = actual_rel->getRightAstNode();			// 3
 			ConstantNode* actual_const1 = static_cast<ConstantNode*>(temp_const1.get());
-			Assert::IsTrue("b" == actual_var2->getVariableName());
-			Assert::IsTrue(2 == actual_print->getStatementNumber());
-			Assert::IsTrue(ENUM)
 			
+			Assert::IsTrue("b" == actual_var2->getVariableName());
+			Assert::IsTrue(RelationTypeEnum::neq == rel_type);
+			Assert::IsTrue("3" == actual_const1->getValue());
+			Assert::IsTrue(2 == actual_while->getStatementNumber());
 
+			// Check stmtlist validity (size 1)
+			STMT_LIST_NODE_PTR actual_stmtlist2 = actual_while->getWhileStatementListNode();
+			STMT_NODE_PTR_LIST actual_stmt_list2 = actual_stmtlist2->getStatementNodeList();
+			Assert::IsTrue(1 == actual_stmt_list2.size());
 		}
 
+		/*
+		procedure complexCond {
+			while ((a<b) && (!(b==c))) || (d>e) {
+				read x;
+			}
+		}
+		*/
+		// To ensure parser can correctly parse more complex conditions
+		
 	};
 }
