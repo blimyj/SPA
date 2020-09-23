@@ -20,15 +20,15 @@ public:
 	PKB parseFile(STRING str);
 	int parseText(LIST_OF_STRINGS l_of_str);
 private:
-	int parseProcedure(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
-	int parseRead(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
-	int parsePrint(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
-	int parseAssign(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
+	int parseProcedure();
+	int parseRead();
+	int parsePrint();
+	int parseAssign();
 
-	int parseWhile(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
-	int parseIfThen(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
-	int parseElse(STMT_TOKEN_QUEUE stmt_tok_queue, PROCESS_TOKEN_QUEUE proc_tok_queue);
-	int parseCall(STRING str);
+	int parseWhile();
+	int parseIfThen();
+	int parseElse();
+	//int parseCall(STRING str);
 	int parseStmtListClose();
 
 	STRING getNextToken(std::istreambuf_iterator<char>* iter, std::istreambuf_iterator<char> eos);
