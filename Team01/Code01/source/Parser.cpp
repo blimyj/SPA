@@ -121,7 +121,7 @@
 		return pkb;
 	}
 
-	STRING Parser::getNextToken(std::istreambuf_iterator<char>* iter, std::istreambuf_iterator<char> eos) {
+	STRING Parser::getNextToken(FILE_ITER_PTR iter, FILE_ITER eos) {
 		std::string curr_token;
 
 		//Skip past all whitespaces
