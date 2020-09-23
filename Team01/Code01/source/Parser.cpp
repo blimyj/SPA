@@ -2251,7 +2251,7 @@
 	}
 
 	//===== START OF HELPER FUNCTIONS =====
-	int Parser::takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op) {
+	PRECEDENCE Parser::takesPrecedent(OP_TYPE_ENUM l_op, OP_TYPE_ENUM r_op) {
 		//Returns 1 if left operator takes precendence
 		if (l_op == OperatorTypeEnum::opMult || l_op == OperatorTypeEnum::opDiv || l_op == OperatorTypeEnum::opMod) {
 			if (r_op == OperatorTypeEnum::opPlus || l_op == OperatorTypeEnum::opMin) {
@@ -2272,7 +2272,7 @@
 		}
 	}
 
-	ExpressionTypeEnum Parser::getExpressionType(OperatorTypeEnum op) {
+	EXPR_TYPE_ENUM Parser::getExpressionType(OP_TYPE_ENUM op) {
 		if (op == OperatorTypeEnum::opPlus) {
 			return ExpressionTypeEnum::plus;
 		}
@@ -2296,7 +2296,7 @@
 	//===== END OF HELPER FUNCTIONS =====
 
 	//===== START OF HELPER FUNCTIONS FOR RELATION NODE =====
-	int Parser::takesPrecedent(RelOperatorTypeEnum l_op, RelOperatorTypeEnum r_op) {
+	PRECEDENCE Parser::takesPrecedent(REL_OP_TYPE_ENUM l_op, REL_OP_TYPE_ENUM r_op) {
 		//Returns 1 if left operator takes precendence
 		if (l_op == RelOperatorTypeEnum::ropMult || l_op == RelOperatorTypeEnum::ropDiv || l_op == RelOperatorTypeEnum::ropMod) {
 			if (r_op == RelOperatorTypeEnum::ropMult || r_op == RelOperatorTypeEnum::ropDiv || r_op == RelOperatorTypeEnum::ropMod) {
@@ -2352,7 +2352,7 @@
 		}
 	}
 
-	ExpressionTypeEnum Parser::getExpressionType(RelOperatorTypeEnum op) {
+	EXPR_TYPE_ENUM Parser::getExpressionType(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropPlus) {
 			return ExpressionTypeEnum::plus;
 		}
@@ -2373,7 +2373,7 @@
 		}
 	}
 
-	RelationTypeEnum Parser::getArithmeticRelationType(RelOperatorTypeEnum op) {
+	REL_TYPE_ENUM Parser::getArithmeticRelationType(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropEq) {
 			return RelationTypeEnum::eq;
 		}
@@ -2397,7 +2397,7 @@
 		}
 	}
 
-	ConditionTypeEnum Parser::getBooleanRelationType(RelOperatorTypeEnum op) {
+	COND_TYPE_ENUM Parser::getBooleanRelationType(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropNot) {
 			return ConditionTypeEnum::not;
 		}
@@ -2412,7 +2412,7 @@
 		}
 	}
 
-	bool Parser::isArithmeticOp(RelOperatorTypeEnum op) {
+	BOOLEAN_TYPE Parser::isArithmeticOp(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropPlus || op == RelOperatorTypeEnum::ropMin
 			|| op == RelOperatorTypeEnum::ropMult || op == RelOperatorTypeEnum::ropDiv
 			|| op == RelOperatorTypeEnum::ropMod) {
@@ -2423,7 +2423,7 @@
 		}
 	}
 
-	bool Parser::isRelationOp(RelOperatorTypeEnum op) {
+	BOOLEAN_TYPE Parser::isRelationOp(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropEq || op == RelOperatorTypeEnum::ropNeq
 			|| op == RelOperatorTypeEnum::ropGt || op == RelOperatorTypeEnum::ropGte
 			|| op == RelOperatorTypeEnum::ropLt || op == RelOperatorTypeEnum::ropLte) {
@@ -2434,7 +2434,7 @@
 		}
 	}
 
-	bool Parser::isBooleanOp(RelOperatorTypeEnum op) {
+	BOOLEAN_TYPE Parser::isBooleanOp(REL_OP_TYPE_ENUM op) {
 		if (op == RelOperatorTypeEnum::ropBoolNone || op == RelOperatorTypeEnum::ropNot
 			|| op == RelOperatorTypeEnum::ropAnd || op == RelOperatorTypeEnum::ropOr) {
 			return true;
