@@ -13,10 +13,6 @@
 #include "PKB/ASTNode/NodeTypeEnum.h"
 #include "PKB/ASTNode/RelationNode.h"
 
-	int Parser::Parse() {
-
-		return 0;
-	}
 
 	PKB Parser::parseFile(STRING filename) {
 		//Construct program root node
@@ -265,13 +261,7 @@
 		return curr_token;
 	}
 
-	int Parser::parseText(LIST_OF_STRINGS str_list) {
-
-		// Not considered for now.
-		return 0;
-	}
-
-	int Parser::parseWhile() {
+	void Parser::parseWhile() {
 
 		if (this->stmt_token_queue_.front() != "while") {
 			throw "Error: Expected 'while' terminal but was not found.";
@@ -922,11 +912,9 @@
 		this->pkb_builder_.addWhileNode(new_while_node);
 		this->pkb_builder_.addStatementNode(new_while_node);
 		this->pkb_builder_.addStatementListNode(new_stmt_list_node);
-
-		return 0;
 	}
 
-	int Parser::parseIfThen() {
+	void Parser::parseIfThen() {
 		//We assume that this opening segment will either terminate with '{' or ';' with the exception of whitespaces and newline?
 
 		if (this->stmt_token_queue_.front() != "if") {
@@ -1585,11 +1573,9 @@
 		this->pkb_builder_.addStatementNode(new_if_node);
 		this->pkb_builder_.addStatementListNode(if_stmt_list_node);
 		this->pkb_builder_.addStatementListNode(else_stmt_list_node);
-
-		return 0;
 	}
 
-	int Parser::parseElse() {
+	void Parser::parseElse() {
 		//We assume that '{' will follow 'else'
 
 		if (this->stmt_token_queue_.front() != "else") {
@@ -1605,11 +1591,9 @@
 
 		//Due to parseStmtListClose changing current_parent_node_ there is no need change parent tracker to stmtlistnode_ptr
 		//This function exists just to remove the "else" & "{" tokens
-
-		return 0;
 	}
 
-	int Parser::parseAssign() {
+	void Parser::parseAssign() {
 		//We assume that this statement will terminate with ';'
 		// First token is assign
 		if (this->stmt_token_queue_.front() != "assign") {
@@ -1993,11 +1977,9 @@
 					, var_name);
 			}
 		}
-
-		return 0;
 	}
 
-	int Parser::parseRead() {
+	void Parser::parseRead() {
 		//We take in two tokens, expecting a NAME and a ';'
 		if (this->stmt_token_queue_.front() != "read") {
 			throw "Error: Expected 'read' terminal but was not found.";
@@ -2090,11 +2072,9 @@
 			this->pkb_builder_.addModifies(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
 				, var_name);
 		}
-
-		return 0;
 	}
 
-	int Parser::parsePrint() {
+	void Parser::parsePrint() {
 		//We take in two tokens, expecting a NAME and a ';'
 		if (this->stmt_token_queue_.front() != "print") {
 			throw "Error: Expected 'print' terminal but was not found.";
@@ -2186,11 +2166,9 @@
 			this->pkb_builder_.addUses(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
 				, var_name);
 		}
-
-		return 0;
 	}
 
-	int Parser::parseProcedure() {
+	void Parser::parseProcedure() {
 		//We assume that this opening segment will either terminate with '{'
 		if (this->stmt_token_queue_.front() != "procedure") {
 			throw "Error: Expected 'procedure' terminal but was not found.";
@@ -2227,18 +2205,15 @@
 		//Need to add new_stmt_list_node & new_procedure_node to PKB tables
 		this->pkb_builder_.addProcedureNode(new_procedure_node);
 		this->pkb_builder_.addStatementListNode(new_stmt_list_node);
-
-		return 0;
 	}
 
 	/*
-	int Parser::parseCall(STRING str) {
+	void Parser::parseCall(STRING str) {
 		//We assume that this statement will terminate with ';'
-		return 0;
 	}
 	*/
 
-	int Parser::parseStmtListClose() {	
+	void Parser::parseStmtListClose() {	
 		//Method 2: accounts for container statements
 		
 		//Part 1: When closing a stmtList Node, 
@@ -2273,8 +2248,6 @@
 			this->current_parent_node_ = this->current_parent_node_->getParentNode()->getParentNode();
 
 		}
-
-		return 0;
 	}
 
 	//===== START OF HELPER FUNCTIONS =====
