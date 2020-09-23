@@ -1,6 +1,3 @@
 Such_That/Parent/Iteration1_Global_1
-Pattern/Iteration1_Any_Match_Global_1
-Pattern/Iteration1_Any_Variable&Partial_Single_Match_Global_1
-Pattern/Iteration1_Exact_Variable&Partial_Single_Match_Global_1
 Such_That/Modifies/Iteration1_Any_Pattern_Global_1
 Such_That/Uses/Iteration1_Any_Pattern_Global_1
