@@ -269,5 +269,77 @@ namespace UnitTesting {
 			STMT_NODE_PTR_LIST actual_stmt_list2 = actual_stmtlist2->getStatementNodeList();
 			Assert::IsTrue(1 == actual_stmt_list2.size());
 		}
+
+		/*
+		procedure complexCond {
+			while ((a<b) && (!(b==c))) || (d>e) {
+				read x;
+			}
+		}
+		*/
+		// To ensure parser can correctly parse more complex conditions
+		TEST_METHOD(parsewhile_2) {
+			Parser parser = Parser();
+			PKB_PTR actual_pkb =
+				std::make_shared<PKB>(parser.parseFile("../UnitTesting/Parser/TestParser-6.txt"));
+
+			// Check program node is made
+			PROGRAM_NODE_PTR actual_prog = actual_pkb->getProgramNode();
+			PROGRAM_NODE_PTR prog = std::make_shared<ProgramNode>();
+			Assert::IsTrue(typeid(prog) == typeid(actual_prog));
+
+			// Check procedure list is made, with correct procedure name
+			PROC_NODE_PTR_LIST actual_proc_list = actual_prog->getProcedureNodeList();
+			PROC_NODE_PTR actual_proc = actual_proc_list.at(0);
+			Assert::IsTrue(actual_proc->getProcedureName() == "complexCond");
+
+			// Check statementlist is made with 1 statement(children)
+			STMT_LIST_NODE_PTR actual_stmtlist1 = actual_proc->getProcedureStatementListNode();
+			STMT_NODE_PTR_LIST actual_stmt_list = actual_stmtlist1->getStatementNodeList();
+			Assert::IsTrue(actual_stmt_list.size() == 1);
+
+			// Check while node validity 
+			/*
+				While node, condition node ((a<b) && (!(b==c))) || (d>e), stmtlist
+				While -> condition(or) + stmtlist
+				cond1(or) -> cond(and) + rel(gt)
+				cond2(and) -> rel(lt) + cond(not)
+				rel1(gt) -> var(d) + var(e)
+				rel2(lt) -> var(a) + var(b)
+				cond3(not) -> rel(eq) on left
+				rel3(eq) -> var(b) + var(c)
+			*/
+			WhileNode* actual_while = static_cast<WhileNode*>(actual_stmt_list.at(0).get());
+			CONDITION_NODE_PTR actual_cond1 = actual_while->getConditionNode();
+			CONDITION_TYPE cond1_type = actual_cond1->getConditionType();			// or
+			Assert::IsTrue(ConditionTypeEnum::or == cond1_type);
+			
+			AST_NODE_PTR temp_cond2 = actual_cond1->getLeftAstNode();				// and
+			ConditionNode* actual_cond2 = static_cast<ConditionNode*>(temp_cond2.get());
+			CONDITION_TYPE cond2_type = actual_cond2->getConditionType();
+			Assert::IsTrue(ConditionTypeEnum:: and == cond2_type);
+
+			AST_NODE_PTR temp_rel1 = actual_cond1->getRightAstNode();				//gt
+			RelationNode* actual_rel1 = static_cast<RelationNode*>(temp_rel1.get());
+			RELATION_TYPE rel1_type = actual_rel1->getRelationType();
+			Assert::IsTrue(RelationTypeEnum::gt == rel1_type);
+			
+			AST_NODE_PTR temp_rel2 = actual_cond2->getLeftAstNode();				//lt
+			RelationNode* actual_rel2 = static_cast<RelationNode*>(temp_rel2.get());
+			RELATION_TYPE rel2_type = actual_rel2->getRelationType();
+			Assert::IsTrue(RelationTypeEnum::lt == rel2_type);
+
+			AST_NODE_PTR temp_cond3 = actual_cond2->getRightAstNode();				// not
+			ConditionNode* actual_cond3 = static_cast<ConditionNode*>(temp_cond3.get());
+			CONDITION_TYPE cond3_type = actual_cond3->getConditionType();
+			Assert::IsTrue(ConditionTypeEnum::not == cond3_type);
+
+			AST_NODE_PTR temp_rel3 = actual_cond3->getLeftAstNode();				// eq
+			RelationNode* actual_rel3 = static_cast<RelationNode*>(temp_rel3.get());
+			RELATION_TYPE rel3_type = actual_rel3->getRelationType();
+			Assert::IsTrue(RelationTypeEnum::eq == rel3_type);
+		}
+
+
 	};
 }
