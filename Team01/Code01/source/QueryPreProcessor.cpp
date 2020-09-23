@@ -6,6 +6,7 @@
 
 #include "PKB/ASTNode/ConstantNode.h"
 #include "PKB/ASTNode/VariableNode.h"
+#include "PKB/ASTNode/ExpressionNode.h"
 #include "QueryNode.h"
 #include "QueryNodeType.h"
 #include "QueryPreProcessor.h"
@@ -95,19 +96,21 @@ QueryNode QueryPreProcessor::createExpressionNode(EXPRESSION e) {
 		int close_quote_index = e.rfind("\"");
 		std::string trimmed_exp = trimWhitespaces(e.substr(open_quote_index + 1,
 			close_quote_index - open_quote_index - 1));
-
+		std::shared_ptr<ExpressionNode> expr_node = std::make_shared<ExpressionNode>();
 
 		if (std::regex_match(trimmed_exp, std::regex(name_format_))) {
 			// expression is a var_name
 			std::shared_ptr<VariableNode> var_node = std::make_shared<VariableNode>();
 			var_node->setVariableName(trimmed_exp);
-			exp_node.setASTNode(var_node);
+			expr_node->setLeftAstNode(var_node);
+			exp_node.setASTNode(expr_node);
 		}
 		else {
 			// expression is a const_value
 			std::shared_ptr<ConstantNode> const_node = std::make_shared<ConstantNode>();
 			const_node->setValue(trimmed_exp);
-			exp_node.setASTNode(const_node);
+			expr_node->setLeftAstNode(const_node);
+			exp_node.setASTNode(expr_node);
 		}
 	}
 	
