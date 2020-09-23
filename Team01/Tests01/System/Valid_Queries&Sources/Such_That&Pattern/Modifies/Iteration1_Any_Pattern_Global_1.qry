@@ -93,12 +93,7 @@ assign a;
 Select a such that Modifies ("main", "cat") pattern a (_, _)
 none
 5000
-20 - Out of Scope, Select Procedure
-assign a; procedure p
-Select p such that Modifies (p, "d") pattern a (_, _)
-15, 21, 34, 38, 61, 62, 78, 83
-5000
-21 - Out of Scope, Modifies but different Vairable
+20 - Out of Scope, Modifies but different Vairable
 assign a;
 Select a such that Modifies (a, "z") pattern a ("b", _"dog"_)
 none
