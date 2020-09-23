@@ -16,11 +16,6 @@ class QueryProcessor {
 private:
 	PKB pkb = (PKBBuilder().build()); // because PKB has no default constructor
 public:
-	QueryProcessor();
-	/*
-		Description:
-		  Normal: 
-		*/
 
 	QueryProcessor(PKB pkb);
 	/*
