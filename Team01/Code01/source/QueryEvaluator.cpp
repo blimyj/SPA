@@ -885,18 +885,21 @@ bool QueryEvaluator::findPartialPattern(AST_NODE_PTR ast, std::string search_nam
 		if (node_type == NodeTypeEnum::constantNode) {
 			CONSTANT_NODE_PTR n = std::static_pointer_cast<ConstantNode>(node);
 			VALUE node_name = n->getValue();
-			if (node_name == search_name) {
+			if (node_name.compare(search_name) == 0) {
 				return true;
 			}
 		} else if (node_type == NodeTypeEnum::expressionNode) {
 			EXPR_NODE_PTR n = std::static_pointer_cast<ExpressionNode>(node);
-			for (AST_NODE_PTR child : n->getChildrenNode()) {
-				queue.push(child);
+			if (n->getExpressionType() == ExpressionTypeEnum::none) {
+				queue.push(n->getLeftAstNode());
+			} else {
+				queue.push(n->getLeftAstNode());
+				queue.push(n->getRightAstNode());
 			}
 		} else if (node_type == NodeTypeEnum::variableNode) {
 			VAR_NODE_PTR n = std::static_pointer_cast<VariableNode>(node);
 			VAR_NAME node_name = n->getVariableName();
-			if (node_name == search_name) {
+			if (node_name.compare(search_name) == 0) {
 				return true;
 			}
 		}
