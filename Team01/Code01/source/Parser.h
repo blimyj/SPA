@@ -17,6 +17,13 @@ typedef std::deque<STRING> PROCESS_TOKEN_QUEUE;
 typedef int STMT_NUMBER;
 typedef bool BOOLEAN_TYPE;
 typedef int PRECEDENCE;
+typedef std::istreambuf_iterator<char>* FILE_ITER_PTR;
+typedef std::istreambuf_iterator<char> FILE_ITER;
+typedef ExpressionTypeEnum EXPR_TYPE_ENUM;
+typedef RelationTypeEnum REL_TYPE_ENUM;
+typedef ConditionTypeEnum COND_TYPE_ENUM;
+typedef RelOperatorTypeEnum REL_OP_TYPE_ENUM;
+typedef OperatorTypeEnum OP_TYPE_ENUM;
 
 class Parser {
 public:
@@ -34,7 +41,7 @@ private:
 	//int parseCall(STRING str);
 	void parseStmtListClose();
 
-	STRING getNextToken(std::istreambuf_iterator<char>* iter, std::istreambuf_iterator<char> eos);
+	STRING getNextToken(FILE_ITER_PTR iter, FILE_ITER eos);
 
 	PROGRAM_NODE_PTR program_node_;
 	AST_NODE_PTR current_parent_node_;
@@ -46,16 +53,17 @@ private:
 	STMT_NUMBER stmt_num_;
 
 	//Helper variables & functions for parsing expressions
-	PRECEDENCE takesPrecedent(OperatorTypeEnum l_op, OperatorTypeEnum r_op);
-	ExpressionTypeEnum getExpressionType(OperatorTypeEnum op);
+	PRECEDENCE takesPrecedent(OP_TYPE_ENUM l_op, OP_TYPE_ENUM r_op);
+	EXPR_TYPE_ENUM getExpressionType(OP_TYPE_ENUM op);
 
-	PRECEDENCE takesPrecedent(RelOperatorTypeEnum l_op, RelOperatorTypeEnum r_op);
-	ExpressionTypeEnum getExpressionType(RelOperatorTypeEnum op);
-	RelationTypeEnum getArithmeticRelationType(RelOperatorTypeEnum op);
-	ConditionTypeEnum getBooleanRelationType(RelOperatorTypeEnum op);
+	PRECEDENCE takesPrecedent(REL_OP_TYPE_ENUM l_op, REL_OP_TYPE_ENUM r_op);
+	EXPR_TYPE_ENUM getExpressionType(REL_OP_TYPE_ENUM op);
 
-	BOOLEAN_TYPE isArithmeticOp(RelOperatorTypeEnum op);
-	BOOLEAN_TYPE isRelationOp(RelOperatorTypeEnum op);
-	BOOLEAN_TYPE isBooleanOp(RelOperatorTypeEnum op);
+	REL_TYPE_ENUM getArithmeticRelationType(REL_OP_TYPE_ENUM op);
+	COND_TYPE_ENUM getBooleanRelationType(REL_OP_TYPE_ENUM op);
+
+	BOOLEAN_TYPE isArithmeticOp(REL_OP_TYPE_ENUM op);
+	BOOLEAN_TYPE isRelationOp(REL_OP_TYPE_ENUM op);
+	BOOLEAN_TYPE isBooleanOp(REL_OP_TYPE_ENUM op);
 };
 
