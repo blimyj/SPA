@@ -12,7 +12,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTesting
+namespace IntegrationTesting
 {
 	TEST_CLASS(TestQueryEvaluator)
 	{
