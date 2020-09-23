@@ -602,9 +602,8 @@ namespace UnitTesting
 			CLAUSES c5 = "Select v such that Modifies(a, 1)";
 			CLAUSES c6 = "Select v such that Modifies(, 1)";
 			CLAUSES c7 = "Select v such that Modifies(a, )";
-			CLAUSES c8 = "Select v such that Modifies(a, v)";
-			CLAUSES c9 = "Select v such that ModifiesS(pr, v)";
-			CLAUSES c10 = "Select v such that Modifiess(a, v)";
+			CLAUSES c8 = "Select v such that ModifiesS(pr, v)";
+			CLAUSES c9 = "Select v such that Modifiess(a, v)";
 
 
 			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
@@ -616,7 +615,6 @@ namespace UnitTesting
 			PROCESSED_CLAUSES proc_c7 = qpp.preProcessClauses(proc_s, c7);
 			PROCESSED_CLAUSES proc_c8 = qpp.preProcessClauses(proc_s, c8);
 			PROCESSED_CLAUSES proc_c9 = qpp.preProcessClauses(proc_s, c9);
-			PROCESSED_CLAUSES proc_c10 = qpp.preProcessClauses(proc_s, c10);
 
 			Assert::IsTrue(proc_c1.getNodeType() == QueryNodeType::unassigned);
 			Assert::IsTrue(proc_c2.getNodeType() == QueryNodeType::unassigned);
@@ -626,7 +624,7 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c6.getNodeType() == QueryNodeType::unassigned);
 			Assert::IsTrue(proc_c7.getNodeType() == QueryNodeType::unassigned);
 			Assert::IsTrue(proc_c8.getNodeType() == QueryNodeType::unassigned);
-			Assert::IsTrue(proc_c10.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c9.getNodeType() == QueryNodeType::unassigned);
 		}
 
 		TEST_METHOD(preProcessClauses_Pattern_Valid_Success) {
