@@ -5,6 +5,7 @@
 #include "CppUnitTest.h"
 #include "../source/QueryPreProcessor.h"
 #include "../source/QueryNode.h"
+#include "../source/PKB/ASTNode/ExpressionNode.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -291,7 +292,7 @@ namespace UnitTesting
 
 			CLAUSES c1 = "Select s such that Follows(1, s)";
 			CLAUSES c2 = "Select s such that Follows(s, a)";
-			CLAUSES c3 = "Select s such that FollowsT(_, s)";
+			CLAUSES c3 = "Select s such that Follows*(_, s)";
 
 			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
 			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
@@ -330,9 +331,9 @@ namespace UnitTesting
 
 			CLAUSES c1 = "Select s Such that Follows(1, s)";
 			CLAUSES c2 = "Select s such that follows(s, a)";
-			CLAUSES c3 = "Select s such that FollowsT("", s)";
-			CLAUSES c4 = "Select s such that Followst(_, s)";
-			CLAUSES c5 = "Select s such that FollowsT(, s)";
+			CLAUSES c3 = "Select s such that Follows*("", s)";
+			CLAUSES c4 = "Select s such that FollowsT(_, s)";
+			CLAUSES c5 = "Select s such that Follows*(, s)";
 			CLAUSES c6 = "Select s such that Follows(_, )";
 			CLAUSES c7 = "Select s such that Follows(1, "")";
 
@@ -362,7 +363,7 @@ namespace UnitTesting
 
 			CLAUSES c1 = "Select s such that Parent(1, s)";
 			CLAUSES c2 = "Select s such that Parent(s, a)";
-			CLAUSES c3 = "Select s such that ParentT(_, s)";
+			CLAUSES c3 = "Select s such that Parent*(_, s)";
 
 			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
 			PROCESSED_CLAUSES proc_c2 = qpp.preProcessClauses(proc_s, c2);
@@ -401,9 +402,9 @@ namespace UnitTesting
 
 			CLAUSES c1 = "Select s Such that Parent(1, s)";
 			CLAUSES c2 = "Select s such that parent(s, a)";
-			CLAUSES c3 = "Select s such that ParentT("", s)";
-			CLAUSES c4 = "Select s such that Parentt(_, s)";
-			CLAUSES c5 = "Select s such that ParentT(, s)";
+			CLAUSES c3 = "Select s such that Parent*("", s)";
+			CLAUSES c4 = "Select s such that ParentT(_, s)";
+			CLAUSES c5 = "Select s such that Parent*(, s)";
 			CLAUSES c6 = "Select s such that Parent(_, )";
 			CLAUSES c7 = "Select s such that Parent(1, "")";
 
@@ -431,11 +432,11 @@ namespace UnitTesting
 			DECLARATIONS d = "variable v; assign a; procedure p;";
 			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
 
-			CLAUSES c1 = "Select v such that UsesS(a, v)";
-			CLAUSES c2 = "Select v such that UsesS(p, v)";
-			CLAUSES c3 = "Select v such that UsesS(a, _)";
-			CLAUSES c4 = "Select v such that UsesS(1, v)";
-			CLAUSES c5 = "Select v such that UsesS(a, \"hello\")";
+			CLAUSES c1 = "Select v such that Uses(a, v)";
+			CLAUSES c2 = "Select v such that Uses(p, v)";
+			CLAUSES c3 = "Select v such that Uses(a, _)";
+			CLAUSES c4 = "Select v such that Uses(1, v)";
+			CLAUSES c5 = "Select v such that Uses(a, \"hello\")";
 
 
 			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
@@ -492,15 +493,15 @@ namespace UnitTesting
 			DECLARATIONS d = "variable v; assign a; procedure p; read re;";
 			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
 
-			CLAUSES c1 = "Select v Such that UsesS(a, v)";
-			CLAUSES c2 = "Select v such that usesS(p, v)";
-			CLAUSES c3 = "Select v such that UsesS("", v)";
-			CLAUSES c4 = "Select v such that UsesS(_, v)";
-			CLAUSES c5 = "Select v such that UsesS(a, 1)";
-			CLAUSES c6 = "Select v such that UsesS(, 1)";
-			CLAUSES c7 = "Select v such that UsesS(a, )";
-			CLAUSES c8 = "Select v such that Uses(a, v)";
-			CLAUSES c9 = "Select v such that UsesS(re, v)";
+			CLAUSES c1 = "Select v Such that Uses(a, v)";
+			CLAUSES c2 = "Select v such that uses(p, v)";
+			CLAUSES c3 = "Select v such that Uses("", v)";
+			CLAUSES c4 = "Select v such that Uses(_, v)";
+			CLAUSES c5 = "Select v such that Uses(a, 1)";
+			CLAUSES c6 = "Select v such that Uses(, 1)";
+			CLAUSES c7 = "Select v such that Uses(a, )";
+			CLAUSES c8 = "Select v such that UsesS(a, v)";
+			CLAUSES c9 = "Select v such that Uses(re, v)";
 			CLAUSES c10 = "Select v such that Usess(a, v)";
 
 
@@ -533,11 +534,11 @@ namespace UnitTesting
 			DECLARATIONS d = "variable v; assign a; procedure p;";
 			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
 
-			CLAUSES c1 = "Select v such that ModifiesS(a, v)";
-			CLAUSES c2 = "Select v such that ModifiesS(p, v)";
-			CLAUSES c3 = "Select v such that ModifiesS(a, _)";
-			CLAUSES c4 = "Select v such that ModifiesS(1, v)";
-			CLAUSES c5 = "Select v such that ModifiesS(a, \"hello\")";
+			CLAUSES c1 = "Select v such that Modifies(a, v)";
+			CLAUSES c2 = "Select v such that Modifies(p, v)";
+			CLAUSES c3 = "Select v such that Modifies(a, _)";
+			CLAUSES c4 = "Select v such that Modifies(1, v)";
+			CLAUSES c5 = "Select v such that Modifies(a, \"hello\")";
 
 
 			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
@@ -594,16 +595,15 @@ namespace UnitTesting
 			DECLARATIONS d = "variable v; assign a; procedure p; print pr;";
 			PROCESSED_SYNONYMS proc_s = qpp.preProcessSynonyms(d);
 
-			CLAUSES c1 = "Select v Such that ModifiesS(a, v)";
-			CLAUSES c2 = "Select v such that modifiesS(p, v)";
-			CLAUSES c3 = "Select v such that ModifiesS("", v)";
-			CLAUSES c4 = "Select v such that ModifiesS(_, v)";
-			CLAUSES c5 = "Select v such that ModifiesS(a, 1)";
-			CLAUSES c6 = "Select v such that ModifiesS(, 1)";
-			CLAUSES c7 = "Select v such that ModifiesS(a, )";
-			CLAUSES c8 = "Select v such that Modifies(a, v)";
-			CLAUSES c9 = "Select v such that ModifiesS(pr, v)";
-			CLAUSES c10 = "Select v such that Modifiess(a, v)";
+			CLAUSES c1 = "Select v Such that Modifies(a, v)";
+			CLAUSES c2 = "Select v such that modifies(p, v)";
+			CLAUSES c3 = "Select v such that Modifies("", v)";
+			CLAUSES c4 = "Select v such that Modifies(_, v)";
+			CLAUSES c5 = "Select v such that Modifies(a, 1)";
+			CLAUSES c6 = "Select v such that Modifies(, 1)";
+			CLAUSES c7 = "Select v such that Modifies(a, )";
+			CLAUSES c8 = "Select v such that ModifiesS(pr, v)";
+			CLAUSES c9 = "Select v such that Modifiess(a, v)";
 
 
 			PROCESSED_CLAUSES proc_c1 = qpp.preProcessClauses(proc_s, c1);
@@ -615,7 +615,6 @@ namespace UnitTesting
 			PROCESSED_CLAUSES proc_c7 = qpp.preProcessClauses(proc_s, c7);
 			PROCESSED_CLAUSES proc_c8 = qpp.preProcessClauses(proc_s, c8);
 			PROCESSED_CLAUSES proc_c9 = qpp.preProcessClauses(proc_s, c9);
-			PROCESSED_CLAUSES proc_c10 = qpp.preProcessClauses(proc_s, c10);
 
 			Assert::IsTrue(proc_c1.getNodeType() == QueryNodeType::unassigned);
 			Assert::IsTrue(proc_c2.getNodeType() == QueryNodeType::unassigned);
@@ -625,7 +624,7 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c6.getNodeType() == QueryNodeType::unassigned);
 			Assert::IsTrue(proc_c7.getNodeType() == QueryNodeType::unassigned);
 			Assert::IsTrue(proc_c8.getNodeType() == QueryNodeType::unassigned);
-			Assert::IsTrue(proc_c10.getNodeType() == QueryNodeType::unassigned);
+			Assert::IsTrue(proc_c9.getNodeType() == QueryNodeType::unassigned);
 		}
 
 		TEST_METHOD(preProcessClauses_Pattern_Valid_Success) {
@@ -679,7 +678,10 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[1].getSynonymType() == QuerySynonymType::variable);
 			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[1].getString().compare("v") == 0);
 			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[2].getNodeType() == QueryNodeType::expression);
-			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[2].getAstNode()->getNodeType() == NodeTypeEnum::variableNode);
+			Assert::IsTrue(proc_c4.getChildren()[1].getChildren()[2].getAstNode()->getNodeType() == NodeTypeEnum::expressionNode);
+			std::shared_ptr<ExpressionNode> expr_node_c4 = std::static_pointer_cast<ExpressionNode>(proc_c4.getChildren()[1].getChildren()[2].getAstNode());
+			Assert::IsTrue(expr_node_c4->getLeftAstNode()->getNodeType() == NodeTypeEnum::variableNode);
+
 
 			Assert::IsTrue(proc_c5.getChildren()[1].getNodeType() == QueryNodeType::pattern);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[0].getNodeType() == QueryNodeType::synonym);
@@ -689,7 +691,9 @@ namespace UnitTesting
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[1].getSynonymType() == QuerySynonymType::variable);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[1].getString().compare("v") == 0);
 			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[2].getNodeType() == QueryNodeType::expression);
-			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[2].getAstNode()->getNodeType() == NodeTypeEnum::constantNode);
+			Assert::IsTrue(proc_c5.getChildren()[1].getChildren()[2].getAstNode()->getNodeType() == NodeTypeEnum::expressionNode);
+			std::shared_ptr<ExpressionNode> expr_node_c5 = std::static_pointer_cast<ExpressionNode>(proc_c5.getChildren()[1].getChildren()[2].getAstNode());
+			Assert::IsTrue(expr_node_c5->getLeftAstNode()->getNodeType() == NodeTypeEnum::constantNode);
 		}
 
 		TEST_METHOD(preProcessClauses_Pattern_Invalid_Success) {

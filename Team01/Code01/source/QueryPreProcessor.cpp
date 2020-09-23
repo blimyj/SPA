@@ -6,6 +6,7 @@
 
 #include "PKB/ASTNode/ConstantNode.h"
 #include "PKB/ASTNode/VariableNode.h"
+#include "PKB/ASTNode/ExpressionNode.h"
 #include "QueryNode.h"
 #include "QueryNodeType.h"
 #include "QueryPreProcessor.h"
@@ -16,7 +17,7 @@ const std::regex integer_format_("[+-]?[1-9]\\d*|0$");
 const std::regex identity_format_("\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\"");
 const std::regex declaration_format_("(stmt|read|print|while|if|assign|variable|constant|procedure)\\s+[a-zA-Z][a-zA-Z0-9]*\\s*(\\,\\s*[a-zA-Z][a-zA-Z0-9]*)*\\s*");
 const std::regex clause_select_format_("Select\\s+[a-zA-Z][a-zA-Z0-9]*.*");
-const std::regex clause_relation_format_("(Follows|FollowsT|Parent|ParentT|UsesS|UsesP|ModifiesS|ModifiesP)\\s*\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*\"?\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*\"?\\s*\\)");
+const std::regex clause_relation_format_("(Follows|Follows\\*|Parent|Parent\\*|Uses|Modifies)\\s*\\(\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*,\\s*\"?\\s*[a-zA-Z0-9_][a-zA-Z0-9]*\\s*\"?\\s*\\)");
 const std::regex clause_pattern_format_("pattern\\s+[a-zA-Z][a-zA-Z0-9]*\\s*\\(\\s*(_|\"?\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\"?)\\s*,\\s*(_\\s*\"\\s*[^\\s].*\\s*\"\\s*_|_)\\s*\\)");
 const std::regex stmt_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|^[+-]?[1-9]\\d*|0$)");
 const std::regex ent_ref_format_("([a-zA-Z][a-zA-Z0-9]*|_|\"\\s*[a-zA-Z][a-zA-Z0-9]*\\s*\")");
@@ -95,19 +96,21 @@ QueryNode QueryPreProcessor::createExpressionNode(EXPRESSION e) {
 		int close_quote_index = e.rfind("\"");
 		std::string trimmed_exp = trimWhitespaces(e.substr(open_quote_index + 1,
 			close_quote_index - open_quote_index - 1));
-
+		std::shared_ptr<ExpressionNode> expr_node = std::make_shared<ExpressionNode>();
 
 		if (std::regex_match(trimmed_exp, std::regex(name_format_))) {
 			// expression is a var_name
 			std::shared_ptr<VariableNode> var_node = std::make_shared<VariableNode>();
 			var_node->setVariableName(trimmed_exp);
-			exp_node.setASTNode(var_node);
+			expr_node->setLeftAstNode(var_node);
+			exp_node.setASTNode(expr_node);
 		}
 		else {
 			// expression is a const_value
 			std::shared_ptr<ConstantNode> const_node = std::make_shared<ConstantNode>();
 			const_node->setValue(trimmed_exp);
-			exp_node.setASTNode(const_node);
+			expr_node->setLeftAstNode(const_node);
+			exp_node.setASTNode(expr_node);
 		}
 	}
 	
@@ -336,7 +339,7 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 		return false;
 	}
 
-	if (std::regex_match(rel, std::regex("Follows")) || std::regex_match(rel, std::regex("FollowsT"))) {
+	if (std::regex_match(rel, std::regex("Follows")) || std::regex_match(rel, std::regex("Follows\\*"))) {
 		if (!isStatementArgument(proc_s, first_arg)) {
 			return false;
 		}
@@ -347,7 +350,7 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 			return true;
 		}
 	}
-	else if (std::regex_match(rel, std::regex("Parent")) || std::regex_match(rel, std::regex("ParentT"))) {
+	else if (std::regex_match(rel, std::regex("Parent")) || std::regex_match(rel, std::regex("Parent\\*"))) {
 		if (!isStatementArgument(proc_s, first_arg)) {
 			return false;
 		}
@@ -358,7 +361,7 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 			return true;
 		}
 	}
-	else if (std::regex_match(rel, std::regex("UsesS"))) {
+	else if (std::regex_match(rel, std::regex("Uses"))) {
 		if (std::regex_match(first_arg, std::regex("_"))) {
 			return false;
 		}
@@ -394,7 +397,7 @@ VALIDATION_RESULT QueryPreProcessor::isValidRelationArguments(PROCESSED_SYNONYMS
 			return true;
 		}
 	}
-	else if (std::regex_match(rel, std::regex("ModifiesS"))) {
+	else if (std::regex_match(rel, std::regex("Modifies"))) {
 		if (std::regex_match(first_arg, std::regex("_"))) {
 			return false;
 		}
@@ -524,7 +527,7 @@ PROCESSED_SYNONYMS QueryPreProcessor::preProcessSynonyms(DECLARATIONS d) {
 		// add node to map
 		std::string delimiter = ",";
 		int index = first_space_index + 1;
-		int split_index = d.find(delimiter);
+		int split_index = single_d.find(delimiter);
 
 		if (split_index == -1) {
 			QueryNode new_node = QueryNode();
@@ -551,7 +554,7 @@ PROCESSED_SYNONYMS QueryPreProcessor::preProcessSynonyms(DECLARATIONS d) {
 				proc_s.insert({ syn_name, new_node });
 
 				index = split_index + 1;
-				split_index = d.find(delimiter, index);
+				split_index = single_d.find(delimiter, index);
 
 				if (split_index == -1 && isNotLast) {
 					split_index = index;
@@ -626,7 +629,7 @@ PROCESSED_CLAUSES QueryPreProcessor::preProcessClauses(PROCESSED_SYNONYMS proc_s
 				// create clause node
 				// add to children array
 				if (next_index == such_that_index) {
-					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index + 9, pattern_index - next_index));
+					SINGLE_CLAUSE current_c = trimWhitespaces(c.substr(next_index + 9, pattern_index - (next_index + 9)));
 
 					if (!isValidRelationFormat(current_c)) {
 						is_valid = false;
