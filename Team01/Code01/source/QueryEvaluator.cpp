@@ -119,12 +119,12 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 			QueryNodeType child3_type = child3.getNodeType();
 			
 			SYNONYM_NAME assign_synonym_name = child1.getString();
-
-			// ResultList only contains the assign synonym
-			// a1
-			// 1
-			// 2
-			// 5
+			
+			// ResultList contains the assign synonym + variable synonym
+			// a v
+			// 1 cat
+			// 2 dog
+			// 5 meow
 			// ...
 			clause_result_list.addColumn(assign_synonym_name);
 		
@@ -139,16 +139,22 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 
 			// if qpp_lhs is synonym, add all synonym to lhs_set
 			} else if (child2_type == QueryNodeType::synonym) {
-				STRING child2_content = child2.getString();
-				QueryNode node = synonyms.find(child2_content)->second;
-				QuerySynonymType node_type = node.getSynonymType();
-				if (node_type == QuerySynonymType::variable) {
+				STRING child2_synonym_name = child2.getString();
+				QuerySynonymType child2_synonym_type = child2.getSynonymType();
+				if (child2_synonym_type == QuerySynonymType::variable) {
 					std::vector<SYNONYM_NAME> var_names = pkb.getVariableNameList();
 					for (SYNONYM_NAME var_name : var_names) {
 						lhs_set.insert(var_name);
 					}
-				} //check if other synonyms are valid
-			
+					// if child2 is a synonym, then we add to ResultList
+					clause_result_list.addColumn(child2_synonym_name);
+				}
+				else {
+					// check if other synonyms are valid
+					// if child2 is a synonym which is not a variable, we throw an exception 
+					throw "QE: child2 synonym of pattern clause must be a variable!";
+				}
+
 			// if qpp_lhs is wildcard, add all variables to lhs_set
 			} else if (child2_type == QueryNodeType::wild_card) {
 				for (VAR_NAME name : pkb.getVariableNameList()) {
@@ -161,17 +167,23 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 			for (ASSIGN_NODE_PTR assign_node : pkb_assigns) {
 				std::string stmt_num = std::to_string(assign_node->getStatementNumber());
 				VAR_NODE_PTR lhs_node = assign_node->getVariableNode();
+				VAR_NAME lhs_var_name = lhs_node->getVariableName();
 				EXPR_NODE_PTR rhs_node = assign_node->getExpressionNode();
 
-				// if lhs name is not in qpp_lhs_set, skip this assign node
-				if (lhs_set.count(lhs_node->getVariableName()) == 0) {
+				// if lhs_var_name is not in qpp_lhs_set, skip this assign node
+				if (lhs_set.count(lhs_var_name) == 0) {
 					continue;
 				}
-
+				
 				// if qpp_rhs is a wildcard, add to ResultList
 				if (child3_type == QueryNodeType::wild_card) {
 					ROW row;
 					row.insert({ assign_synonym_name, stmt_num });
+					// if lhs is a variable synonym, add it to the ResultList :)
+					if (child2_type == QueryNodeType::synonym) {
+						STRING child2_synonym_name = child2.getString();
+						row.insert({ child2_synonym_name, lhs_var_name });
+					}
 					clause_result_list.addRow(row);
 				}
 				else if (child3_type == QueryNodeType::expression) {
@@ -198,6 +210,11 @@ QUERY_RESULT QueryEvaluator::evaluateQuery(PROCESSED_SYNONYMS synonyms, PROCESSE
 					if (match) {
 						ROW row;
 						row.insert({ assign_synonym_name, stmt_num });
+						// if lhs is a variable synonym, add it to the ResultList :)
+						if (child2_type == QueryNodeType::synonym) {
+							STRING child2_synonym_name = child2.getString();
+							row.insert({ child2_synonym_name, lhs_var_name });
+						}
 						clause_result_list.addRow(row);
 					}
 				}
