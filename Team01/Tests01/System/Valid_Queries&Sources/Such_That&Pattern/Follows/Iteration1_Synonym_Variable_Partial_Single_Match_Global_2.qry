@@ -51,7 +51,7 @@ Select a such that Follows (r, a) pattern a (v, _"happiness"_)
 11 - Assign and If, Select Assign
 assign a; if i; variable v;
 Select a such that Follows (a, i) pattern a (v, _"time"_)
-6
+6, 39, 57
 5000
 12 - Assign and While, Select Assign
 assign a; while w; variable v;
@@ -66,7 +66,7 @@ Select s such that Follows (a, s) pattern a (v, _"boredom"_)
 14 - Assign and Assign, Select Assign 2
 assign a1, a2; variable v;
 Select a2 such that Follows (a1, a2) pattern a2 (v, _"tired"_)
-57, 92
+56, 91
 5000
 15 - Assign and Print, Select Print
 assign a; print p; variable v;
@@ -81,7 +81,7 @@ Select r such that Follows (r, a) pattern a (v, _"happiness"_)
 17 - Assign and If, Select If
 assign a; if i; variable v;
 Select i such that Follows (a, i) pattern a (v, _"time"_)
-7
+7, 40, 58
 5000
 18 - Assign and While, Select While
 assign a; while w; variable v;
@@ -111,7 +111,7 @@ happiness
 23 - Assign and If, Select Variable
 assign a; if i; variable v;
 Select v such that Follows (a, i) pattern a (v, _"time"_)
-age
+age, time
 5000
 24 - Assign and While, Select Variable
 assign a; while w; variable v;

@@ -56,7 +56,7 @@ Select a such that Modifies (a, v) pattern a (v, _)
 12 - Select Assign, Synonym Variable, Partial Single Match
 assign a; variable v;
 Select a such that Modifies (a, v) pattern a (v, _"dog"_)
-26, 28, 63, 64, 75
+20, 26, 28, 41, 42, 63, 64, 75
 5000
 13 - Select Variable, Any Variable, Any Match
 assign a; variable v;
@@ -81,7 +81,7 @@ a
 17 - Select Variable, Synonym Variable, Any Match
 assign a; variable v;
 Select v such that Modifies (a, v) pattern a (v, _)
-a, b, c, d, e, dog, woof, cat, meow, name
+a, b, c, d, e, dog, woof, cat, meow, name, x, y, z
 5000
 18 - Select Variable, Synonym Variable, Partial Single Match
 assign a; variable v;
