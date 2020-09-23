@@ -527,7 +527,7 @@ PROCESSED_SYNONYMS QueryPreProcessor::preProcessSynonyms(DECLARATIONS d) {
 		// add node to map
 		std::string delimiter = ",";
 		int index = first_space_index + 1;
-		int split_index = d.find(delimiter);
+		int split_index = single_d.find(delimiter);
 
 		if (split_index == -1) {
 			QueryNode new_node = QueryNode();
@@ -554,7 +554,7 @@ PROCESSED_SYNONYMS QueryPreProcessor::preProcessSynonyms(DECLARATIONS d) {
 				proc_s.insert({ syn_name, new_node });
 
 				index = split_index + 1;
-				split_index = d.find(delimiter, index);
+				split_index = single_d.find(delimiter, index);
 
 				if (split_index == -1 && isNotLast) {
 					split_index = index;
