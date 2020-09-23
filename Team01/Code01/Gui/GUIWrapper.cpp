@@ -78,6 +78,6 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
 		}
 	}
 	else {
-	results.push_back("Invalid SIMPLE source code encountered during parsing. Query Evaluation not allowed.");
+		results.push_back("Invalid SIMPLE source code encountered during parsing. Query Evaluation not allowed.");
 	}
 }
