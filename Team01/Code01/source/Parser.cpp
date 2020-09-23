@@ -1605,8 +1605,6 @@
 
 		//Due to parseStmtListClose changing current_parent_node_ there is no need change parent tracker to stmtlistnode_ptr
 		//This function exists just to remove the "else" & "{" tokens
-		//Debugging statement
-		std::cout << "\nParse else tokens\n";
 
 		return 0;
 	}
@@ -2188,9 +2186,6 @@
 			this->pkb_builder_.addUses(std::static_pointer_cast<ProcedureNode>(curr_container)->getProcedureName()
 				, var_name);
 		}
-
-		//Debugging statement
-		std::cout << "\nCreated print node with var: " << new_var_node->getVariableName();
 
 		return 0;
 	}
