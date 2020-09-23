@@ -486,6 +486,9 @@ void QueryEvaluator::getUsesSResult(QueryNode child1, QueryNode child2, bool& cl
 	else if (child2_type == QueryNodeType::synonym) {
 		list2 = getVarNameList(child2);
 	}
+	else if (child2_type == QueryNodeType::wild_card) {
+		list2 = getVarNameList(child2);
+	}
 	else {
 		throw "QE: Second argument of Uses should be SYNONYM or IDENT";
 	}
@@ -558,6 +561,9 @@ void QueryEvaluator::getUsesPResult(QueryNode child1, QueryNode child2, bool& cl
 	else if (child2_type == QueryNodeType::synonym) {
 		list2 = getVarNameList(child2);
 	}
+	else if (child2_type == QueryNodeType::wild_card) {
+		list2 = getVarNameList(child2);
+	}
 	else {
 		throw "QE: Second argument of Uses should be SYNONYM or IDENT";
 	}
@@ -626,6 +632,9 @@ void QueryEvaluator::getModifiesSResult(QueryNode child1, QueryNode child2, bool
 	else if (child2_type == QueryNodeType::synonym) {
 		list2 = getVarNameList(child2);
 	}
+	else if (child2_type == QueryNodeType::wild_card) {
+		list2 = getVarNameList(child2);
+	}
 	else {
 		throw "QE: Second argument of Uses should be SYNONYM or IDENT";
 	}
@@ -692,6 +701,9 @@ void QueryEvaluator::getModifiesPResult(QueryNode child1, QueryNode child2, bool
 		list2.push_back(child2.getString());
 	}
 	else if (child2_type == QueryNodeType::synonym) {
+		list2 = getVarNameList(child2);
+	}
+	else if (child2_type == QueryNodeType::wild_card) {
 		list2 = getVarNameList(child2);
 	}
 	else {
