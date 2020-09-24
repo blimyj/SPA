@@ -63,8 +63,18 @@ while w; print p;
 Select p such that Parent* (w, p)
 56, 57, 58, 59, 84, 85, 107, 108, 109
 1000
-14 - While and Read
-while w; read r;
-Select r such that Parent* (w, r)
-65, 66, 67, 68, 69, 70, 71, 72, 91, 92
+14 - Wildcard and Print
+print p;
+Select p such that Parent* (_, p)
+39, 56, 57, 58, 59, 84, 85, 107, 108, 109
+1000
+15 - If and Wildcard
+if i;
+Select i such that Parent* (i, _)
+3, 8, 30, 50, 74, 93, 94, 95, 96
+1000
+16 - Wildcard and Wilcard, Select Randomly
+read r;
+Select r such that Parent* (_, _)
+1, 4, 5, 6, 7, 9, 10, 11, 65, 66, 67, 68, 69, 70, 71, 72, 91, 92
 1000
