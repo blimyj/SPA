@@ -93,3 +93,8 @@ assign a;
 Select a such that Uses ("main", "cat") pattern a (_, _)
 none
 5000
+20 - Wildcard and Assign
+assign a; variable v;
+Select a such that Uses (a, _) pattern a (_, _"e"_)
+80, 81, 82, 83, 97
+5000
