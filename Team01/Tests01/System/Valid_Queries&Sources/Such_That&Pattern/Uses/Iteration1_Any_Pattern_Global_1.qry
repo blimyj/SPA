@@ -96,5 +96,5 @@ none
 20 - Wildcard and Assign
 assign a; variable v;
 Select a such that Uses (a, _) pattern a (_, _"e"_)
-80, 81, 82, 83
+80, 81, 82, 83, 97
 5000
