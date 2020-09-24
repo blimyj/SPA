@@ -158,3 +158,13 @@ assign a; while w;
 Select w such that Follows (a, w) pattern a (_, _"1"_)
 53
 5000
+33 - Wildcard and Assign
+assign a;
+Select a such that Follows (_, a) pattern a (_, _"365"_)
+6
+5000
+34 - Assign and Wildcard
+assign a;
+Select a such that Follows (a, _) pattern a (_, _"60"_)
+3, 4, 5, 6
+5000
