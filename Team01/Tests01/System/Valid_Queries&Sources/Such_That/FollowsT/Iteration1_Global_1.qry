@@ -63,3 +63,18 @@ if i; while w;
 Select i such that Follows* (i, w)
 3, 93
 1000
+14 - Wildcard and Assign
+assign a;
+Select a such that Follows* (_, a)
+14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 26, 32, 33, 34, 36, 37, 38, 40, 41, 42, 60, 61, 62, 64, 76, 77, 78, 81, 82, 83, 86, 87, 102, 103, 104
+1000
+15 - Read and Wildcard
+read r;
+Select r such that Follows* (r, _)
+1, 4, 5, 6, 9, 10, 11, 65, 66, 67, 69, 70, 71, 72, 91, 92
+1000
+16 - Wildcard and Wilcard, Select Randomly
+read r;
+Select r such that Follows* (_, _)
+1, 4, 5, 6, 7, 9, 10, 11, 65, 66, 67, 68, 69, 70, 71, 72, 91, 92
+1000
