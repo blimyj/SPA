@@ -150,7 +150,7 @@ Select a such that Follows(_, a)
 1000
 31 - If and Wildcard
 if i;
-Select a such that Follows(i, _)
+Select i such that Follows(i, _)
 13, 22, 34, 58, 75
 1000
 32 - Wildcard and Wilcard, Select Randomly
