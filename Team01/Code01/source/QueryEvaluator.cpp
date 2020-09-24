@@ -508,7 +508,12 @@ void QueryEvaluator::getUsesSResult(QueryNode child1, QueryNode child2, bool& cl
 	QueryNodeType child2_type = child2.getNodeType();
 
 	// Populate list1 with stmtRef values
-	std::vector<int> list1 = getStmtList(child1);
+	std::vector<int> list1;
+	if (child1_type == QueryNodeType::wild_card) {
+		throw "QE: First argument of Uses cannot be a wildcard!";
+	} else {
+		 list1 = getStmtList(child1);
+	}
 
 	// Populate list2 with entRef values
 	/*
@@ -674,7 +679,12 @@ void QueryEvaluator::getModifiesSResult(QueryNode child1, QueryNode child2, bool
 	QueryNodeType child2_type = child2.getNodeType();
 
 	// Populate list1 with child1 values
-	std::vector<int> list1 = getStmtList(child1);
+	std::vector<int> list1;
+	if (child1_type == QueryNodeType::wild_card) {
+		throw "QE: First argument of Uses cannot be a wildcard!";
+	} else {
+		list1 = getStmtList(child1);
+	}
 	
 	// Populate list2 with child2 values
 	/*
@@ -849,8 +859,11 @@ STMT_NUM_LIST QueryEvaluator::getStmtList(QueryNode child1) {
 			throw "QE: Synonym is not a statement or an integer!";
 		}
 	}
+	else if (child1_type == QueryNodeType::wild_card) {
+		return pkb.getStatementNumList();
+	}
 	else {
-		throw "QE: Synonym is not a statement or an integer!";
+		throw "QE: stmtRef is not a integer, synonym or wildcard!";
 	}
 }
 
