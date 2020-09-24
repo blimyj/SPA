@@ -41,5 +41,5 @@ none
 9 - Wildcard and Assign
 assign a;
 Select a such that Parent (_, a) pattern a (_, _"24"_)
-hours
+5, 6
 5000
