@@ -98,3 +98,8 @@ assign a;
 Select a such that Modifies (a, "z") pattern a ("b", _"dog"_)
 none
 5000
+21 - Wildcard and Assign
+assign a; variable v;
+Select a such that Modifies (a, _) pattern a ("dog", _)
+dog
+5000

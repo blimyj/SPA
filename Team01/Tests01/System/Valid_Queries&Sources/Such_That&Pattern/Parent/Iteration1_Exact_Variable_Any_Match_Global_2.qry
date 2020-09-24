@@ -38,3 +38,8 @@ assign a;
 Select a such that Parent (61, a) pattern a ("playing", _)
 none
 5000
+9 - Wildcard and Assign
+assign a;
+Select a such that Parent (_, a) pattern a ("hours", _)
+5
+5000

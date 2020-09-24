@@ -38,3 +38,13 @@ assign a; while w; variable v;
 Select a such that Follows (a, w) pattern a ("messages", _)
 52
 5000
+9 - Wildcard and Assign
+assign a;
+Select a such that Follows (_, a) pattern a ("hours", _)
+5
+5000
+10 - Assign and Wildcard
+assign a;
+Select a such that Follows (a, _) pattern a ("age", _)
+6
+5000
