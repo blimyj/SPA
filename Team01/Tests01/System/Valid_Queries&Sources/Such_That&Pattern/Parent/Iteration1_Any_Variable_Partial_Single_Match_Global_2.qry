@@ -38,3 +38,8 @@ assign a;
 Select a such that Parent (58, a) pattern a (_, _"1"_)
 none
 5000
+9 - Wildcard and Assign
+assign a;
+Select a such that Parent (_, a) pattern a (_, _"24"_)
+hours
+5000
