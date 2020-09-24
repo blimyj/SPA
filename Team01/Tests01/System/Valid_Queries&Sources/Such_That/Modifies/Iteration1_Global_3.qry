@@ -73,3 +73,8 @@ stmt s;
 Select s such that Modifies(s, "main")
 none
 1000
+16 - Read and Wildcard
+read r;
+Select r such that Modifies (r, _)
+1, 5, 16, 30, 31, 34, 36, 38, 46, 52, 53, 57, 59, 63, 65, 66, 72
+1000

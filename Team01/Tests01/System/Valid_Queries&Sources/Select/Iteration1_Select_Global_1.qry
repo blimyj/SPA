@@ -33,3 +33,8 @@ while w;
 Select w
 12, 19, 27, 29, 47, 48, 49, 51, 52, 53, 54, 55, 73, 79, 88, 89, 105, 106
 1000
+8 - Select Complex Varaible
+variable v1, v2, v3; variable v4, v5, v6; variable v7, v8, v9; variable v10, v11, v12;
+Select v9
+a, b, c, d, e, x, y, z, name, cat, meow, dog, woof
+1000

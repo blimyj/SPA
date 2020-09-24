@@ -143,3 +143,18 @@ while w1, w2;
 Select w1 such that Follows(w1, w2)
 none
 1000
+30 - Wildcard and Assign
+assign a;
+Select a such that Follows(_, a)
+3, 4, 5, 6, 27, 28, 33, 39, 42, 55, 56, 57, 71, 72, 73, 74, 80, 83, 84, 85, 88, 89, 90, 91, 92
+1000
+31 - If and Wildcard
+if i;
+Select a such that Follows(i, _)
+13, 22, 34, 58, 75
+1000
+32 - Wildcard and Wilcard, Select Randomly
+read r;
+Select r such that Follows(_, _)
+68, 69, 70, 82
+1000
