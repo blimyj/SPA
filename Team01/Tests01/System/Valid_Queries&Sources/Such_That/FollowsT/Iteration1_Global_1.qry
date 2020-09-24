@@ -49,9 +49,9 @@ Select i1 such that Follows* (i1, i2)
 none
 1000
 11 - While and While, Select While One
-if w1, w2;
+while w1, w2;
 Select w1 such that Follows* (w1, w2)
-19, 27, 48
+19, 27, 48, 73
 1000
 12 - Print and Read, Select Print
 print p, read r;

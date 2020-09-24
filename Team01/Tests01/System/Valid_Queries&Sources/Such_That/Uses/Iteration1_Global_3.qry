@@ -1,7 +1,7 @@
 1 - Statement and Exact Variable, Select Statement
 stmt s;
 Select s such that Uses(s, "ina")
-2, 3, 4, 5, 6, 9, 11, 14, 15, 20, 22, 29, 37, 39, 40, 41, 44, 51, 61, 62, 64, 67, 68
+2, 3, 4, 6, 9, 11, 14, 15, 20, 22, 29, 37, 39, 40, 41, 44, 51, 61, 62, 64, 67, 68
 1000
 2 - Assign and Exact Variable, Select Assign
 assign a;
@@ -26,7 +26,7 @@ Select w such that Uses(w, "ame")
 6 - Assign and Synonym Variable, Select Variable
 variable v; assign a;
 Select v such that Uses(a, v)
-ame, calli, gura, ina, kiara
+ame, cali, calli, gura, ina, kiara
 1000
 7 - Print and Synonym Variable, Select Variable
 variable v; print p;
