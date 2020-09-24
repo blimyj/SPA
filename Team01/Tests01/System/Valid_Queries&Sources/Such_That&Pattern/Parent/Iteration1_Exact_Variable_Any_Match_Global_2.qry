@@ -16,7 +16,7 @@ Select a such that Parent (i, a) pattern a ("motivation", _)
 4 - While and Assign, Select Assign
 assign a; while w;
 Select a such that Parent (w, a) pattern a ("messages", _)
-54, 83
+85
 5000
 5 - Statement and Assign , Select Statement
 assign a; stmt s;
@@ -26,12 +26,12 @@ Select s such that Parent (s, a) pattern a ("time", _)
 6 - If and Assign, Select If
 assign a; if i;
 Select i such that Parent (i, a) pattern a ("boredom", _)
-25, 59, 87
+25, 58, 86
 5000
 7 - While and Assign, Select While
 assign a; while w;
 Select w such that Parent (w, a) pattern a ("sadness", _)
-38
+37
 5000
 8 - Constant and Assign, Select Assign, No Assignment
 assign a;

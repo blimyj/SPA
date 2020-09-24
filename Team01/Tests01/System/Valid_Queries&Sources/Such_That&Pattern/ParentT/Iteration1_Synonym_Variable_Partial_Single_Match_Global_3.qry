@@ -21,17 +21,17 @@ Select a such that Parent* (w, a) pattern a (v, _"gura"_)
 5 - Statement and Assign, Select Statement
 assign a; stmt s; variable v;
 Select s such that Parent* (s, a) pattern a (v, _"calli"_)
-4, 6, 39, 40, 48
+4, 6, 9, 11, 14, 39, 40, 41, 48, 68
 5000
 6 - If and Assign, Select If
 assign a; if i; variable v;
 Select i such that Parent* (i, a) pattern a (v, _"7"_)
-4, 6, 9, 11, 14, 20
+4, 11, 20
 5000
 7 - While and Assign, Select While
 assign a; while w; variable v;
 Select w such that Parent* (w, a) pattern a (v, _"4"_)
-7, 9, 14
+6, 9, 14
 5000
 8 - Out of Scope, Constant and Assign
 assign a; variable v;
