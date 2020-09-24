@@ -21,7 +21,7 @@ Select a such that Follows* (a, a1) pattern a (_, _"2"_)
 5 - Assign and Print, Select Assign
 assign a; print p;
 Select a such that Follows* (a, p) pattern a (_, _"ame"_)
-43
+7, 43
 5000
 6 - Assign and Read, Select Assign
 assign a; read r;

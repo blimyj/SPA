@@ -14,11 +14,14 @@ import sys
 AUTOTESTER_DIRECTORIES = [".", "../Code01/Debug"]
 AUTOTESTER_FILE_NAME = "AutoTester.exe"
 OUTPUT_DIRECTORY = "./RunTestsOutput"
+PUBLISH_OUTPUT_DIRECTORY = os.path.join(OUTPUT_DIRECTORY, "Tests01")
 
 QUERIES_EXTENSION = "qry"
 SOURCE_EXTENSION = "src"
 SOURCE_DEPENDENCIES_EXTENSION = "dep"
 LABEL_EXTENSION = "lab"
+PUBLISH_QRY_EXTENSION = "_queries.txt"
+PUBLISH_SRC_EXTENSION = "_source.txt"
 
 WARNING_COLOR = "\033[93m"
 ERROR_COLOR = "\033[91m"
@@ -101,29 +104,67 @@ def find_autotester_path():
     printinfo("'{}' found! '{}'".format(AUTOTESTER_FILE_NAME, autotester_path))
     return autotester_path
 
-# Find all query and source files
-def get_tests_paths():
-    printinfo("Finding all query and source files...")
-    queries_paths = []
+# Find all source files
+def get_source_paths():
+    printinfo("Finding all source files...")
     source_paths = []
-    for (dir_path, dirs, files) in os.walk(tests_dir_path):
-        for f in files:
-            match = re.search("^(.+)\\.([^.]+)$", f)
-            if not match:
-                continue
+    # BFS
+    depth = 0
+    queue = collections.deque()
+    queue.append(tests_dir_path)
+    while True:
+        # No more directories to search
+        if len(queue) == 0:
+            return source_paths
+        # The maximum depth is non-negative, and
+        # The current depth exceeds the maximum depth
+        if max_source_depth >= 0 and depth > max_source_depth:
+            return source_paths
+        # Get current path
+        root_path = queue.popleft()
+        # Find all files and directories in the current path
+        for file_name in os.listdir(root_path):
+            path = os.path.join(root_path, file_name)
+            if os.path.isfile(path):
+                match = re.search("^(.+)\\.([^.]+)$", file_name)
+                if not match:
+                    continue
+                name = match.group(1)
+                ext = match.group(2)
+                name_path = os.path.join(root_path, name)
+                if ext == SOURCE_EXTENSION:
+                    source_paths.append(name_path)
+            elif os.path.isdir(path):
+                queue.append(path)
+        depth += 1
 
-            name = match.group(1)
-            ext = match.group(2)
+# Get dependencies of source files
+def get_deps_paths(source_paths):
+    printinfo("Checking source dependencies files...")
+    out = []
+    for source_path in source_paths:
+        dependencies_path = "{}.{}".format(source_path, SOURCE_DEPENDENCIES_EXTENSION)
+        if not os.path.isfile(dependencies_path):
+            path = "{}.{}".format(source_path, SOURCE_EXTENSION)
+            path = os.path.relpath(path)
+            printwarn("'{}' is missing its dependency file! Skipping...".format(path))
+            continue
 
-            path = os.path.join(dir_path, name)
-            path = os.path.abspath(path)
-            if ext == QUERIES_EXTENSION:
-                queries_paths.append(path)
-            elif ext == SOURCE_EXTENSION:
-                source_paths.append(path)
-    return (queries_paths, source_paths)
-
-
+        deps_paths = []
+        with open(dependencies_path) as d:
+            for line in d:
+                line = line.strip()
+                queries_path = os.path.join(os.path.dirname(source_path), line)
+                queries_path = os.path.abspath(queries_path)
+                queries_full_path = "{}.{}".format(queries_path, QUERIES_EXTENSION)
+                if not os.path.isfile(queries_full_path):
+                    d_path = os.path.relpath(dependencies_path)
+                    q_path = os.path.relpath(queries_full_path)
+                    printwarn("'{}': '{}' query file does not exist! Skipping...".format(d_path, q_path))
+                    continue
+                deps_paths.append(queries_path)
+        out.append((source_path, deps_paths))
+    return out
 
 def tokenize_source(content):
     out = collections.deque()
@@ -386,8 +427,7 @@ def analyse():
 
 # Check that all .src files contain valid grammar
 def check():
-    queries_paths, source_paths = get_tests_paths()
-
+    source_paths = get_source_paths()
     if len(source_paths) == 0:
         printwarn("No source files were found!")
         return
@@ -397,7 +437,7 @@ def check():
         source_full_path = "{}.{}".format(source_path, SOURCE_EXTENSION)
 
         with open(source_full_path) as f:
-            content = "".join(f.readlines())
+            content = f.read()
 
         path = os.path.relpath(source_full_path)
         printinfo("Checking ({}/{}): '{}'".format(index+1, len(source_paths), path))
@@ -412,11 +452,9 @@ def check():
 
     printinfo("All done! :)")
 
-
 # Generate .lab files from existing .src files
 def label():
-    queries_paths, source_paths = get_tests_paths()
-
+    source_paths = get_source_paths()
     if len(source_paths) == 0:
         printwarn("No source files were found!")
         return
@@ -427,7 +465,7 @@ def label():
         label_full_path = "{}.{}".format(source_path, LABEL_EXTENSION)
 
         with open(source_full_path) as f:
-            content = "".join(f.readlines())
+            content = f.read()
 
         try:
             tokens = tokenize_source(content)
@@ -487,40 +525,79 @@ def label_statements(statement_list, indent):
             result.append((True, indent, v))
     return result
 
-# Tests all .src files using AutoTester
-def run():
-    autotester_path = find_autotester_path()
-    queries_paths, source_paths = get_tests_paths()
+# Creates compiled system test files for submission!
+def publish():
+    # Create publish directory
+    if not os.path.exists(PUBLISH_OUTPUT_DIRECTORY):
+        os.mkdir(PUBLISH_OUTPUT_DIRECTORY)
 
+    # Check publish directory
+    if not os.path.isdir(PUBLISH_OUTPUT_DIRECTORY):
+        printerr("{} is not a directory! Please delete it.".format(PUBLISH_OUTPUT_DIRECTORY))
+
+    source_paths = get_source_paths()
     if len(source_paths) == 0:
         printwarn("No source files were found!")
         return
 
-    # Check dependencies of source files
-    printinfo("Checking source dependencies files...")
+    deps = get_deps_paths(source_paths)
+    for index, (source_path, deps_paths) in enumerate(deps):
+        source_full_path = "{}.{}".format(source_path, SOURCE_EXTENSION)
+
+        qry_lines = []
+        for queries_path in deps_paths:
+            queries_full_path = "{}.{}".format(queries_path, QUERIES_EXTENSION)
+            with open(queries_full_path) as q:
+                for line in q:
+                    line = line.strip()
+                    if line == "":
+                        break
+                    qry_lines.append(line)
+
+        # Replace comment numbers
+        count = 1
+        for i in range(0, len(qry_lines), 5):
+            line = qry_lines[i]
+            line = re.sub(r"^\d+(.*)", r"\1", line)
+            qry_lines[i] = "{}{}".format(count, line)
+            count += 1
+
+        # Write files to PUBLISH_OUTPUT_DIRECTORY
+        output_name = os.path.relpath(source_path, tests_dir_path)
+        output_name = os.path.normpath(output_name)
+        output_name = "-".join(output_name.split(os.sep))
+        output_qry_full_path = "{}{}".format(output_name, PUBLISH_QRY_EXTENSION)
+        output_qry_full_path = os.path.join(PUBLISH_OUTPUT_DIRECTORY, output_qry_full_path)
+        output_qry_full_path = os.path.abspath(output_qry_full_path)
+        output_src_full_path = "{}{}".format(output_name, PUBLISH_SRC_EXTENSION)
+        output_src_full_path = os.path.join(PUBLISH_OUTPUT_DIRECTORY, output_src_full_path)
+        output_src_full_path = os.path.abspath(output_src_full_path)
+
+        printinfo("Publishing test ({}/{}): {}".format(index+1, len(deps), output_name))
+        with open(source_full_path) as s:
+            src_content = s.read()
+
+        with open(output_src_full_path, "w") as s:
+            s.write(src_content)
+
+        with open(output_qry_full_path, "w") as q:
+            q.write("\n".join(qry_lines))
+
+    printinfo("All tests published! :) Please check '{}' directory for all AutoTester outputs!".format(os.path.relpath(PUBLISH_OUTPUT_DIRECTORY)))
+
+# Tests all .src files using AutoTester
+def run():
+    autotester_path = find_autotester_path()
+    source_paths = get_source_paths()
+    if len(source_paths) == 0:
+        printwarn("No source files were found!")
+        return
+
     tests = []
-    for source_path in source_paths:
-        dependencies_path = "{}.{}".format(source_path, SOURCE_DEPENDENCIES_EXTENSION)
-        if not os.path.isfile(dependencies_path):
-            path = "{}.{}".format(source_path, SOURCE_EXTENSION)
-            path = os.path.relpath(path)
-            printwarn("'{}' is missing its dependency file! Skipping...".format(path))
-            continue
-
-        with open(dependencies_path) as d:
-            for line in d:
-                line = line.rstrip()
-                queries_path = os.path.join(os.path.dirname(source_path), line)
-                queries_path = os.path.abspath(queries_path)
-
-                if not queries_path in queries_paths:
-                    d_path = os.path.relpath(dependencies_path)
-                    q_path = "{}.{}".format(queries_path, QUERIES_EXTENSION)
-                    q_path = os.path.relpath(q_path)
-                    printwarn("'{}': '{}' query file does not exist! Skipping...".format(d_path, q_path))
-                    continue
-
-                tests.append((source_path, queries_path))
+    deps = get_deps_paths(source_paths)
+    for source_path, deps_paths in deps:
+        for queries_path in deps_paths:
+            tests.append((source_path, queries_path))
 
     # Test each source file with it's queries
     printinfo("Testing all source files...")
@@ -560,19 +637,22 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--analyse", action="store_true", help="Summarize 'coverage' of all .qry and .src files")
 parser.add_argument("-c", "--check", action="store_true", help="Check that all .src files contain valid grammar")
 parser.add_argument("-l", "--label", action="store_true", help="Generate .lab files from existing .src files")
+parser.add_argument("-p", "--publish", action="store_true", help="Creates compiled system test files for submission!")
 parser.add_argument("-r", "--run", action="store_true", help="Tests all .src files using AutoTester")
 parser.add_argument("tests_dir_path", help="Path of directory containing tests")
+parser.add_argument("-d", "--depth", type=int, default=-1, help="Maximum folder depth of source files to include.")
 args = parser.parse_args()
 
 # If no options are selected, run by default
-if not (args.analyse or args.check or args.label or args.run):
+if not (args.analyse or args.check or args.label or args.publish or args.run):
     args.run = True
 
 # Check tests_path
 tests_dir_path = args.tests_dir_path
+tests_dir_path = os.path.abspath(tests_dir_path)
+max_source_depth = args.depth
 if not os.path.isdir(tests_dir_path):
-    path = os.path.abspath(tests_dir_path)
-    printerr("'{}' is not a directory!".format(path))
+    printerr("'{}' is not a directory!".format(tests_dir_path))
 
 # Create output directory
 if not os.path.exists(OUTPUT_DIRECTORY):
@@ -591,6 +671,9 @@ if args.check:
 
 if args.label:
     label()
+
+if args.publish:
+    publish()
 
 if args.run:
     run()

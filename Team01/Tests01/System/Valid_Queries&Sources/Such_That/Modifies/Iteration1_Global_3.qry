@@ -1,7 +1,7 @@
 1 - Statement and Exact Variable, Select Statement
 stmt s;
 Select s such that Modifies(s, "ame")
-1, 6, 9, 11, 12, 14, 15, 17, 19, 20, 25, 30, 31, 39, 40, 57, 59, 60, 61, 62, 64, 65, 66
+1, 4, 6, 9, 11, 12, 14, 15, 16, 17, 19, 20, 23, 25, 30, 31, 39, 40, 57, 59, 60, 61, 62, 64, 65, 66
 1000
 2 - Assign and Exact Variable, Select Assign
 assign a;
@@ -51,13 +51,13 @@ none
 11 - Constant and Synonym Variable, Assign Statement
 variable v;
 Select v such that Modifies(12, v)
-kiara, gura
+ame
 1000
 12 - Constant and Synonym Variable, Read Statement
 variable v;
 Select v such that Modifies(16, v)
 ame
-1000 
+1000
 13 - Constant and Synonym Variable, If Statement
 variable v;
 Select v such that Modifies(20, v)
