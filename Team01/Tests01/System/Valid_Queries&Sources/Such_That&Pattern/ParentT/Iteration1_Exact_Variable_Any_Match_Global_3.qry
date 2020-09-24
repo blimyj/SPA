@@ -38,3 +38,8 @@ assign a;
 Select a such that Parent* (51, a) pattern a ("gura", _)
 none
 5000
+9 - Wildcard and Assign
+assign a;
+Select a such that Parent* (_, a) pattern a ("ame", _)
+12, 15, 17, 19, 23, 25, 60, 62
+5000

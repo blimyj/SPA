@@ -38,3 +38,8 @@ assign a; variable v;
 Select a such that Parent* (68, a) pattern a (v, _"ina"_)
 none
 5000
+9 - Wildcard and Assign
+assign a; variable v;
+Select v such that Parent* (_, a) pattern a (v, _"4"_)
+ame, kiara
+5000

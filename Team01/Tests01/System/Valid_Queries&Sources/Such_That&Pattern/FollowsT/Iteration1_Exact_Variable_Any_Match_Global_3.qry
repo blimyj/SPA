@@ -38,3 +38,13 @@ assign a; while w;
 Select a such that Follows* (a, w) pattern a ("calli", _)
 7, 8
 5000
+9 - Wildcard and Assign
+assign a;
+Select a such that Follows* (_, a) pattern a ("ina", _)
+3, 70, 71
+5000
+10 - Assign and Wildcard
+assign a;
+Select a such that Follows* (a, _) pattern a ("calli", _)
+7, 8, 49, 58
+5000

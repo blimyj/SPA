@@ -38,3 +38,8 @@ assign a;
 Select a such that Parent (16, a) pattern a ("hunger", _"1"_)
 none
 5000
+9 - Wildcard and Assign
+assign a;
+Select a such that Parent (_, a) pattern a ("hours", _"24"_)
+5
+5000

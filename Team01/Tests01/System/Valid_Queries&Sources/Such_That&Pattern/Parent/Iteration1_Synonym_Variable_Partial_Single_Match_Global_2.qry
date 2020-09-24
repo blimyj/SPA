@@ -38,3 +38,8 @@ assign a; variable v;
 Select a such that Parent (58, a) pattern a (v, _"1"_)
 none
 5000
+9 - Wildcard and Assign
+assign a; variable v;
+Select v such that Parent (_, a) pattern a (v, _"24"_)
+hours, age
+5000
