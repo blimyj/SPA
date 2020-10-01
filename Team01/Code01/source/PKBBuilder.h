@@ -5,6 +5,7 @@ class PKBBuilder;
 #include "PKB.h"
 #include "PKB/ASTNode/ProgramNode.h"
 #include "PKB/DesignEntities/AssignTable.h"
+#include "PKB/DesignEntities/CallTable.h"
 #include "PKB/DesignEntities/ConstantTable.h"
 #include "PKB/DesignEntities/IfTable.h"
 #include "PKB/DesignEntities/PrintTable.h"
@@ -14,14 +15,18 @@ class PKBBuilder;
 #include "PKB/DesignEntities/StatementTable.h"
 #include "PKB/DesignEntities/VariableTable.h"
 #include "PKB/DesignEntities/WhileTable.h"
+#include "PKB/Relationships/CallsTable.h"
 #include "PKB/Relationships/FollowsTable.h"
 #include "PKB/Relationships/ParentTable.h"
 #include "PKB/Relationships/UsesTable.h"
 #include "PKB/Relationships/ModifiesTable.h"
+#include "PKB/Relationships/NextTable.h"
+
 
 typedef std::shared_ptr<ProgramNode> PROGRAM_NODE_PTR;
 
 typedef AssignTable ASSIGN_TABLE;
+typedef CallTable CALL_TABLE;
 typedef ConstantTable CONSTANT_TABLE;
 typedef IfTable IF_TABLE;
 typedef PrintTable PRINT_TABLE;
@@ -36,52 +41,24 @@ typedef FollowsTable FOLLOWS_TABLE;
 typedef ParentTable PARENT_TABLE;
 typedef UsesTable USES_TABLE;
 typedef ModifiesTable MODIFIES_TABLE;
+typedef CallsTable CALLS_TABLE;
+typedef NextTable NEXT_TABLE;
 
 class PKBBuilder {
 /* Overview: A builder to aid in the construction of the PKB */
 
 public:
     /*==== Design Entities ====*/
-    INDEX addStatementNode(STMT_NODE_PTR stmt_node_ptr);
-        /*
-        Description: Adds a STMT_NODE_PTR to the STATEMENT_TABLE when building the PKB.
-                     Returns the INDEX of the STMT_NODE_PTR in the STATEMENT_TABLE.
-        */
-
-    INDEX addStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);
-        /*
-        Description: Adds a STMT_LIST_NODE_PTR to the STATEMENT_TABLE when building the PKB.
-                     Returns the INDEX of the STMT_LIST_NODE_PTR in the STATEMENT_TABLE.
-        */
-
-    INDEX addReadNode(READ_NODE_PTR read_node_ptr);
-        /*
-        Description: Adds a READ_NODE_PTR to the READ_TABLE when building the PKB.
-                     Returns the INDEX of the READ_NODE_PTR in the READ_TABLE.
-        */
-
-    INDEX addPrintNode(PRINT_NODE_PTR print_node_ptr);
-        /*
-        Description: Adds a PRINT_NODE_PTR to the PRINT_TABLE when building the PKB.
-                     Returns the INDEX of the PRINT_NODE_PTR in the PRINT_TABLE.
-        */
-
-    INDEX addWhileNode(WHILE_NODE_PTR while_node_ptr);
-        /*
-        Description: Adds a STMT_NUM to the WHILE_TABLE when building the PKB.
-                     Returns the INDEX of the STMT_NUM in the WHILE_TABLE.
-        */
-
-    INDEX addIfNode(IF_NODE_PTR if_node_ptr);
-        /*
-        Description: Adds a IF_NODE_PTR to the IF_TABLE when building the PKB.
-                     Returns the INDEX of the IF_NODE_PTR in the IF_TABLE.
-        */
-
     INDEX addAssignNode(ASSIGN_NODE_PTR assign_node_ptr);
         /*
         Description: Adds a ASSIGN_NODE_PTR to the ASSIGN_TABLE when building the PKB.
                      Returns the INDEX of the ASSIGN_NODE_PTR in the ASSIGN_TABLE.
+        */
+
+    INDEX addCallNode(CALL_NODE_PTR call_node_ptr);
+        /*
+        Description: Adds a CALL_NODE_PTR to the CALL_TABLE when building the PKB.
+                     Returns the INDEX of the CALL_NODE_PTR in the CALL_TABLE.
         */
 
     INDEX addConstantNode(CONSTANT_NODE_PTR constant_node_ptr);
@@ -90,16 +67,52 @@ public:
                      Returns the INDEX of the CONSTANT_NODE_PTR in the CONSTANT_TABLE.
         */
 
-    INDEX addVariableNode(VAR_NODE_PTR var_node_ptr);
+    INDEX addIfNode(IF_NODE_PTR if_node_ptr);
         /*
-        Description: Adds a VAR_NODE_PTR to the VARIABLE_TABLE when building the PKB.
-                     Returns the INDEX of the VAR_NODE_PTR in the VARIABLE_TABLE.
+        Description: Adds a IF_NODE_PTR to the IF_TABLE when building the PKB.
+                     Returns the INDEX of the IF_NODE_PTR in the IF_TABLE.
+        */
+
+    INDEX addPrintNode(PRINT_NODE_PTR print_node_ptr);
+        /*
+        Description: Adds a PRINT_NODE_PTR to the PRINT_TABLE when building the PKB.
+                        Returns the INDEX of the PRINT_NODE_PTR in the PRINT_TABLE.
         */
 
     INDEX addProcedureNode(PROC_NODE_PTR proc_node_ptr);
         /*
         Description: Adds a PROC_NAME to the PROCEDURE_TABLE when building the PKB.
                      Returns the INDEX of the PROC_NAME in the PROCEDURE_TABLE.
+        */
+
+    INDEX addReadNode(READ_NODE_PTR read_node_ptr);
+        /*
+        Description: Adds a READ_NODE_PTR to the READ_TABLE when building the PKB.
+                     Returns the INDEX of the READ_NODE_PTR in the READ_TABLE.
+        */
+
+    INDEX addStatementListNode(STMT_LIST_NODE_PTR stmt_list_node_ptr);
+        /*
+        Description: Adds a STMT_LIST_NODE_PTR to the STATEMENT_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_LIST_NODE_PTR in the STATEMENT_TABLE.
+        */
+
+    INDEX addWhileNode(WHILE_NODE_PTR while_node_ptr);
+        /*
+        Description: Adds a STMT_NUM to the WHILE_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_NUM in the WHILE_TABLE.
+        */
+
+    INDEX addVariableNode(VAR_NODE_PTR var_node_ptr);
+        /*
+        Description: Adds a VAR_NODE_PTR to the VARIABLE_TABLE when building the PKB.
+                     Returns the INDEX of the VAR_NODE_PTR in the VARIABLE_TABLE.
+        */
+
+    INDEX addStatementNode(STMT_NODE_PTR stmt_node_ptr);
+        /*
+        Description: Adds a STMT_NODE_PTR to the STATEMENT_TABLE when building the PKB.
+                     Returns the INDEX of the STMT_NODE_PTR in the STATEMENT_TABLE.
         */
 
     /*==== Relationships ====*/
@@ -137,6 +150,18 @@ public:
                      the MODIFIES_TABLE when building the PKB.
         */
 
+    void addCalls(PROC_NAME p1, PROC_NAME p2);
+        /*
+        Description: Stores a Calls(PROC_NAME, PROC_NAME) relationship to
+                     the CALL_TABLE when building the PKB.
+        */
+
+    void addNext(STMT_NUM s1, STMT_NUM s2);
+        /*
+        Description: Stores a Next(STMT_NUM, STMT_NUM) relationship to
+                     the NEXT_TABLE when building the PKB.
+        */
+
     void setProgramNode(PROGRAM_NODE_PTR program_node_ptr);
         /*
         Description: Stores the root/program node pointer into the PKB.
@@ -154,6 +179,7 @@ private:
     PROGRAM_NODE_PTR program_node_ptr_;
 
     ASSIGN_TABLE assign_table_;
+    CALL_TABLE call_table_;
     CONSTANT_TABLE constant_table_;
     IF_TABLE if_table_;
     PRINT_TABLE print_table_;
@@ -168,4 +194,6 @@ private:
     PARENT_TABLE parent_table_;
     USES_TABLE uses_table_;
     MODIFIES_TABLE modifies_table_;
+    CALLS_TABLE calls_table_;
+    NEXT_TABLE next_table_;
 };
