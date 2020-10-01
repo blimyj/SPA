@@ -124,6 +124,9 @@
     <ClCompile Include="..\source\DesignExtractor.cpp">
       <Filter>Source\PKB</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\PKB\Relationships\CallsTable.cpp">
+      <Filter>Source\Relationship</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\PKB\Relationships\NextTable.cpp">
       <Filter>Source\Relationship</Filter>
     </ClCompile>
@@ -132,9 +135,6 @@
     </ClCompile>
     <ClCompile Include="..\source\PKB\DesignEntities\CallTable.cpp">
       <Filter>Source\DesignEntity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PKB\Relationships\CallsTable.cpp">
-      <Filter>Source\Relationship</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -276,17 +276,20 @@
     <ClInclude Include="..\source\PKB\Hashing.h">
       <Filter>Header\PKB</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\PKB\Relationships\CallsTable.h">
+      <Filter>Header\Relationship</Filter>
+    </ClInclude>
     <ClInclude Include="..\source\PKB\Relationships\NextTable.h">
       <Filter>Header\Relationship</Filter>
     </ClInclude>
     <ClInclude Include="..\source\PKB\ASTNode\CallNode.h">
       <Filter>Header\ASTNode</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\PKB\Relationships\CallsTable.h">
-      <Filter>Header\Relationship</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\PKB\DesignEntities\CallTable.h">
       <Filter>Header\DesignEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="RelOperatorTypeEnum.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
